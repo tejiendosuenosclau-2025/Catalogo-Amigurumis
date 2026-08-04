@@ -1,0 +1,2 @@
+#filtros{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+#buscar,#categoria{padding:10px;border-radius:10px;border:1px solid #ccc}

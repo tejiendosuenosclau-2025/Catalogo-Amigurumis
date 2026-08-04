@@ -1,0 +1,5 @@
+.card{position:relative;overflow:hidden;border-radius:22px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);box-shadow:0 15px 30px rgba(0,0,0,.12);transition:.35s}
+.card:hover{transform:translateY(-10px)}
+.badge{position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:20px;color:#fff;font-size:.8rem}
+.badge.nuevo{background:#3bb273}.badge.oferta{background:#e85d75}.badge.hecho{background:#b56b45}
+.btn{display:inline-block;padding:12px 20px;border-radius:999px;background:#b56b45;color:#fff;text-decoration:none}

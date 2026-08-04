@@ -1,0 +1,2 @@
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.hero,.card{animation:fadeUp .8s ease both}

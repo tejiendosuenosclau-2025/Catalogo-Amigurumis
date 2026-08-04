@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Catálogo de Amigurumis</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/cards.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/filtros.css">
+<link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/contacto.css">
+<link rel="stylesheet" href="css/dark.css">
+</head>
+<body>
+<header class="header-banner"></header>
+<nav>
+        <a href="#inicio">🏠 Inicio</a>
+        <a href="#categorias">🧶 Categorías</a>
+        <a href="#catalogo">🧸 Catálogo</a>
+        <a href="#contacto">💬 Contacto</a>
+</nav>
+<section id="categorias">
+
+    <h2>-----Nuestros Amigurumis-----</h2>
+
+    <div class="categorias">
+
+        <article class="categoria" data-categoria="Todos">
+            🏠 Inicio(<span id="totalProductos">0</span>)
+        </article>
+
+        <article class="categoria" data-categoria="Animales">
+            🐻 Animales
+        </article>
+
+        <article class="categoria" data-categoria="Personajes">
+            🦸 Personajes
+        </article>
+
+        <article class="categoria" data-categoria="Bebés">
+            👶 Bebés
+	</article>
+</div>
+	<!--<div class="buscador-menu">
+       	 <input 
+            type="text" 
+            id="buscar" 
+            placeholder="🔎 Buscar...">
+    	</div>-->
+
+</section>
+
+<section id="catalogo">
+<!--<h2>Productos destacados</h2>-->
+<div id="productos">
+<!-- Aquí se cargarán los productos desde productos.json -->
+</div>
+</section>
+<section id="beneficios">
+<h2>¿Por qué elegirnos?</h2>
+<ul>
+<li>100% hecho a mano</li>
+<li>Personalización</li>
+<li>Materiales de calidad</li>
+<li>Envíos nacionales</li>
+</ul>
+</section>
+
+<footer id="contacto">
+<p>WhatsApp | Instagram | Facebook</p>
+<p>© 2026 Tejidos con Amor</p>
+</footer>
+
+<script type="module" src="js/modal.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/whatsapp.js"></script>
+<script src="js/contacto.js"></script>
+<script type="module" src="js/theme.js"></script>
+</body>
+</html>

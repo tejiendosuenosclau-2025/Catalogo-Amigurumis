@@ -1,0 +1,1 @@
+document.addEventListener('submit',e=>{if(e.target.id==='formContacto'){e.preventDefault();alert('Mensaje enviado');}});

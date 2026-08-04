@@ -1,0 +1,48 @@
+/* Capa transparente */
+.header-banner::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,.15);
+}
+
+.header-banner nav{
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    gap:20px;
+}
+
+.header-banner nav a{
+    text-decoration:none;
+    color:#4b2e2e;
+    font-weight:bold;
+    font-size:17px;
+
+    background:rgba(255,255,255,.85);
+    padding:12px 20px;
+
+    border-radius:30px;
+
+    transition:.3s;
+}
+
+.header-banner nav a:hover{
+    background:#40AD55;
+    color:white;
+}
+
+@media(max-width:768px){
+
+    .header-banner{
+        justify-content:center;
+        min-height:220px;
+    }
+
+    .header-banner nav{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+}
