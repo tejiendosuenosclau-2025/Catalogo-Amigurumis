@@ -14,13 +14,20 @@
 <link rel="stylesheet" href="css/dark.css">
 </head>
 <body>
-<header class="header-banner"></header>
-<nav>
+<header class="header-banner">
+       <button class="menu-toggle" id="menuToggle">
+        ☰
+        </button>
+</header>
+        <nav id="menu">
+	<div class="menu-logo">
+        <img src="img/logo.png" alt="Tejiendo Sueños Clau">
+       	</div>
         <a href="#inicio">🏠 Inicio</a>
         <a href="#categorias">🧶 Categorías</a>
         <a href="#catalogo">🧸 Catálogo</a>
         <a href="#contacto">💬 Contacto</a>
-</nav>
+        </nav>
 <section id="categorias">
 
     <h2>-----Nuestros Amigurumis-----</h2>
@@ -69,11 +76,21 @@
 </section>
 
 <footer id="contacto">
-<p>WhatsApp | Instagram | Facebook</p>
+
+<h2>Contáctanos</h2>
+
+<p>📱 WhatsApp</p>
+
+<p>📷 Instagram</p>
+
+<p>📘 Facebook</p>
+
 <p>© 2026 Tejidos con Amor</p>
+
 </footer>
 
 <script type="module" src="js/modal.js"></script>
+<script src="js/menu.js"></script>
 <script src="js/app.js"></script>
 <script type="module" src="js/whatsapp.js"></script>
 <script src="js/contacto.js"></script>

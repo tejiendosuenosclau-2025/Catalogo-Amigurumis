@@ -17,23 +17,6 @@
     padding:20px 40px;
     position:relative;
 }
-@media (max-width:768px){
-    .header-banner{
-        position: relative;
-    }
-
-    .header-banner nav{
-        position: absolute;
-        top: 80px;     /* Distancia desde la parte superior */
-        right: 40px;   /* Distancia desde la derecha */
-
-    }
-
-    .header-banner nav a{
-        font-size:14px;
-        padding:8px 15px;
-    }
-}
 /* Capa para mejorar la lectura */
 .header-banner::before{
     content:"";
@@ -444,37 +427,74 @@ nav{margin-top:15px}
     color:#40AD55;
 }
 
-/* =========================================
-   DISEÑO RESPONSIVE PARA CELULARES
-========================================= */
+/* =====================================================
+   RESPONSIVE - CELULARES Y TABLETS
+===================================================== */
 
-@media screen and (max-width: 768px){
+/* Todas las imágenes se adaptan */
+img{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
 
-    /* Encabezado */
-    .header-banner{
-        padding:15px;
-        background-size:cover;
-        aspect-ratio:auto;
-        min-height:220px;
+/* Tablets */
+@media (max-width:992px){
+
+    .hero{
+        padding:60px 30px;
     }
 
-    /* Menú */
+    .hero h2{
+        font-size:2.4rem;
+    }
+
+    nav{
+        gap:12px;
+    }
+
+    #productos{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+/* Celulares */
+@media (max-width:768px){
+
+    body{
+        overflow-x:hidden;
+    }
+
+    /* Encabezado */
+
+    .header-banner{
+        padding:15px;
+        min-height:220px;
+        aspect-ratio:auto;
+        background-size:cover;
+        background-position:center;
+    }
+
     nav{
         width:100%;
         flex-direction:column;
         align-items:center;
+        justify-content:center;
+        padding:15px;
         gap:10px;
-        padding:10px;
     }
 
     nav a{
-        width:90%;
+        width:100%;
+        max-width:300px;
         text-align:center;
-        font-size:16px;
         margin:0;
+        font-size:16px;
     }
 
-    /* Título principal */
+    /* Hero */
+
     .hero{
         padding:40px 20px;
     }
@@ -487,50 +507,303 @@ nav{margin-top:15px}
         font-size:16px;
     }
 
-    /* Categorías */
+    /* Buscador */
+
     .menu-categorias{
         flex-direction:column;
         align-items:center;
     }
 
-    .categorias{
-        width:100%;
-        justify-content:center;
-    }
-
-    .categoria{
-        width:90%;
-        text-align:center;
-    }
-
-    /* Buscador */
     .buscador-menu{
         width:100%;
         justify-content:center;
     }
 
     #buscar{
-        width:95%;
-    }
-
-    /* Productos */
-    #productos{
-        grid-template-columns:1fr;
-    }
-
-    .producto-img{
-        height:220px;
-    }
-
-    /* Botones */
-    .btn{
         width:100%;
+        max-width:350px;
+    }
+
+    /* Categorías */
+
+    .categorias{
+        justify-content:center;
+    }
+
+    .categoria{
+        width:90%;
+        max-width:320px;
         text-align:center;
     }
 
-    /* Footer */
+    /* Productos */
+
+    #productos{
+        grid-template-columns:1fr;
+        gap:20px;
+    }
+
+    .card{
+        width:100%;
+    }
+
+    .producto-img{
+        width:100%;
+        height:auto;
+        max-height:240px;
+        object-fit:contain;
+    }
+
+    .card-body{
+        padding:18px;
+    }
+
+    .precio{
+        font-size:20px;
+    }
+
+    .btn{
+        width:100%;
+        padding:14px;
+        text-align:center;
+    }
+
     footer{
         padding:25px;
+        font-size:14px;
+    }
+
+}
+
+/* Celulares muy pequeños */
+
+@media (max-width:480px){
+
+    .hero h2{
+        font-size:1.6rem;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .producto-img{
+        max-height:180px;
+    }
+
+    .categoria{
+        padding:12px;
+    }
+
+    nav a{
+        font-size:15px;
+    }
+
+}
+/*==================================
+      MENÚ LATERAL
+===================================*/
+
+.menu-toggle{
+    display:none;
+}
+
+/* COMPUTADOR */
+@media (min-width:769px){
+
+    .menu-toggle{
+        display:none;
+    }
+
+    nav{
+        display:flex;
+        justify-content:center;
+        gap:20px;
+        position:static;
+        background:transparent;
+        box-shadow:none;
+    }
+
+}
+
+/* CELULAR */
+@media (max-width:768px){
+
+    .header-banner{
+        position:relative;
+    }
+
+    .menu-toggle{
+
+    display:block;
+
+    position:fixed;
+
+    top:15px;
+
+    right:15px;
+
+    width:50px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#40AD55;
+
+    color:white;
+
+    font-size:30px;
+
+    cursor:pointer;
+
+    z-index:9999;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
+
+    transition:all .3s ease;
+
+    }
+    .menu-toggle:hover{
+    transform:scale(1.08);
+    }
+    .menu-toggle:active{
+    transform:scale(.95);
+    }
+
+    nav{
+
+        position:fixed;
+
+        top:0;
+
+        right:-280px;
+
+        width:260px;
+
+        height:100vh;
+
+        background:white;
+
+        display:flex;
+
+        flex-direction:column;
+
+        padding-top:80px;
+
+        transition:right .35s ease;
+
+        box-shadow:-5px 0 20px rgba(0,0,0,.25);
+
+        z-index:1000;
+
+    }
+
+    nav.activo{
+
+        right:0;
+
+    }
+
+    nav a{
+
+        width:100%;
+
+        padding:18px;
+
+        text-align:left;
+
+        font-size:18px;
+
+        border-bottom:1px solid #eee;
+
+        background:none;
+
+        border-radius:0;
+
+    }
+
+}
+/*==============================
+      CABECERA DEL MENÚ
+===============================*/
+
+.menu-logo{
+
+    color:white;
+
+    text-align:center;
+
+    padding:30px 20px;
+
+    margin-bottom:20px;
+
+}
+
+.menu-logo img{
+
+    width:200px;
+    height:200px;
+    object-fit:contain;
+
+    object-fit:contain;
+
+    background:white;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:0px 0px;
+
+    box-shadow:0 20px 20px rgba(0,0,0,.20);
+
+    margin-bottom:5px;
+
+}
+/* ===========================
+   LOGO DEL MENÚ
+=========================== */
+
+/* En computador NO se muestra */
+.menu-logo{
+    display:none;
+}
+
+/* En celulares SÍ se muestra */
+@media (max-width:768px){
+
+    .menu-logo{
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        padding:30px 20px;
+        
+    }
+
+    .menu-logo img{
+        width:200px;
+    height:200px;
+    object-fit:contain;
+
+    object-fit:contain;
+
+    background:white;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:0px 0px;
+
+    box-shadow:0 20px 20px rgba(0,0,0,.20);
+
+    margin-bottom:5px;
     }
 
 }
