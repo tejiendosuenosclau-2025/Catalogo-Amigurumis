@@ -6,7 +6,7 @@
     background-image:url("../img/fondo.jpg");
     background-repeat:no-repeat;
     background-position:center;
-    background-size:contain;
+    background-size:cover;
 
     background-color:#fdf8f3;
 
@@ -160,11 +160,12 @@ nav{margin-top:15px}
 
 .producto-img{
     width:100%;
-    height:300px;
-    object-fit:contain;   /* La imagen se adapta sin cortarse */
-    background:#ffffff;
-    padding:10px;
+    height:auto;
+    max-height:300px;
+    object-fit:contain;
     display:block;
+    background:#fff;
+    padding:10px;
 }
 
 .card-body{
@@ -441,4 +442,95 @@ nav{margin-top:15px}
 
 .card:hover .precio{
     color:#40AD55;
+}
+
+/* =========================================
+   DISEÑO RESPONSIVE PARA CELULARES
+========================================= */
+
+@media screen and (max-width: 768px){
+
+    /* Encabezado */
+    .header-banner{
+        padding:15px;
+        background-size:cover;
+        aspect-ratio:auto;
+        min-height:220px;
+    }
+
+    /* Menú */
+    nav{
+        width:100%;
+        flex-direction:column;
+        align-items:center;
+        gap:10px;
+        padding:10px;
+    }
+
+    nav a{
+        width:90%;
+        text-align:center;
+        font-size:16px;
+        margin:0;
+    }
+
+    /* Título principal */
+    .hero{
+        padding:40px 20px;
+    }
+
+    .hero h2{
+        font-size:2rem;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+
+    /* Categorías */
+    .menu-categorias{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .categorias{
+        width:100%;
+        justify-content:center;
+    }
+
+    .categoria{
+        width:90%;
+        text-align:center;
+    }
+
+    /* Buscador */
+    .buscador-menu{
+        width:100%;
+        justify-content:center;
+    }
+
+    #buscar{
+        width:95%;
+    }
+
+    /* Productos */
+    #productos{
+        grid-template-columns:1fr;
+    }
+
+    .producto-img{
+        height:220px;
+    }
+
+    /* Botones */
+    .btn{
+        width:100%;
+        text-align:center;
+    }
+
+    /* Footer */
+    footer{
+        padding:25px;
+    }
+
 }

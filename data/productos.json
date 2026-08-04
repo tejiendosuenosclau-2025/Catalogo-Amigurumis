@@ -61,6 +61,15 @@
     "tamano": "20 cm",
     "imagen": "img/productos/rapunzel.jpg",
     "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+  },
+  {
+    "id": 8,
+    "nombre": "Rapunzel",
+    "categoria": "Personajes",
+    "precio": 120000,
+    "tamano": "20 cm",
+    "imagen": "img/productos/rapunzel.jpg",
+    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
   }
 
 
