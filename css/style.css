@@ -17,6 +17,23 @@
     padding:20px 40px;
     position:relative;
 }
+@media (max-width:768px){
+    .header-banner{
+        position: relative;
+    }
+
+    .header-banner nav{
+        position: absolute;
+        top: 80px;     /* Distancia desde la parte superior */
+        right: 40px;   /* Distancia desde la derecha */
+
+    }
+
+    .header-banner nav a{
+        font-size:14px;
+        padding:8px 15px;
+    }
+}
 /* Capa para mejorar la lectura */
 .header-banner::before{
     content:"";
