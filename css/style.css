@@ -80,7 +80,6 @@ nav a:hover{
 *{margin:0;padding:0;box-sizing:border-box}
 body{
 font-family:century gothic;
-background:linear-gradient(#fffaf6,#f8eee8);
 color:var(--text);
 line-height:1.6;
 }
@@ -894,20 +893,32 @@ img{
     width: 28px;
     height: 28px;
 }
-/*=====================================
+/*=============================
       PIE DE PÁGINA
-=====================================*/
+==============================*/
 
 .footer-artesanal{
-    width:100vw;
-    margin:0 calc(50% - 50vw);
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    width: 100vw;
+
     padding:0;
+    margin-top:40px;
     line-height:0;
     overflow:hidden;
+
+    background:#fff;
 }
 
 .footer-banner{
     display:block;
     width:100%;
     height:auto;
+}
+body{
+
+    margin:0;
+    overflow-x:hidden;
+
 }
