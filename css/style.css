@@ -1,7 +1,7 @@
 /* ENCABEZADO */
 .header-banner{
     width:100%;
-    aspect-ratio:1983 / 930;   /* Proporción de tu imagen */
+    aspect-ratio:1900/850;   /* Proporción de tu imagen */
 
     background-image:url("../img/fondo.png");
     background-repeat:no-repeat;
