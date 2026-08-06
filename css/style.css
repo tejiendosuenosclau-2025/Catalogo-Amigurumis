@@ -1,15 +1,12 @@
 /* ENCABEZADO */
 .header-banner{
     width:100%;
-    aspect-ratio:1983 / 793;   /* Proporción de tu imagen */
+    aspect-ratio:1983 / 930;   /* Proporción de tu imagen */
 
-    background-image:url("../img/fondo.jpg");
+    background-image:url("../img/fondo.png");
     background-repeat:no-repeat;
     background-position:center;
     background-size:cover;
-
-    background-color:#fdf8f3;
-
     display:flex;
     justify-content:flex-end;
     align-items:flex-start;
