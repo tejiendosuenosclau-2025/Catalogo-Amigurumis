@@ -1,8 +1,8 @@
 /* ENCABEZADO */
 .header-banner{
     width:100%;
-    aspect-ratio:1900/850;   /* Proporción de tu imagen */
-
+    height:850px;
+    max-height:45vw;
     background-image:url("../img/fondo.png");
     background-repeat:no-repeat;
     background-position:center;
@@ -15,8 +15,11 @@
     position:relative;
 }
 @media (max-width:768px){
-    .header-banner{
-        position: relative;
+        .header-banner{
+        height:260px;
+        padding:15px;
+        background-size:cover;
+        background-position:60% center;
     }
 
     .header-banner nav{
