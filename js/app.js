@@ -45,7 +45,7 @@ function mostrarProductos(categoria = "Todos") {
 
                     <h3>${producto.nombre}</h3>
 
-                    <p><strong>Categorías:</strong> ${producto.categoria.join(", ")}</p>
+                    <p><strong>Categoría:</strong> ${producto.categoria.join(", ")}</p>
 
                     <p><strong>Tamaño:</strong> ${producto.tamano}</p>
 
@@ -162,7 +162,7 @@ if (buscador) {
 
                     <h3>${producto.nombre}</h3>
 
-                    <p><strong>Categorías:</strong> ${producto.categoria.join(", ")}</p>
+                    <p><strong>Categoría:</strong> ${producto.categoria.join(", ")}</p>
 
                     <p><strong>Tamaño:</strong> ${producto.tamano}</p>
 
