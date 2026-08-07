@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/sitemap.xml
