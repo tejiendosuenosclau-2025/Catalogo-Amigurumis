@@ -4,7 +4,7 @@
     "nombre": ["Llavero Dinosaurio Amigurumi"],
     "categoria": ["Animales","Disponibles"],
     "precio": 30000,
-    "tamano": "10 cm",
+    "tamano": "8 cm",
     "imagen": "img/productos/dinosaurios-verdes.jpg"
   },
   {
@@ -12,7 +12,8 @@
     "nombre": "Migli y Bigli",
     "categoria": ["Personajes"],
     "precio": 20000,
-    "tamano": "7 cm",
+    "tamano": "8 cm",
+    "unidad": "c/u",
     "imagen": "img/productos/migli-bigli.jpg"
     
   },
@@ -30,7 +31,7 @@
     "nombre": "Chavo del 8",
     "categoria": ["Personajes","Disponibles"],
     "precio": 65000,
-    "tamano": "15 cm",
+    "tamano": "16 cm",
     "imagen": "img/productos/chavo.jpg"
     
   },
@@ -74,6 +75,7 @@
     "nombre": "Chicas Super Poderosas",
     "categoria": ["Llaveros","Disponibles"],
     "precio": 30000,
+    "unidad": "c/u",
     "tamano": "8 cm",
     "imagen": "img/productos/chicas-poderosas.jpg"
   },
@@ -82,6 +84,7 @@
     "nombre": "Soldados",
     "categoria": ["Personalizados","Disponibles"],
     "precio": 110000,
+    "unidad": "c/u",
     "tamano": "20 cm",
     "imagen": "img/productos/soldados.jpg"
   },
@@ -92,7 +95,89 @@
     "precio": 50000,
     "tamano": "10 cm",
     "imagen": "img/productos/abuelo.jpg"
+  },
+  {
+    "id": 12,
+    "nombre": "Conejo + Gallina",
+    "categoria": ["Animales","Disponibles"],
+    "precio": 120000,
+    "tamano": "30 cm",
+    "imagen": "img/productos/conejo.png"
+  },
+  {
+    "id": 13,
+    "nombre": "Familia + Arco con Nubes",
+    "categoria": ["Personalizados","Disponibles"],
+    "precio": 80000,
+    "tamano": "Personas de 11 cm + arco decorativo de 22 cm",
+    "imagen": "img/productos/familia.png"
+  },
+  {
+    "id": 14,
+    "nombre": "Novios",
+    "categoria": ["Personalizados"],
+    "precio": 50000,
+    "unidad": "c/u",
+    "tamano": "12cm",
+    "imagen": "img/productos/novios.png"
+  },
+  {
+    "id": 15,
+    "nombre": "Peras",
+    "categoria": ["Personalizados","Disponibles"],
+    "precio": 25000,
+    "unidad": "c/u",
+    "tamano": "8cm",
+    "imagen": "img/productos/peras.png"
+  },
+  {
+    "id": 16,
+    "nombre": "Winny Puu",
+    "categoria": ["Personaje","Disponibles"],
+    "precio": 35000,
+    "tamano": "12cm",
+    "imagen": "img/productos/winny.png"
+  },
+  {
+    "id": 17,
+    "nombre": "Pitufinas",
+    "categoria": ["Personajes","Disponibles"],
+    "precio": 30000,
+    "unidad": "c/u",
+    "tamano": "13 cm y 11 cm",
+    "imagen": "img/productos/pitufinas.png"
+  },
+  {
+    "id": 18,
+    "nombre": "Mike Wazowsky",
+    "categoria": ["Personajes","Disponibles"],
+    "precio": 20000,
+    "tamano": "5 cm",
+    "imagen": "img/productos/mike.png"
+  },
+  {
+    "id": 19,
+    "nombre": "Estrellas",
+    "categoria": ["Llaveros","Disponibles"],
+    "precio": 20000,
+    "unidad": "c/u",
+    "tamano": "9 cm y 8 cm",
+    "imagen": "img/productos/estrellas.png"
+  },
+  {
+    "id": 20,
+    "nombre": "Hoja de Marihuana",
+    "categoria": ["Llaveros","Disponibles"],
+    "precio": 20000,
+    "tamano": "10 cm",
+    "imagen": "img/productos/marihuana.png"
+  },
+  {
+    "id": 21,
+    "nombre": "Vacas",
+    "categoria": ["Llaveros","Disponibles"],
+    "precio": 30000,
+    "tamano": "8 cm y 10 cm",
+    "imagen": "img/productos/vacas.png"
   }
-
-
 ]

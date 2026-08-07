@@ -49,7 +49,7 @@ function mostrarProductos(categoria = "Todos") {
 
                     <p><strong>Tamaño:</strong> ${producto.tamano}</p>
 
-                    <h2>$${producto.precio.toLocaleString()}</h2>
+                    <h2>$${producto.precio.toLocaleString()} ${producto.unidad ? producto.unidad : ""}</h2>
 
 		    <a href="https://wa.me/573011810933?text=Hola,%20estoy%20interesado%20en%20el%20amigurumi%20${encodeURIComponent(producto.nombre)}" target="_blank"
                     class="btn-whatsapp">
@@ -166,7 +166,7 @@ if (buscador) {
 
                     <p><strong>Tamaño:</strong> ${producto.tamano}</p>
 
-                    <h2>$${producto.precio.toLocaleString()}</h2>
+                    <h2>$${producto.precio.toLocaleString()} ${producto.unidad ? producto.unidad : ""}</h2>
 		    
                     <a href="https://wa.me/573011810933?text=Hola,%20estoy%20interesado%20en%20el%20amigurumi%20${encodeURIComponent(producto.nombre)}" target="_blank"
                     class="btn-whatsapp">
