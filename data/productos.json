@@ -1,75 +1,97 @@
 [
   {
     "id": 1,
-    "nombre": "Llavero Dinosaurio Amigurumi",
-    "categoria": "Animales",
+    "nombre": ["Llavero Dinosaurio Amigurumi"],
+    "categoria": ["Animales","Disponibles"],
     "precio": 30000,
     "tamano": "10 cm",
-    "imagen": "img/productos/dinosaurios-verdes.jpg",
-    "descripcion": "Llavero tejido a mano con técnica amigurumi."
+    "imagen": "img/productos/dinosaurios-verdes.jpg"
   },
   {
     "id": 2,
     "nombre": "Migli y Bigli",
-    "categoria": "Personajes",
-    "precio": 12000,
+    "categoria": ["Personajes"],
+    "precio": 20000,
     "tamano": "7 cm",
-    "imagen": "img/productos/migli-bigli.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "imagen": "img/productos/migli-bigli.jpg"
+    
   },
   {
     "id": 3,
     "nombre": "Perros",
-    "categoria": "Animales",
+    "categoria": ["Animales"],
     "precio": 45000,
     "tamano": "10 cm",
-    "imagen": "img/productos/perros.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "imagen": "img/productos/perros.jpg"
+    
   },
   {
     "id": 4,
     "nombre": "Chavo del 8",
-    "categoria": "Personajes",
-    "precio": 50000,
+    "categoria": ["Personajes","Disponibles"],
+    "precio": 65000,
     "tamano": "15 cm",
-    "imagen": "img/productos/chavo.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "imagen": "img/productos/chavo.jpg"
+    
   },
   {
     "id": 5,
     "nombre": "Llavero Perro",
-    "categoria": "Animales",
+    "categoria": ["Animales"],
     "precio": 45000,
-    "tamano": "7 cm",
-    "imagen": "img/productos/perro.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "tamano": "10 cm",
+    "imagen": "img/productos/perro.jpg"
+    
   },
   {
     "id": 6,
     "nombre": "Minecraft",
-    "categoria": "Personajes",
+    "categoria": ["Personajes"],
     "precio": 80000,
     "tamano": "15 cm",
-    "imagen": "img/productos/minecraft.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "imagen": "img/productos/minecraft.jpg"
+    
   },
   {
     "id": 7,
     "nombre": "Rapunzel",
-    "categoria": "Personajes",
+    "categoria": ["Personajes"],
     "precio": 120000,
     "tamano": "20 cm",
-    "imagen": "img/productos/rapunzel.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "imagen": "img/productos/rapunzel.jpg"
+    
   },
   {
     "id": 8,
-    "nombre": "Rapunzel",
-    "categoria": "Personajes",
-    "precio": 120000,
+    "nombre": "Llavero Perro",
+    "categoria": ["Llaveros"],
+    "precio": 30000,
+    "tamano": "10 cm",
+    "imagen": "img/productos/llavero-perro.jpg"
+  },
+  {
+    "id": 9,
+    "nombre": "Chicas Super Poderosas",
+    "categoria": ["Llaveros","Disponibles"],
+    "precio": 30000,
+    "tamano": "8 cm",
+    "imagen": "img/productos/chicas-poderosas.jpg"
+  },
+  {
+    "id": 10,
+    "nombre": "Soldados",
+    "categoria": ["Personalizados","Disponibles"],
+    "precio": 110000,
     "tamano": "20 cm",
-    "imagen": "img/productos/rapunzel.jpg",
-    "descripcion": "Amigurumi tejido a mano con hilo de algodón."
+    "imagen": "img/productos/soldados.jpg"
+  },
+  {
+    "id": 11,
+    "nombre": "Abuelo",
+    "categoria": ["Personalizados"],
+    "precio": 50000,
+    "tamano": "10 cm",
+    "imagen": "img/productos/abuelo.jpg"
   }
 
 

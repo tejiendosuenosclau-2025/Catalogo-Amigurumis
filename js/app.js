@@ -30,15 +30,14 @@ function mostrarProductos(categoria = "Todos") {
     if (categoria !== "Todos") {
 
         productosMostrar = todosLosProductos.filter(producto =>
-            producto.categoria === categoria
+            producto.categoria.includes(categoria)
         );
 
     }
 
     productosMostrar.forEach(producto => {
 
-        contenedor.innerHTML += `
-            <div class="card">
+        contenedor.innerHTML += `<div class="card">
 
                 <img src="${producto.imagen}" class="producto-img" alt="${producto.nombre}">
 
@@ -46,13 +45,16 @@ function mostrarProductos(categoria = "Todos") {
 
                     <h3>${producto.nombre}</h3>
 
-                    <p><strong>Categoría:</strong> ${producto.categoria}</p>
+                    <p><strong>Categorías:</strong> ${producto.categoria.join(", ")}</p>
 
                     <p><strong>Tamaño:</strong> ${producto.tamano}</p>
 
                     <h2>$${producto.precio.toLocaleString()}</h2>
 
-                    <p>${producto.descripcion}</p>
+		    <a href="https://wa.me/573011810933?text=Hola,%20estoy%20interesado%20en%20el%20amigurumi%20${encodeURIComponent(producto.nombre)}" target="_blank"
+                    class="btn-whatsapp">
+                      	<img src="img/boton.png" alt="Comprar por WhatsApp">
+    		    </a>
 
                  </div>
 
@@ -62,6 +64,14 @@ function mostrarProductos(categoria = "Todos") {
     });
 
 }
+
+const iconos = {
+    "Disponibles": "✅",
+    "Animales": "🐻",
+    "Personajes": "🦸",
+    "Llaveros": "🔑",
+    "Personalizados": "🎨"
+};
 
 function actualizarContadores() {
 
@@ -83,43 +93,15 @@ function actualizarContadores() {
         if (nombre !== "Todos") {
 
             const cantidad = todosLosProductos.filter(producto =>
-                producto.categoria === nombre
-            ).length;
+            producto.categoria.includes(nombre)).length;
 
-            categoria.innerHTML = 
-            `${nombre} (${cantidad})`;
+            categoria.innerHTML = `${iconos[nombre] || ""} ${nombre} (${cantidad})`;
 
         }
 
     });
 
 }
-document.querySelectorAll(".categoria").forEach(categoria => {
-
-    categoria.addEventListener("click", () => {
-
-        // Cambiar color del botón seleccionado
-        document.querySelectorAll(".categoria").forEach(c =>
-            c.classList.remove("activa")
-        );
-
-        categoria.classList.add("activa");
-
-        // Animación de salida
-        contenedor.classList.add("oculto");
-
-        setTimeout(() => {
-
-            mostrarProductos(categoria.dataset.categoria);
-
-            contenedor.classList.remove("oculto");
-            contenedor.classList.add("visible");
-
-        },300);
-
-    });
-
-});
 
 document.querySelectorAll(".categoria").forEach(categoria => {
 
@@ -159,12 +141,13 @@ if (buscador) {
 
         const productosFiltrados = todosLosProductos.filter(producto => {
 
-            return (
-                producto.nombre.toLowerCase().includes(texto) ||
-                producto.categoria.toLowerCase().includes(texto)
-            );
+        return (producto.nombre.toLowerCase().includes(texto) ||
+        producto.categoria.some(cat =>
+            cat.toLowerCase().includes(texto)
+        )
+    );
 
-        });
+});
 
         contenedor.innerHTML = "";
 
@@ -179,13 +162,16 @@ if (buscador) {
 
                     <h3>${producto.nombre}</h3>
 
-                    <p><strong>Categoría:</strong> ${producto.categoria}</p>
+                    <p><strong>Categorías:</strong> ${producto.categoria.join(", ")}</p>
 
                     <p><strong>Tamaño:</strong> ${producto.tamano}</p>
 
                     <h2>$${producto.precio.toLocaleString()}</h2>
-
-                    <p>${producto.descripcion}</p>
+		    
+                    <a href="https://wa.me/573011810933?text=Hola,%20estoy%20interesado%20en%20el%20amigurumi%20${encodeURIComponent(producto.nombre)}" target="_blank"
+                    class="btn-whatsapp">
+                      	<img src="img/boton.png" alt="Comprar por WhatsApp">
+    		    </a>
 
                 </div>
 

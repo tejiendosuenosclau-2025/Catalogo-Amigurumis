@@ -211,8 +211,8 @@ nav{margin-top:15px}
 .categoria{
     background:#ffffff;
     border:2px solid #40AD55;
-    border-radius:30px;
-    padding:12px 25px;
+    border-radius:18px;
+    padding:16px 26px;
     cursor:pointer;
     font-weight:bold;
     transition:all .35s ease;
@@ -290,9 +290,8 @@ nav{margin-top:15px}
 
     border:2px solid #40AD55;
 
-    padding:15px 30px;
-
-    border-radius:40px;
+    border-radius:18px;
+    padding:16px 26px;
 
     cursor:pointer;
 
@@ -934,3 +933,25 @@ body{
     overflow-x:hidden;
 
 }
+
+/*=============================
+      BOTON COMPRAR
+==============================*/
+.btn-whatsapp{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-whatsapp img{
+    width: 130px;
+    height: auto;
+    display: block;
+    margin: 12px auto 0;
+    transition: 0.3s;
+}
+
+.btn-whatsapp img:hover{
+    transform: scale(1.05);
+}
+
