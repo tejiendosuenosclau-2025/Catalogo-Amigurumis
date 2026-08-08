@@ -172,184 +172,382 @@ function calc(){
 function collect(){let c=calc();return{numero:$("numero").value,fecha:$("fecha").value,cliente:{nombre:$("nombre").value,ident:$("ident").value,tel:$("tel").value,correo:$("correo").value,direccion:$("direccion").value},pago:$("pago").value,estado:$("estado").value,obs:$("obs").value,items:[...document.querySelectorAll("#items tr")].map(t=>{let id=t.querySelector(".ps").value,p=products.find(x=>String(x.id)==id),q=+t.querySelector(".qty").value||0,pr=+t.querySelector(".price").value||0,d=+t.querySelector(".disc").value||0;return{id,nombre:name(p),q,pr,d,total:q*pr*(1-d/100)}}).filter(x=>x.q),...c}}
 function valid(){if(!$("nombre").value.trim())return alert("Escribe el nombre del cliente."),false;if(!$("numero").value.trim())return alert("Indica el número de factura."),false;if(!document.querySelector("#items tr"))return alert("Agrega al menos un producto."),false;return true}
 
-function sheet(f){
+function sheet(f) {
+
+    const estadoClass =
+        f.estado === "Pagada"
+            ? "status-paid"
+            : "";
 
     return `
-    <div class="factura-bonita">
 
-        <div class="factura-header">
+    <div class="sheet">
 
-            <div class="factura-marca">
+        <!-- ================= HEADER ================= -->
 
-                <img src="img/logo.png" alt="Tejiendo Sueños Clau">
+        <div class="invoice-header">
 
-                <div>
-                    <h2>Tejiendo Sueños Clau</h2>
-                    <p>Hecho con Amor 💗</p>
+            <img
+                src="img/logo.png"
+                class="invoice-logo"
+                alt="Tejiendo Sueños Clau"
+            >
+
+            <div class="invoice-brand">
+
+                <h1>Tejiendo</h1>
+
+                <h2>Sueños Clau</h2>
+
+                <p>
+                    <span>♥</span>
+                    Hecho con Amor
+                    <span>♥</span>
+                </p>
+
+            </div>
+
+
+            <div class="invoice-number">
+
+                <h3>FACTURA</h3>
+
+                <span class="number">
+                    ${esc(f.numero)}
+                </span>
+
+                <div class="invoice-date">
+                    📅 ${esc(f.fecha)}
                 </div>
 
             </div>
 
-            <div class="factura-info">
-
-                <span>FACTURA</span>
-
-                <strong>${esc(f.numero)}</strong>
-
-                <small>${esc(f.fecha)}</small>
-
-            </div>
-
         </div>
 
 
-        <div class="factura-linea"></div>
+        <!-- ================= CONTENIDO ================= -->
+
+        <div class="invoice-content">
 
 
-        <div class="cliente-box">
+            <!-- CLIENTE -->
 
-            <div>
-                <small>CLIENTE</small>
-                <strong>${esc(f.cliente.nombre || "No registrado")}</strong>
+            <div class="client-grid">
+
+                <div class="client-card">
+
+                    <span class="client-label">
+                        Cliente
+                    </span>
+
+                    <span class="client-value">
+                        ${esc(f.cliente.nombre || "-")}
+                    </span>
+
+                </div>
+
+
+                <div class="client-card">
+
+                    <span class="client-label">
+                        Identificación
+                    </span>
+
+                    <span class="client-value">
+                        ${esc(f.cliente.ident || "-")}
+                    </span>
+
+                </div>
+
+
+                <div class="client-card">
+
+                    <span class="client-label">
+                        Teléfono
+                    </span>
+
+                    <span class="client-value">
+                        ${esc(f.cliente.tel || "-")}
+                    </span>
+
+                </div>
+
+
+                <div class="client-card">
+
+                    <span class="client-label">
+                        Correo
+                    </span>
+
+                    <span class="client-value">
+                        ${esc(f.cliente.correo || "-")}
+                    </span>
+
+                </div>
+
+
+                <div class="client-card">
+
+                    <span class="client-label">
+                        Dirección
+                    </span>
+
+                    <span class="client-value">
+                        ${esc(f.cliente.direccion || "-")}
+                    </span>
+
+                </div>
+
+
+                <div class="client-card">
+
+                    <span class="client-label">
+                        Forma de pago
+                    </span>
+
+                    <span class="client-value">
+                        ${esc(f.pago || "-")}
+                    </span>
+
+                </div>
+
             </div>
 
-            <div>
-                <small>IDENTIFICACIÓN</small>
-                <strong>${esc(f.cliente.ident || "No registrada")}</strong>
+
+            <!-- ================= PRODUCTOS ================= -->
+
+            <div class="products-title">
+
+                <span class="ball">🧶</span>
+
+                Productos
+
             </div>
 
-            <div>
-                <small>TELÉFONO</small>
-                <strong>${esc(f.cliente.tel || "No registrado")}</strong>
-            </div>
 
-            <div>
-                <small>CORREO</small>
-                <strong>${esc(f.cliente.correo || "No registrado")}</strong>
-            </div>
+            <table class="invoice-table">
 
-            <div>
-                <small>DIRECCIÓN</small>
-                <strong>${esc(f.cliente.direccion || "No registrada")}</strong>
-            </div>
-
-            <div>
-                <small>FORMA DE PAGO</small>
-                <strong>${esc(f.pago || "Contado")}</strong>
-            </div>
-
-        </div>
-
-
-        <div class="productos-titulo">
-            🧶 Productos
-        </div>
-
-
-        <table class="factura-tabla">
-
-            <thead>
-
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Desc.</th>
-                    <th>Total</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                ${f.items.map(x => `
+                <thead>
 
                     <tr>
 
-                        <td>${esc(x.nombre)}</td>
+                        <th>Producto</th>
 
-                        <td>${x.q}</td>
+                        <th>Cantidad</th>
 
-                        <td>${money(x.pr)}</td>
+                        <th>Precio</th>
 
-                        <td>${x.d}%</td>
+                        <th>Desc.</th>
 
-                        <td><strong>${money(x.total)}</strong></td>
+                        <th>Total</th>
 
                     </tr>
 
-                `).join("")}
-
-            </tbody>
-
-        </table>
+                </thead>
 
 
-        <div class="factura-resumen">
+                <tbody>
 
-            <div>
-                <span>Subtotal</span>
-                <strong>${money(f.sub)}</strong>
+                    ${f.items.map(x => `
+
+                        <tr>
+
+                            <td>
+
+                                <div class="product-name">
+
+                                    <span>
+                                        ${esc(x.nombre)}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                ${x.q}
+                            </td>
+
+
+                            <td>
+                                ${money(x.pr)}
+                            </td>
+
+
+                            <td>
+                                ${x.d}%
+                            </td>
+
+
+                            <td class="product-total">
+
+                                ${money(x.total)}
+
+                            </td>
+
+                        </tr>
+
+                    `).join("")}
+
+                </tbody>
+
+            </table>
+
+
+            <!-- ================= PARTE INFERIOR ================= -->
+
+            <div class="invoice-bottom">
+
+
+                <!-- ESTADO -->
+
+                <div class="status-column">
+
+
+                    <div class="info-box">
+
+                        <div class="info-box-label">
+                            Estado
+                        </div>
+
+                        <div class="info-box-value">
+
+                            ${
+                                f.estado === "Pagada"
+
+                                ? `<span class="status-paid">
+                                    Pagada ✓
+                                   </span>`
+
+                                : esc(f.estado || "-")
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-box-label">
+                            Forma de pago
+                        </div>
+
+                        <div class="info-box-value">
+
+                            💳 ${esc(f.pago || "-")}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- TOTALES -->
+
+                <div class="totals-box">
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            ${money(f.sub)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Descuento
+                        </span>
+
+                        <strong>
+                            ${f.dg}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            IVA
+                        </span>
+
+                        <strong>
+                            ${f.iv}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="final-total">
+
+                        <span>
+                            Total a pagar
+                        </span>
+
+                        <span>
+                            ${money(f.total)}
+                        </span>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div>
-                <span>Descuento</span>
-                <strong>${f.dg}%</strong>
+
+            <!-- ================= OBSERVACIONES ================= -->
+
+            <div class="observations">
+
+                <div class="observations-title">
+
+                    💗 Observaciones
+
+                </div>
+
+
+                <div class="observations-text">
+
+                    ${esc(
+                        f.obs ||
+                        "Gracias por tu compra 💗"
+                    )}
+
+                </div>
+
             </div>
 
-            <div>
-                <span>IVA</span>
-                <strong>${f.iv}%</strong>
-            </div>
-
-            <div class="factura-total">
-
-                <span>Total a pagar</span>
-
-                <strong>${money(f.total)}</strong>
-
-            </div>
 
         </div>
 
 
-        <div class="factura-extra">
+        <!-- ================= FOOTER ================= -->
 
-            <div>
+        <div class="invoice-footer">
 
-                <small>ESTADO</small>
-
-                <strong>${esc(f.estado || "Pagada")}</strong>
-
+            <div class="footer-decoration">
+                🧶
             </div>
 
-            <div>
+            <h3>
+                Tejiendo Sueños Clau ♥
+            </h3>
 
-                <small>FORMA DE PAGO</small>
-
-                <strong>${esc(f.pago || "Contado")}</strong>
-
-            </div>
-
-        </div>
-
-
-        <div class="factura-observaciones">
-
-            <strong>💗 Observaciones</strong>
-
-            <br><br>
-
-            ${esc(f.obs || "Gracias por tu compra 💗")}
-
-        </div>
-
-
-        <div class="factura-footer">
-
-            <strong>Tejiendo Sueños Clau 💗</strong>
-
-            <span>Gracias por elegirnos</span>
+            <p>
+                Gracias por elegirnos
+            </p>
 
             <small>
                 Esta factura fue generada digitalmente.
@@ -357,9 +555,12 @@ function sheet(f){
 
         </div>
 
+
     </div>
+
     `;
 }
+
 function show(f=collect()){if(!valid())return;$("previewBox").innerHTML=sheet(f);$("modal").classList.add("show")}
 
 async function clienteDB(c){
