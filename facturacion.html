@@ -110,10 +110,68 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <article class="card"><div class="title">📄 Datos de la factura</div>
 <label>Número *</label><input id="numero" required>
 <label>Fecha *</label><input id="fecha" type="date" required>
-<label>Forma de pago</label><select id="pago"><option>Contado</option><option>Transferencia</option><option>Nequi</option><option>Daviplata</option><option>Tarjeta</option><option>Otro</option></select>
-<label>Estado</label><select id="estado"><option>Pagada</option><option>Pendiente</option><option>Enviada</option></select>
-<label>Observaciones</label><textarea id="obs" rows="3" placeholder="Gracias por tu compra 💗"></textarea>
-</article></section>
+<label>Forma de pago</label><select id="pago"><option>Efectivo</option><option>Abono</option><option>Bancolombia</option><option>Nequi</option><option>Daviplata</option><option>Otro</option></select>
+
+<div id="abonoBox" style="display:none;">
+    <label><img src="img/abono.png" alt="PDF" class="grilla-icon"> Valor del abono</label>
+    <input
+        id="abono"
+        type="number"
+        min="0"
+        step="1"
+        value="0"
+        placeholder="Ej: 87500">
+
+    <div class="saldo-box">
+        Saldo pendiente:
+        <strong id="saldoPendiente">$0</strong>
+    </div>
+</div>
+
+<div class="top"><div><h1>🧾 Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
+<form id="form">
+<section class="grid">
+<article class="card"><div class="title">👤 Datos del cliente</div>
+<label>Nombre / Razón social *</label><input id="nombre" required placeholder="Ej: María López">
+<label>Cédula / NIT</label><input id="ident" placeholder="Ej: 1234567890">
+<label>Teléfono</label><input id="tel" inputmode="tel" placeholder="Ej: 300 123 4567">
+<label>Correo</label><input id="correo" type="email" placeholder="Ej: maria@gmail.com">
+<label>Dirección</label><input id="direccion" placeholder="Ej: Calle 10 # 5-20, Popayán">
+</article>
+<article class="card"><div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
+<label>Número *</label><input id="numero" required>
+<label>Fecha *</label><input id="fecha" type="date" required>
+<label>Forma de pago</label><select id="pago"><option>Efectivo</option><option>Abono</option><option>Bancolombia</option><option>Nequi</option><option>Daviplata</option><option>Otro</option></select>
+
+<div id="abonoBox" style="display:none;">
+    <label><img src="img/abono.png" alt="PDF" class="grilla-icon"> Valor del abono</label>
+    <input
+        id="abono"
+        type="number"
+        min="0"
+        step="1"
+        value="0"
+        placeholder="Ej: 87500">
+
+    <div class="saldo-box">
+        Saldo pendiente:
+        <strong id="saldoPendiente">$0</strong>
+    </div>
+</div>
+
+<label>Estado</label>
+<select id="estado">
+    <option>Pagada</option>
+    <option>Pendiente</option>
+    <option>Enviada</option>
+</select>
+
+<label>Observaciones</label>
+<textarea
+    id="obs"
+    rows="3"
+    placeholder="Gracias por tu compra 💗"
+></textarea>
 
 <section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
@@ -135,6 +193,53 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <script src="js/supabase-config.js"></script>
 <script>
 const $=id=>document.getElementById(id);
+
+function actualizarAbono(){
+
+    const pago = $("pago").value;
+    const box = $("abonoBox");
+
+    if(!box) return;
+
+    if(pago === "Abono"){
+
+        box.style.display = "block";
+
+    }else{
+
+        box.style.display = "none";
+
+        if($("abono")){
+            $("abono").value = 0;
+        }
+    }
+
+    calcularSaldo();
+}
+
+function calcularSaldo(){
+
+    const total = calc().total;
+
+    const abono =
+        $("pago").value === "Abono"
+        ? Math.max(0, Number($("abono").value) || 0)
+        : total;
+
+    const abonoReal = Math.min(abono, total);
+
+    const saldo = Math.max(0, total - abonoReal);
+
+    if($("saldoPendiente")){
+        $("saldoPendiente").textContent = money(saldo);
+    }
+
+    return {
+        abono: abonoReal,
+        saldo
+    };
+}
+
 const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
 let products=[],clients=[],db=null,currentUser=null;
 let editingInvoiceId=null;
@@ -165,11 +270,164 @@ function row(id="",q=1,price=null,d=0){
  tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
 }
 function calc(){
- let sub=0;document.querySelectorAll("#items tr").forEach(tr=>{let q=+tr.querySelector(".qty").value||0,p=+tr.querySelector(".price").value||0,d=+tr.querySelector(".disc").value||0,v=q*p*(1-d/100);sub+=v;tr.querySelector(".lt").textContent=money(v)});
- let dg=Math.min(100,+$("dg").value||0),iv=Math.min(100,+$("iva").value||0),base=sub*(1-dg/100),total=base*(1+iv/100);
- $("sub").textContent=money(sub);$("tot").textContent=money(total);return{sub,dg,iv,total};
+
+    let sub = 0;
+
+    document.querySelectorAll("#items tr").forEach(tr => {
+
+        let q = +tr.querySelector(".qty").value || 0;
+        let p = +tr.querySelector(".price").value || 0;
+        let d = +tr.querySelector(".disc").value || 0;
+
+        let v = q * p * (1 - d / 100);
+
+        sub += v;
+
+        tr.querySelector(".lt").textContent = money(v);
+    });
+
+    let dg = Math.min(100, +$("dg").value || 0);
+    let iv = Math.min(100, +$("iva").value || 0);
+
+    let base = sub * (1 - dg / 100);
+
+    let total = base * (1 + iv / 100);
+
+
+    // ==============================
+    // ABONO Y SALDO PENDIENTE
+    // ==============================
+
+    let abono = Math.max(
+        0,
+        +$("abono").value || 0
+    );
+
+    // El abono nunca puede superar el total
+    abono = Math.min(abono, total);
+
+    let saldo = Math.max(
+        0,
+        total - abono
+    );
+
+
+    // ==============================
+    // MOSTRAR TOTALES
+    // ==============================
+
+    $("sub").textContent = money(sub);
+
+    $("tot").textContent = money(total);
+
+
+    // Mostrar saldo pendiente
+    if($("saldoPendiente")){
+
+        $("saldoPendiente").textContent = money(saldo);
+
+    }
+
+
+    return {
+        sub,
+        dg,
+        iv,
+        total,
+        abono,
+        saldo
+    };
+
 }
-function collect(){let c=calc();return{numero:$("numero").value,fecha:$("fecha").value,cliente:{nombre:$("nombre").value,ident:$("ident").value,tel:$("tel").value,correo:$("correo").value,direccion:$("direccion").value},pago:$("pago").value,estado:$("estado").value,obs:$("obs").value,items:[...document.querySelectorAll("#items tr")].map(t=>{let id=t.querySelector(".ps").value,p=products.find(x=>String(x.id)==id),q=+t.querySelector(".qty").value||0,pr=+t.querySelector(".price").value||0,d=+t.querySelector(".disc").value||0;return{id,nombre:name(p),q,pr,d,total:q*pr*(1-d/100)}}).filter(x=>x.q),...c}}
+function actualizarAbono(){
+
+    const pago = $("pago").value;
+    const box = $("abonoBox");
+
+    if(pago === "Abono"){
+
+        box.style.display = "block";
+
+        const total = calc().total;
+        let abono = Number($("abono").value) || 0;
+
+        if(abono > total){
+            abono = total;
+            $("abono").value = total;
+        }
+
+        const saldo = Math.max(0, total - abono);
+
+        $("saldo").textContent = money(saldo);
+
+    }else{
+
+        box.style.display = "none";
+        $("abono").value = "";
+        $("saldo").textContent = money(0);
+    }
+}
+
+$("pago").onchange = actualizarAbono;
+
+$("abono").oninput = actualizarAbono;
+
+$("dg").oninput = () => {
+    calc();
+    actualizarAbono();
+};
+
+$("iva").oninput = () => {
+    calc();
+    actualizarAbono();
+};
+
+function collect(){
+
+    let c = calc();
+
+    return {
+        numero: $("numero").value,
+        fecha: $("fecha").value,
+
+        cliente: {
+            nombre: $("nombre").value,
+            ident: $("ident").value,
+            tel: $("tel").value,
+            correo: $("correo").value,
+            direccion: $("direccion").value
+        },
+
+        pago: $("pago").value,
+        estado: $("estado").value,
+        obs: $("obs").value,
+
+        items: [...document.querySelectorAll("#items tr")]
+            .map(t => {
+
+                let id = t.querySelector(".ps").value;
+                let p = products.find(x => String(x.id) == id);
+
+                let q = +t.querySelector(".qty").value || 0;
+                let pr = +t.querySelector(".price").value || 0;
+                let d = +t.querySelector(".disc").value || 0;
+
+                return {
+                    id,
+                    nombre: name(p),
+                    q,
+                    pr,
+                    d,
+                    total: q * pr * (1 - d / 100)
+                };
+
+            })
+            .filter(x => x.q),
+
+        ...c
+    };
+}
+
 function valid(){if(!$("nombre").value.trim())return alert("Escribe el nombre del cliente."),false;if(!$("numero").value.trim())return alert("Indica el número de factura."),false;if(!document.querySelector("#items tr"))return alert("Agrega al menos un producto."),false;return true}
 
 function sheet(f) {
@@ -571,7 +829,36 @@ async function clienteDB(c){
 }
 async function guardarDB(f){
  const cliente=await clienteDB(f.cliente);
- const {data:fac,error:e1}=await db.from("facturas").insert({numero:f.numero,fecha:f.fecha,cliente_id:cliente.id,forma_pago:f.pago,estado:f.estado,observaciones:f.obs||null,subtotal:f.sub,descuento_porcentaje:f.dg,iva_porcentaje:f.iv,total:f.total,usuario_id:currentUser.id}).select().single();
+ const {data:fac,error:e1}=await db.from("facturas").insert({
+
+    numero: f.numero,
+
+    fecha: f.fecha,
+
+    cliente_id: cliente.id,
+
+    forma_pago: f.pago,
+
+    estado: f.estado,
+
+    observaciones: f.obs || null,
+
+    subtotal: f.sub,
+
+    descuento_porcentaje: f.dg,
+
+    iva_porcentaje: f.iv,
+
+    total: f.total,
+
+    valor_abono: f.abono,
+
+    saldo_pendiente: f.saldo,
+
+    usuario_id: currentUser.id
+
+}).select().single();
+
  if(e1)throw e1;
  const rows=f.items.map(x=>({factura_id:fac.id,producto_id:String(x.id||"")||null,producto_nombre:x.nombre,cantidad:x.q,precio_unitario:x.pr,descuento_porcentaje:x.d,total:x.total}));
  const {error:e2}=await db.from("factura_detalle").insert(rows);if(e2){await db.from("facturas").delete().eq("id",fac.id);throw e2}
@@ -584,19 +871,34 @@ async function actualizarFacturaDB(f){
     const { error: e1 } = await db
         .from("facturas")
         .update({
+
             fecha: f.fecha,
+
             cliente_id: cliente.id,
+
             forma_pago: f.pago,
+
             estado: f.estado,
+
             observaciones: f.obs || null,
+
             subtotal: f.sub,
+
             descuento_porcentaje: f.dg,
+
             iva_porcentaje: f.iv,
-            total: f.total
+
+            total: f.total,
+
+            valor_abono: f.abono,
+
+            saldo_pendiente: f.saldo
+
         })
         .eq("id", editingInvoiceId);
 
     if(e1) throw e1;
+
 
     const { error: e2 } = await db
         .from("factura_detalle")
@@ -605,15 +907,25 @@ async function actualizarFacturaDB(f){
 
     if(e2) throw e2;
 
+
     const rows = f.items.map(x => ({
+
         factura_id: editingInvoiceId,
+
         producto_id: String(x.id || "") || null,
+
         producto_nombre: x.nombre,
+
         cantidad: x.q,
+
         precio_unitario: x.pr,
+
         descuento_porcentaje: x.d,
+
         total: x.total
+
     }));
+
 
     const { error: e3 } = await db
         .from("factura_detalle")
@@ -1000,7 +1312,21 @@ async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se p
 async function logoutDB(e){e?.preventDefault();if(db)await db.auth.signOut();currentUser=null;showDBLogin()}
 function initDB(){if(window.SUPABASE_URL&&window.SUPABASE_ANON_KEY){db=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);console.log("✅ Supabase conectado")}else console.error("❌ No se encontraron las credenciales de Supabase.")}
 
-$("add").onclick=()=>row();$("dg").oninput=calc;$("iva").oninput=calc;$("preview").onclick=()=>show();
+$("add").onclick = () => row();
+
+$("dg").oninput = () => {
+    calc();
+    calcularSaldo();
+};
+
+$("iva").oninput = () => {
+    calc();
+    calcularSaldo();
+};
+
+$("pago").onchange = actualizarAbono;
+$("abono").oninput = calcularSaldo;
+$("preview").onclick=()=>show();
 $("print").onclick=()=>{show();setTimeout(()=>print(),200)};$("pdf").onclick=()=>{show();setTimeout(()=>{alert("Selecciona «Guardar como PDF» en la ventana de impresión.");print()},200)};
 $("wa").onclick=()=>{if(!valid())return;const f=collect(),txt="Hola "+f.cliente.nombre+" 😊%0AFactura "+f.numero+"%0A"+f.items.map(x=>"• "+x.nombre+" x"+x.q+": "+money(x.total)).join("%0A")+"%0ATotal: "+money(f.total)+"%0A¡Gracias por tu compra! 💗";open("https://wa.me/"+((f.cliente.tel||"573011810933").replace(/\D/g,""))+"?text="+txt,"_blank")};
 
