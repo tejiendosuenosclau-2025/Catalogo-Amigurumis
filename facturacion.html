@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Facturación | Tejiendo Sueños Clau</title>
+<link rel="icon" href="img/logo.png">
+<style>
+:root{--p:#f47da3;--pd:#e85c8b;--g:#31b866;--v:#8662a9;--ink:#40373b;--mut:#7d7378;--line:#eadfe4;--soft:#fff3f7}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fff}body.locked{overflow:hidden}
+aside{position:fixed;inset:0 auto 0 0;width:235px;border-right:1px solid var(--line);background:#fff;padding:18px 14px;z-index:20;box-shadow:3px 0 18px #0000000a}
+.brand{text-align:center}.brand img{width:155px;max-width:90%}nav{display:grid;gap:4px;margin-top:15px}nav a{padding:12px;border-radius:10px;text-decoration:none;color:var(--ink)}nav a.active,nav a:hover{background:var(--soft);color:var(--pd);font-weight:bold}
+.wa{position:absolute;bottom:18px;left:14px;right:14px;text-align:center;background:var(--g);color:#fff;padding:12px;border-radius:25px;text-decoration:none;font-weight:bold}
+main{margin-left:235px;padding:28px;max-width:1450px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.top h1{margin:0;font-size:30px}.top p{margin:5px 0;color:var(--mut)}
+.card{border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:0 8px 25px #00000009}.title{color:var(--pd);font-weight:bold;font-size:18px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #d8cfd3;border-radius:8px;font:inherit}textarea{resize:vertical}.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--soft);color:var(--pd);padding:11px;text-align:left;font-size:13px}td{border-bottom:1px solid #eee;padding:8px;font-size:13px}
+.qty{width:70px}.price{width:125px}.disc{width:75px}button{cursor:pointer}.add{margin-top:12px;padding:10px 14px;border:1px solid var(--p);color:var(--pd);background:#fff;border-radius:8px;font-weight:bold}.del{border:0;background:transparent;font-size:18px}
+.totals{max-width:430px;margin:18px 0 0 auto}.totals div{display:flex;justify-content:flex-end;gap:14px;padding:6px}.total{background:var(--soft);padding:13px!important;border-radius:9px;color:var(--pd);font-size:18px;font-weight:bold}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}.btn{border:0;border-radius:9px;padding:13px;font-weight:bold}.green{background:var(--g);color:#fff}.pink{background:var(--p);color:#fff}.purple{background:var(--v);color:#fff}.white{background:#fff;border:1px solid var(--p);color:var(--pd)}.gray{background:#f3eff1}
+.status{padding:5px 8px;border-radius:14px;font-size:11px;font-weight:bold}.Pagada{background:#e5f8ed;color:#198b4b}.Pendiente{background:#fff1d6;color:#a66b00}.Enviada{background:#e6efff;color:#3268b2}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:15px;overflow:auto}.modal.show{display:block}.sheet{background:#fff;max-width:820px;margin:20px auto;padding:28px;border-radius:12px}.sheethead{display:flex;justify-content:space-between;border-bottom:2px solid var(--p);padding-bottom:15px}.sheethead img{width:135px}.sheet table{min-width:0}.close{float:right;border:0;background:#fff;font-size:28px}.muted{color:var(--mut)}footer{text-align:center;color:var(--mut);padding:20px}.mobile{display:none}
+.login-screen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#fff3f7,#fff)}
+.login-card{width:100%;max-width:420px;background:#fff;padding:35px 30px;border-radius:20px;box-shadow:0 15px 50px #00000018;border:1px solid var(--line);text-align:center}
+.login-logo{width:150px;max-width:80%;margin-bottom:15px}.login-card h1{margin:5px 0;color:var(--pd);font-size:28px}.login-subtitle{color:var(--mut);margin-bottom:25px}.login-card label{text-align:left}
+.password-box{position:relative}.password-box input{padding-right:50px}.password-box button{position:absolute;right:5px;top:3px;height:38px;width:42px;border:0;background:transparent;font-size:18px}
+.login-button{width:100%;margin-top:20px;padding:14px;border:0;border-radius:10px;background:var(--p);color:#fff;font-weight:bold;font-size:16px}.login-button:hover{background:var(--pd)}
+.login-error{color:#d62828;font-weight:bold;min-height:20px;margin-top:12px}.login-footer{color:var(--mut);margin-top:25px;font-size:13px}
+@media(max-width:850px){.mobile{display:flex;position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);padding:12px 15px;gap:12px;align-items:center}.mobile button{border:0;background:var(--soft);font-size:22px;border-radius:8px;padding:7px 11px}aside{transform:translateX(-105%);transition:.2s;width:min(82vw,320px)}aside.open{transform:translateX(0)}main{margin:0;padding:16px}.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}.overlay{display:none;position:fixed;inset:0;background:#0007;z-index:10}.overlay.show{display:block}}
+@media(max-width:520px){.actions{grid-template-columns:1fr}.top h1{font-size:24px}.card{padding:14px}.login-card{padding:28px 20px}.login-card h1{font-size:24px}}
+@media print{aside,.mobile,.top,#form,.history,footer,.modal button,.login-screen{display:none!important}main{margin:0;padding:0}.modal{display:block!important;position:static;background:#fff;padding:0}.sheet{margin:0;box-shadow:none}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+<div class="login-card">
+<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
+<h1>🧾 Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
+<form id="loginForm">
+<label for="loginUser">📧 Correo electrónico</label>
+<input type="email" id="loginUser" placeholder="correo@ejemplo.com" required autocomplete="username">
+<label for="loginPass">🔐 Contraseña</label>
+<div class="password-box"><input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword">👁️</button></div>
+<button type="submit" class="login-button">🔐 Ingresar</button><p id="loginError" class="login-error"></p>
+</form><p class="login-footer">Tejiendo Sueños Clau 💗</p>
+</div></div>
+
+<div class="mobile"><button id="open">☰</button><b>🧾 Facturación</b></div><div id="ov" class="overlay"></div>
+<aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
+<div class="brand"><img src="img/logo.png" alt="Tejiendo Sueños Clau"></div>
+<nav>
+<a href="index.html">🏠 Inicio</a><a href="index.html#categorias">🧶 Categorías</a><a href="index.html#catalogo">🧸 Catálogo</a><a href="index.html#favoritos">❤️ Mis Favoritos</a><a href="index.html#carrito">🛒 Carrito</a><a class="active" href="facturacion.html">🧾 Facturación</a><a href="#historial">📋 Historial</a><a href="#clientes">👥 Clientes</a><a href="index.html#contacto">💬 Contacto</a><a href="#" id="logoutBtn">🚪 Cerrar sesión</a>
+</nav><a class="wa" href="https://wa.me/573011810933" target="_blank" rel="noopener">💬 WhatsApp</a>
+</aside>
+
+<main>
+<div class="top"><div><h1>🧾 Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
+<form id="form">
+<section class="grid">
+<article class="card"><div class="title">👤 Datos del cliente</div>
+<label>Nombre / Razón social *</label><input id="nombre" required placeholder="Ej: María López">
+<label>Cédula / NIT</label><input id="ident" placeholder="Ej: 1234567890">
+<label>Teléfono</label><input id="tel" inputmode="tel" placeholder="Ej: 300 123 4567">
+<label>Correo</label><input id="correo" type="email" placeholder="Ej: maria@gmail.com">
+<label>Dirección</label><input id="direccion" placeholder="Ej: Calle 10 # 5-20, Popayán">
+</article>
+<article class="card"><div class="title">📄 Datos de la factura</div>
+<label>Número *</label><input id="numero" required>
+<label>Fecha *</label><input id="fecha" type="date" required>
+<label>Forma de pago</label><select id="pago"><option>Contado</option><option>Transferencia</option><option>Nequi</option><option>Daviplata</option><option>Tarjeta</option><option>Otro</option></select>
+<label>Estado</label><select id="estado"><option>Pagada</option><option>Pendiente</option><option>Enviada</option></select>
+<label>Observaciones</label><textarea id="obs" rows="3" placeholder="Gracias por tu compra 💗"></textarea>
+</article></section>
+
+<section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
+<button type="button" class="add" id="add">＋ Agregar producto</button>
+<div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
+</section>
+
+<div class="actions"><button type="button" class="btn green" id="preview">👁️ Vista previa</button><button type="button" class="btn pink" id="pdf">📄 Generar PDF</button><button type="button" class="btn purple" id="print">🖨️ Imprimir</button><button type="button" class="btn green" id="wa">💬 WhatsApp</button><button class="btn white">💾 Guardar factura</button><button type="button" class="btn gray" id="new">＋ Nueva factura</button></div>
+</form>
+
+<section id="historial" class="card history"><div class="title">📋 Historial de facturas</div><div class="wrap"><table><thead><tr><th>Factura</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="history"></tbody></table></div></section>
+<section id="clientes" class="card"><div class="title">👥 Clientes guardados</div><div id="clients" class="muted">Los clientes aparecerán aquí después de guardar una factura.</div></section>
+<footer>Tejiendo Sueños Clau · Hecho con Amor 💗</footer>
+</main>
+
+<div id="modal" class="modal"><div class="sheet"><button class="close" id="x">×</button><div id="previewBox"></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
+let products=[],clients=[],db=null,currentUser=null;
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function name(p){return Array.isArray(p?.nombre)?p.nombre.join(" "):(p?.nombre||"Producto")}
+function today(){return new Date().toISOString().slice(0,10)}
+async function load(){try{products=await (await fetch("data/productos.json")).json()}catch(e){console.error(e);products=[]}}
+function next(){return "FAC-"+String((window.__nextInvoice||0)+1).padStart(5,"0")}
+function options(sel=""){return '<option value="">Seleccionar producto</option>'+products.map(p=>'<option value="'+p.id+'" '+(String(p.id)==String(sel)?"selected":"")+'>'+esc(name(p))+'</option>').join("")}
+function row(id="",q=1,price=null,d=0){
+ const tr=document.createElement("tr"),p=products.find(x=>String(x.id)==String(id));
+ tr.innerHTML='<td><select class="ps">'+options(id)+'</select></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??p?.precio??0)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del">🗑️</button></td>';
+ $("items").appendChild(tr);
+ tr.querySelector(".ps").onchange=()=>{let x=products.find(p=>String(p.id)==tr.querySelector(".ps").value);tr.querySelector(".price").value=x?.precio||0;calc()};
+ tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
+}
+function calc(){
+ let sub=0;document.querySelectorAll("#items tr").forEach(tr=>{let q=+tr.querySelector(".qty").value||0,p=+tr.querySelector(".price").value||0,d=+tr.querySelector(".disc").value||0,v=q*p*(1-d/100);sub+=v;tr.querySelector(".lt").textContent=money(v)});
+ let dg=Math.min(100,+$("dg").value||0),iv=Math.min(100,+$("iva").value||0),base=sub*(1-dg/100),total=base*(1+iv/100);
+ $("sub").textContent=money(sub);$("tot").textContent=money(total);return{sub,dg,iv,total};
+}
+function collect(){let c=calc();return{numero:$("numero").value,fecha:$("fecha").value,cliente:{nombre:$("nombre").value,ident:$("ident").value,tel:$("tel").value,correo:$("correo").value,direccion:$("direccion").value},pago:$("pago").value,estado:$("estado").value,obs:$("obs").value,items:[...document.querySelectorAll("#items tr")].map(t=>{let id=t.querySelector(".ps").value,p=products.find(x=>String(x.id)==id),q=+t.querySelector(".qty").value||0,pr=+t.querySelector(".price").value||0,d=+t.querySelector(".disc").value||0;return{id,nombre:name(p),q,pr,d,total:q*pr*(1-d/100)}}).filter(x=>x.q),...c}}
+function valid(){if(!$("nombre").value.trim())return alert("Escribe el nombre del cliente."),false;if(!$("numero").value.trim())return alert("Indica el número de factura."),false;if(!document.querySelector("#items tr"))return alert("Agrega al menos un producto."),false;return true}
+function sheet(f){return '<div class="sheethead"><img src="img/logo.png"><div><h2>FACTURA</h2><b>'+esc(f.numero)+'</b><br>'+esc(f.fecha)+'</div></div><p><b>Cliente:</b> '+esc(f.cliente.nombre)+'<br>'+esc(f.cliente.ident)+' · '+esc(f.cliente.tel)+'<br>'+esc(f.cliente.correo)+'<br>'+esc(f.cliente.direccion)+'</p><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc.</th><th>Total</th></tr></thead><tbody>'+f.items.map(x=>'<tr><td>'+esc(x.nombre)+'</td><td>'+x.q+'</td><td>'+money(x.pr)+'</td><td>'+x.d+'%</td><td>'+money(x.total)+'</td></tr>').join("")+'</tbody></table><div style="text-align:right;margin-top:20px"><p>Subtotal: <b>'+money(f.sub)+'</b></p><p>Descuento: '+f.dg+'%</p><p>IVA: '+f.iv+'%</p><h2 style="color:var(--pd)">Total: '+money(f.total)+'</h2></div><p style="background:var(--soft);padding:12px">'+esc(f.obs||"Gracias por tu compra 💗")+'</p><p style="text-align:center;color:#888">Tejiendo Sueños Clau · Hecho con Amor 💗</p>'}
+function show(f=collect()){if(!valid())return;$("previewBox").innerHTML=sheet(f);$("modal").classList.add("show")}
+
+async function clienteDB(c){
+ let q=db.from("clientes").select("*").limit(1);if(c.ident.trim())q=q.eq("identificacion",c.ident.trim());else q=q.eq("nombre",c.nombre.trim());
+ const {data:found,error:findError}=await q.maybeSingle();if(findError)throw findError;
+ if(found){const {data,error}=await db.from("clientes").update({nombre:c.nombre,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).eq("id",found.id).select().single();if(error)throw error;return data}
+ const {data,error}=await db.from("clientes").insert({nombre:c.nombre,identificacion:c.ident.trim()||null,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).select().single();if(error)throw error;return data;
+}
+async function guardarDB(f){
+ const cliente=await clienteDB(f.cliente);
+ const {data:fac,error:e1}=await db.from("facturas").insert({numero:f.numero,fecha:f.fecha,cliente_id:cliente.id,forma_pago:f.pago,estado:f.estado,observaciones:f.obs||null,subtotal:f.sub,descuento_porcentaje:f.dg,iva_porcentaje:f.iv,total:f.total,usuario_id:currentUser.id}).select().single();
+ if(e1)throw e1;
+ const rows=f.items.map(x=>({factura_id:fac.id,producto_id:String(x.id||"")||null,producto_nombre:x.nombre,cantidad:x.q,precio_unitario:x.pr,descuento_porcentaje:x.d,total:x.total}));
+ const {error:e2}=await db.from("factura_detalle").insert(rows);if(e2){await db.from("facturas").delete().eq("id",fac.id);throw e2}
+}
+async function cargarHistorialDB(){
+ if(!db||!currentUser)return;const {data,error}=await db.from("facturas").select("id,numero,fecha,estado,total,clientes(nombre)").order("created_at",{ascending:false}).limit(100);
+ if(error){console.error(error);$("history").innerHTML='<tr><td colspan="6" class="muted">No se pudo cargar el historial.</td></tr>';return}
+ $("history").innerHTML=data?.length?data.map(f=>'<tr><td>'+esc(f.numero)+'</td><td>'+esc(f.clientes?.nombre||"")+'</td><td>'+esc(f.fecha)+'</td><td>'+money(f.total)+'</td><td><span class="status '+esc(f.estado)+'">'+esc(f.estado)+'</span></td><td>☁️ Guardada</td></tr>').join(""):'<tr><td colspan="6" class="muted">No hay facturas guardadas.</td></tr>';
+}
+async function cargarClientesDB(){
+ if(!db||!currentUser)return;const {data,error}=await db.from("clientes").select("id,nombre,identificacion,telefono,correo,direccion").order("created_at",{ascending:false}).limit(100);if(error){console.error(error);return}
+ clients=data||[];$("clients").innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div style="display:inline-block;border:1px solid var(--line);padding:10px;margin:4px;border-radius:8px"><b>'+esc(c.nombre)+'</b><br>'+esc(c.telefono||"")+'<br><button type="button" onclick="useClient('+i+')">Usar cliente</button></div>').join(""):"Aún no hay clientes.";
+}
+function useClient(i){let c=clients[i];if(!c)return;$("nombre").value=c.nombre||"";$("ident").value=c.identificacion||"";$("tel").value=c.telefono||"";$("correo").value=c.correo||"";$("direccion").value=c.direccion||"";scrollTo({top:0,behavior:"smooth"})}
+async function guardarFacturaDB(e){
+ e.preventDefault();if(!valid())return;if(!db||!currentUser){alert("Debes iniciar sesión.");return}
+ try{const f=collect();await guardarDB(f);window.__nextInvoice=(window.__nextInvoice||0)+1;await cargarHistorialDB();await cargarClientesDB();alert("Factura "+f.numero+" guardada correctamente en Supabase.");$("numero").value=next()}catch(err){console.error(err);alert("No se pudo guardar la factura. Revisa las tablas y las políticas RLS de Supabase.")}
+}
+function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
+function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";document.body.classList.remove("locked")}
+async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se pudo conectar con Supabase.");return}const email=$("loginUser").value.trim(),password=$("loginPass").value;const {data,error}=await db.auth.signInWithPassword({email,password});if(error){$("loginError").textContent="❌ Correo o contraseña incorrectos.";return}currentUser=data.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}
+async function logoutDB(e){e?.preventDefault();if(db)await db.auth.signOut();currentUser=null;showDBLogin()}
+function initDB(){if(window.SUPABASE_URL&&window.SUPABASE_ANON_KEY){db=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);console.log("✅ Supabase conectado")}else console.error("❌ No se encontraron las credenciales de Supabase.")}
+
+$("add").onclick=()=>row();$("dg").oninput=calc;$("iva").oninput=calc;$("preview").onclick=()=>show();
+$("print").onclick=()=>{show();setTimeout(()=>print(),200)};$("pdf").onclick=()=>{show();setTimeout(()=>{alert("Selecciona «Guardar como PDF» en la ventana de impresión.");print()},200)};
+$("wa").onclick=()=>{if(!valid())return;const f=collect(),txt="Hola "+f.cliente.nombre+" 😊%0AFactura "+f.numero+"%0A"+f.items.map(x=>"• "+x.nombre+" x"+x.q+": "+money(x.total)).join("%0A")+"%0ATotal: "+money(f.total)+"%0A¡Gracias por tu compra! 💗";open("https://wa.me/"+((f.cliente.tel||"573011810933").replace(/\D/g,""))+"?text="+txt,"_blank")};
+$("new").onclick=()=>{$("form").reset();$("numero").value=next();$("fecha").value=today();$("items").innerHTML="";row()};$("x").onclick=()=>$("modal").classList.remove("show");
+$("open").onclick=()=>{$("side").classList.add("open");$("ov").classList.add("show")};$("close").onclick=()=>{$("side").classList.remove("open");$("ov").classList.remove("show")};$("ov").onclick=$("close").onclick;
+$("loginForm").onsubmit=loginDB;$("logoutBtn").onclick=logoutDB;$("togglePassword").onclick=()=>{const pass=$("loginPass"),visible=pass.type==="text";pass.type=visible?"password":"text";$("togglePassword").textContent=visible?"👁️":"🙈"};
+$("form").onsubmit=guardarFacturaDB;
+
+(async()=>{initDB();await load();$("numero").value=next();$("fecha").value=today();$("fechaTexto").textContent=new Date().toLocaleDateString("es-CO",{day:"2-digit",month:"long",year:"numeric"});row();
+ if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
+ db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
+</script>
+</body>
+</html>
