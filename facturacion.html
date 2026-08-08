@@ -110,23 +110,43 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <article class="card"><div class="title">📄 Datos de la factura</div>
 <label>Número *</label><input id="numero" required>
 <label>Fecha *</label><input id="fecha" type="date" required>
-<label>Forma de pago</label><select id="pago"><option>Efectivo</option><option>Abono</option><option>Bancolombia</option><option>Nequi</option><option>Daviplata</option><option>Otro</option></select>
+<label>Forma de pago</label>
+<select id="pago">
+    <option>Efectivo</option>
+    <option>Abono</option>
+    <option>Bancolombia</option>
+    <option>Nequi</option>
+    <option>Daviplata</option>
+    <option>Otro</option>
+</select>
 
-<div id="abonoBox" style="display:none;">
-    <label><img src="img/abono.png" alt="PDF" class="grilla-icon"> Valor del abono</label>
-    <input
-        id="abono"
-        type="number"
-        min="0"
-        step="1"
-        value="0"
-        placeholder="Ej: 87500">
+<label>Abono</label>
+<input
+    id="abono"
+    type="number"
+    min="0"
+    value="0"
+    placeholder="Ej: 50000"
+>
 
-    <div class="saldo-box">
-        Saldo pendiente:
-        <strong id="saldoPendiente">$0</strong>
-    </div>
+<div class="saldo-box">
+    <span>Saldo pendiente:</span>
+    <strong id="saldoPendiente">$0</strong>
 </div>
+
+<label>Estado</label>
+<select id="estado">
+    <option>Pagada</option>
+    <option>Pendiente</option>
+    <option>Enviada</option>
+</select>
+
+<label>Observaciones</label>
+<textarea
+    id="obs"
+    rows="3"
+    placeholder="Gracias por tu compra 💗"
+></textarea>
 
 <div class="top"><div><h1>🧾 Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
 <form id="form">
