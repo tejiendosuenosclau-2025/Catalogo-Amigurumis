@@ -823,3 +823,117 @@
         page-break-inside: avoid;
     }
 }
+
+/* =========================================================
+   CORRECCIÓN DEL NÚMERO DE FACTURA
+   ========================================================= */
+
+.invoice-header {
+    grid-template-columns: 190px minmax(0, 1fr) 210px;
+    gap: 20px;
+    min-width: 0;
+}
+
+.invoice-number {
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.invoice-number h3 {
+    white-space: nowrap;
+    font-size: clamp(20px, 3vw, 28px);
+}
+
+.invoice-number .number {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    padding: 12px 10px;
+
+    font-size: clamp(17px, 2.5vw, 27px);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    text-align: center;
+}
+
+/* Evita que cualquier elemento de la factura
+   provoque desbordamiento horizontal */
+
+.sheet,
+.sheet * {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* En ventanas pequeñas */
+
+@media (max-width: 900px) {
+
+    .invoice-header {
+        grid-template-columns: 150px minmax(0, 1fr) 180px;
+        gap: 12px;
+        padding: 25px 25px 22px;
+    }
+
+    .invoice-logo {
+        width: 140px;
+        height: 140px;
+    }
+
+    .invoice-brand h1 {
+        font-size: 34px;
+    }
+
+    .invoice-brand h2 {
+        font-size: 28px;
+    }
+
+    .invoice-brand p {
+        font-size: 16px;
+    }
+
+    .invoice-number h3 {
+        font-size: 21px;
+    }
+
+    .invoice-number .number {
+        font-size: 19px;
+        padding: 11px 8px;
+    }
+}
+
+/* Vista previa todavía más pequeña */
+
+@media (max-width: 650px) {
+
+    .invoice-header {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .invoice-logo {
+        margin: auto;
+    }
+
+    .invoice-number {
+        border-left: 0;
+        border-top: 2px solid var(--rosa-borde);
+        padding: 15px 0 0;
+    }
+
+    .invoice-number .number {
+        width: min(100%, 260px);
+        margin: auto;
+        font-size: 20px;
+    }
+}
