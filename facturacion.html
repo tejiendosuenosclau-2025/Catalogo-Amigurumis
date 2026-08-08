@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Facturación | Tejiendo Sueños Clau</title>
 <link rel="icon" href="img/logo.png">
+<link rel="stylesheet" href="css/factura-bonita.css">
 <style>
 :root{--p:#f47da3;--pd:#e85c8b;--g:#31b866;--v:#8662a9;--ink:#40373b;--mut:#7d7378;--line:#eadfe4;--soft:#fff3f7}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fff}body.locked{overflow:hidden}
@@ -170,7 +171,195 @@ function calc(){
 }
 function collect(){let c=calc();return{numero:$("numero").value,fecha:$("fecha").value,cliente:{nombre:$("nombre").value,ident:$("ident").value,tel:$("tel").value,correo:$("correo").value,direccion:$("direccion").value},pago:$("pago").value,estado:$("estado").value,obs:$("obs").value,items:[...document.querySelectorAll("#items tr")].map(t=>{let id=t.querySelector(".ps").value,p=products.find(x=>String(x.id)==id),q=+t.querySelector(".qty").value||0,pr=+t.querySelector(".price").value||0,d=+t.querySelector(".disc").value||0;return{id,nombre:name(p),q,pr,d,total:q*pr*(1-d/100)}}).filter(x=>x.q),...c}}
 function valid(){if(!$("nombre").value.trim())return alert("Escribe el nombre del cliente."),false;if(!$("numero").value.trim())return alert("Indica el número de factura."),false;if(!document.querySelector("#items tr"))return alert("Agrega al menos un producto."),false;return true}
-function sheet(f){return '<div class="sheethead"><img src="img/logo.png"><div><h2>FACTURA</h2><b>'+esc(f.numero)+'</b><br>'+esc(f.fecha)+'</div></div><p><b>Cliente:</b> '+esc(f.cliente.nombre)+'<br>'+esc(f.cliente.ident)+' · '+esc(f.cliente.tel)+'<br>'+esc(f.cliente.correo)+'<br>'+esc(f.cliente.direccion)+'</p><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc.</th><th>Total</th></tr></thead><tbody>'+f.items.map(x=>'<tr><td>'+esc(x.nombre)+'</td><td>'+x.q+'</td><td>'+money(x.pr)+'</td><td>'+x.d+'%</td><td>'+money(x.total)+'</td></tr>').join("")+'</tbody></table><div style="text-align:right;margin-top:20px"><p>Subtotal: <b>'+money(f.sub)+'</b></p><p>Descuento: '+f.dg+'%</p><p>IVA: '+f.iv+'%</p><h2 style="color:var(--pd)">Total: '+money(f.total)+'</h2></div><p style="background:var(--soft);padding:12px">'+esc(f.obs||"Gracias por tu compra 💗")+'</p><p style="text-align:center;color:#888">Tejiendo Sueños Clau · Hecho con Amor 💗</p>'}
+
+function sheet(f){
+
+    return `
+    <div class="factura-bonita">
+
+        <div class="factura-header">
+
+            <div class="factura-marca">
+
+                <img src="img/logo.png" alt="Tejiendo Sueños Clau">
+
+                <div>
+                    <h2>Tejiendo Sueños Clau</h2>
+                    <p>Hecho con Amor 💗</p>
+                </div>
+
+            </div>
+
+            <div class="factura-info">
+
+                <span>FACTURA</span>
+
+                <strong>${esc(f.numero)}</strong>
+
+                <small>${esc(f.fecha)}</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="factura-linea"></div>
+
+
+        <div class="cliente-box">
+
+            <div>
+                <small>CLIENTE</small>
+                <strong>${esc(f.cliente.nombre || "No registrado")}</strong>
+            </div>
+
+            <div>
+                <small>IDENTIFICACIÓN</small>
+                <strong>${esc(f.cliente.ident || "No registrada")}</strong>
+            </div>
+
+            <div>
+                <small>TELÉFONO</small>
+                <strong>${esc(f.cliente.tel || "No registrado")}</strong>
+            </div>
+
+            <div>
+                <small>CORREO</small>
+                <strong>${esc(f.cliente.correo || "No registrado")}</strong>
+            </div>
+
+            <div>
+                <small>DIRECCIÓN</small>
+                <strong>${esc(f.cliente.direccion || "No registrada")}</strong>
+            </div>
+
+            <div>
+                <small>FORMA DE PAGO</small>
+                <strong>${esc(f.pago || "Contado")}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="productos-titulo">
+            🧶 Productos
+        </div>
+
+
+        <table class="factura-tabla">
+
+            <thead>
+
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Desc.</th>
+                    <th>Total</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${f.items.map(x => `
+
+                    <tr>
+
+                        <td>${esc(x.nombre)}</td>
+
+                        <td>${x.q}</td>
+
+                        <td>${money(x.pr)}</td>
+
+                        <td>${x.d}%</td>
+
+                        <td><strong>${money(x.total)}</strong></td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+
+
+        <div class="factura-resumen">
+
+            <div>
+                <span>Subtotal</span>
+                <strong>${money(f.sub)}</strong>
+            </div>
+
+            <div>
+                <span>Descuento</span>
+                <strong>${f.dg}%</strong>
+            </div>
+
+            <div>
+                <span>IVA</span>
+                <strong>${f.iv}%</strong>
+            </div>
+
+            <div class="factura-total">
+
+                <span>Total a pagar</span>
+
+                <strong>${money(f.total)}</strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="factura-extra">
+
+            <div>
+
+                <small>ESTADO</small>
+
+                <strong>${esc(f.estado || "Pagada")}</strong>
+
+            </div>
+
+            <div>
+
+                <small>FORMA DE PAGO</small>
+
+                <strong>${esc(f.pago || "Contado")}</strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="factura-observaciones">
+
+            <strong>💗 Observaciones</strong>
+
+            <br><br>
+
+            ${esc(f.obs || "Gracias por tu compra 💗")}
+
+        </div>
+
+
+        <div class="factura-footer">
+
+            <strong>Tejiendo Sueños Clau 💗</strong>
+
+            <span>Gracias por elegirnos</span>
+
+            <small>
+                Esta factura fue generada digitalmente.
+            </small>
+
+        </div>
+
+    </div>
+    `;
+}
 function show(f=collect()){if(!valid())return;$("previewBox").innerHTML=sheet(f);$("modal").classList.add("show")}
 
 async function clienteDB(c){
@@ -439,6 +628,29 @@ async function pdfFacturaDB(id){
 
 }
 
+async function imprimirFacturaDB(id){
+
+    try{
+
+        const f = await obtenerFacturaDB(id);
+
+        $("previewBox").innerHTML = sheet(f);
+
+        $("modal").classList.add("show");
+
+        setTimeout(() => {
+            window.print();
+        }, 300);
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("No se pudo imprimir la factura.");
+
+    }
+}
+
 async function anularFacturaDB(id){
 
     if(!confirm("¿Seguro que deseas anular esta factura?")) return;
@@ -641,6 +853,10 @@ $("history").addEventListener("click", async e => {
     
     if (action === "pdf") {
         await pdfFacturaDB(id);
+    }
+
+    if (action === "print") {
+        await imprimirFacturaDB(id);
     }
 
     if (action === "cancel") {
