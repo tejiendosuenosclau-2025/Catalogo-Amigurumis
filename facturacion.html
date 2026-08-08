@@ -355,6 +355,55 @@ async function verFacturaDB(id){
     }
 }
 
+async function editarFacturaDB(id){
+
+    try{
+
+        const f = await obtenerFacturaDB(id);
+
+        editingInvoiceId = id;
+
+        $("numero").value = f.numero;
+        $("fecha").value = f.fecha;
+
+        $("nombre").value = f.cliente.nombre;
+        $("ident").value = f.cliente.ident;
+        $("tel").value = f.cliente.tel;
+        $("correo").value = f.cliente.correo;
+        $("direccion").value = f.cliente.direccion;
+
+        $("pago").value = f.pago;
+        $("estado").value = f.estado;
+        $("obs").value = f.obs;
+
+        $("dg").value = f.dg;
+        $("iva").value = f.iv;
+
+        $("items").innerHTML = "";
+
+        f.items.forEach(item => {
+            row(item.id, item.q, item.pr, item.d);
+        });
+
+        if(!f.items.length){
+            row();
+        }
+
+        $("saveBtn").textContent = "💾 Actualizar factura";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("No se pudo cargar la factura para editar.");
+    }
+}
+
 async function cargarClientesDB(){
  if(!db||!currentUser)return;const {data,error}=await db.from("clientes").select("id,nombre,identificacion,telefono,correo,direccion").order("created_at",{ascending:false}).limit(100);if(error){console.error(error);return}
  clients=data||[];$("clients").innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div style="display:inline-block;border:1px solid var(--line);padding:10px;margin:4px;border-radius:8px"><b>'+esc(c.nombre)+'</b><br>'+esc(c.telefono||"")+'<br><button type="button" onclick="useClient('+i+')">Usar cliente</button></div>').join(""):"Aún no hay clientes.";
@@ -454,6 +503,10 @@ $("history").addEventListener("click", async e => {
 
     if (action === "view") {
         await verFacturaDB(id);
+    }
+
+    if (action === "edit") {
+        await editarFacturaDB(id);
     }
 
 });
