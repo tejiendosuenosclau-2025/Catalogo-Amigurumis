@@ -986,16 +986,7 @@ async function cargarHistorialDB(){
                             data-id="${f.id}">
                             <img src="img/imprimir.png" alt="PDF" class="grilla-icon">
                         </button>
-
-                        <button
-                            type="button"
-                            class="history-btn wa"
-                            title="Enviar por WhatsApp"
-                            data-action="wa"
-                            data-id="${f.id}">
-                            <img src="img/whatsapp.png" alt="PDF" class="grilla-icon">
-                        </button>
-
+               
                         ${
                             f.estado !== "Anulada"
                             ? `
