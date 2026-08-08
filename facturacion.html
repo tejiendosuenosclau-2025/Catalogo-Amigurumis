@@ -270,14 +270,20 @@ async function cargarHistorialDB(){
                             👁️
                         </button>
 
-                        <button
-                            type="button"
-                            class="history-btn edit"
-                            title="Editar factura"
-                            data-action="edit"
-                            data-id="${f.id}">
-                            ✏️
-                        </button>
+                        ${
+                        f.estado !== "Anulada"
+                        ? `
+                          <button
+                           type="button"
+                           class="history-btn edit"
+                           title="Editar factura"
+                           data-action="edit"
+                           data-id="${f.id}">
+                           ✏️
+                          </button>
+                        `
+                        : ""
+                        }
 
                         <button
                             type="button"
@@ -434,6 +440,10 @@ async function editarFacturaDB(id){
     try{
 
         const f = await obtenerFacturaDB(id);
+	if(f.estado === "Anulada"){
+            alert("Factura anulada no se puede editar.");
+            return;
+        }
 
         editingInvoiceId = id;
 
