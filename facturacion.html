@@ -506,7 +506,7 @@ async function editarFacturaDB(id){
             row();
         }
 
-        $("saveBtn").textContent = '<img src="img/actualizar.png" alt="PDF" class="grilla-icon"> Actualizar factura';
+        $("saveBtn").innerHTML ='<img src="img/actualizar.png" alt="PDF" class="grilla-icon"> Actualizar factura';
 
         window.scrollTo({
             top: 0,
@@ -550,7 +550,7 @@ async function guardarFacturaDB(e){
 
             editingInvoiceId = null;
 
-            $("saveBtn").textContent = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
+            $("saveBtn").innerHTML = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
 
         }else{
 
@@ -605,7 +605,7 @@ $("new").onclick = async () => {
 
         $("items").innerHTML = "";
 
-        $("saveBtn").textContent = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
+        $("saveBtn").innerHTML = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
 
         row();
 
