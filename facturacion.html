@@ -180,6 +180,51 @@ async function guardarDB(f){
  const {error:e2}=await db.from("factura_detalle").insert(rows);if(e2){await db.from("facturas").delete().eq("id",fac.id);throw e2}
 }
 
+async function actualizarFacturaDB(f){
+
+    const cliente = await clienteDB(f.cliente);
+
+    const { error: e1 } = await db
+        .from("facturas")
+        .update({
+            fecha: f.fecha,
+            cliente_id: cliente.id,
+            forma_pago: f.pago,
+            estado: f.estado,
+            observaciones: f.obs || null,
+            subtotal: f.sub,
+            descuento_porcentaje: f.dg,
+            iva_porcentaje: f.iv,
+            total: f.total
+        })
+        .eq("id", editingInvoiceId);
+
+    if(e1) throw e1;
+
+    const { error: e2 } = await db
+        .from("factura_detalle")
+        .delete()
+        .eq("factura_id", editingInvoiceId);
+
+    if(e2) throw e2;
+
+    const rows = f.items.map(x => ({
+        factura_id: editingInvoiceId,
+        producto_id: String(x.id || "") || null,
+        producto_nombre: x.nombre,
+        cantidad: x.q,
+        precio_unitario: x.pr,
+        descuento_porcentaje: x.d,
+        total: x.total
+    }));
+
+    const { error: e3 } = await db
+        .from("factura_detalle")
+        .insert(rows);
+
+    if(e3) throw e3;
+}
+
 async function cargarHistorialDB(){
     if(!db || !currentUser) return;
 
@@ -425,23 +470,36 @@ async function guardarFacturaDB(e){
 
         const f = collect();
 
-        await guardarDB(f);
+        if(editingInvoiceId){
+
+            await actualizarFacturaDB(f);
+
+            alert("Factura " + f.numero + " Actualizada Correctamente.");
+
+            editingInvoiceId = null;
+
+            $("saveBtn").textContent = "💾 Guardar factura";
+
+        }else{
+
+            await guardarDB(f);
+
+            alert("Factura " + f.numero + " Guardada Correctamente.");
+
+            $("form").reset();
+
+            $("numero").value = await nextInvoiceNumber();
+
+            $("fecha").value = today();
+
+            $("items").innerHTML = "";
+
+            row();
+        }
 
         await cargarHistorialDB();
 
         await cargarClientesDB();
-
-        alert("Factura " + f.numero + " guardada correctamente en Supabase.");
-
-        $("form").reset();
-
-        $("numero").value = await nextInvoiceNumber();
-
-        $("fecha").value = today();
-
-        $("items").innerHTML = "";
-
-        row();
 
     }catch(err){
 
