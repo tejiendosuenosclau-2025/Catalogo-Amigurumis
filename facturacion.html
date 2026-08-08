@@ -70,134 +70,6 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
     vertical-align:middle;
 }
 
-/*==================================
-      MENÚ LATERAL
-===================================*/
-
-.menu-toggle{
-    display:none;
-}
-
-/* COMPUTADOR */
-@media (min-width:769px){
-
-    .menu-toggle{
-        display:none;
-    }
-
-    nav{
-        display:flex;
-        justify-content:center;
-        gap:20px;
-        position:static;
-        background:transparent;
-        box-shadow:none;
-    }
-
-}
-
-/* CELULAR */
-@media (max-width:768px){
-
-    .header-banner{
-        position:relative;
-    }
-
-    .menu-toggle{
-
-    display:block;
-
-    position:fixed;
-
-    top:15px;
-
-    right:15px;
-
-    width:50px;
-
-    height:50px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#40AD55;
-
-    color:white;
-
-    font-size:30px;
-
-    cursor:pointer;
-
-    z-index:9999;
-
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-
-    transition:all .3s ease;
-
-    }
-    .menu-toggle:hover{
-    transform:scale(1.08);
-    }
-    .menu-toggle:active{
-    transform:scale(.95);
-    }
-
-    nav{
-
-        position:fixed;
-
-        top:0;
-
-        right:-280px;
-
-        width:260px;
-
-        height:100vh;
-
-        background:white;
-
-        display:flex;
-
-        flex-direction:column;
-
-        padding-top:80px;
-
-        transition:right .35s ease;
-
-        box-shadow:-5px 0 20px rgba(0,0,0,.25);
-
-        z-index:1000;
-
-    }
-
-    nav.activo{
-
-        right:0;
-
-    }
-
-    nav a{
-
-        width:100%;
-
-        padding:18px;
-
-        text-align:left;
-
-        font-size:18px;
-
-        border-bottom:1px solid #eee;
-
-        background:none;
-
-        border-radius:0;
-
-    }
-
-}
-
-
 </style>
 </head>
 <body>
@@ -218,8 +90,8 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <div class="mobile"><button id="open">☰</button><b>🧾 Facturación</b></div><div id="ov" class="overlay"></div>
 <aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
 <div class="brand"><img src="img/logo.png" alt="Tejiendo Sueños Clau"></div>
-<nav id="menu">
-<a href="index.html">🏠 Inicio</a><a href="index.html#categorias">🧶 Categorías</a><a href="index.html#catalogo">🧸 Catálogo</a><a href="index.html#favoritos">❤️ Mis Favoritos</a><a href="index.html#carrito">🛒 Carrito</a><a class="active" href="facturacion.html">🧾 Facturación</a><a href="#historial">📋 Historial</a><a href="#clientes">👥 Clientes</a><a href="index.html#contacto">💬 Contacto</a><a href="#" id="logoutBtn"><img src="img/cerrar.png" alt="PDF" class="grilla-icon"> Cerrar sesión</a>
+<nav>
+<a href="index.html">🏠 Inicio</a><a href="index.html#categorias">🧶 Categorías</a><a href="index.html#catalogo">🧸 Catálogo</a><a href="index.html#favoritos">❤️ Mis Favoritos</a><a href="index.html#carrito">🛒 Carrito</a><a class="active" href="facturacion.html">🧾 Facturación</a><a href="#historial">📋 Historial</a><a href="#clientes">👥 Clientes</a><a href="index.html#contacto">💬 Contacto</a><a href="#" id="logoutBtn">🚪 Cerrar sesión</a>
 </nav>
 </aside>
 
