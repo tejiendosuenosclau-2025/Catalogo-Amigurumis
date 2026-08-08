@@ -30,6 +30,39 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 @media(max-width:850px){.mobile{display:flex;position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);padding:12px 15px;gap:12px;align-items:center}.mobile button{border:0;background:var(--soft);font-size:22px;border-radius:8px;padding:7px 11px}aside{transform:translateX(-105%);transition:.2s;width:min(82vw,320px)}aside.open{transform:translateX(0)}main{margin:0;padding:16px}.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}.overlay{display:none;position:fixed;inset:0;background:#0007;z-index:10}.overlay.show{display:block}}
 @media(max-width:520px){.actions{grid-template-columns:1fr}.top h1{font-size:24px}.card{padding:14px}.login-card{padding:28px 20px}.login-card h1{font-size:24px}}
 @media print{aside,.mobile,.top,#form,.history,footer,.modal button,.login-screen{display:none!important}main{margin:0;padding:0}.modal{display:block!important;position:static;background:#fff;padding:0}.sheet{margin:0;box-shadow:none}}
+
+.history-actions{
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+}
+
+.history-btn{
+    border:0;
+    border-radius:7px;
+    padding:6px 8px;
+    font-size:14px;
+    cursor:pointer;
+    background:#f7f2f4;
+}
+
+.history-btn:hover{
+    transform:translateY(-1px);
+    filter:brightness(.97);
+}
+
+.history-btn.view{color:#8662a9}
+.history-btn.edit{color:#e85c8b}
+.history-btn.pdf{color:#d85b78}
+.history-btn.print{color:#555}
+.history-btn.wa{color:#198b4b}
+.history-btn.cancel{color:#d62828}
+
+.status.Anulada{
+    background:#ffe5e5;
+    color:#c62828;
+}
+
 </style>
 </head>
 <body>
@@ -79,7 +112,8 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 </section>
 
-<div class="actions"><button type="button" class="btn green" id="preview">👁️ Vista previa</button><button type="button" class="btn pink" id="pdf">📄 Generar PDF</button><button type="button" class="btn purple" id="print">🖨️ Imprimir</button><button type="button" class="btn green" id="wa">💬 WhatsApp</button><button class="btn white">💾 Guardar factura</button><button type="button" class="btn gray" id="new">＋ Nueva factura</button></div>
+<div class="actions"><button type="button" class="btn green" id="preview">👁️ Vista previa</button><button type="button" class="btn pink" id="pdf">📄 Generar PDF</button><button type="button" class="btn purple" id="print">🖨️ Imprimir</button><button type="button" class="btn green" id="wa">💬 WhatsApp</button>
+<button type="submit" class="btn white" id="saveBtn">💾 Guardar factura</button><button type="button" class="btn gray" id="new">＋ Nueva factura</button></div>
 </form>
 
 <section id="historial" class="card history"><div class="title">📋 Historial de facturas</div><div class="wrap"><table><thead><tr><th>Factura</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="history"></tbody></table></div></section>
@@ -95,12 +129,25 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
 let products=[],clients=[],db=null,currentUser=null;
+let editingInvoiceId=null;
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function name(p){return Array.isArray(p?.nombre)?p.nombre.join(" "):(p?.nombre||"Producto")}
 function today(){return new Date().toISOString().slice(0,10)}
 async function load(){try{products=await (await fetch("data/productos.json")).json()}catch(e){console.error(e);products=[]}}
-function next(){return "FAC-"+String((window.__nextInvoice||0)+1).padStart(5,"0")}
+
+async function nextInvoiceNumber(){
+
+    const { data, error } = await db.rpc("siguiente_numero_factura");
+
+    if(error){
+        console.error(error);
+        throw error;
+    }
+
+    return "FAC-" + String(data).padStart(5, "0");
+}
+
 function options(sel=""){return '<option value="">Seleccionar producto</option>'+products.map(p=>'<option value="'+p.id+'" '+(String(p.id)==String(sel)?"selected":"")+'>'+esc(name(p))+'</option>').join("")}
 function row(id="",q=1,price=null,d=0){
  const tr=document.createElement("tr"),p=products.find(x=>String(x.id)==String(id));
@@ -132,20 +179,229 @@ async function guardarDB(f){
  const rows=f.items.map(x=>({factura_id:fac.id,producto_id:String(x.id||"")||null,producto_nombre:x.nombre,cantidad:x.q,precio_unitario:x.pr,descuento_porcentaje:x.d,total:x.total}));
  const {error:e2}=await db.from("factura_detalle").insert(rows);if(e2){await db.from("facturas").delete().eq("id",fac.id);throw e2}
 }
+
 async function cargarHistorialDB(){
- if(!db||!currentUser)return;const {data,error}=await db.from("facturas").select("id,numero,fecha,estado,total,clientes(nombre)").order("created_at",{ascending:false}).limit(100);
- if(error){console.error(error);$("history").innerHTML='<tr><td colspan="6" class="muted">No se pudo cargar el historial.</td></tr>';return}
- $("history").innerHTML=data?.length?data.map(f=>'<tr><td>'+esc(f.numero)+'</td><td>'+esc(f.clientes?.nombre||"")+'</td><td>'+esc(f.fecha)+'</td><td>'+money(f.total)+'</td><td><span class="status '+esc(f.estado)+'">'+esc(f.estado)+'</span></td><td>☁️ Guardada</td></tr>').join(""):'<tr><td colspan="6" class="muted">No hay facturas guardadas.</td></tr>';
+    if(!db || !currentUser) return;
+
+    const {data,error}=await db
+        .from("facturas")
+        .select("id,numero,fecha,estado,total,clientes(nombre)")
+        .order("created_at",{ascending:false})
+        .limit(100);
+
+    if(error){
+        console.error(error);
+        $("history").innerHTML=
+            '<tr><td colspan="6" class="muted">No se pudo cargar el historial.</td></tr>';
+        return;
+    }
+
+    $("history").innerHTML=data?.length
+        ? data.map(f=>`
+            <tr>
+                <td>${esc(f.numero)}</td>
+
+                <td>${esc(f.clientes?.nombre||"")}</td>
+
+                <td>${esc(f.fecha)}</td>
+
+                <td>${money(f.total)}</td>
+
+                <td>
+                    <span class="status ${esc(f.estado)}">
+                        ${esc(f.estado)}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="history-actions">
+
+                        <button
+                            type="button"
+                            class="history-btn view"
+                            title="Ver factura"
+                            data-action="view"
+                            data-id="${f.id}">
+                            👁️
+                        </button>
+
+                        <button
+                            type="button"
+                            class="history-btn edit"
+                            title="Editar factura"
+                            data-action="edit"
+                            data-id="${f.id}">
+                            ✏️
+                        </button>
+
+                        <button
+                            type="button"
+                            class="history-btn pdf"
+                            title="Generar PDF"
+                            data-action="pdf"
+                            data-id="${f.id}">
+                            📄
+                        </button>
+
+                        <button
+                            type="button"
+                            class="history-btn print"
+                            title="Imprimir factura"
+                            data-action="print"
+                            data-id="${f.id}">
+                            🖨️
+                        </button>
+
+                        <button
+                            type="button"
+                            class="history-btn wa"
+                            title="Enviar por WhatsApp"
+                            data-action="wa"
+                            data-id="${f.id}">
+                            💬
+                        </button>
+
+                        ${
+                            f.estado !== "Anulada"
+                            ? `
+                            <button
+                                type="button"
+                                class="history-btn cancel"
+                                title="Anular factura"
+                                data-action="cancel"
+                                data-id="${f.id}">
+                                🗑️
+                            </button>
+                            `
+                            : ""
+                        }
+
+                    </div>
+                </td>
+            </tr>
+        `).join("")
+        : '<tr><td colspan="6" class="muted">No hay facturas guardadas.</td></tr>';
 }
+
+async function obtenerFacturaDB(id){
+
+    const {data,error}=await db
+        .from("facturas")
+        .select(`
+            *,
+            clientes(
+                id,
+                nombre,
+                identificacion,
+                telefono,
+                correo,
+                direccion
+            ),
+            factura_detalle(*)
+        `)
+        .eq("id",id)
+        .single();
+
+    if(error) throw error;
+
+    return {
+        id:data.id,
+        numero:data.numero,
+        fecha:data.fecha,
+
+        cliente:{
+            nombre:data.clientes?.nombre || "",
+            ident:data.clientes?.identificacion || "",
+            tel:data.clientes?.telefono || "",
+            correo:data.clientes?.correo || "",
+            direccion:data.clientes?.direccion || ""
+        },
+
+        pago:data.forma_pago || "Contado",
+        estado:data.estado || "Pagada",
+        obs:data.observaciones || "",
+
+        items:(data.factura_detalle || []).map(x=>({
+            id:x.producto_id || "",
+            nombre:x.producto_nombre || "Producto",
+            q:Number(x.cantidad)||0,
+            pr:Number(x.precio_unitario)||0,
+            d:Number(x.descuento_porcentaje)||0,
+            total:Number(x.total)||0
+        })),
+
+        sub:Number(data.subtotal)||0,
+        dg:Number(data.descuento_porcentaje)||0,
+        iv:Number(data.iva_porcentaje)||0,
+        total:Number(data.total)||0
+    };
+}
+
+async function verFacturaDB(id){
+
+    try{
+
+        const f = await obtenerFacturaDB(id);
+
+        $("previewBox").innerHTML = sheet(f);
+
+        $("modal").classList.add("show");
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("No se pudo cargar la factura.");
+    }
+}
+
 async function cargarClientesDB(){
  if(!db||!currentUser)return;const {data,error}=await db.from("clientes").select("id,nombre,identificacion,telefono,correo,direccion").order("created_at",{ascending:false}).limit(100);if(error){console.error(error);return}
  clients=data||[];$("clients").innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div style="display:inline-block;border:1px solid var(--line);padding:10px;margin:4px;border-radius:8px"><b>'+esc(c.nombre)+'</b><br>'+esc(c.telefono||"")+'<br><button type="button" onclick="useClient('+i+')">Usar cliente</button></div>').join(""):"Aún no hay clientes.";
 }
 function useClient(i){let c=clients[i];if(!c)return;$("nombre").value=c.nombre||"";$("ident").value=c.identificacion||"";$("tel").value=c.telefono||"";$("correo").value=c.correo||"";$("direccion").value=c.direccion||"";scrollTo({top:0,behavior:"smooth"})}
+
 async function guardarFacturaDB(e){
- e.preventDefault();if(!valid())return;if(!db||!currentUser){alert("Debes iniciar sesión.");return}
- try{const f=collect();await guardarDB(f);window.__nextInvoice=(window.__nextInvoice||0)+1;await cargarHistorialDB();await cargarClientesDB();alert("Factura "+f.numero+" guardada correctamente en Supabase.");$("numero").value=next()}catch(err){console.error(err);alert("No se pudo guardar la factura. Revisa las tablas y las políticas RLS de Supabase.")}
+
+    e.preventDefault();
+
+    if(!valid()) return;
+
+    if(!db || !currentUser){
+        alert("Debes iniciar sesión.");
+        return;
+    }
+
+    try{
+
+        const f = collect();
+
+        await guardarDB(f);
+
+        await cargarHistorialDB();
+
+        await cargarClientesDB();
+
+        alert("Factura " + f.numero + " guardada correctamente en Supabase.");
+
+        $("form").reset();
+
+        $("numero").value = await nextInvoiceNumber();
+
+        $("fecha").value = today();
+
+        $("items").innerHTML = "";
+
+        row();
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("No se pudo guardar la factura. Revisa las tablas y las políticas RLS de Supabase.");
+    }
 }
+
 function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
 function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";document.body.classList.remove("locked")}
 async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se pudo conectar con Supabase.");return}const email=$("loginUser").value.trim(),password=$("loginPass").value;const {data,error}=await db.auth.signInWithPassword({email,password});if(error){$("loginError").textContent="❌ Correo o contraseña incorrectos.";return}currentUser=data.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}
@@ -155,12 +411,54 @@ function initDB(){if(window.SUPABASE_URL&&window.SUPABASE_ANON_KEY){db=window.su
 $("add").onclick=()=>row();$("dg").oninput=calc;$("iva").oninput=calc;$("preview").onclick=()=>show();
 $("print").onclick=()=>{show();setTimeout(()=>print(),200)};$("pdf").onclick=()=>{show();setTimeout(()=>{alert("Selecciona «Guardar como PDF» en la ventana de impresión.");print()},200)};
 $("wa").onclick=()=>{if(!valid())return;const f=collect(),txt="Hola "+f.cliente.nombre+" 😊%0AFactura "+f.numero+"%0A"+f.items.map(x=>"• "+x.nombre+" x"+x.q+": "+money(x.total)).join("%0A")+"%0ATotal: "+money(f.total)+"%0A¡Gracias por tu compra! 💗";open("https://wa.me/"+((f.cliente.tel||"573011810933").replace(/\D/g,""))+"?text="+txt,"_blank")};
-$("new").onclick=()=>{$("form").reset();$("numero").value=next();$("fecha").value=today();$("items").innerHTML="";row()};$("x").onclick=()=>$("modal").classList.remove("show");
+
+$("new").onclick = async () => {
+
+    try {
+
+        editingInvoiceId = null;
+
+        $("form").reset();
+
+        $("numero").value = await nextInvoiceNumber();
+
+        $("fecha").value = today();
+
+        $("items").innerHTML = "";
+
+        $("saveBtn").textContent = "💾 Guardar factura";
+
+        row();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("No se pudo generar el número de factura.");
+    }
+};
+
+$("x").onclick=()=>$("modal").classList.remove("show");
 $("open").onclick=()=>{$("side").classList.add("open");$("ov").classList.add("show")};$("close").onclick=()=>{$("side").classList.remove("open");$("ov").classList.remove("show")};$("ov").onclick=$("close").onclick;
 $("loginForm").onsubmit=loginDB;$("logoutBtn").onclick=logoutDB;$("togglePassword").onclick=()=>{const pass=$("loginPass"),visible=pass.type==="text";pass.type=visible?"password":"text";$("togglePassword").textContent=visible?"👁️":"🙈"};
 $("form").onsubmit=guardarFacturaDB;
 
-(async()=>{initDB();await load();$("numero").value=next();$("fecha").value=today();$("fechaTexto").textContent=new Date().toLocaleDateString("es-CO",{day:"2-digit",month:"long",year:"numeric"});row();
+$("history").addEventListener("click", async e => {
+
+    const btn = e.target.closest("[data-action]");
+
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+
+    if (action === "view") {
+        await verFacturaDB(id);
+    }
+
+});
+
+(async()=>{initDB();await load();$("fecha").value=today();$("fechaTexto").textContent=new Date().toLocaleDateString("es-CO",{day:"2-digit",month:"long",year:"numeric"});row();
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
