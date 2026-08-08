@@ -406,6 +406,32 @@ async function verFacturaDB(id){
     }
 }
 
+async function pdfFacturaDB(id){
+
+    try{
+
+        const f = await obtenerFacturaDB(id);
+
+        $("previewBox").innerHTML = sheet(f);
+
+        $("modal").classList.add("show");
+
+        setTimeout(() => {
+
+            window.print();
+
+        }, 300);
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("No se pudo generar el PDF de la factura.");
+
+    }
+
+}
+
 async function anularFacturaDB(id){
 
     if(!confirm("¿Seguro que deseas anular esta factura?")) return;
@@ -604,6 +630,10 @@ $("history").addEventListener("click", async e => {
 
     if (action === "edit") {
         await editarFacturaDB(id);
+    }
+    
+    if (action === "pdf") {
+        await pdfFacturaDB(id);
     }
 
     if (action === "cancel") {
