@@ -400,6 +400,35 @@ async function verFacturaDB(id){
     }
 }
 
+async function anularFacturaDB(id){
+
+    if(!confirm("¿Seguro que deseas anular esta factura?")) return;
+
+    try{
+
+        const { data, error } = await db
+            .from("facturas")
+            .update({
+                estado: "Anulada"
+            })
+            .eq("id", id)
+            .select()
+            .single();
+
+        if(error) throw error;
+
+        alert("Factura " + data.numero + " Anulada Correctamente.");
+
+        await cargarHistorialDB();
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("No se pudo anular la factura.");
+    }
+}
+
 async function editarFacturaDB(id){
 
     try{
@@ -565,6 +594,10 @@ $("history").addEventListener("click", async e => {
 
     if (action === "edit") {
         await editarFacturaDB(id);
+    }
+
+    if (action === "cancel") {
+        await anularFacturaDB(id);
     }
 
 });
