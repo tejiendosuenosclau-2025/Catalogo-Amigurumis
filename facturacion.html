@@ -8,7 +8,10 @@
 <link rel="stylesheet" href="css/factura-bonita.css">
 <style>
 :root{--p:#f47da3;--pd:#e85c8b;--g:#31b866;--v:#8662a9;--ink:#40373b;--mut:#7d7378;--line:#eadfe4;--soft:#fff3f7}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fff}body.locked{overflow:hidden}
+*{box-sizing:border-box}
+body{margin:0;
+color:var(--ink);
+background:#fff}body.locked{overflow:hidden}
 aside{position:fixed;inset:0 auto 0 0;width:235px;border-right:1px solid var(--line);background:#fff;padding:18px 14px;z-index:20;box-shadow:3px 0 18px #0000000a}
 .brand{text-align:center}.brand img{width:155px;max-width:90%}nav{display:grid;gap:4px;margin-top:15px}nav a{padding:12px;border-radius:10px;text-decoration:none;color:var(--ink)}nav a.active,nav a:hover{background:var(--soft);color:var(--pd);font-weight:bold}
 .wa{position:absolute;bottom:18px;left:14px;right:14px;text-align:center;background:var(--g);color:#fff;padding:12px;border-radius:25px;text-decoration:none;font-weight:bold}
@@ -247,6 +250,24 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 
 #tipoAbonoBox select{
     width:100%;
+}
+
+/* ==========================================
+   FUENTE GENERAL DEL SISTEMA
+   ========================================== */
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+table,
+th,
+td,
+label,
+option {
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 }
 
 </style>
