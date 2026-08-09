@@ -71,6 +71,52 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
     vertical-align:middle;
 }
 
+.cliente-autocomplete{
+    position:relative;
+}
+
+.sugerencias-clientes{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    z-index:1000;
+    background:#fff;
+    border:1px solid #eadfe5;
+    border-radius:0 0 8px 8px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+    max-height:220px;
+    overflow-y:auto;
+    display:none;
+}
+
+.sugerencia-cliente{
+    padding:10px 12px;
+    cursor:pointer;
+    border-bottom:1px solid #f1e9ed;
+}
+
+.sugerencia-cliente:last-child{
+    border-bottom:0;
+}
+
+.sugerencia-cliente:hover{
+    background:#faf3f7;
+}
+
+.sugerencia-cliente strong{
+    display:block;
+    color:#555;
+    font-size:14px;
+}
+
+.sugerencia-cliente small{
+    display:block;
+    margin-top:3px;
+    color:#888;
+    font-size:12px;
+}
+
 </style>
 </head>
 <body>
@@ -99,13 +145,63 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <main>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
 <form id="form" autocomplete="off">
-<section class="grid">
-<article class="card"><div class="title">👤 Datos del cliente</div>
-<label>Nombre / Razón social *</label><input id="nombre" required placeholder="Ej: María López">
-<label>Cédula / NIT</label><input id="ident" placeholder="Ej: 1234567890">
-<label>Teléfono</label><input id="tel" name="customer_phone" type="tel" inputmode="tel" autocomplete="off" placeholder="Ej: 300 123 4567">
-<label>Correo</label><input id="correo" type="email" placeholder="Ej: maria@gmail.com">
-<label>Dirección</label><input id="direccion" placeholder="Ej: Calle 10 # 5-20, Popayán">
+<article class="card">
+    <div class="title">👤 Datos del cliente</div>
+
+    <div class="cliente-autocomplete">
+        <label>Nombre / Razón social *</label>
+
+        <input
+            id="nombre"
+            required
+            placeholder="Ej: María López"
+            autocomplete="off"
+        >
+
+        <div id="sugerenciasClientes" class="sugerencias-clientes"></div>
+    </div>
+
+
+    <div class="cliente-autocomplete">
+        <label>Cédula / NIT</label>
+
+        <input
+            id="ident"
+            placeholder="Ej: 1234567890"
+            autocomplete="off"
+        >
+
+        <div id="sugerenciasIdent" class="sugerencias-clientes"></div>
+    </div>
+
+
+    <label>Teléfono</label>
+
+    <input
+        id="tel"
+        name="customer_phone"
+        type="tel"
+        inputmode="tel"
+        autocomplete="off"
+        placeholder="Ej: 300 123 4567"
+    >
+
+
+    <label>Correo</label>
+
+    <input
+        id="correo"
+        type="email"
+        placeholder="Ej: maria@gmail.com"
+    >
+
+
+    <label>Dirección</label>
+
+    <input
+        id="direccion"
+        placeholder="Ej: Calle 10 # 5-20, Popayán"
+    >
 </article>
 <article class="card"><div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
 <label>Número *</label><input id="numero" name="invoice_number" autocomplete="off" inputmode="text">
@@ -1003,6 +1099,7 @@ async function clienteDB(c){
  if(found){const {data,error}=await db.from("clientes").update({nombre:c.nombre,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).eq("id",found.id).select().single();if(error)throw error;return data}
  const {data,error}=await db.from("clientes").insert({nombre:c.nombre,identificacion:c.ident.trim()||null,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).select().single();if(error)throw error;return data;
 }
+
 async function guardarDB(f){
 
     // ==========================================
@@ -1843,6 +1940,258 @@ function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";docu
 async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se pudo conectar con Supabase.");return}const email=$("loginUser").value.trim(),password=$("loginPass").value;const {data,error}=await db.auth.signInWithPassword({email,password});if(error){$("loginError").textContent="❌ Correo o contraseña incorrectos.";return}currentUser=data.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}
 async function logoutDB(e){e?.preventDefault();if(db)await db.auth.signOut();currentUser=null;showDBLogin()}
 function initDB(){if(window.SUPABASE_URL&&window.SUPABASE_ANON_KEY){db=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);console.log("✅ Supabase conectado")}else console.error("❌ No se encontraron las credenciales de Supabase.")}
+
+// ==========================================
+// SUGERENCIAS DE CLIENTES
+// ==========================================
+
+let clientesSugerenciasTimer = null;
+
+
+// ------------------------------------------
+// Mostrar clientes por nombre
+// ------------------------------------------
+
+async function buscarClientesPorNombre(valor){
+
+    const box = $("sugerenciasClientes");
+
+    if(!box) return;
+
+    valor = (valor || "").trim();
+
+    if(valor.length < 2){
+
+        box.innerHTML = "";
+        box.style.display = "none";
+
+        return;
+    }
+
+    const { data, error } = await db
+        .from("clientes")
+        .select(`
+            id,
+            nombre,
+            identificacion,
+            telefono,
+            correo,
+            direccion
+        `)
+        .ilike("nombre", `%${valor}%`)
+        .order("nombre")
+        .limit(8);
+
+    if(error){
+
+        console.error("Error buscando clientes:", error);
+
+        box.innerHTML = "";
+        box.style.display = "none";
+
+        return;
+    }
+
+    mostrarSugerenciasClientes(
+        data || [],
+        box
+    );
+}
+
+
+// ------------------------------------------
+// Mostrar clientes por documento
+// ------------------------------------------
+
+async function buscarClientesPorIdent(valor){
+
+    const box = $("sugerenciasIdent");
+
+    if(!box) return;
+
+    valor = (valor || "").trim();
+
+    if(valor.length < 2){
+
+        box.innerHTML = "";
+        box.style.display = "none";
+
+        return;
+    }
+
+    const { data, error } = await db
+        .from("clientes")
+        .select(`
+            id,
+            nombre,
+            identificacion,
+            telefono,
+            correo,
+            direccion
+        `)
+        .ilike("identificacion", `%${valor}%`)
+        .order("nombre")
+        .limit(8);
+
+    if(error){
+
+        console.error("Error buscando clientes:", error);
+
+        box.innerHTML = "";
+        box.style.display = "none";
+
+        return;
+    }
+
+    mostrarSugerenciasClientes(
+        data || [],
+        box
+    );
+}
+
+
+// ------------------------------------------
+// Dibujar sugerencias
+// ------------------------------------------
+
+function mostrarSugerenciasClientes(clientes, box){
+
+    if(!clientes.length){
+
+        box.innerHTML = "";
+        box.style.display = "none";
+
+        return;
+    }
+
+    box.innerHTML = "";
+
+    clientes.forEach(cliente => {
+
+        const item = document.createElement("div");
+
+        item.className = "sugerencia-cliente";
+
+        item.innerHTML = `
+            <strong>${escapeHtml(cliente.nombre || "Sin nombre")}</strong>
+            <small>
+                ${escapeHtml(cliente.identificacion || "Sin documento")}
+                ${cliente.telefono ? " • " + escapeHtml(cliente.telefono) : ""}
+            </small>
+        `;
+
+        item.addEventListener("mousedown", function(e){
+
+            e.preventDefault();
+
+            seleccionarClienteSugerencia(cliente);
+
+        });
+
+        box.appendChild(item);
+
+    });
+
+    box.style.display = "block";
+}
+
+// ------------------------------------------
+// Seleccionar cliente
+// ------------------------------------------
+
+function seleccionarClienteSugerencia(cliente){
+
+    $("nombre").value =
+        cliente.nombre || "";
+
+    $("ident").value =
+        cliente.identificacion || "";
+
+    $("tel").value =
+        cliente.telefono || "";
+
+    $("correo").value =
+        cliente.correo || "";
+
+    $("direccion").value =
+        cliente.direccion || "";
+
+    // Ocultar ambas listas
+    $("sugerenciasClientes").style.display = "none";
+    $("sugerenciasIdent").style.display = "none";
+
+    // IMPORTANTE:
+    // NO modificar $("numero")
+    // NO buscar facturas
+    // NO cargar una factura anterior
+}
+
+
+// ------------------------------------------
+// Buscar mientras se escribe el nombre
+// ------------------------------------------
+
+$("nombre").addEventListener("input", function(){
+
+    clearTimeout(clientesSugerenciasTimer);
+
+    const valor = this.value;
+
+    clientesSugerenciasTimer = setTimeout(() => {
+
+        buscarClientesPorNombre(valor);
+
+    }, 250);
+
+});
+
+
+// ------------------------------------------
+// Buscar mientras se escribe documento
+// ------------------------------------------
+
+$("ident").addEventListener("input", function(){
+
+    clearTimeout(clientesSugerenciasTimer);
+
+    const valor = this.value;
+
+    clientesSugerenciasTimer = setTimeout(() => {
+
+        buscarClientesPorIdent(valor);
+
+    }, 250);
+
+});
+
+
+// ------------------------------------------
+// Ocultar sugerencias al hacer clic afuera
+// ------------------------------------------
+
+document.addEventListener("click", function(e){
+
+    if(!e.target.closest(".cliente-autocomplete")){
+
+        const a = $("sugerenciasClientes");
+        const b = $("sugerenciasIdent");
+
+        if(a) a.style.display = "none";
+        if(b) b.style.display = "none";
+    }
+
+});
+
+function escapeHtml(valor){
+
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
 
 $("add").onclick = () => row();
 
