@@ -288,6 +288,8 @@ option {
     text-decoration:underline;
 }
 
+
+
 </style>
 </head>
 <body>
@@ -315,8 +317,157 @@ option {
 <a href="index.html">🏠 Inicio</a><a href="index.html#categorias">🧶 Categorías</a><a href="index.html#catalogo">🧸 Catálogo</a><a href="index.html#favoritos">❤️ Mis Favoritos</a><a href="index.html#carrito">🛒 Carrito</a><a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon">    Facturación</a><a href="#historial">📋 Historial</a><a href="#clientes">👥 Clientes</a><a href="index.html#contacto">💬 Contacto</a><a href="#" id="logoutBtn">🚪 Cerrar sesión</a>
 </nav>
 </aside>
-
 <main>
+<!-- ============================= -->
+<!-- DASHBOARD - RESUMEN -->
+<!-- ============================= -->
+
+<section class="resumen-dashboard">
+
+    <!-- Ventas del día -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-ventas-dia">
+                🛍️
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Ventas del día
+                </div>
+
+                <div class="resumen-valor" id="dashboardVentasDia">
+                    $0
+                </div>
+
+                <div class="resumen-cambio positivo">
+                    ↗ 0% vs ayer
+                </div>
+            </div>
+        </div>
+    </article>
+
+
+    <!-- Ventas del mes -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-ventas-mes">
+                📅
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Ventas del mes
+                </div>
+
+                <div class="resumen-valor" id="dashboardVentasMes">
+                    $0
+                </div>
+
+                <div class="resumen-cambio positivo">
+                    ↗ 0% vs mes anterior
+                </div>
+            </div>
+        </div>
+    </article>
+
+
+    <!-- Facturas emitidas -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-facturas">
+                📄
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Facturas emitidas
+                </div>
+
+                <div class="resumen-valor" id="dashboardFacturas">
+                    0
+                </div>
+
+                <div class="resumen-cambio positivo">
+                    ↗ 0% vs mes anterior
+                </div>
+            </div>
+        </div>
+    </article>
+
+
+    <!-- Dinero recibido -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-recibido">
+                💵
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Dinero recibido
+                </div>
+
+                <div class="resumen-valor" id="dashboardRecibido">
+                    $0
+                </div>
+
+                <div class="resumen-cambio positivo">
+                    ↗ 0% vs mes anterior
+                </div>
+            </div>
+        </div>
+    </article>
+
+
+    <!-- Por cobrar -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-cobrar">
+                💳
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Por cobrar
+                </div>
+
+                <div class="resumen-valor" id="dashboardCobrar">
+                    $0
+                </div>
+
+                <div class="resumen-cambio negativo">
+                    ↘ 0% vs mes anterior
+                </div>
+            </div>
+        </div>
+    </article>
+
+
+    <!-- Clientes registrados -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-clientes">
+                👥
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Clientes registrados
+                </div>
+
+                <div class="resumen-valor" id="dashboardClientes">
+                    0
+                </div>
+
+                <div class="resumen-cambio positivo">
+                    ↗ 0% vs mes anterior
+                </div>
+            </div>
+        </div>
+    </article>
+
+</section>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
 <form id="form">
 <section class="grid datos-superiores">
@@ -2194,6 +2345,213 @@ async function actualizarFacturaDB(f){
 
 }
 
+// =====================================================
+// DASHBOARD - DATOS REALES DESDE SUPABASE
+// =====================================================
+
+async function cargarDashboardDB(){
+
+    if(!db || !currentUser) return;
+
+    try{
+
+        const { data: facturas, error } = await db
+            .from("facturas")
+            .select(`
+                id,
+                fecha,
+                total,
+                estado,
+                valor_abono,
+                abono_acumulado,
+                saldo_pendiente
+            `)
+            .neq("estado", "Anulada");
+
+        if(error) throw error;
+
+
+        // ==========================================
+        // FECHAS
+        // ==========================================
+
+        const hoy = new Date();
+
+        const fechaHoy =
+            hoy.toISOString().slice(0,10);
+
+        const anioActual =
+            hoy.getFullYear();
+
+        const mesActual =
+            hoy.getMonth();
+
+
+        // ==========================================
+        // VENTAS DEL DÍA
+        // ==========================================
+
+        const ventasDia = (facturas || [])
+            .filter(f => f.fecha === fechaHoy)
+            .reduce(
+                (suma,f) =>
+                    suma + Number(f.total || 0),
+                0
+            );
+
+
+        // ==========================================
+        // VENTAS DEL MES
+        // ==========================================
+
+        const ventasMes = (facturas || [])
+            .filter(f => {
+
+                const fecha = new Date(f.fecha + "T00:00:00");
+
+                return (
+                    fecha.getFullYear() === anioActual &&
+                    fecha.getMonth() === mesActual
+                );
+
+            })
+            .reduce(
+                (suma,f) =>
+                    suma + Number(f.total || 0),
+                0
+            );
+
+
+        // ==========================================
+        // FACTURAS EMITIDAS
+        // ==========================================
+
+        const facturasEmitidas =
+            (facturas || []).length;
+
+
+        // ==========================================
+        // DINERO RECIBIDO
+        // ==========================================
+
+        const dineroRecibido =
+            (facturas || [])
+            .reduce(
+                (suma,f) =>
+                    suma + Number(
+                        f.abono_acumulado || 0
+                    ),
+                0
+            );
+
+
+        // ==========================================
+        // DINERO POR COBRAR
+        // ==========================================
+
+        const porCobrar =
+            (facturas || [])
+            .reduce(
+                (suma,f) =>
+                    suma + Number(
+                        f.saldo_pendiente || 0
+                    ),
+                0
+            );
+
+
+        // ==========================================
+        // CLIENTES
+        // ==========================================
+
+        const { count: clientesRegistrados, error: errorClientes } =
+            await db
+                .from("clientes")
+                .select("id", {
+                    count: "exact",
+                    head: true
+                });
+
+        if(errorClientes) throw errorClientes;
+
+
+        // ==========================================
+        // MOSTRAR EN EL DASHBOARD
+        // ==========================================
+
+        const ventasDiaEl =
+            document.getElementById("dashboardVentasDia");
+
+        const ventasMesEl =
+            document.getElementById("dashboardVentasMes");
+
+        const facturasEl =
+            document.getElementById("dashboardFacturas");
+
+        const recibidoEl =
+            document.getElementById("dashboardRecibido");
+
+        const cobrarEl =
+            document.getElementById("dashboardCobrar");
+
+        const clientesEl =
+            document.getElementById("dashboardClientes");
+
+
+        if(ventasDiaEl)
+            ventasDiaEl.textContent =
+                money(ventasDia);
+
+
+        if(ventasMesEl)
+            ventasMesEl.textContent =
+                money(ventasMes);
+
+
+        if(facturasEl)
+            facturasEl.textContent =
+                facturasEmitidas;
+
+
+        if(recibidoEl)
+            recibidoEl.textContent =
+                money(dineroRecibido);
+
+
+        if(cobrarEl)
+            cobrarEl.textContent =
+                money(porCobrar);
+
+
+        if(clientesEl)
+            clientesEl.textContent =
+                clientesRegistrados || 0;
+
+
+        console.log(
+            "📊 Dashboard actualizado:",
+            {
+                ventasDia,
+                ventasMes,
+                facturasEmitidas,
+                dineroRecibido,
+                porCobrar,
+                clientesRegistrados
+            }
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "❌ Error cargando Dashboard:",
+            error
+        );
+
+    }
+
+}
+
 async function cargarHistorialDB(){
     if(!db || !currentUser) return;
 
@@ -2300,6 +2658,7 @@ async function cargarHistorialDB(){
             </tr>
         `).join("")
         : '<tr><td colspan="6" class="muted">No hay facturas guardadas.</td></tr>';
+        await cargarDashboardDB();
 }
 
 async function obtenerFacturaDB(id){
@@ -2881,7 +3240,7 @@ async function guardarFacturaDB(e){
 function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
 function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";document.body.classList.remove("locked")}
 
-async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se pudo conectar con Supabase.");return}const email=$("loginUser").value.trim(),password=$("loginPass").value;const {data,error}=await db.auth.signInWithPassword({email,password});if(error){$("loginError").textContent="❌ Correo o contraseña incorrectos.";return}currentUser=data.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}
+async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se pudo conectar con Supabase.");return}const email=$("loginUser").value.trim(),password=$("loginPass").value;const {data,error}=await db.auth.signInWithPassword({email,password});if(error){$("loginError").textContent="❌ Correo o contraseña incorrectos.";return}currentUser=data.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB();await cargarDashboardDB()}
 
 async function recuperarPassword(){
 
