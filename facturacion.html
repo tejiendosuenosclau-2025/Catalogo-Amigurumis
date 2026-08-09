@@ -1582,68 +1582,88 @@ async function editarFacturaDB(id){
             return;
         }
 
-        /*
-         * Guardamos el ID de la factura que estamos editando
-         */
-        editingInvoiceId = id;
-        abonoAcumuladoAnterior = Number(f.abono_acumulado) || 0;
 
-        /*
-         * DATOS DE LA FACTURA
-         */
+        // ==========================================
+        // GUARDAR ID DE LA FACTURA
+        // ==========================================
+
+        editingInvoiceId = id;
+
+
+        // ==========================================
+        // CARGAR ABONO ACUMULADO
+        // ==========================================
+
+        abonoAcumuladoActual =
+            Number(f.abonoAcumulado) || 0;
+
+
+        // ==========================================
+        // DATOS DE LA FACTURA
+        // ==========================================
 
         $("numero").value = f.numero;
 
         $("fecha").value = f.fecha;
 
 
-        /*
-         * DATOS DEL CLIENTE
-         */
+        // ==========================================
+        // DATOS DEL CLIENTE
+        // ==========================================
 
-        $("nombre").value = f.cliente.nombre;
+        $("nombre").value =
+            f.cliente.nombre || "";
 
-        $("ident").value = f.cliente.ident;
+        $("ident").value =
+            f.cliente.ident || "";
 
-        $("tel").value = f.cliente.tel;
+        $("tel").value =
+            f.cliente.tel || "";
 
-        $("correo").value = f.cliente.correo;
+        $("correo").value =
+            f.cliente.correo || "";
 
-        $("direccion").value = f.cliente.direccion;
-
-
-        /*
-         * FORMA DE PAGO
-         */
-
-        $("pago").value = f.pago;
+        $("direccion").value =
+            f.cliente.direccion || "";
 
 
-        /*
-         * OBSERVACIONES
-         */
+        // ==========================================
+        // FORMA DE PAGO
+        // ==========================================
 
-        $("obs").value = f.obs;
-
-
-        /*
-         * DESCUENTO E IVA
-         */
-
-        $("dg").value = f.dg;
-
-        $("iva").value = f.iv;
+        $("pago").value =
+            f.pago || "Contado";
 
 
-        /*
-         * ABONO ACUMULADO
-         *
-         * IMPORTANTE:
-         * El campo "abono" representa el NUEVO
-         * dinero que el cliente está pagando ahora.
-         *
-         * Por eso lo ponemos inicialmente en 0.
-         */
+        // ==========================================
+        // OBSERVACIONES
+        // ==========================================
+
+        $("obs").value =
+            f.obs || "";
+
+
+        // ==========================================
+        // DESCUENTO E IVA
+        // ==========================================
+
+        $("dg").value =
+            f.dg || 0;
+
+        $("iva").value =
+            f.iv || 0;
+
+
+        // ==========================================
+        // NUEVO ABONO
+        // ==========================================
+        //
+        // Al editar NO colocamos nuevamente
+        // el abono anterior en este campo.
+        //
+        // Este campo es solamente para el
+        // NUEVO dinero que paga el cliente.
+        //
 
         if($("abono")){
 
@@ -1652,21 +1672,21 @@ async function editarFacturaDB(id){
         }
 
 
-        /*
-         * MOSTRAR ABONO ACUMULADO
-         */
+        // ==========================================
+        // MOSTRAR ABONO ACUMULADO
+        // ==========================================
 
         if($("abonoAcumulado")){
 
             $("abonoAcumulado").textContent =
-                money(f.abono_acumulado);
+                money(abonoAcumuladoActual);
 
         }
 
 
-        /*
-         * MOSTRAR SALDO ACTUAL
-         */
+        // ==========================================
+        // MOSTRAR SALDO ACTUAL
+        // ==========================================
 
         if($("saldoPendiente")){
 
@@ -1676,9 +1696,9 @@ async function editarFacturaDB(id){
         }
 
 
-        /*
-         * CARGAR PRODUCTOS
-         */
+        // ==========================================
+        // CARGAR PRODUCTOS
+        // ==========================================
 
         $("items").innerHTML = "";
 
@@ -1694,10 +1714,9 @@ async function editarFacturaDB(id){
         });
 
 
-        /*
-         * Si no tiene productos,
-         * crear una fila vacía.
-         */
+        // ==========================================
+        // SI NO HAY PRODUCTOS
+        // ==========================================
 
         if(!f.items.length){
 
@@ -1706,25 +1725,24 @@ async function editarFacturaDB(id){
         }
 
 
-        /*
-         * CAMBIAR BOTÓN GUARDAR
-         * por ACTUALIZAR
-         */
+        // ==========================================
+        // CAMBIAR BOTÓN
+        // ==========================================
 
         $("saveBtn").innerHTML =
             '<img src="img/actualizar.png" alt="Actualizar" class="grilla-icon"> Actualizar factura';
 
 
-        /*
-         * Actualizar cálculos
-         */
+        // ==========================================
+        // RECALCULAR
+        // ==========================================
 
         calc();
 
 
-        /*
-         * Llevar al usuario al formulario
-         */
+        // ==========================================
+        // SUBIR AL FORMULARIO
+        // ==========================================
 
         window.scrollTo({
 
@@ -1734,6 +1752,7 @@ async function editarFacturaDB(id){
 
         });
 
+
     }catch(err){
 
         console.error(err);
@@ -1741,9 +1760,9 @@ async function editarFacturaDB(id){
         alert(
             "No se pudo cargar la factura para editar."
         );
+
     }
 }
-
 async function cargarClientesDB(){
  if(!db||!currentUser)return;const {data,error}=await db.from("clientes").select("id,nombre,identificacion,telefono,correo,direccion").order("created_at",{ascending:false}).limit(100);if(error){console.error(error);return}
  clients=data||[];$("clients").innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div style="display:inline-block;border:1px solid var(--line);padding:10px;margin:4px;border-radius:8px"><b>'+esc(c.nombre)+'</b><br>'+esc(c.telefono||"")+'<br><button type="button" onclick="useClient('+i+')">Usar cliente</button></div>').join(""):"Aún no hay clientes.";
