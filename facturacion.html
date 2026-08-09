@@ -191,11 +191,32 @@ function actualizarAbono(){
         box.style.display = "none";
 
         if($("abono")){
+
             $("abono").value = 0;
+
         }
     }
 
-    calcularSaldo();
+    // Recalcular todos los valores
+    calc();
+
+}
+
+function calcularSaldo(){
+
+    // Usar el cálculo principal de la factura
+    const c = calc();
+
+    // calc() ya tiene en cuenta:
+    // - abono anterior
+    // - nuevo abono
+    // - abono acumulado
+    // - saldo pendiente
+
+    return {
+        abono: c.abono,
+        saldo: c.saldo
+    };
 }
 
 const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
@@ -1835,11 +1856,56 @@ $("iva").oninput = () => {
     calcularSaldo();
 };
 
-$("pago").onchange = actualizarAbono;
-$("abono").oninput = calcularSaldo;
-$("preview").onclick=()=>show();
-$("print").onclick=()=>{show();setTimeout(()=>print(),200)};$("pdf").onclick=()=>{show();setTimeout(()=>{alert("Selecciona «Guardar como PDF» en la ventana de impresión.");print()},200)};
-$("wa").onclick=()=>{if(!valid())return;const f=collect(),txt="Hola "+f.cliente.nombre+" 😊%0AFactura "+f.numero+"%0A"+f.items.map(x=>"• "+x.nombre+" x"+x.q+": "+money(x.total)).join("%0A")+"%0ATotal: "+money(f.total)+"%0A¡Gracias por tu compra! 💗";open("https://wa.me/"+((f.cliente.tel||"573011810933").replace(/\D/g,""))+"?text="+txt,"_blank")};
+$("pago").onchange = () => {
+    actualizarAbono();
+    calc();
+    calcularSaldo();
+};
+
+$("abono").oninput = () => {
+    calc();
+    calcularSaldo();
+};
+
+$("preview").onclick = () => show();
+
+$("print").onclick = () => {
+    show();
+    setTimeout(() => print(), 200);
+};
+
+$("pdf").onclick = () => {
+    show();
+
+    setTimeout(() => {
+        alert("Selecciona «Guardar como PDF» en la ventana de impresión.");
+        print();
+    }, 200);
+};
+
+$("wa").onclick = () => {
+
+    if(!valid()) return;
+
+    const f = collect();
+
+    const txt =
+        "Hola " + f.cliente.nombre +
+        " 😊%0AFactura " + f.numero +
+        "%0A" +
+        f.items
+            .map(x => "• " + x.nombre + " x" + x.q + ": " + money(x.total))
+            .join("%0A") +
+        "%0ATotal: " + money(f.total) +
+        "%0A¡Gracias por tu compra! 💗";
+
+    open(
+        "https://wa.me/" +
+        ((f.cliente.tel || "573011810933").replace(/\D/g, "")) +
+        "?text=" + txt,
+        "_blank"
+    );
+};
 
 $("new").onclick = async () => {
 
