@@ -2507,17 +2507,42 @@ async function guardarFacturaDB(e){
             row();
         }
 
-        await cargarHistorialDB();
+        try{
+
+          await cargarHistorialDB();
+
+        }catch(error){
+
+        console.error(
+          "ERROR CARGANDO HISTORIAL:",
+           error
+        );
+
+        }
+
+        try{
 
         await cargarClientesDB();
 
-    }catch(err){
+        }catch(error){
 
-        console.error(err);
+         console.error(
+        "ERROR CARGANDO CLIENTES:",
+        error
+        );
 
-        alert("No se pudo guardar la factura. Revisa las tablas y las políticas RLS de Supabase.");
-    }
-}
+        }
+
+        }catch(err){
+
+          console.error("ERROR REAL AL GUARDAR:", err);
+
+          alert(
+          "ERROR REAL:\n\n" +
+           (err?.message || JSON.stringify(err))
+          );
+        }
+        }
 
 function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
 function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";document.body.classList.remove("locked")}
