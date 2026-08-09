@@ -198,29 +198,6 @@ function actualizarAbono(){
     calcularSaldo();
 }
 
-function calcularSaldo(){
-
-    const total = calc().total;
-
-    const abono =
-        $("pago").value === "Abono"
-        ? Math.max(0, Number($("abono").value) || 0)
-        : total;
-
-    const abonoReal = Math.min(abono, total);
-
-    const saldo = Math.max(0, total - abonoReal);
-
-    if($("saldoPendiente")){
-        $("saldoPendiente").textContent = money(saldo);
-    }
-
-    return {
-        abono: abonoReal,
-        saldo
-    };
-}
-
 const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
 let products=[],clients=[],db=null,currentUser=null;
 let editingInvoiceId=null;
