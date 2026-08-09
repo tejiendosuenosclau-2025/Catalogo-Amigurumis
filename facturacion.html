@@ -254,7 +254,7 @@ function row(id="",q=1,price=null,d=0){
 function calc(){
 
     // ==========================================
-    // 1. CALCULAR SUBTOTAL
+    // CALCULAR SUBTOTAL
     // ==========================================
 
     let sub = 0;
@@ -277,19 +277,30 @@ function calc(){
 
         tr.querySelector(".lt").textContent =
             money(v);
+
     });
 
 
     // ==========================================
-    // 2. DESCUENTO E IVA
+    // DESCUENTO E IVA
     // ==========================================
 
     let dg =
-        Math.min(100, +$("dg").value || 0);
+        Math.min(
+            100,
+            +$("dg").value || 0
+        );
 
     let iv =
-        Math.min(100, +$("iva").value || 0);
+        Math.min(
+            100,
+            +$("iva").value || 0
+        );
 
+
+    // ==========================================
+    // TOTAL
+    // ==========================================
 
     let base =
         sub * (1 - dg / 100);
@@ -299,22 +310,24 @@ function calc(){
 
 
     // ==========================================
-    // 3. ABONO ACUMULADO ANTERIOR
+    // ABONO ACUMULADO ANTERIOR
     // ==========================================
     //
-    // Si estamos editando una factura,
-    // aquí está lo que el cliente ya había pagado.
-    //
-    // Si es una factura nueva, vale 0.
+    // Esta es la cantidad que el cliente
+    // YA HABÍA PAGADO antes de editar.
     //
 
     let abonoAnterior =
-        Number(abonoAcumuladoActual || 0);
+        Number(abonoAcumuladoActual) || 0;
 
 
     // ==========================================
-    // 4. NUEVO ABONO
+    // NUEVO ABONO
     // ==========================================
+    //
+    // Es solamente el dinero que el cliente
+    // está pagando AHORA.
+    //
 
     let nuevoAbono =
         Math.max(
@@ -324,8 +337,7 @@ function calc(){
 
 
     // ==========================================
-    // 5. CUÁNTO FALTA POR PAGAR
-    //    ANTES DEL NUEVO ABONO
+    // SALDO ANTES DEL NUEVO ABONO
     // ==========================================
 
     let saldoAntesDelNuevoAbono =
@@ -336,7 +348,7 @@ function calc(){
 
 
     // ==========================================
-    // 6. NO PERMITIR ABONO MAYOR AL SALDO
+    // EVITAR ABONO MAYOR AL SALDO
     // ==========================================
 
     if(nuevoAbono > saldoAntesDelNuevoAbono){
@@ -350,7 +362,7 @@ function calc(){
 
 
     // ==========================================
-    // 7. ABONO ACUMULADO
+    // ABONO ACUMULADO
     // ==========================================
 
     let abonoAcumulado =
@@ -358,7 +370,7 @@ function calc(){
 
 
     // ==========================================
-    // 8. SALDO PENDIENTE
+    // SALDO PENDIENTE
     // ==========================================
 
     let saldo =
@@ -369,7 +381,7 @@ function calc(){
 
 
     // ==========================================
-    // 9. MOSTRAR SUBTOTAL Y TOTAL
+    // MOSTRAR SUBTOTAL Y TOTAL
     // ==========================================
 
     $("sub").textContent =
@@ -380,29 +392,31 @@ function calc(){
 
 
     // ==========================================
-    // 10. MOSTRAR ABONO ACUMULADO
+    // MOSTRAR ABONO ACUMULADO
     // ==========================================
 
     if($("abonoAcumulado")){
 
         $("abonoAcumulado").textContent =
             money(abonoAcumulado);
+
     }
 
 
     // ==========================================
-    // 11. MOSTRAR SALDO PENDIENTE
+    // MOSTRAR SALDO PENDIENTE
     // ==========================================
 
     if($("saldoPendiente")){
 
         $("saldoPendiente").textContent =
             money(saldo);
+
     }
 
 
     // ==========================================
-    // 12. ESTADO AUTOMÁTICO
+    // ESTADO AUTOMÁTICO
     // ==========================================
 
     if($("estado")){
@@ -416,12 +430,14 @@ function calc(){
 
             $("estado").value =
                 "Pendiente";
+
         }
+
     }
 
 
     // ==========================================
-    // 13. DEVOLVER DATOS
+    // DEVOLVER DATOS
     // ==========================================
 
     return {
@@ -443,6 +459,7 @@ function calc(){
         saldo
 
     };
+
 }
 
 function actualizarAbono(){
