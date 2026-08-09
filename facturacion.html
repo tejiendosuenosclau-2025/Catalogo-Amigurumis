@@ -103,12 +103,12 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 <article class="card"><div class="title">👤 Datos del cliente</div>
 <label>Nombre / Razón social *</label><input id="nombre" required placeholder="Ej: María López">
 <label>Cédula / NIT</label><input id="ident" placeholder="Ej: 1234567890">
-<label>Teléfono</label><input id="tel" name="customer_phone" type="tel" inputmode="tel" placeholder="Ej: 300 123 4567">
+<label>Teléfono</label><input id="tel" name="customer_phone" type="tel" inputmode="tel" autocomplete="off" placeholder="Ej: 300 123 4567">
 <label>Correo</label><input id="correo" type="email" placeholder="Ej: maria@gmail.com">
 <label>Dirección</label><input id="direccion" placeholder="Ej: Calle 10 # 5-20, Popayán">
 </article>
 <article class="card"><div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
-<label>Número *</label><input id="numero" name="invoice_number" required autocomplete="off" inputmode="text">
+<label>Número *</label><input id="numero" name="invoice_number" autocomplete="off" inputmode="text">
 <label>Fecha *</label><input id="fecha" type="date" required>
 <label>Forma de pago</label>
 <select id="pago">
@@ -130,6 +130,11 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 >
 
 <div class="saldo-box">
+    Abono acumulado:
+    <strong id="abonoAcumulado">$0</strong>
+</div>
+
+<div class="saldo-box">
     <span>Saldo pendiente:</span>
     <strong id="saldoPendiente">$0</strong>
 </div>
@@ -148,6 +153,7 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
     placeholder="Gracias por tu compra 💗"
 ></textarea>
 </section>
+</article>
 <section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
@@ -218,6 +224,7 @@ function calcularSaldo(){
 const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
 let products=[],clients=[],db=null,currentUser=null;
 let editingInvoiceId=null;
+let abonoAcumuladoActual = 0;
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function name(p){return Array.isArray(p?.nombre)?p.nombre.join(" "):(p?.nombre||"Producto")}
@@ -246,74 +253,198 @@ function row(id="",q=1,price=null,d=0){
 }
 function calc(){
 
+    // ==========================================
+    // 1. CALCULAR SUBTOTAL
+    // ==========================================
+
     let sub = 0;
 
     document.querySelectorAll("#items tr").forEach(tr => {
 
-        let q = +tr.querySelector(".qty").value || 0;
-        let p = +tr.querySelector(".price").value || 0;
-        let d = +tr.querySelector(".disc").value || 0;
+        let q =
+            +tr.querySelector(".qty").value || 0;
 
-        let v = q * p * (1 - d / 100);
+        let p =
+            +tr.querySelector(".price").value || 0;
+
+        let d =
+            +tr.querySelector(".disc").value || 0;
+
+        let v =
+            q * p * (1 - d / 100);
 
         sub += v;
 
-        tr.querySelector(".lt").textContent = money(v);
+        tr.querySelector(".lt").textContent =
+            money(v);
     });
 
-    let dg = Math.min(100, +$("dg").value || 0);
-    let iv = Math.min(100, +$("iva").value || 0);
 
-    let base = sub * (1 - dg / 100);
+    // ==========================================
+    // 2. DESCUENTO E IVA
+    // ==========================================
 
-    let total = base * (1 + iv / 100);
+    let dg =
+        Math.min(100, +$("dg").value || 0);
 
-
-    // ==============================
-    // ABONO Y SALDO PENDIENTE
-    // ==============================
-
-    let abono = Math.max(
-        0,
-        +$("abono").value || 0
-    );
-
-    // El abono nunca puede superar el total
-    abono = Math.min(abono, total);
-
-    let saldo = Math.max(
-        0,
-        total - abono
-    );
+    let iv =
+        Math.min(100, +$("iva").value || 0);
 
 
-    // ==============================
-    // MOSTRAR TOTALES
-    // ==============================
+    let base =
+        sub * (1 - dg / 100);
 
-    $("sub").textContent = money(sub);
-
-    $("tot").textContent = money(total);
+    let total =
+        base * (1 + iv / 100);
 
 
-    // Mostrar saldo pendiente
-    if($("saldoPendiente")){
+    // ==========================================
+    // 3. ABONO ACUMULADO ANTERIOR
+    // ==========================================
+    //
+    // Si estamos editando una factura,
+    // aquí está lo que el cliente ya había pagado.
+    //
+    // Si es una factura nueva, vale 0.
+    //
 
-        $("saldoPendiente").textContent = money(saldo);
+    let abonoAnterior =
+        Number(abonoAcumuladoActual || 0);
 
+
+    // ==========================================
+    // 4. NUEVO ABONO
+    // ==========================================
+
+    let nuevoAbono =
+        Math.max(
+            0,
+            +$("abono").value || 0
+        );
+
+
+    // ==========================================
+    // 5. CUÁNTO FALTA POR PAGAR
+    //    ANTES DEL NUEVO ABONO
+    // ==========================================
+
+    let saldoAntesDelNuevoAbono =
+        Math.max(
+            0,
+            total - abonoAnterior
+        );
+
+
+    // ==========================================
+    // 6. NO PERMITIR ABONO MAYOR AL SALDO
+    // ==========================================
+
+    if(nuevoAbono > saldoAntesDelNuevoAbono){
+
+        nuevoAbono =
+            saldoAntesDelNuevoAbono;
+
+        $("abono").value =
+            nuevoAbono;
     }
 
 
-    return {
-        sub,
-        dg,
-        iv,
-        total,
-        abono,
-        saldo
-    };
+    // ==========================================
+    // 7. ABONO ACUMULADO
+    // ==========================================
 
+    let abonoAcumulado =
+        abonoAnterior + nuevoAbono;
+
+
+    // ==========================================
+    // 8. SALDO PENDIENTE
+    // ==========================================
+
+    let saldo =
+        Math.max(
+            0,
+            total - abonoAcumulado
+        );
+
+
+    // ==========================================
+    // 9. MOSTRAR SUBTOTAL Y TOTAL
+    // ==========================================
+
+    $("sub").textContent =
+        money(sub);
+
+    $("tot").textContent =
+        money(total);
+
+
+    // ==========================================
+    // 10. MOSTRAR ABONO ACUMULADO
+    // ==========================================
+
+    if($("abonoAcumulado")){
+
+        $("abonoAcumulado").textContent =
+            money(abonoAcumulado);
+    }
+
+
+    // ==========================================
+    // 11. MOSTRAR SALDO PENDIENTE
+    // ==========================================
+
+    if($("saldoPendiente")){
+
+        $("saldoPendiente").textContent =
+            money(saldo);
+    }
+
+
+    // ==========================================
+    // 12. ESTADO AUTOMÁTICO
+    // ==========================================
+
+    if($("estado")){
+
+        if(saldo === 0 && total > 0){
+
+            $("estado").value =
+                "Pagada";
+
+        }else if(abonoAcumulado > 0){
+
+            $("estado").value =
+                "Pendiente";
+        }
+    }
+
+
+    // ==========================================
+    // 13. DEVOLVER DATOS
+    // ==========================================
+
+    return {
+
+        sub,
+
+        dg,
+
+        iv,
+
+        total,
+
+        abono: nuevoAbono,
+
+        abonoAnterior,
+
+        abonoAcumulado,
+
+        saldo
+
+    };
 }
+
 function actualizarAbono(){
 
     const pago = $("pago").value;
@@ -362,7 +493,9 @@ function collect(){
     let c = calc();
 
     return {
+
         numero: $("numero").value,
+
         fecha: $("fecha").value,
 
         cliente: {
@@ -374,32 +507,85 @@ function collect(){
         },
 
         pago: $("pago").value,
+
         estado: $("estado").value,
+
         obs: $("obs").value,
 
-        items: [...document.querySelectorAll("#items tr")]
-            .map(t => {
 
-                let id = t.querySelector(".ps").value;
-                let p = products.find(x => String(x.id) == id);
+        // ==========================================
+        // ABONOS
+        // ==========================================
 
-                let q = +t.querySelector(".qty").value || 0;
-                let pr = +t.querySelector(".price").value || 0;
-                let d = +t.querySelector(".disc").value || 0;
+        // Dinero que el cliente está pagando ahora
+        abono: c.abono,
 
-                return {
-                    id,
-                    nombre: name(p),
-                    q,
-                    pr,
-                    d,
-                    total: q * pr * (1 - d / 100)
-                };
+        // Total abonado hasta este momento
+        abonoAcumulado: c.abonoAcumulado,
 
-            })
-            .filter(x => x.q),
+        // Lo que todavía debe
+        saldo: c.saldo,
 
-        ...c
+
+        // ==========================================
+        // PRODUCTOS
+        // ==========================================
+
+        items: [
+            ...document.querySelectorAll("#items tr")
+        ]
+        .map(t => {
+
+            let id =
+                t.querySelector(".ps").value;
+
+            let p =
+                products.find(
+                    x => String(x.id) == id
+                );
+
+            let q =
+                +t.querySelector(".qty").value || 0;
+
+            let pr =
+                +t.querySelector(".price").value || 0;
+
+            let d =
+                +t.querySelector(".disc").value || 0;
+
+            return {
+
+                id,
+
+                nombre: name(p),
+
+                q,
+
+                pr,
+
+                d,
+
+                total:
+                    q * pr * (1 - d / 100)
+
+            };
+
+        })
+        .filter(x => x.q),
+
+
+        // ==========================================
+        // TOTALES
+        // ==========================================
+
+        sub: c.sub,
+
+        dg: c.dg,
+
+        iv: c.iv,
+
+        total: c.total
+
     };
 }
 
@@ -803,49 +989,67 @@ async function clienteDB(c){
  const {data,error}=await db.from("clientes").insert({nombre:c.nombre,identificacion:c.ident.trim()||null,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).select().single();if(error)throw error;return data;
 }
 async function guardarDB(f){
- const cliente=await clienteDB(f.cliente);
- const {data:fac,error:e1}=await db.from("facturas").insert({
 
-    numero: f.numero,
-
-    fecha: f.fecha,
-
-    cliente_id: cliente.id,
-
-    forma_pago: f.pago,
-
-    estado: f.estado,
-
-    observaciones: f.obs || null,
-
-    subtotal: f.sub,
-
-    descuento_porcentaje: f.dg,
-
-    iva_porcentaje: f.iv,
-
-    total: f.total,
-
-    valor_abono: f.abono,
-
-    saldo_pendiente: f.saldo,
-
-    usuario_id: currentUser.id
-
-}).select().single();
-
- if(e1)throw e1;
- const rows=f.items.map(x=>({factura_id:fac.id,producto_id:String(x.id||"")||null,producto_nombre:x.nombre,cantidad:x.q,precio_unitario:x.pr,descuento_porcentaje:x.d,total:x.total}));
- const {error:e2}=await db.from("factura_detalle").insert(rows);if(e2){await db.from("facturas").delete().eq("id",fac.id);throw e2}
-}
-
-async function actualizarFacturaDB(f){
+    // ==========================================
+    // 1. CLIENTE
+    // ==========================================
 
     const cliente = await clienteDB(f.cliente);
 
-    const { error: e1 } = await db
+
+    // ==========================================
+    // 2. PRIMER ABONO
+    // ==========================================
+
+    const nuevoAbono =
+        Math.max(0, Number(f.abono) || 0);
+
+
+    // ==========================================
+    // 3. EN UNA FACTURA NUEVA,
+    //    EL ABONO ACUMULADO ES EL PRIMER ABONO
+    // ==========================================
+
+    const abonoAcumulado =
+        nuevoAbono;
+
+
+    // ==========================================
+    // 4. CALCULAR SALDO
+    // ==========================================
+
+    const saldoPendiente = Math.max(
+        0,
+        Number(f.total) - abonoAcumulado
+    );
+
+
+    // ==========================================
+    // 5. ESTADO AUTOMÁTICO
+    // ==========================================
+
+    let estadoFactura = f.estado;
+
+    if(saldoPendiente === 0){
+
+        estadoFactura = "Pagada";
+
+    }else if(abonoAcumulado > 0){
+
+        estadoFactura = "Pendiente";
+
+    }
+
+
+    // ==========================================
+    // 6. GUARDAR FACTURA
+    // ==========================================
+
+    const { data: fac, error: e1 } = await db
         .from("facturas")
-        .update({
+        .insert({
+
+            numero: f.numero,
 
             fecha: f.fecha,
 
@@ -853,7 +1057,7 @@ async function actualizarFacturaDB(f){
 
             forma_pago: f.pago,
 
-            estado: f.estado,
+            estado: estadoFactura,
 
             observaciones: f.obs || null,
 
@@ -865,9 +1069,176 @@ async function actualizarFacturaDB(f){
 
             total: f.total,
 
-            valor_abono: f.abono,
+            // Abono realizado en esta factura
+            valor_abono: nuevoAbono,
 
-            saldo_pendiente: f.saldo
+            // Primer abono = acumulado inicial
+            abono_acumulado: abonoAcumulado,
+
+            // Lo que queda por pagar
+            saldo_pendiente: saldoPendiente,
+
+            usuario_id: currentUser.id
+
+        })
+        .select()
+        .single();
+
+
+    if(e1) throw e1;
+
+
+    // ==========================================
+    // 7. DETALLES DE PRODUCTOS
+    // ==========================================
+
+    const rows = f.items.map(x => ({
+
+        factura_id: fac.id,
+
+        producto_id:
+            String(x.id || "") || null,
+
+        producto_nombre: x.nombre,
+
+        cantidad: x.q,
+
+        precio_unitario: x.pr,
+
+        descuento_porcentaje: x.d,
+
+        total: x.total
+
+    }));
+
+
+    // ==========================================
+    // 8. GUARDAR DETALLES
+    // ==========================================
+
+    const { error: e2 } = await db
+        .from("factura_detalle")
+        .insert(rows);
+
+
+    // ==========================================
+    // 9. SI FALLA EL DETALLE,
+    //    ELIMINAR LA FACTURA
+    // ==========================================
+
+    if(e2){
+
+        await db
+            .from("facturas")
+            .delete()
+            .eq("id", fac.id);
+
+        throw e2;
+    }
+
+}
+
+async function actualizarFacturaDB(f){
+
+    /*
+     * 1. Buscar la factura actual en Supabase
+     *    para recuperar el abono acumulado anterior.
+     */
+    const { data: facturaActual, error: errorFactura } = await db
+        .from("facturas")
+        .select("id,total,abono_acumulado,valor_abono,saldo_pendiente")
+        .eq("id", editingInvoiceId)
+        .single();
+
+    if(errorFactura) throw errorFactura;
+
+
+    /*
+     * 2. Actualizar / crear el cliente
+     */
+    const cliente = await clienteDB(f.cliente);
+
+
+    /*
+     * 3. Abono acumulado anterior
+     */
+    const abonoAnterior =
+        Number(facturaActual.abono_acumulado) || 0;
+
+
+    /*
+     * 4. Nuevo abono que estás registrando ahora
+     */
+    const nuevoAbono =
+        Number(f.abono) || 0;
+
+
+    /*
+     * 5. Sumar ambos abonos
+     *
+     * Ejemplo:
+     * anterior = 50.000
+     * nuevo     = 50.000
+     * acumulado = 100.000
+     */
+    const abonoAcumulado =
+        abonoAnterior + nuevoAbono;
+
+
+    /*
+     * 6. El saldo se calcula sobre el total
+     */
+    const saldoPendiente = Math.max(
+        0,
+        Number(f.total) - abonoAcumulado
+    );
+
+
+    /*
+     * 7. Estado automático
+     */
+    let estadoFactura = f.estado;
+
+    if(saldoPendiente === 0){
+
+        estadoFactura = "Pagada";
+
+    }else if(abonoAcumulado > 0){
+
+        estadoFactura = "Pendiente";
+    }
+
+
+    /*
+     * 8. Actualizar la factura
+     */
+    const { error: e1 } = await db
+        .from("facturas")
+        .update({
+
+            fecha: f.fecha,
+
+            cliente_id: cliente.id,
+
+            forma_pago: f.pago,
+
+            estado: estadoFactura,
+
+            observaciones: f.obs || null,
+
+            subtotal: f.sub,
+
+            descuento_porcentaje: f.dg,
+
+            iva_porcentaje: f.iv,
+
+            total: f.total,
+
+            valor_abono: nuevoAbono,
+
+            abono_acumulado: abonoAcumulado,
+
+            saldo_pendiente: saldoPendiente
 
         })
         .eq("id", editingInvoiceId);
@@ -875,6 +1246,9 @@ async function actualizarFacturaDB(f){
     if(e1) throw e1;
 
 
+    /*
+     * 9. Eliminar los detalles anteriores
+     */
     const { error: e2 } = await db
         .from("factura_detalle")
         .delete()
@@ -883,11 +1257,15 @@ async function actualizarFacturaDB(f){
     if(e2) throw e2;
 
 
+    /*
+     * 10. Crear nuevamente los detalles
+     */
     const rows = f.items.map(x => ({
 
         factura_id: editingInvoiceId,
 
-        producto_id: String(x.id || "") || null,
+        producto_id:
+            String(x.id || "") || null,
 
         producto_nombre: x.nombre,
 
@@ -1011,7 +1389,7 @@ async function cargarHistorialDB(){
 
 async function obtenerFacturaDB(id){
 
-    const {data,error}=await db
+    const { data, error } = await db
         .from("facturas")
         .select(`
             *,
@@ -1025,44 +1403,76 @@ async function obtenerFacturaDB(id){
             ),
             factura_detalle(*)
         `)
-        .eq("id",id)
+        .eq("id", id)
         .single();
 
     if(error) throw error;
 
     return {
-        id:data.id,
-        numero:data.numero,
-        fecha:data.fecha,
 
-        cliente:{
-            nombre:data.clientes?.nombre || "",
-            ident:data.clientes?.identificacion || "",
-            tel:data.clientes?.telefono || "",
-            correo:data.clientes?.correo || "",
-            direccion:data.clientes?.direccion || ""
+        id: data.id,
+
+        numero: data.numero,
+
+        fecha: data.fecha,
+
+        cliente: {
+            nombre: data.clientes?.nombre || "",
+            ident: data.clientes?.identificacion || "",
+            tel: data.clientes?.telefono || "",
+            correo: data.clientes?.correo || "",
+            direccion: data.clientes?.direccion || ""
         },
 
-        pago:data.forma_pago || "Contado",
-        estado:data.estado || "Pagada",
-        obs:data.observaciones || "",
+        pago: data.forma_pago || "Contado",
 
-        items:(data.factura_detalle || []).map(x=>({
-            id:x.producto_id || "",
-            nombre:x.producto_nombre || "Producto",
-            q:Number(x.cantidad)||0,
-            pr:Number(x.precio_unitario)||0,
-            d:Number(x.descuento_porcentaje)||0,
-            total:Number(x.total)||0
+        estado: data.estado || "Pagada",
+
+        obs: data.observaciones || "",
+
+        // ==========================================
+        // ABONOS
+        // ==========================================
+
+        abono: Number(data.valor_abono) || 0,
+
+        abonoAcumulado: Number(data.abono_acumulado) || 0,
+
+        saldo: Number(data.saldo_pendiente) || 0,
+
+        // ==========================================
+        // PRODUCTOS
+        // ==========================================
+
+        items: (data.factura_detalle || []).map(x => ({
+
+            id: x.producto_id || "",
+
+            nombre: x.producto_nombre || "Producto",
+
+            q: Number(x.cantidad) || 0,
+
+            pr: Number(x.precio_unitario) || 0,
+
+            d: Number(x.descuento_porcentaje) || 0,
+
+            total: Number(x.total) || 0
+
         })),
 
-        sub:Number(data.subtotal)||0,
-        dg:Number(data.descuento_porcentaje)||0,
-        iv:Number(data.iva_porcentaje)||0,
-        total:Number(data.total)||0
+        // ==========================================
+        // TOTALES
+        // ==========================================
+
+        sub: Number(data.subtotal) || 0,
+
+        dg: Number(data.descuento_porcentaje) || 0,
+
+        iv: Number(data.iva_porcentaje) || 0,
+
+        total: Number(data.total) || 0
     };
 }
-
 async function verFacturaDB(id){
 
     try{
@@ -1164,51 +1574,173 @@ async function editarFacturaDB(id){
     try{
 
         const f = await obtenerFacturaDB(id);
-	if(f.estado === "Anulada"){
+
+        if(f.estado === "Anulada"){
+
             alert("Factura anulada no se puede editar.");
+
             return;
         }
 
+        /*
+         * Guardamos el ID de la factura que estamos editando
+         */
         editingInvoiceId = id;
+        abonoAcumuladoAnterior = Number(f.abono_acumulado) || 0;
+
+        /*
+         * DATOS DE LA FACTURA
+         */
 
         $("numero").value = f.numero;
+
         $("fecha").value = f.fecha;
 
+
+        /*
+         * DATOS DEL CLIENTE
+         */
+
         $("nombre").value = f.cliente.nombre;
+
         $("ident").value = f.cliente.ident;
+
         $("tel").value = f.cliente.tel;
+
         $("correo").value = f.cliente.correo;
+
         $("direccion").value = f.cliente.direccion;
 
+
+        /*
+         * FORMA DE PAGO
+         */
+
         $("pago").value = f.pago;
-        $("estado").value = f.estado;
+
+
+        /*
+         * OBSERVACIONES
+         */
+
         $("obs").value = f.obs;
 
+
+        /*
+         * DESCUENTO E IVA
+         */
+
         $("dg").value = f.dg;
+
         $("iva").value = f.iv;
+
+
+        /*
+         * ABONO ACUMULADO
+         *
+         * IMPORTANTE:
+         * El campo "abono" representa el NUEVO
+         * dinero que el cliente está pagando ahora.
+         *
+         * Por eso lo ponemos inicialmente en 0.
+         */
+
+        if($("abono")){
+
+            $("abono").value = 0;
+
+        }
+
+
+        /*
+         * MOSTRAR ABONO ACUMULADO
+         */
+
+        if($("abonoAcumulado")){
+
+            $("abonoAcumulado").textContent =
+                money(f.abono_acumulado);
+
+        }
+
+
+        /*
+         * MOSTRAR SALDO ACTUAL
+         */
+
+        if($("saldoPendiente")){
+
+            $("saldoPendiente").textContent =
+                money(f.saldo);
+
+        }
+
+
+        /*
+         * CARGAR PRODUCTOS
+         */
 
         $("items").innerHTML = "";
 
         f.items.forEach(item => {
-            row(item.id, item.q, item.pr, item.d);
+
+            row(
+                item.id,
+                item.q,
+                item.pr,
+                item.d
+            );
+
         });
 
+
+        /*
+         * Si no tiene productos,
+         * crear una fila vacía.
+         */
+
         if(!f.items.length){
+
             row();
+
         }
 
-        $("saveBtn").innerHTML ='<img src="img/actualizar.png" alt="PDF" class="grilla-icon"> Actualizar factura';
+
+        /*
+         * CAMBIAR BOTÓN GUARDAR
+         * por ACTUALIZAR
+         */
+
+        $("saveBtn").innerHTML =
+            '<img src="img/actualizar.png" alt="Actualizar" class="grilla-icon"> Actualizar factura';
+
+
+        /*
+         * Actualizar cálculos
+         */
+
+        calc();
+
+
+        /*
+         * Llevar al usuario al formulario
+         */
 
         window.scrollTo({
+
             top: 0,
+
             behavior: "smooth"
+
         });
 
     }catch(err){
 
         console.error(err);
 
-        alert("No se pudo cargar la factura para editar.");
+        alert(
+            "No se pudo cargar la factura para editar."
+        );
     }
 }
 
@@ -1301,6 +1833,7 @@ $("new").onclick = async () => {
     try {
 
         editingInvoiceId = null;
+        abonoAcumuladoAnterior = 0;
 
         $("form").reset();
 
