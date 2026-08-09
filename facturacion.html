@@ -1426,6 +1426,26 @@ function sheet(f) {
                         </div>
 
                     </div>
+                 
+                    ${
+                      f.pago === "Abono"
+                      ? `
+                        <div class="info-box">
+
+                          <div class="info-box-label">
+                              Tipo de abono
+                          </div>
+
+                        <div class="info-box-value">
+
+                       💰 ${esc(f.tipoAbono || "Efectivo")}
+
+                        </div>
+
+                       </div>
+                       `
+                       : ""
+                     }
 
 
                 </div>
