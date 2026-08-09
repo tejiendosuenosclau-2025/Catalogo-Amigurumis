@@ -2893,6 +2893,7 @@ async function recuperarPassword(){
         return;
     }
 
+
     const email =
         $("loginUser").value.trim();
 
@@ -2915,8 +2916,7 @@ async function recuperarPassword(){
                 email,
                 {
                     redirectTo:
-                        window.location.origin +
-                        "/Catalogo-Amigurumis/recuperar.html"
+                        "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/recuperar.html"
                 }
             );
 
@@ -2930,6 +2930,7 @@ async function recuperarPassword(){
         $("loginError").textContent =
             "✅ Te enviamos un enlace para restablecer tu contraseña. Revisa tu correo.";
 
+
     }catch(error){
 
         console.error(
@@ -2937,11 +2938,14 @@ async function recuperarPassword(){
             error
         );
 
+
         $("loginError").style.color =
             "#c62828";
 
+
+        // Mostrar el error real temporalmente
         $("loginError").textContent =
-            "❌ No se pudo enviar el correo de recuperación.";
+            "❌ " + error.message;
 
     }
 

@@ -236,106 +236,150 @@ button:hover{
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="js/supabase-config.js"></script>
 
 <script>
 
-const db =
-    window.supabaseClient;
+const db = window.supabaseClient;
+
+const form = document.getElementById("resetForm");
+const mensaje = document.getElementById("mensaje");
 
 
-const form =
-    document.getElementById("resetForm");
+// ==========================================
+// MOSTRAR MENSAJE
+// ==========================================
 
-const mensaje =
-    document.getElementById("mensaje");
+function mostrarMensaje(texto, tipo = "") {
 
+    mensaje.textContent = texto;
+    mensaje.className = "mensaje " + tipo;
 
-form.addEventListener(
-    "submit",
-    async function(e){
-
-        e.preventDefault();
+}
 
 
-        const password =
-            document.getElementById("password").value;
+// ==========================================
+// DETECTAR SESIÓN DE RECUPERACIÓN
+// ==========================================
 
-        const password2 =
-            document.getElementById("password2").value;
+db.auth.onAuthStateChange(async (event, session) => {
 
+    console.log("Evento Supabase:", event);
 
-        if(password !== password2){
+    if(event === "PASSWORD_RECOVERY") {
 
-            mensaje.style.color =
-                "#c62828";
+        console.log("Sesión de recuperación detectada");
 
-            mensaje.textContent =
-                "❌ Las contraseñas no coinciden.";
+        form.style.display = "block";
 
-            return;
-        }
-
-
-        if(password.length < 6){
-
-            mensaje.style.color =
-                "#c62828";
-
-            mensaje.textContent =
-                "❌ La contraseña debe tener al menos 6 caracteres.";
-
-            return;
-        }
-
-
-        try{
-
-            const { error } =
-                await db.auth.updateUser({
-                    password: password
-                });
-
-
-            if(error) throw error;
-
-
-            mensaje.style.color =
-                "#198b4b";
-
-            mensaje.textContent =
-                "✅ Contraseña actualizada correctamente.";
-
-            form.reset();
-
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "facturacion.html";
-
-            },2000);
-
-
-        }catch(error){
-
-            console.error(error);
-
-            mensaje.style.color =
-                "#c62828";
-
-            mensaje.textContent =
-                "❌ El enlace no es válido o ya expiró.";
-
-        }
+        mostrarMensaje(
+            "🔐 Puedes establecer tu nueva contraseña.",
+            "ok"
+        );
 
     }
 
-);
+});
+
+
+// ==========================================
+// CAMBIAR CONTRASEÑA
+// ==========================================
+
+form.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+
+    const password =
+        document.getElementById("password").value.trim();
+
+    const password2 =
+        document.getElementById("password2").value.trim();
+
+
+    // ==========================================
+    // VALIDAR
+    // ==========================================
+
+    if(password.length < 6) {
+
+        mostrarMensaje(
+            "❌ La contraseña debe tener mínimo 6 caracteres.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(password !== password2) {
+
+        mostrarMensaje(
+            "❌ Las contraseñas no coinciden.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // ACTUALIZAR CONTRASEÑA
+    // ==========================================
+
+    mostrarMensaje(
+        "⏳ Actualizando contraseña...",
+        "ok"
+    );
+
+
+    const { error } =
+        await db.auth.updateUser({
+            password: password
+        });
+
+
+    if(error) {
+
+        console.error(
+            "Error actualizando contraseña:",
+            error
+        );
+
+        mostrarMensaje(
+            "❌ No se pudo cambiar la contraseña: " +
+            error.message,
+            "error"
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // ÉXITO
+    // ==========================================
+
+    mostrarMensaje(
+        "✅ Contraseña actualizada correctamente.",
+        "ok"
+    );
+
+
+    form.reset();
+
+
+    setTimeout(() => {
+
+        window.location.href =
+            "facturacion.html";
+
+    }, 2000);
+
+});
 
 </script>
-
 </body>
 
 </html>
