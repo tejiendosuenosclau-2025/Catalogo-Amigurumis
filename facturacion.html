@@ -500,23 +500,53 @@ option {
 }
 
 .perfil-logo-btn {
-    border: 0;
-    background: transparent;
+    width: 82px;
+    height: 82px;
+    border: 2px solid rgba(244, 125, 163, 0.25);
+    background: #fff;
     cursor: pointer;
-    padding: 4px;
+    padding: 5px;
     border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.10),
+        0 0 0 5px rgba(244, 125, 163, 0.06);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
 }
 
 .perfil-logo-btn img {
-    width: 48px;
-    height: 48px;
+    width: 70px;
+    height: 70px;
     object-fit: contain;
     border-radius: 50%;
-    transition: transform .2s ease;
+    transition: transform .3s ease, filter .3s ease;
+}
+
+.perfil-logo-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+
+    border-color: rgba(244, 125, 163, 0.55);
+
+    box-shadow:
+        0 9px 24px rgba(244, 125, 163, 0.25),
+        0 0 0 7px rgba(244, 125, 163, 0.08);
 }
 
 .perfil-logo-btn:hover img {
-    transform: scale(1.06);
+    transform: scale(1.05);
+    filter: drop-shadow(0 3px 5px rgba(244, 125, 163, 0.25));
+}
+
+.perfil-logo-btn:active {
+    transform: scale(0.96);
 }
 
 .perfil-menu {
