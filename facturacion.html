@@ -486,6 +486,78 @@ option {
    FIN DASHBOARD
    ===================================================== */
 
+/* =====================================================
+   PERFIL - LOGO Y CERRAR SESIÓN
+   ===================================================== */
+
+.perfil-dashboard {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 100;
+}
+
+.perfil-logo-btn {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.perfil-logo-btn img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: transform .2s ease;
+}
+
+.perfil-logo-btn:hover img {
+    transform: scale(1.06);
+}
+
+.perfil-menu {
+    display: none;
+    position: absolute;
+    top: 58px;
+    right: 0;
+    width: 190px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px #00000018;
+    padding: 8px;
+}
+
+.perfil-menu.show {
+    display: block;
+}
+
+.perfil-menu button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 11px 12px;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.perfil-menu button:hover {
+    background: var(--soft);
+    color: var(--pd);
+}
+
+@media(max-width:850px) {
+    .perfil-dashboard {
+        margin-top: 5px;
+    }
+}
 
 </style>
 </head>
@@ -511,10 +583,39 @@ option {
 <aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
 <div class="brand"><img src="img/logo.png" alt="Tejiendo Sueños Clau"></div>
 <nav>
-<a href="index.html">🏠 Inicio</a><a href="index.html#categorias">🧶 Categorías</a><a href="index.html#catalogo">🧸 Catálogo</a><a href="index.html#favoritos">❤️ Mis Favoritos</a><a href="index.html#carrito">🛒 Carrito</a><a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon">    Facturación</a><a href="#historial">📋 Historial</a><a href="#clientes">👥 Clientes</a><a href="index.html#contacto">💬 Contacto</a><a href="#" id="logoutBtn">🚪 Cerrar sesión</a>
+<a href="index.html">🏠 Inicio</a><a href="index.html#categorias">🧶 Categorías</a><a href="index.html#catalogo">🧸 Catálogo</a><a href="index.html#favoritos">❤️ Mis Favoritos</a><a href="index.html#carrito">🛒 Carrito</a><a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon">    Facturación</a><a href="#historial">📋 Historial</a><a href="#clientes">👥 Clientes</a><a href="index.html#contacto">💬 Contacto</a>
 </nav>
 </aside>
 <main>
+
+<!-- PERFIL / CERRAR SESIÓN -->
+<div class="perfil-dashboard">
+
+    <button
+        type="button"
+        class="perfil-logo-btn"
+        id="perfilLogoBtn"
+        title="Cuenta"
+    >
+        <img
+            src="img/logo.png"
+            alt="Tejiendo Sueños Clau"
+        >
+    </button>
+
+    <div class="perfil-menu" id="perfilMenu">
+
+        <button
+            type="button"
+            id="cerrarSesionDashboard"
+        >
+            🚪 Cerrar sesión
+        </button>
+
+    </div>
+
+</div>
+
 <!-- ============================= -->
 <!-- DASHBOARD - RESUMEN -->
 <!-- ============================= -->
@@ -3859,7 +3960,63 @@ $("ov").classList.remove("show")};
 $("ov").onclick=$("close").onclick;
 $("loginForm").onsubmit=loginDB;
 $("forgotPassword").onclick = recuperarPassword;
-$("logoutBtn").onclick=logoutDB;
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+    logoutBtn.onclick = logoutDB;
+}
+
+// =====================================================
+// PERFIL - MOSTRAR CERRAR SESIÓN
+// =====================================================
+
+const perfilLogoBtn = document.getElementById("perfilLogoBtn");
+const perfilMenu = document.getElementById("perfilMenu");
+const cerrarSesionDashboard =
+    document.getElementById("cerrarSesionDashboard");
+
+if (perfilLogoBtn && perfilMenu) {
+
+    perfilLogoBtn.addEventListener("click", function(e) {
+
+        e.stopPropagation();
+
+        perfilMenu.classList.toggle("show");
+
+    });
+
+}
+
+if (cerrarSesionDashboard) {
+
+    cerrarSesionDashboard.addEventListener("click", async function(e) {
+
+        e.preventDefault();
+
+        perfilMenu.classList.remove("show");
+
+        await logoutDB();
+
+    });
+
+}
+
+// Cerrar el menú si se hace clic fuera
+document.addEventListener("click", function(e) {
+
+    if (
+        perfilMenu &&
+        perfilLogoBtn &&
+        !perfilMenu.contains(e.target) &&
+        !perfilLogoBtn.contains(e.target)
+    ) {
+
+        perfilMenu.classList.remove("show");
+
+    }
+
+});
+
 $("togglePassword").onclick=()=>{const pass=$("loginPass"),visible=pass.type==="text";pass.type=visible?"password":"text";$("togglePassword").textContent=visible?"👁️":"🙈"};
 $("form").onsubmit=guardarFacturaDB;
 
