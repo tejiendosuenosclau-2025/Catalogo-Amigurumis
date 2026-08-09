@@ -117,6 +117,112 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
     font-size:12px;
 }
 
+/* ==========================================
+   DATOS SUPERIORES
+   ========================================== */
+
+.datos-superiores{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    align-items:start;
+}
+
+
+/* ==========================================
+   RESUMEN DE ABONOS
+   ========================================== */
+
+.factura-resumen{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:12px 0;
+}
+
+.factura-resumen > div{
+    background:#faf5f7;
+    border-radius:8px;
+    padding:10px;
+}
+
+.factura-resumen span{
+    display:block;
+    font-size:12px;
+    color:#777;
+    margin-bottom:4px;
+}
+
+.factura-resumen strong{
+    display:block;
+    font-size:15px;
+    color:#555;
+}
+
+
+/* ==========================================
+   SUGERENCIAS DE CLIENTES
+   ========================================== */
+
+.cliente-autocomplete{
+    position:relative;
+}
+
+.sugerencias-clientes{
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    z-index:1000;
+    background:#fff;
+    border:1px solid #eadfe5;
+    border-radius:0 0 8px 8px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+    max-height:220px;
+    overflow-y:auto;
+    display:none;
+}
+
+.sugerencia-cliente{
+    padding:10px 12px;
+    cursor:pointer;
+    border-bottom:1px solid #f1e9ed;
+}
+
+.sugerencia-cliente:last-child{
+    border-bottom:0;
+}
+
+.sugerencia-cliente:hover{
+    background:#faf3f7;
+}
+
+.sugerencia-cliente strong{
+    display:block;
+    color:#555;
+    font-size:14px;
+}
+
+.sugerencia-cliente small{
+    display:block;
+    margin-top:3px;
+    color:#888;
+    font-size:12px;
+}
+
+
+/* ==========================================
+   CELULAR
+   ========================================== */
+
+@media (max-width:700px){
+
+    .datos-superiores{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
 </head>
 <body>
@@ -144,112 +250,197 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 
 <main>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
-<form id="form">
-<article class="card">
-    <div class="title">👤 Datos del cliente</div>
+<section class="grid datos-superiores">
 
-    <div class="cliente-autocomplete">
-        <label>Nombre / Razón social *</label>
+    <!-- ============================= -->
+    <!-- DATOS DEL CLIENTE              -->
+    <!-- ============================= -->
+
+    <article class="card">
+
+        <div class="title">👤 Datos del cliente</div>
+
+        <div class="cliente-autocomplete">
+
+            <label>Nombre / Razón social *</label>
+
+            <input
+                id="nombre"
+                required
+                placeholder="Ej: María López"
+                autocomplete="off"
+            >
+
+            <div
+                id="sugerenciasClientes"
+                class="sugerencias-clientes"
+            ></div>
+
+        </div>
+
+
+        <div class="cliente-autocomplete">
+
+            <label>Cédula / NIT</label>
+
+            <input
+                id="ident"
+                placeholder="Ej: 1234567890"
+                autocomplete="off"
+            >
+
+            <div
+                id="sugerenciasIdent"
+                class="sugerencias-clientes"
+            ></div>
+
+        </div>
+
+
+        <label>Teléfono</label>
 
         <input
-            id="nombre"
-            required
-            placeholder="Ej: María López"
+            id="tel"
+            name="customer_phone"
+            type="tel"
+            inputmode="tel"
             autocomplete="off"
+            placeholder="Ej: 300 123 4567"
         >
 
-        <div id="sugerenciasClientes" class="sugerencias-clientes"></div>
-    </div>
 
-
-    <div class="cliente-autocomplete">
-        <label>Cédula / NIT</label>
+        <label>Correo</label>
 
         <input
-            id="ident"
-            placeholder="Ej: 1234567890"
-            autocomplete="off"
+            id="correo"
+            type="email"
+            placeholder="Ej: maria@gmail.com"
         >
 
-        <div id="sugerenciasIdent" class="sugerencias-clientes"></div>
-    </div>
+
+        <label>Dirección</label>
+
+        <input
+            id="direccion"
+            placeholder="Ej: Calle 10 # 5-20, Popayán"
+        >
+
+    </article>
 
 
-    <label>Teléfono</label>
+    <!-- ============================= -->
+    <!-- DATOS DE LA FACTURA            -->
+    <!-- ============================= -->
 
-    <input
-        id="tel"
-        name="customer_phone"
-        type="tel"
-        inputmode="tel"
-        autocomplete="off"
-        placeholder="Ej: 300 123 4567"
-    >
+    <article class="card">
+
+        <div class="title">🧾 Datos de la factura</div>
 
 
-    <label>Correo</label>
+        <label>Número de factura</label>
 
-    <input
-        id="correo"
-        type="email"
-        placeholder="Ej: maria@gmail.com"
-    >
+        <input
+            id="numero"
+            readonly
+        >
 
 
-    <label>Dirección</label>
+        <label>Fecha</label>
 
-    <input
-        id="direccion"
-        placeholder="Ej: Calle 10 # 5-20, Popayán"
-    >
-</article>
-<article class="card"><div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
-<label>Número *</label><input id="numero" name="invoice_number" autocomplete="off" inputmode="text">
-<label>Fecha *</label><input id="fecha" type="date" required>
-<label>Forma de pago</label>
-<select id="pago">
-    <option>Efectivo</option>
-    <option>Abono</option>
-    <option>Bancolombia</option>
-    <option>Nequi</option>
-    <option>Daviplata</option>
-    <option>Otro</option>
-</select>
+        <input
+            id="fecha"
+            type="date"
+        >
 
-<label>Abono</label>
-<input
-    id="abono"
-    type="number"
-    min="0"
-    value="0"
-    placeholder="Ej: 50000"
->
 
-<div class="saldo-box">
-    Abono acumulado:
-    <strong id="abonoAcumulado">$0</strong>
-</div>
+        <label>Forma de pago</label>
 
-<div class="saldo-box">
-    <span>Saldo pendiente:</span>
-    <strong id="saldoPendiente">$0</strong>
-</div>
+        <select id="pago">
 
-<label>Estado</label>
-<select id="estado">
-    <option>Pagada</option>
-    <option>Pendiente</option>
-    <option>Enviada</option>
-</select>
+            <option value="Contado">
+                Contado
+            </option>
 
-<label>Observaciones</label>
-<textarea
-    id="obs"
-    rows="3"
-    placeholder="Gracias por tu compra 💗"
-></textarea>
+            <option value="Abono">
+                Abono
+            </option>
+
+        </select>
+
+
+        <!-- ============================= -->
+        <!-- ABONO                          -->
+        <!-- ============================= -->
+
+        <div id="abonoBox">
+
+            <label>Abono</label>
+
+            <input
+                id="abono"
+                type="number"
+                min="0"
+                value="0"
+                placeholder="Ej: 50000"
+            >
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- ABONO ACUMULADO                -->
+        <!-- ============================= -->
+
+        <div class="factura-resumen">
+
+            <div>
+                <span>Abono acumulado</span>
+                <strong id="abonoAcumulado">$0</strong>
+            </div>
+
+            <div>
+                <span>Saldo pendiente</span>
+                <strong id="saldoPendiente">$0</strong>
+            </div>
+
+        </div>
+
+
+        <label>Estado</label>
+
+        <select id="estado">
+
+            <option value="Pagada">
+                Pagada
+            </option>
+
+            <option value="Pendiente">
+                Pendiente
+            </option>
+
+            <option value="Enviada">
+                Enviada
+            </option>
+
+            <option value="Anulada">
+                Anulada
+            </option>
+
+        </select>
+
+
+        <label>Observaciones</label>
+
+        <textarea
+            id="obs"
+            rows="4"
+            placeholder="Gracias por tu compra 💗"
+        ></textarea>
+
+    </article>
+
 </section>
-</article>
+
 <section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
@@ -257,7 +448,6 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 
 <div class="actions"><button type="button" class="btn green" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn pink" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn purple" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn green" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
 <button type="submit" class="btn white" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button><button type="button" class="btn gray" id="new">＋ Nueva factura</button></div>
-</form>
 
 <section id="historial" class="card history"><div class="title">📋 Historial de facturas</div><div class="wrap"><table><thead><tr><th>Factura</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="history"></tbody></table></div></section>
 <section id="clientes" class="card"><div class="title">👥 Clientes guardados</div><div id="clients" class="muted">Los clientes aparecerán aquí después de guardar una factura.</div></section>
