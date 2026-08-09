@@ -487,25 +487,90 @@ option {
    ===================================================== */
 
 /* =====================================================
-   PERFIL - LOGO Y CERRAR SESIÓN
+   PERFIL - FECHA + LOGO + CERRAR SESIÓN
    ===================================================== */
 
 .perfil-dashboard {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 14px;
     margin-bottom: 12px;
     position: relative;
     z-index: 100;
 }
 
+/* =====================================================
+   FECHA
+   ===================================================== */
+
+.fecha-perfil {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 14px;
+
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(244, 125, 163, 0.20);
+    border-radius: 14px;
+
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+
+    box-shadow:
+        0 5px 18px rgba(244, 125, 163, 0.10);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.fecha-perfil:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(244, 125, 163, 0.40);
+
+    box-shadow:
+        0 8px 24px rgba(244, 125, 163, 0.18);
+}
+
+.fecha-icono {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #fff0f5,
+        #ffe1eb
+    );
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   LOGO
+   ===================================================== */
+
 .perfil-icon-logo-btn {
     width: 82px;
     height: 82px;
+
     border: 2px solid rgba(244, 125, 163, 0.25);
     background: #fff;
+
     cursor: pointer;
     padding: 5px;
+
     border-radius: 50%;
 
     display: flex;
@@ -523,11 +588,15 @@ option {
 }
 
 .perfil-icon-logo-btn img {
-    width: 80px;
-    height: 80px;
+    width: 68px;
+    height: 68px;
+
     object-fit: contain;
     border-radius: 50%;
-    transition: transform .3s ease, filter .3s ease;
+
+    transition:
+        transform .3s ease,
+        filter .3s ease;
 }
 
 .perfil-icon-logo-btn:hover {
@@ -542,23 +611,46 @@ option {
 
 .perfil-icon-logo-btn:hover img {
     transform: scale(1.05);
-    filter: drop-shadow(0 3px 5px rgba(244, 125, 163, 0.25));
+
+    filter:
+        drop-shadow(
+            0 3px 5px
+            rgba(244, 125, 163, 0.25)
+        );
 }
 
 .perfil-icon-logo-btn:active {
     transform: scale(0.96);
 }
 
+
+/* =====================================================
+   MENÚ CERRAR SESIÓN
+   ===================================================== */
+
 .perfil-menu {
     display: none;
+
     position: absolute;
-    top: 92px;
+
+    /*
+       El logo mide 82px.
+       El menú comienza debajo del logo.
+    */
+    top: 94px;
+
     right: 0;
+
     width: 190px;
+
     background: #fff;
+
     border: 1px solid var(--line);
     border-radius: 12px;
-    box-shadow: 0 8px 25px #00000018;
+
+    box-shadow:
+        0 8px 25px #00000018;
+
     padding: 8px;
 }
 
@@ -568,13 +660,20 @@ option {
 
 .perfil-menu button {
     width: 100%;
+
     border: 0;
     background: transparent;
+
     padding: 11px 12px;
+
     text-align: left;
+
     border-radius: 8px;
+
     cursor: pointer;
+
     color: var(--ink);
+
     font-size: 14px;
 }
 
@@ -583,9 +682,41 @@ option {
     color: var(--pd);
 }
 
+
+/* =====================================================
+   CELULAR
+   ===================================================== */
+
 @media(max-width:850px) {
+
     .perfil-dashboard {
         margin-top: 5px;
+        gap: 8px;
+    }
+
+    .fecha-perfil {
+        padding: 7px 10px;
+        font-size: 11px;
+    }
+
+    .fecha-icono {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    .perfil-icon-logo-btn {
+        width: 62px;
+        height: 62px;
+    }
+
+    .perfil-icon-logo-btn img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .perfil-menu {
+        top: 72px;
     }
 }
 
@@ -620,7 +751,11 @@ option {
 
 <!-- PERFIL / CERRAR SESIÓN -->
 <div class="perfil-dashboard">
-
+    
+    <div class="fecha-perfil">
+        <span class="fecha-icono"><img src="img/fecha.png" class="grilla-icon"></span>
+        <span id="fechaPerfil"></span>
+    </div>
     <button
         type="button"
         class="perfil-icon-logo-btn"
@@ -796,7 +931,7 @@ option {
     </article>
 
 </section>
-<div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div><span id="fechaTexto"></span></div>
+<div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
 <form id="form">
 <section class="grid datos-superiores">
 
@@ -4084,7 +4219,26 @@ $("history").addEventListener("click", async e => {
 
 });
 
-(async()=>{initDB();await load();$("fecha").value=today();$("fechaTexto").textContent=new Date().toLocaleDateString("es-CO",{day:"2-digit",month:"long",year:"numeric"});row();
+(async()=>{
+    initDB();
+    await load();
+
+    $("fecha").value = today();
+
+    const fechaPerfil = document.getElementById("fechaPerfil");
+
+    if (fechaPerfil) {
+        fechaPerfil.textContent = new Date().toLocaleDateString(
+            "es-CO",
+            {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }
+        );
+    }
+
+    row();
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
