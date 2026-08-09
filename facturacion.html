@@ -271,6 +271,23 @@ option {
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 }
 
+.forgot-password{
+    display:block;
+    width:100%;
+    margin-top:12px;
+    padding:8px;
+    border:0;
+    background:none;
+    color:#d85b78;
+    font-family:inherit;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.forgot-password:hover{
+    text-decoration:underline;
+}
+
 </style>
 </head>
 <body>
@@ -280,13 +297,16 @@ option {
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
 <h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
 <form id="loginForm" autocomplete="off">
-<label for="loginUser">📧 Correo electrónico</label>
+<label for="loginUser"><img src="img/user.png" alt="PDF" class="grilla-icon"> Correo electrónico</label>
 <input type="email" id="loginUser" placeholder="correo@ejemplo.com" required autocomplete="username">
-<label for="loginPass">🔐 Contraseña</label>
+<label for="loginPass"><img src="img/key.png" alt="PDF" class="grilla-icon"> Contraseña</label>
 <div class="password-box"><input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword">👁️</button></div>
-<button type="submit" class="login-button">🔐 Ingresar</button><p id="loginError" class="login-error"></p>
-</form><p class="login-footer">Tejiendo Sueños Clau 💗</p>
-</div></div>
+<button type="submit" class="login-button">🔐 Ingresar</button><button type="button" id="forgotPassword" class="forgot-password"> ¿Olvidaste tu contraseña?</button>
+<p id="loginError" class="login-error"></p>
+</form>
+<p class="login-footer">Tejiendo Sueños Clau 💗</p>
+</div>
+</div>
 
 <div class="mobile"><button id="open">☰</button><b><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</b></div><div id="ov" class="overlay"></div>
 <aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
@@ -2860,7 +2880,73 @@ async function guardarFacturaDB(e){
 
 function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
 function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";document.body.classList.remove("locked")}
+
 async function loginDB(e){e.preventDefault();if(!db){showDBLogin("⚠️ No se pudo conectar con Supabase.");return}const email=$("loginUser").value.trim(),password=$("loginPass").value;const {data,error}=await db.auth.signInWithPassword({email,password});if(error){$("loginError").textContent="❌ Correo o contraseña incorrectos.";return}currentUser=data.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}
+
+async function recuperarPassword(){
+
+    if(!db){
+
+        $("loginError").textContent =
+            "⚠️ No se pudo conectar con Supabase.";
+
+        return;
+    }
+
+    const email =
+        $("loginUser").value.trim();
+
+
+    if(!email){
+
+        $("loginError").textContent =
+            "📧 Escribe primero tu correo electrónico.";
+
+        $("loginUser").focus();
+
+        return;
+    }
+
+
+    try{
+
+        const { error } =
+            await db.auth.resetPasswordForEmail(
+                email,
+                {
+                    redirectTo:
+                        window.location.origin +
+                        "/Catalogo-Amigurumis/recuperar.html"
+                }
+            );
+
+
+        if(error) throw error;
+
+
+        $("loginError").style.color =
+            "#198b4b";
+
+        $("loginError").textContent =
+            "✅ Te enviamos un enlace para restablecer tu contraseña. Revisa tu correo.";
+
+    }catch(error){
+
+        console.error(
+            "ERROR RECUPERANDO CONTRASEÑA:",
+            error
+        );
+
+        $("loginError").style.color =
+            "#c62828";
+
+        $("loginError").textContent =
+            "❌ No se pudo enviar el correo de recuperación.";
+
+    }
+
+}
+
 async function logoutDB(e){e?.preventDefault();if(db)await db.auth.signOut();currentUser=null;showDBLogin()}
 function initDB(){if(window.SUPABASE_URL&&window.SUPABASE_ANON_KEY){db=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);console.log("✅ Supabase conectado")}else console.error("❌ No se encontraron las credenciales de Supabase.")}
 
@@ -3207,8 +3293,14 @@ $("new").onclick = async () => {
 };
 
 $("x").onclick=()=>$("modal").classList.remove("show");
-$("open").onclick=()=>{$("side").classList.add("open");$("ov").classList.add("show")};$("close").onclick=()=>{$("side").classList.remove("open");$("ov").classList.remove("show")};$("ov").onclick=$("close").onclick;
-$("loginForm").onsubmit=loginDB;$("logoutBtn").onclick=logoutDB;$("togglePassword").onclick=()=>{const pass=$("loginPass"),visible=pass.type==="text";pass.type=visible?"password":"text";$("togglePassword").textContent=visible?"👁️":"🙈"};
+$("open").onclick=()=>{$("side").classList.add("open");
+$("ov").classList.add("show")};$("close").onclick=()=>{$("side").classList.remove("open");
+$("ov").classList.remove("show")};
+$("ov").onclick=$("close").onclick;
+$("loginForm").onsubmit=loginDB;
+$("forgotPassword").onclick = recuperarPassword;
+$("logoutBtn").onclick=logoutDB;
+$("togglePassword").onclick=()=>{const pass=$("loginPass"),visible=pass.type==="text";pass.type=visible?"password":"text";$("togglePassword").textContent=visible?"👁️":"🙈"};
 $("form").onsubmit=guardarFacturaDB;
 
 $("history").addEventListener("click", async e => {
