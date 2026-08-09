@@ -61,6 +61,7 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 .history-btn.print{color:#555}
 .history-btn.wa{color:#198b4b}
 .history-btn.cancel{color:#d62828}
+.history-btn.delete{color:#b00020}
 
 .status.Anulada{
     background:#ffe5e5;
@@ -1590,10 +1591,175 @@ function sheet(f) {
 function show(f=collect()){if(!valid())return;$("previewBox").innerHTML=sheet(f);$("modal").classList.add("show")}
 
 async function clienteDB(c){
- let q=db.from("clientes").select("*").limit(1);if(c.ident.trim())q=q.eq("identificacion",c.ident.trim());else q=q.eq("nombre",c.nombre.trim());
- const {data:found,error:findError}=await q.maybeSingle();if(findError)throw findError;
- if(found){const {data,error}=await db.from("clientes").update({nombre:c.nombre,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).eq("id",found.id).select().single();if(error)throw error;return data}
- const {data,error}=await db.from("clientes").insert({nombre:c.nombre,identificacion:c.ident.trim()||null,telefono:c.tel||null,correo:c.correo||null,direccion:c.direccion||null}).select().single();if(error)throw error;return data;
+
+    const nombre = (c.nombre || "").trim();
+    const ident = (c.ident || "").trim();
+    const tel = (c.tel || "").trim();
+
+    if(!nombre){
+        throw new Error("El nombre del cliente es obligatorio.");
+    }
+
+
+    // ==========================================
+    // 1. SI TIENE DOCUMENTO
+    // ==========================================
+    //
+    // El documento es el identificador principal.
+    //
+
+    if(ident){
+
+        const { data: encontrado, error } = await db
+            .from("clientes")
+            .select("*")
+            .eq("identificacion", ident)
+            .maybeSingle();
+
+        if(error) throw error;
+
+
+        // Cliente existente con ese documento
+        if(encontrado){
+
+            const { data, error: updateError } = await db
+                .from("clientes")
+                .update({
+
+                    nombre: nombre,
+                    telefono: tel || null,
+                    correo: c.correo || null,
+                    direccion: c.direccion || null
+
+                })
+                .eq("id", encontrado.id)
+                .select()
+                .single();
+
+            if(updateError) throw updateError;
+
+            return data;
+        }
+
+
+        // Cliente nuevo con documento
+        const { data, error: insertError } = await db
+            .from("clientes")
+            .insert({
+
+                nombre: nombre,
+                identificacion: ident,
+                telefono: tel || null,
+                correo: c.correo || null,
+                direccion: c.direccion || null
+
+            })
+            .select()
+            .single();
+
+        if(insertError) throw insertError;
+
+        return data;
+    }
+
+
+    // ==========================================
+    // 2. SIN DOCUMENTO
+    // ==========================================
+    //
+    // Buscamos por nombre + teléfono.
+    //
+    // Esto evita crear otro registro idéntico
+    // cuando el cliente no tiene documento.
+    //
+
+    let consulta = db
+        .from("clientes")
+        .select("*")
+        .eq("nombre", nombre)
+        .is("identificacion", null);
+
+
+    // Si tiene teléfono, también lo usamos
+    // para identificarlo.
+    if(tel){
+
+        consulta = consulta.eq(
+            "telefono",
+            tel
+        );
+
+    }else{
+
+        consulta = consulta.is(
+            "telefono",
+            null
+        );
+
+    }
+
+
+    const {
+        data: encontrado,
+        error
+    } = await consulta.maybeSingle();
+
+
+    if(error) throw error;
+
+
+    // ==========================================
+    // 3. YA EXISTE SIN DOCUMENTO
+    // ==========================================
+
+    if(encontrado){
+
+        const { data, error: updateError } = await db
+            .from("clientes")
+            .update({
+
+                nombre: nombre,
+                telefono: tel || null,
+                correo: c.correo || null,
+                direccion: c.direccion || null
+
+            })
+            .eq("id", encontrado.id)
+            .select()
+            .single();
+
+        if(updateError) throw updateError;
+
+        return data;
+    }
+
+
+    // ==========================================
+    // 4. CLIENTE NUEVO SIN DOCUMENTO
+    // ==========================================
+
+    const { data, error: insertError } = await db
+        .from("clientes")
+        .insert({
+
+            nombre: nombre,
+
+            // IMPORTANTE:
+            // sin documento queda NULL,
+            // no una cadena vacía.
+            identificacion: null,
+
+            telefono: tel || null,
+            correo: c.correo || null,
+            direccion: c.direccion || null
+
+        })
+        .select()
+        .single();
+
+    if(insertError) throw insertError;
+
+    return data;
 }
 
 async function guardarDB(f){
