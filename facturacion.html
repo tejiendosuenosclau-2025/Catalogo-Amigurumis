@@ -2100,6 +2100,14 @@ async function cargarHistorialDB(){
                             `
                             : ""
                         }
+                        <button
+                          type="button"
+                          class="history-btn delete"
+                          title="Eliminar factura definitivamente"
+                          data-action="delete"
+                          data-id="${f.id}">
+                          <img src="img/delete.png" alt="PDF" class="grilla-icon">
+                        </button>
 
                     </div>
                 </td>
@@ -2289,6 +2297,103 @@ async function anularFacturaDB(id){
         console.error(err);
 
         alert("No se pudo anular la factura.");
+    }
+}
+
+async function eliminarFacturaDB(id){
+
+    // ==========================================
+    // 1. CONFIRMACIÓN
+    // ==========================================
+
+    const confirmar = confirm(
+        "⚠️ ELIMINAR FACTURA DEFINITIVAMENTE\n\n" +
+        "Esta acción eliminará la factura y todos sus productos " +
+        "asociados de la base de datos.\n\n" +
+        "La factura NO podrá recuperarse.\n\n" +
+        "¿Deseas continuar?"
+    );
+
+    if(!confirmar) return;
+
+
+    // Segunda confirmación
+    const confirmar2 = confirm(
+        "⚠️ ÚLTIMA CONFIRMACIÓN\n\n" +
+        "¿REALMENTE deseas eliminar esta factura de forma definitiva?"
+    );
+
+    if(!confirmar2) return;
+
+
+    try{
+
+        // ==========================================
+        // 2. OBTENER DATOS DE LA FACTURA
+        // ==========================================
+
+        const { data: factura, error: errorFactura } = await db
+            .from("facturas")
+            .select("id,numero")
+            .eq("id", id)
+            .single();
+
+        if(errorFactura) throw errorFactura;
+
+
+        // ==========================================
+        // 3. ELIMINAR DETALLES
+        // ==========================================
+
+        const { error: errorDetalle } = await db
+            .from("factura_detalle")
+            .delete()
+            .eq("factura_id", id);
+
+        if(errorDetalle) throw errorDetalle;
+
+
+        // ==========================================
+        // 4. ELIMINAR FACTURA
+        // ==========================================
+
+        const { error: errorFacturaDelete } = await db
+            .from("facturas")
+            .delete()
+            .eq("id", id);
+
+        if(errorFacturaDelete) throw errorFacturaDelete;
+
+
+        // ==========================================
+        // 5. MENSAJE
+        // ==========================================
+
+        alert(
+            "Factura " +
+            factura.numero +
+            " eliminada definitivamente."
+        );
+
+
+        // ==========================================
+        // 6. ACTUALIZAR HISTORIAL
+        // ==========================================
+
+        await cargarHistorialDB();
+
+
+    }catch(err){
+
+        console.error(
+            "Error eliminando factura:",
+            err
+        );
+
+        alert(
+            "No se pudo eliminar la factura.\n\n" +
+            "Revisa las políticas RLS de Supabase."
+        );
     }
 }
 
@@ -2968,6 +3073,9 @@ $("history").addEventListener("click", async e => {
     if (action === "cancel") {
         await anularFacturaDB(id);
     }
+    if (action === "delete") {
+        await eliminarFacturaDB(id);
+}
 
 });
 
