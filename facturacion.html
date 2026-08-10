@@ -1703,34 +1703,6 @@ function cerrarModalAbono() {
     modal.classList.remove("show");
 }
 
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const botonCerrarAbono =
-        $("cerrarModalAbono");
-
-    if (botonCerrarAbono) {
-
-        botonCerrarAbono.addEventListener(
-            "click",
-            cerrarModalAbono
-        );
-    }
-
-
-    const botonCancelarAbono =
-        $("cancelarAbono");
-
-    if (botonCancelarAbono) {
-
-        botonCancelarAbono.addEventListener(
-            "click",
-            cerrarModalAbono
-        );
-    }
-
-});
-
 function calcularSaldo(){
 
     // Usar el cálculo principal de la factura
