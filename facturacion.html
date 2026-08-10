@@ -3142,7 +3142,10 @@ async function actualizarFacturaDB(f){
     // 1. BUSCAR FACTURA ACTUAL
     // ==========================================
 
-    const { data: facturaActual, error: errorFactura } = await db
+    const {
+        data: facturaActual,
+        error: errorFactura
+    } = await db
         .from("facturas")
         .select(`
             id,
@@ -3154,14 +3157,17 @@ async function actualizarFacturaDB(f){
         .eq("id", editingInvoiceId)
         .single();
 
-    if(errorFactura) throw errorFactura;
+    if(errorFactura){
+        throw errorFactura;
+    }
 
 
     // ==========================================
     // 2. ACTUALIZAR / CREAR CLIENTE
     // ==========================================
 
-    const cliente = await clienteDB(f.cliente);
+    const cliente =
+        await clienteDB(f.cliente);
 
 
     // ==========================================
@@ -3173,19 +3179,52 @@ async function actualizarFacturaDB(f){
 
 
     // ==========================================
-    // 4. ABONO ANTERIOR
+    // 4. OBTENER ABONOS REALES
+    //    DESDE factura_pagos
+    // ==========================================
+
+    const {
+        data: pagosExistentes,
+        error: errorPagos
+    } = await db
+        .from("factura_pagos")
+        .select("valor")
+        .eq("factura_id", editingInvoiceId);
+
+    if(errorPagos){
+
+        console.error(
+            "ERROR CARGANDO ABONOS EXISTENTES:",
+            errorPagos
+        );
+
+        throw errorPagos;
+    }
+
+
+    // ==========================================
+    // 5. SUMAR TODOS LOS ABONOS REALES
     // ==========================================
 
     const abonoAnterior =
-        Number(facturaActual.abono_acumulado) || 0;
+        (pagosExistentes || []).reduce(
+            (suma, pago) =>
+                suma + Number(pago.valor || 0),
+            0
+        );
+
+
+    console.log(
+        "ABONO REAL ANTES DE ACTUALIZAR:",
+        abonoAnterior
+    );
 
 
     // ==========================================
-    // 5. NUEVO ABONO
+    // 6. NUEVO ABONO
     // ==========================================
 
     let nuevoAbono = 0;
-
 
     if(f.pago === "Abono"){
 
@@ -3194,13 +3233,11 @@ async function actualizarFacturaDB(f){
                 0,
                 Number(f.abono) || 0
             );
-
     }
 
 
     // ==========================================
-    // 6. EVITAR QUE EL NUEVO ABONO
-    //    SUPERE EL SALDO ANTERIOR
+    // 7. SALDO ANTES DEL NUEVO ABONO
     // ==========================================
 
     const saldoAntes =
@@ -3210,48 +3247,80 @@ async function actualizarFacturaDB(f){
         );
 
 
+    // ==========================================
+    // 8. EVITAR ABONO MAYOR AL SALDO
+    // ==========================================
+
     if(nuevoAbono > saldoAntes){
 
-        nuevoAbono = saldoAntes;
-
+        nuevoAbono =
+            saldoAntes;
     }
 
 
     // ==========================================
-    // 7. ABONO ACUMULADO
+    // 9. REGISTRAR NUEVO ABONO
+    //    EN factura_pagos
     // ==========================================
 
-    let abonoAcumulado = 0;
+    if(nuevoAbono > 0){
+
+        if(!currentUser?.id){
+
+            throw new Error(
+                "No se pudo identificar al usuario actual."
+            );
+        }
 
 
-    if(f.pago === "Abono"){
+        const {
+            error: errorNuevoPago
+        } = await db
+            .from("factura_pagos")
+            .insert({
 
-        abonoAcumulado =
-            abonoAnterior + nuevoAbono;
+                factura_id:
+                    editingInvoiceId,
 
-    }else{
+                valor:
+                    nuevoAbono,
 
-        // Contado paga la totalidad
-        abonoAcumulado =
-            totalFactura;
+                tipo_abono:
+                    f.tipoAbono || "Efectivo",
 
-    }
+                usuario_id:
+                    currentUser.id
+            });
 
 
-    // ==========================================
-    // 8. EVITAR QUE EL ACUMULADO
-    //    SUPERE EL TOTAL
-    // ==========================================
+        if(errorNuevoPago){
 
-    abonoAcumulado =
-        Math.min(
-            abonoAcumulado,
-            totalFactura
+            console.error(
+                "ERROR REGISTRANDO NUEVO ABONO:",
+                errorNuevoPago
+            );
+
+            throw errorNuevoPago;
+        }
+
+
+        console.log(
+            "NUEVO ABONO REGISTRADO:",
+            nuevoAbono
         );
+    }
 
 
     // ==========================================
-    // 9. SALDO PENDIENTE
+    // 10. ABONO ACUMULADO REAL
+    // ==========================================
+
+    const abonoAcumulado =
+        abonoAnterior + nuevoAbono;
+
+
+    // ==========================================
+    // 11. SALDO PENDIENTE
     // ==========================================
 
     const saldoPendiente =
@@ -3262,25 +3331,27 @@ async function actualizarFacturaDB(f){
 
 
     // ==========================================
-    // 10. ESTADO AUTOMÁTICO
+    // 12. ESTADO AUTOMÁTICO
     // ==========================================
 
-    let estadoFactura = f.estado;
+    let estadoFactura =
+        f.estado;
 
 
     if(saldoPendiente === 0){
 
-        estadoFactura = "Pagada";
+        estadoFactura =
+            "Pagada";
 
     }else if(abonoAcumulado > 0){
 
-        estadoFactura = "Pendiente";
-
+        estadoFactura =
+            "Pendiente";
     }
 
 
     // ==========================================
-    // 11. TIPO DE ABONO
+    // 13. TIPO DE ABONO
     // ==========================================
 
     const tipoAbono =
@@ -3290,110 +3361,190 @@ async function actualizarFacturaDB(f){
 
 
     // ==========================================
-    // 12. ACTUALIZAR FACTURA
+    // 14. ACTUALIZAR FACTURA
     // ==========================================
 
-    const { error: e1 } = await db
+    const {
+        error: e1
+    } = await db
         .from("facturas")
         .update({
 
-            fecha: f.fecha,
+            fecha:
+                f.fecha,
 
-            cliente_id: cliente.id,
+            cliente_id:
+                cliente.id,
 
-            forma_pago: f.pago,
+            forma_pago:
+                f.pago,
 
-            tipo_abono: tipoAbono,
+            tipo_abono:
+                tipoAbono,
 
-            estado: estadoFactura,
+            estado:
+                estadoFactura,
 
             observaciones:
                 f.obs || null,
 
-            subtotal: f.sub,
+            subtotal:
+                f.sub,
 
-            descuento_porcentaje: f.dg,
+            descuento_porcentaje:
+                f.dg,
 
-            iva_porcentaje: f.iv,
+            iva_porcentaje:
+                f.iv,
 
-            total: totalFactura,
+            total:
+                totalFactura,
 
-
-            // Dinero ingresado EN ESTA EDICIÓN
+            // Solo el nuevo abono de esta edición
             valor_abono:
                 nuevoAbono,
 
-
-            // Total pagado históricamente
+            // Acumulado REAL
             abono_acumulado:
                 abonoAcumulado,
 
-
-            // Lo que todavía falta pagar
+            // Saldo REAL
             saldo_pendiente:
                 saldoPendiente
 
         })
-        .eq("id", editingInvoiceId);
+        .eq(
+            "id",
+            editingInvoiceId
+        );
 
 
-    if(e1) throw e1;
+    if(e1){
+
+        console.error(
+            "ERROR ACTUALIZANDO FACTURA:",
+            e1
+        );
+
+        throw e1;
+    }
 
 
     // ==========================================
-    // 13. ELIMINAR DETALLES ANTERIORES
+    // 15. ELIMINAR DETALLES ANTERIORES
     // ==========================================
 
-    const { error: e2 } = await db
+    const {
+        error: e2
+    } = await db
         .from("factura_detalle")
         .delete()
-        .eq("factura_id", editingInvoiceId);
+        .eq(
+            "factura_id",
+            editingInvoiceId
+        );
 
 
-    if(e2) throw e2;
+    if(e2){
 
+        console.error(
+            "ERROR ELIMINANDO DETALLES:",
+            e2
+        );
 
-    // ==========================================
-    // 14. CREAR NUEVAMENTE LOS DETALLES
-    // ==========================================
-
-    const rows = f.items.map(x => ({
-
-        factura_id:
-            editingInvoiceId,
-
-        producto_id:
-            String(x.id || "") || null,
-
-        producto_nombre:
-            x.nombre,
-
-        cantidad:
-            x.q,
-
-        precio_unitario:
-            x.pr,
-
-        descuento_porcentaje:
-            x.d,
-
-        total:
-            x.total
-
-    }));
+        throw e2;
+    }
 
 
     // ==========================================
-    // 15. GUARDAR DETALLES
+    // 16. CREAR NUEVOS DETALLES
     // ==========================================
 
-    const { error: e3 } = await db
-        .from("factura_detalle")
-        .insert(rows);
+    const rows =
+        f.items.map(x => ({
+
+            factura_id:
+                editingInvoiceId,
+
+            producto_id:
+                String(x.id || "") || null,
+
+            producto_nombre:
+                x.nombre,
+
+            cantidad:
+                x.q,
+
+            precio_unitario:
+                x.pr,
+
+            descuento_porcentaje:
+                x.d,
+
+            total:
+                x.total
+
+        }));
 
 
-    if(e3) throw e3;
+    // ==========================================
+    // 17. GUARDAR DETALLES
+    // ==========================================
 
+    if(rows.length){
+
+        const {
+            error: e3
+        } = await db
+            .from("factura_detalle")
+            .insert(rows);
+
+
+        if(e3){
+
+            console.error(
+                "ERROR GUARDANDO DETALLES:",
+                e3
+            );
+
+            throw e3;
+        }
+    }
+
+
+    // ==========================================
+    // 18. LIMPIAR ABONO NUEVO
+    // ==========================================
+
+    if($("abono")){
+
+        $("abono").value = 0;
+    }
+
+
+    console.log(
+        "FACTURA ACTUALIZADA CORRECTAMENTE"
+    );
+
+    console.log(
+        "ABONO ANTERIOR:",
+        abonoAnterior
+    );
+
+    console.log(
+        "NUEVO ABONO:",
+        nuevoAbono
+    );
+
+    console.log(
+        "ABONO ACUMULADO:",
+        abonoAcumulado
+    );
+
+    console.log(
+        "SALDO PENDIENTE:",
+        saldoPendiente
+    );
 }
 
 // =====================================================
