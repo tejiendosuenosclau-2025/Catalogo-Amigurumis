@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Estad&iacute;sticas | Tejiendo Sue&ntilde;os Clau
+  </title>
+  <style>
+   :root{--p:#f43f7a;--g:#16a765;--o:#f07818;--v:#7650c8;--b:#3d91e8;--ink:#202020;--line:#eadde3;--soft:#fff1f6}*{box-sizing:border-box}body{margin:0;font-family:"Century Gothic",Arial,sans-serif;color:var(--ink);background:#fff}.main{width:100%;padding:28px 26px 12px;min-width:0}.top{display:flex;align-items:center;gap:24px}.title{min-width:245px}.title h1{margin:0;font-size:25px}.sub{color:#657080;font-size:12px;margin-top:7px}.sel,.date{border:1px solid #ead8df;border-radius:9px;background:#fff;padding:11px 16px;font-weight:700}.date{margin-left:auto;font-size:11px;font-weight:400}.profile{width:58px;height:58px;border:2px solid #f6dce5;border-radius:50%;background:#fff;font-size:29px;box-shadow:0 5px 18px #f4a8c533}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:24px}.card,.panel{border:1px solid #eee0e5;border-radius:10px;background:#fff;box-shadow:0 8px 25px #2a1c2312}.card{height:216px;padding:15px 10px 8px;text-align:center;position:relative;overflow:hidden}.icon{width:44px;height:44px;margin:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}.label{font-size:10px;font-weight:700;line-height:1.35;margin-top:14px;min-height:30px}.value{font-size:20px;font-weight:800;margin:10px 0 8px}.up{font-size:10px;color:#159b55}.down{font-size:10px;color:#ef4444}.spark{position:absolute;bottom:0;left:0;width:100%;height:42px}.pink .icon{background:#ffe9f1}.orange .icon{background:#ffead8}.green .icon{background:#dff7e9}.purple .icon{background:#eee7ff}.blue .icon{background:#e2f1ff}.yellow .icon{background:#fff0ce}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.panel{padding:15px}.panel h2{font-size:13px;margin:0 0 12px}.chart{height:220px}.chart svg{width:100%;height:100%}.three{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:12px}.piewrap{display:flex;align-items:center;gap:18px}.donut,.pie{width:145px;height:145px;border-radius:50%;position:relative;flex:none}.donut{background:conic-gradient(#18ad73 0 92.1%,#f07818 92.1% 92.8%,#7650c8 92.8% 100%)}.pie{background:conic-gradient(#f43f7a 0 37.5%,#f07818 37.5% 50%,#f5ad0a 50% 62.5%,#18ad73 62.5% 87.5%,#7650c8 87.5% 100%)}.donut:after,.pie:after{content:"";position:absolute;inset:33px;background:#fff;border-radius:50%}.donut:before{content:"🧶";position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px}.pie:before{content:"8\A Pedidos";white-space:pre;text-align:center;position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:800}.legend{font-size:10px;line-height:1.7}.legend b{font-size:13px}.cobros{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cobro{padding:10px 4px;text-align:center;border-radius:9px;border:1px solid #dcebd8;background:#f5fff5;font-size:10px}.cobro:nth-child(2){background:#fffaf0;border-color:#f4dfbd}.cobro:nth-child(3){background:#fff4f4;border-color:#f3cccc}.cobro strong{display:block;font-size:14px;margin-top:6px}.totals{display:grid;gap:7px;margin-top:10px;font-size:10px}.totals div{display:flex;justify-content:space-between}.lower{display:grid;grid-template-columns:1.05fr 1fr;gap:10px;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#f34a82;color:#fff;text-align:left;padding:7px}td{padding:6px;border-bottom:1px solid #eee}tr.hl td{color:var(--p);font-weight:700;background:#fff5f8}.year{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--soft);padding:10px;border-radius:7px;margin-top:8px;font-size:11px;font-weight:800}.products{display:grid;gap:10px}.prod{display:grid;grid-template-columns:20px 1fr 110px 25px;gap:7px;align-items:center;font-size:10px}.bar{height:5px;background:#eee;border-radius:8px}.bar i{display:block;height:100%;background:var(--p);border-radius:8px}.payments{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.paycircle{width:55px;height:55px;border-radius:50%;border:7px solid #f4e5ea;border-right-color:var(--p);margin:auto;display:flex;align-items:center;justify-content:center}.pay b{display:block;margin-top:5px}.pay span{font-size:9px}.last{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:12px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:10px}.total{display:flex;justify-content:space-between;background:var(--soft);padding:10px;margin-top:9px;font-size:11px;font-weight:800}.orders{display:grid;gap:7px}.order{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:6px;font-size:10px}.badge{padding:4px 7px;border-radius:8px;background:#fff0d9;color:#d67800}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compare div{background:#effaf2;padding:10px;border-radius:8px;font-size:9px}.compare p{margin:6px 0}.footer{text-align:center;margin-top:12px;color:#666;font-size:12px}@media(max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}.three,.last{grid-template-columns:1fr 1fr}}@media(max-width:700px){.main{padding:15px}.top{flex-wrap:wrap}.date{margin-left:0;flex:1}.cards,.grid2,.three,.lower,.last{grid-template-columns:1fr 1fr}.cards .card{height:190px}.piewrap{justify-content:center;flex-wrap:wrap}}@media(max-width:500px){.cards,.grid2,.three,.lower,.last{grid-template-columns:1fr}.payments{grid-template-columns:1fr 1fr}}
+  </style>
+ </head>
+ <body style="margin:0;">
+  <main class="main" style="width:100%;margin:0;">
+   <header class="top">
+    <div class="title">
+     <h1>
+      📊 Estad&iacute;sticas
+     </h1>
+     <div class="sub">
+      An&aacute;lisis financiero de Tejiendo Sue&ntilde;os Clau
+     </div>
+    </div>
+    <select class="sel">
+     <option>
+      📅 Junio 2026
+     </option>
+    </select>
+    <div class="date">
+     📅 &nbsp; 10 de agosto de 2026
+    </div>
+    <button class="profile">
+     🧶
+    </button>
+   </header>
+   <section class="cards">
+    <script>
+     const C=[['pink','🛍️','TOTAL VENTAS','DEL MES','$378.000','↑ 32% vs mayo','#f43f7a'],['orange','💲','TOTAL GASTOS','DEL MES','$3.000','↓ 12% vs mayo','#f07818'],['green','💵','GANANCIA DEL MES','(CIERRE)','$375.000','↑ 45% vs mayo','#16a765'],['purple','📋','TOTAL PEDIDOS','DEL MES','8','↑ 14% vs mayo','#7650c8'],['blue','💳','TOTAL ABONOS','RECIBIDOS','$30.000','↑ 8% vs mayo','#3d91e8'],['yellow','⚠️','SALDO','PENDIENTE','$348.000','↓ 5% vs mayo','#f59e0b']];document.write(C.map(x=>`<article class="card ${x[0]}"><div class="icon">${x[1]}</div><div class="label">${x[2]}<br>${x[3]}</div><div class="value" ${x[0]=='green'?'style="color:#087b2d"':''}>${x[4]}</div><div class="${x[5][0]=='↓'?'down':'up'}">${x[5]}</div><svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none"><polyline points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="${x[6]}" stroke-width="2"/></svg></article>`).join(''))
+    </script>
+   </section>
+   <section class="grid2">
+    <div class="panel">
+     <h2>
+      INGRESOS VS GASTOS
+     </h2>
+     <div class="chart">
+      <svg viewbox="0 0 650 230">
+       <g stroke="#e8e8e8" stroke-dasharray="3 3">
+        <line x1="45" x2="635" y1="20" y2="20">
+        </line>
+        <line x1="45" x2="635" y1="70" y2="70">
+        </line>
+        <line x1="45" x2="635" y1="120" y2="120">
+        </line>
+        <line x1="45" x2="635" y1="170" y2="170">
+        </line>
+        <line x1="45" x2="635" y1="215" y2="215">
+        </line>
+       </g>
+       <g fill="#18ad73">
+        <rect height="25" width="18" x="60" y="190">
+        </rect>
+        <rect height="31" width="18" x="115" y="184">
+        </rect>
+        <rect height="45" width="18" x="170" y="170">
+        </rect>
+        <rect height="60" width="18" x="225" y="155">
+        </rect>
+        <rect height="40" width="18" x="280" y="175">
+        </rect>
+        <rect height="190" width="18" x="335" y="25">
+        </rect>
+        <rect height="78" width="18" x="390" y="137">
+        </rect>
+        <rect height="25" width="18" x="445" y="190">
+        </rect>
+        <rect height="10" width="18" x="500" y="205">
+        </rect>
+        <rect height="35" width="18" x="555" y="180">
+        </rect>
+        <rect height="90" width="18" x="610" y="125">
+        </rect>
+       </g>
+       <g fill="#f07818">
+        <rect height="2" width="18" x="60" y="213">
+        </rect>
+        <rect height="4" width="18" x="335" y="211">
+        </rect>
+       </g>
+       <polyline fill="none" points="69,195 124,190 179,110 234,116 289,75 344,35 399,137 454,182 509,201 564,181 619,140" stroke="#7650c8" stroke-width="3">
+       </polyline>
+       <g fill="#7650c8">
+        <circle cx="69" cy="195" r="4">
+        </circle>
+        <circle cx="124" cy="190" r="4">
+        </circle>
+        <circle cx="179" cy="110" r="4">
+        </circle>
+        <circle cx="234" cy="116" r="4">
+        </circle>
+        <circle cx="289" cy="75" r="4">
+        </circle>
+        <circle cx="344" cy="35" r="5">
+        </circle>
+        <circle cx="399" cy="137" r="4">
+        </circle>
+       </g>
+       <g fill="#444" font-size="10">
+        <text x="58" y="229">
+         Ene
+        </text>
+        <text x="113" y="229">
+         Feb
+        </text>
+        <text x="168" y="229">
+         Mar
+        </text>
+        <text x="223" y="229">
+         Abr
+        </text>
+        <text x="278" y="229">
+         May
+        </text>
+        <text x="333" y="229">
+         Jun
+        </text>
+        <text x="388" y="229">
+         Jul
+        </text>
+        <text x="443" y="229">
+         Ago
+        </text>
+        <text x="498" y="229">
+         Sep
+        </text>
+        <text x="553" y="229">
+         Oct
+        </text>
+        <text x="608" y="229">
+         Nov
+        </text>
+       </g>
+      </svg>
+     </div>
+    </div>
+    <div class="panel">
+     <h2>
+      VENTAS POR MES &mdash; 2026
+     </h2>
+     <div class="chart">
+      <svg viewbox="0 0 650 230">
+       <g stroke="#e8e8e8" stroke-dasharray="3 3">
+        <line x1="40" x2="635" y1="20" y2="20">
+        </line>
+        <line x1="40" x2="635" y1="80" y2="80">
+        </line>
+        <line x1="40" x2="635" y1="140" y2="140">
+        </line>
+        <line x1="40" x2="635" y1="200" y2="200">
+        </line>
+       </g>
+       <g fill="#f43f7a">
+        <rect height="110" width="20" x="55" y="90">
+        </rect>
+        <rect height="20" width="20" x="105" y="180">
+        </rect>
+        <rect height="105" width="20" x="155" y="95">
+        </rect>
+        <rect height="80" width="20" x="205" y="120">
+        </rect>
+        <rect height="55" width="20" x="255" y="145">
+        </rect>
+        <rect height="175" width="20" x="305" y="25">
+        </rect>
+        <rect height="100" width="20" x="355" y="100">
+        </rect>
+       </g>
+       <g fill="#444" font-size="10">
+        <text x="52" y="218">
+         Ene
+        </text>
+        <text x="102" y="218">
+         Feb
+        </text>
+        <text x="152" y="218">
+         Mar
+        </text>
+        <text x="202" y="218">
+         Abr
+        </text>
+        <text x="252" y="218">
+         May
+        </text>
+        <text x="302" y="218">
+         Jun
+        </text>
+        <text x="352" y="218">
+         Jul
+        </text>
+        <text x="402" y="218">
+         Ago
+        </text>
+        <text x="452" y="218">
+         Sep
+        </text>
+        <text x="502" y="218">
+         Oct
+        </text>
+        <text x="552" y="218">
+         Nov
+        </text>
+        <text x="602" y="218">
+         Dic
+        </text>
+       </g>
+       <rect fill="#f43f7a" height="27" rx="6" width="58" x="286" y="3">
+       </rect>
+       <text fill="#fff" font-size="11" x="294" y="21">
+        $378.000
+       </text>
+      </svg>
+     </div>
+    </div>
+   </section>
+   <section class="three">
+    <div class="panel">
+     <h2>
+      DISTRIBUCI&Oacute;N FINANCIERA &mdash; JUNIO 2026
+     </h2>
+     <div class="piewrap">
+      <div class="donut">
+      </div>
+      <div class="legend">
+       🟢 Ingresos
+       <br/>
+       <b>
+        $378.000
+       </b>
+       <br/>
+       <span style="color:#16a765">
+        92.1%
+       </span>
+       <br/>
+       <br/>
+       🟠 Gastos
+       <br/>
+       <b>
+        $3.000
+       </b>
+       <br/>
+       <span style="color:#f07818">
+        0.7%
+       </span>
+       <br/>
+       <br/>
+       🟣 Ganancia
+       <br/>
+       <b>
+        $375.000
+       </b>
+      </div>
+     </div>
+    </div>
+    <div class="panel">
+     <h2>
+      PEDIDOS DEL MES
+     </h2>
+     <div class="piewrap">
+      <div class="pie">
+      </div>
+      <div class="legend">
+       🩷 Personalizados &nbsp;
+       <b>
+        3
+       </b>
+       <br/>
+       🟠 Perritos y abuelos &nbsp;
+       <b>
+        1
+       </b>
+       <br/>
+       🟡 Girasol &nbsp;
+       <b>
+        1
+       </b>
+       <br/>
+       🟢 Perrito &nbsp;
+       <b>
+        2
+       </b>
+       <br/>
+       🟣 Pareja fantasmas &nbsp;
+       <b>
+        1
+       </b>
+      </div>
+     </div>
+    </div>
+    <div class="panel">
+     <h2>
+      ESTADO DE COBROS &mdash; JUNIO 2026
+     </h2>
+     <div class="cobros">
+      <div class="cobro">
+       ✅
+       <b>
+        Pagado
+       </b>
+       <strong>
+        $30.000
+       </strong>
+       8.0%
+      </div>
+      <div class="cobro">
+       ◷
+       <b>
+        Abonado
+       </b>
+       <strong>
+        $348.000
+       </strong>
+       92.0%
+      </div>
+      <div class="cobro">
+       🛒
+       <b>
+        Pendiente
+       </b>
+       <strong>
+        $0
+       </strong>
+       0.0%
+      </div>
+     </div>
+     <div class="totals">
+      <div>
+       🛒 Total vendido
+       <b>
+        $378.000
+       </b>
+      </div>
+      <div>
+       💳 Total recibido
+       <b>
+        $30.000
+       </b>
+      </div>
+      <div>
+       ⚠️ Pendiente por cobrar
+       <b>
+        $348.000
+       </b>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="lower">
+    <div class="panel">
+     <h2>
+      RESUMEN MENSUAL &mdash; 2026
+     </h2>
+     <table>
+      <thead>
+       <tr>
+        <th>
+         Mes
+        </th>
+        <th>
+         Ventas
+        </th>
+        <th>
+         Gastos
+        </th>
+        <th>
+         Ganancia
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr>
+        <td>
+         Enero
+        </td>
+        <td>
+         $173.300
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $173.300
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Febrero
+        </td>
+        <td>
+         $1.000
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $1.000
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Marzo
+        </td>
+        <td>
+         $137.000
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $137.000
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Abril
+        </td>
+        <td>
+         $114.000
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $114.000
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Mayo
+        </td>
+        <td>
+         $34.000
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $34.000
+        </td>
+       </tr>
+       <tr class="hl">
+        <td>
+         Junio
+        </td>
+        <td>
+         $378.000
+        </td>
+        <td>
+         $3.000
+        </td>
+        <td>
+         $375.000
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Julio
+        </td>
+        <td>
+         $173.000
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $173.000
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Agosto
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Septiembre
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Octubre
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Noviembre
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+       </tr>
+       <tr>
+        <td>
+         Diciembre
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+        <td>
+         $0
+        </td>
+       </tr>
+      </tbody>
+     </table>
+     <div class="year">
+      <span>
+       TOTAL A&Ntilde;O 🏆
+      </span>
+      <span>
+       $1.007.300
+      </span>
+      <span>
+       $3.000
+      </span>
+      <span>
+       $1.004.300
+      </span>
+     </div>
+    </div>
+    <div>
+     <div class="panel">
+      <h2>
+       TOP PRODUCTOS &mdash; JUNIO 2026
+      </h2>
+      <div class="products">
+       <div class="prod">
+        <b>
+         1
+        </b>
+        <span>
+         🧸 Perrito personalizado
+        </span>
+        <div class="bar">
+         <i style="width:100%">
+         </i>
+        </div>
+        <b>
+         3
+        </b>
+       </div>
+       <div class="prod">
+        <b>
+         2
+        </b>
+        <span>
+         🐶 Perrito
+        </span>
+        <div class="bar">
+         <i style="width:67%">
+         </i>
+        </div>
+        <b>
+         2
+        </b>
+       </div>
+       <div class="prod">
+        <b>
+         3
+        </b>
+        <span>
+         🐕 Perrito y abuelo
+        </span>
+        <div class="bar">
+         <i style="width:34%">
+         </i>
+        </div>
+        <b>
+         1
+        </b>
+       </div>
+       <div class="prod">
+        <b>
+         4
+        </b>
+        <span>
+         🌻 Girasol
+        </span>
+        <div class="bar">
+         <i style="width:34%">
+         </i>
+        </div>
+        <b>
+         1
+        </b>
+       </div>
+       <div class="prod">
+        <b>
+         5
+        </b>
+        <span>
+         👻 Pareja fantasmas
+        </span>
+        <div class="bar">
+         <i style="width:34%">
+         </i>
+        </div>
+        <b>
+         1
+        </b>
+       </div>
+      </div>
+     </div>
+     <div class="panel" style="margin-top:10px">
+      <h2>
+       M&Eacute;TODOS DE PAGO &mdash; JUNIO 2026
+      </h2>
+      <div class="payments">
+       <div class="pay">
+        <div class="paycircle">
+         💸
+        </div>
+        <b>
+         62%
+        </b>
+        <span>
+         Nequi
+         <br/>
+         $186.000
+        </span>
+       </div>
+       <div class="pay">
+        <div class="paycircle">
+         💵
+        </div>
+        <b>
+         25%
+        </b>
+        <span>
+         Nequi y efectivo
+         <br/>
+         $75.000
+        </span>
+       </div>
+       <div class="pay">
+        <div class="paycircle">
+         💵
+        </div>
+        <b>
+         13%
+        </b>
+        <span>
+         Efectivo
+         <br/>
+         $39.000
+        </span>
+       </div>
+       <div class="pay">
+        <div class="paycircle">
+         💳
+        </div>
+        <b>
+         0%
+        </b>
+        <span>
+         Tarjeta
+         <br/>
+         $0
+        </span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="last">
+    <div class="panel">
+     <h2>
+      GASTOS DEL MES
+     </h2>
+     <div class="row">
+      <b>
+       Concepto / Material
+      </b>
+      <b>
+       Categor&iacute;a
+      </b>
+      <b>
+       Valor
+      </b>
+     </div>
+     <div class="row">
+      <span>
+       Ojitos
+      </span>
+      <span>
+       Materiales
+      </span>
+      <span>
+       $3.000
+      </span>
+     </div>
+     <div class="total">
+      <span>
+       TOTAL GASTOS
+      </span>
+      <span>
+       $3.000
+      </span>
+     </div>
+    </div>
+    <div class="panel">
+     <h2>
+      &Uacute;LTIMOS PEDIDOS
+     </h2>
+     <div class="orders">
+      <div class="order">
+       #8 Pareja fantasmas $48.000
+       <span class="badge">
+        Abonado
+       </span>
+      </div>
+      <div class="order">
+       #7 Pitbull llavero $45.000
+       <span class="badge">
+        Abonado
+       </span>
+      </div>
+      <div class="order">
+       #6 2 pollitos del nacional $40.000
+       <span class="badge">
+        Abonado
+       </span>
+      </div>
+      <div class="order">
+       #5 Perrito $45.000
+       <span class="badge">
+        Abonado
+       </span>
+      </div>
+      <div class="order">
+       #4 Perrito $45.000
+       <span class="badge" style="background:#ffe8e8;color:#d33">
+        Pendiente
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="panel">
+     <h2>
+      COMPARATIVA
+     </h2>
+     <div class="compare">
+      <div>
+       <b>
+        Vs Mayo 2026
+       </b>
+       <p>
+        Ventas &uarr; 32%
+       </p>
+       <p>
+        Gastos &darr; 12%
+       </p>
+       <p>
+        Ganancia &uarr; 45%
+       </p>
+       <p>
+        Pedidos &uarr; 14%
+       </p>
+      </div>
+      <div>
+       <b>
+        Vs Junio 2025
+       </b>
+       <p>
+        Ventas &uarr; 58%
+       </p>
+       <p>
+        Gastos &darr; 8%
+       </p>
+       <p>
+        Ganancia &uarr; 60%
+       </p>
+       <p>
+        Pedidos &uarr; 25%
+       </p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <footer class="footer">
+    ♡ Hecho con amor, paciencia y muchos sue&ntilde;os! ♡ 🧶
+   </footer>
+  </main>
+ </body>
+</html>
