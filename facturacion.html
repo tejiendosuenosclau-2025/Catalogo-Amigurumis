@@ -1554,6 +1554,8 @@ function actualizarAbono(){
     calc();
 }
 
+
+
 /* =====================================================
    CARGAR DATOS EN MODAL DE ABONO
 ===================================================== */
@@ -1689,6 +1691,38 @@ async function cargarDatosModalAbono(id) {
         );
 
     }
+
+}
+
+function cerrarModalAbono() {
+
+    const modal = $("modalAbono");
+
+    if (!modal) return;
+
+    modal.classList.remove("show");
+}
+
+
+const botonCerrarAbono = $("close");
+
+if (botonCerrarAbono) {
+
+    botonCerrarAbono.addEventListener(
+        "click",
+        cerrarModalAbono
+    );
+
+}
+
+const botonCancelarAbono = $("cancelarAbono");
+
+if (botonCancelarAbono) {
+
+    botonCancelarAbono.addEventListener(
+        "click",
+        cerrarModalAbono
+    );
 
 }
 
@@ -3403,6 +3437,7 @@ async function cargarDashboardDB(){
 
 }
 
+
 async function cargarHistorialDB(){
     if(!db || !currentUser) return;
 
@@ -4607,6 +4642,8 @@ $("history").addEventListener("click", async e => {
         console.error("No existe el elemento #modalAbono");
         return;
     }
+
+    await cargarDatosModalAbono(id);
 
     modal.classList.add("show");
 
