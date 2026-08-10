@@ -3731,8 +3731,13 @@ async function actualizarFacturaDB(f){
         saldoPendiente
     );
 // ==========================================
-// LIMPIAR FORMULARIO DESPUÉS DE ACTUALIZAR
+// LIMPIAR COMPLETAMENTE EL FORMULARIO
+// DESPUÉS DE ACTUALIZAR LA FACTURA
 // ==========================================
+
+// Campos de texto
+$("numero").value = "";
+$("fecha").value = "";
 
 $("nombre").value = "";
 $("ident").value = "";
@@ -3742,32 +3747,88 @@ $("direccion").value = "";
 
 $("obs").value = "";
 
-if ($("dg")) {
-    $("dg").value = 0;
+
+// Forma de pago
+if ($("pago")) {
+    $("pago").value = "";
 }
 
-if ($("iva")) {
-    $("iva").value = 0;
-}
 
-if ($("abono")) {
-    $("abono").value = 0;
-}
-
+// Tipo de abono
 if ($("tipoAbono")) {
-    $("tipoAbono").value = "Efectivo";
+    $("tipoAbono").value = "";
 }
 
-$("items").innerHTML = "";
 
-row();
+// Descuento
+if ($("dg")) {
+    $("dg").value = "";
+}
 
+
+// IVA
+if ($("iva")) {
+    $("iva").value = "";
+}
+
+
+// Abono nuevo
+if ($("abono")) {
+    $("abono").value = "";
+}
+
+
+// Abono acumulado mostrado
+if ($("abonoAcumulado")) {
+    $("abonoAcumulado").textContent = "";
+}
+
+
+// Subtotal
+if ($("sub")) {
+    $("sub").textContent = "";
+}
+
+
+// Total
+if ($("tot")) {
+    $("tot").textContent = "";
+}
+
+
+// Saldo pendiente, si existe en el formulario
+if ($("saldo")) {
+    $("saldo").textContent = "";
+}
+
+
+// Eliminar todos los productos
+if ($("items")) {
+    $("items").innerHTML = "";
+}
+
+
+// NO crear una fila nueva
+// porque quieres que quede completamente vacío
+
+
+// Salir del modo edición
 editingInvoiceId = null;
 
+
+// Reiniciar acumulado en memoria
 abonoAcumuladoActual = 0;
 
+
+// Restaurar botón
+if ($("saveBtn")) {
+    $("saveBtn").innerHTML =
+        '<img src="img/guardar.png" alt="Guardar" class="grilla-icon"> Guardar factura';
+}
+
+
 console.log(
-    "FORMULARIO LIMPIADO DESPUÉS DE ACTUALIZAR"
+    "FORMULARIO COMPLETAMENTE LIMPIO"
 );
 }
 
