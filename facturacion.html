@@ -3234,6 +3234,46 @@ async function guardarDB(f){
 
     if(e1) throw e1;
 
+    // ==========================================
+   // GUARDAR ABONO INICIAL EN factura_pagos
+  // ==========================================
+
+if (nuevoAbono > 0) {
+
+    const {
+        error: errorPrimerAbono
+    } = await db
+        .from("factura_pagos")
+        .insert({
+
+            factura_id: fac.id,
+
+            valor: nuevoAbono,
+
+            tipo_abono:
+                f.tipoAbono || "Efectivo",
+
+            usuario_id:
+                currentUser.id
+
+        });
+
+    if (errorPrimerAbono) {
+
+        console.error(
+            "ERROR GUARDANDO ABONO INICIAL:",
+            errorPrimerAbono
+        );
+
+        throw errorPrimerAbono;
+    }
+
+    console.log(
+        "ABONO INICIAL GUARDADO:",
+        nuevoAbono
+    );
+}
+
 
     // ==========================================
     // 7. DETALLES DE PRODUCTOS
