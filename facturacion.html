@@ -740,6 +740,33 @@ option {
         box-shadow: none;
     }
 }
+
+/* =====================================================
+   FECHA + LOGO FIJOS EN TELÉFONOS Y TABLETS
+   ===================================================== */
+
+@media (max-width: 1024px) {
+
+    .perfil-dashboard {
+        position: fixed;
+        top: 10px;
+        right: 15px;
+        left: 15px;
+
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        margin: 0;
+        z-index: 1000;
+
+        pointer-events: none;
+    }
+
+    .perfil-dashboard > * {
+        pointer-events: auto;
+    }
+}
 </style>
 </head>
 <body>
