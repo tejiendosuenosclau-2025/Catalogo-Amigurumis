@@ -1975,18 +1975,14 @@ async function guardarNuevoAbono() {
 
 
         // ==========================================
-        // RECARGAR HISTORIAL
-        // ==========================================
+	// RECARGAR HISTORIAL REAL DESDE SUPABASE
+	// ==========================================
 
-        if (typeof cargarHistorial === "function") {
+	await cargarHistorialDB();
 
-            await cargarHistorial();
-
-        } else if (typeof cargarFacturas === "function") {
-
-            await cargarFacturas();
-
-        }
+	console.log(
+    	"HISTORIAL ACTUALIZADO DESDE SUPABASE"
+	);
 
 
         console.log(
