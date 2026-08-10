@@ -1697,6 +1697,200 @@ async function cargarDatosModalAbono(id) {
 
 }
 
+/* ==========================================
+   GUARDAR NUEVO ABONO
+========================================== */
+
+async function guardarNuevoAbono() {
+
+    try {
+
+        if (!db) {
+            alert("Supabase no está conectado.");
+            return;
+        }
+
+        const factura =
+            window.facturaAbonoActual;
+
+        if (!factura) {
+            alert("No se ha seleccionado una factura.");
+            return;
+        }
+
+
+        const input =
+            $("nuevoAbono");
+
+        const select =
+            $("nuevoTipoAbono");
+
+        const mensaje =
+            $("mensajeAbono");
+
+
+        const valor =
+            Number(input?.value || 0);
+
+        const tipo =
+            select?.value;
+
+
+        /* ==========================================
+           VALIDAR VALOR
+        ========================================== */
+
+        if (!valor || valor <= 0) {
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "Ingresa un valor de abono válido.";
+            }
+
+            return;
+        }
+
+
+        /* ==========================================
+           NO PERMITIR ABONO MAYOR AL SALDO
+        ========================================== */
+
+        if (valor > factura.saldo) {
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "El abono no puede ser mayor al saldo pendiente.";
+            }
+
+            return;
+        }
+
+
+        /* ==========================================
+           USUARIO ACTUAL
+        ========================================== */
+
+        const {
+            data: {
+                user
+            },
+            error: errorUsuario
+        } = await db.auth.getUser();
+
+
+        if (errorUsuario || !user) {
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "No se pudo identificar el usuario.";
+            }
+
+            return;
+        }
+
+
+        /* ==========================================
+           GUARDAR ABONO
+        ========================================== */
+
+        const {
+            data: nuevoPago,
+            error
+        } = await db
+            .from("factura_pagos")
+            .insert({
+
+                factura_id:
+                    factura.id,
+
+                valor:
+                    valor,
+
+                tipo_abono:
+                    tipo,
+
+                usuario_id:
+                    user.id
+
+            })
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "ERROR REGISTRANDO ABONO:",
+                error
+            );
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "No se pudo registrar el abono.";
+            }
+
+            return;
+        }
+
+
+        console.log(
+            "ABONO REGISTRADO:",
+            nuevoPago
+        );
+
+
+        /* ==========================================
+           RECARGAR DATOS
+        ========================================== */
+
+        await cargarDatosModalAbono(
+            factura.id
+        );
+
+
+        /* ==========================================
+           LIMPIAR INPUT
+        ========================================== */
+
+        if (input) {
+            input.value = "";
+        }
+
+
+        if (mensaje) {
+
+            mensaje.textContent =
+                "✅ Abono registrado correctamente.";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "ERROR GENERAL REGISTRANDO ABONO:",
+            error
+        );
+
+    }
+
+}
+
+/* ==========================================
+   BOTÓN REGISTRAR ABONO
+========================================== */
+
+document.addEventListener("click", function (e) {
+
+    if (
+        e.target.closest("#guardarAbono")
+    ) {
+
+        guardarNuevoAbono();
+
+    }
+
+});
 
 function calcularSaldo(){
 
