@@ -4499,6 +4499,38 @@ $("history").addEventListener("click", async e => {
 
 });
 
+/* AQUÍ */
+
+function cerrarModalAbono() {
+
+    const modal = $("modalAbono");
+
+    if (!modal) return;
+
+    modal.classList.remove("show");
+}
+
+$("cerrarModalAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+$("cancelarAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+$("modalAbono").addEventListener(
+    "click",
+    function(e) {
+
+        if (e.target === this) {
+            cerrarModalAbono();
+        }
+
+    }
+);
+
 (async()=>{
     initDB();
     await load();
