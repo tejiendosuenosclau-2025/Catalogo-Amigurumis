@@ -1704,30 +1704,32 @@ function cerrarModalAbono() {
 }
 
 
-/* X */
+document.addEventListener("DOMContentLoaded", function () {
 
-const botonCerrarAbono = $("cerrarModalAbono");
+    const botonCerrarAbono =
+        $("cerrarModalAbono");
 
-if (botonCerrarAbono) {
+    if (botonCerrarAbono) {
 
-    botonCerrarAbono.addEventListener(
-        "click",
-        cerrarModalAbono
-    );
-}
+        botonCerrarAbono.addEventListener(
+            "click",
+            cerrarModalAbono
+        );
+    }
 
 
-/* Cancelar */
+    const botonCancelarAbono =
+        $("cancelarAbono");
 
-const botonCancelarAbono = $("cancelarAbono");
+    if (botonCancelarAbono) {
 
-if (botonCancelarAbono) {
+        botonCancelarAbono.addEventListener(
+            "click",
+            cerrarModalAbono
+        );
+    }
 
-    botonCancelarAbono.addEventListener(
-        "click",
-        cerrarModalAbono
-    );
-}
+});
 
 function calcularSaldo(){
 
