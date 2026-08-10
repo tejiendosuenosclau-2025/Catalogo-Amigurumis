@@ -1609,7 +1609,10 @@ async function cargarDatosModalAbono(id) {
             .from("factura_pagos")
             .select("valor")
             .eq("factura_id", id);
-
+        
+        console.log("FACTURA ID:", id);
+	console.log("ABONOS ENCONTRADOS:", pagos);
+	console.log("ERROR ABONOS:", errorPagos);
 
         if (errorPagos) {
 
