@@ -3730,6 +3730,45 @@ async function actualizarFacturaDB(f){
         "SALDO PENDIENTE:",
         saldoPendiente
     );
+// ==========================================
+// LIMPIAR FORMULARIO DESPUÉS DE ACTUALIZAR
+// ==========================================
+
+$("nombre").value = "";
+$("ident").value = "";
+$("tel").value = "";
+$("correo").value = "";
+$("direccion").value = "";
+
+$("obs").value = "";
+
+if ($("dg")) {
+    $("dg").value = 0;
+}
+
+if ($("iva")) {
+    $("iva").value = 0;
+}
+
+if ($("abono")) {
+    $("abono").value = 0;
+}
+
+if ($("tipoAbono")) {
+    $("tipoAbono").value = "Efectivo";
+}
+
+$("items").innerHTML = "";
+
+row();
+
+editingInvoiceId = null;
+
+abonoAcumuladoActual = 0;
+
+console.log(
+    "FORMULARIO LIMPIADO DESPUÉS DE ACTUALIZAR"
+);
 }
 
 // =====================================================
