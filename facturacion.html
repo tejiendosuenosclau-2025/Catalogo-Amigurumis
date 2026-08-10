@@ -722,54 +722,6 @@ option {
     }
 }
 
-/* =====================================================
-   DASHBOARD FIJO AL HACER SCROLL
-   ===================================================== */
-
-.dashboard-fijo {
-    position: sticky;
-    top: 0;
-    z-index: 900;
-    background: #fff;
-    padding-top: 5px;
-    padding-bottom: 8px;
-}
-
-/* 📱 Teléfonos y 📲 tablets: NO queda fijo */
-@media (max-width: 1024px) {
-    .dashboard-fijo {
-        position: static;
-        box-shadow: none;
-    }
-}
-
-/* =====================================================
-   FECHA + LOGO FIJOS EN TELÉFONOS Y TABLETS
-   ===================================================== */
-
-@media (max-width: 1024px) {
-
-    .perfil-dashboard {
-        position: fixed;
-        top: 10px;
-        right: 15px;
-        left: 15px;
-
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-
-        margin: 0;
-        z-index: 1000;
-
-        pointer-events: none;
-    }
-
-    .perfil-dashboard > * {
-        pointer-events: auto;
-    }
-}
-
 /* ==========================================
    MODAL REGISTRAR ABONO
 ========================================== */
@@ -2109,6 +2061,7 @@ const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",ma
 let products=[],clients=[],db=null,currentUser=null;
 let editingInvoiceId=null;
 let abonoAcumuladoActual = 0;
+let abonoAcumuladoAnterior = 0;
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function name(p){return Array.isArray(p?.nombre)?p.nombre.join(" "):(p?.nombre||"Producto")}
@@ -5078,6 +5031,7 @@ $("new").onclick = async () => {
 
         editingInvoiceId = null;
         abonoAcumuladoActual = 0;
+        abonoAcumuladoAnterior = 0;
 
         $("form").reset();
 
