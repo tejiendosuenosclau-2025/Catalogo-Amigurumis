@@ -4033,11 +4033,39 @@ async function editarFacturaDB(id){
 
 
         // ==========================================
-        // CARGAR ABONO ACUMULADO
-        // ==========================================
+      	 // CARGAR ABONO ACUMULADO REAL
+      	// DESDE factura_pagos
+	// ==========================================
 
-        abonoAcumuladoActual =
-            Number(f.abonoAcumulado) || 0;
+		const {
+    		data: pagosFactura,
+   		error: errorPagosFactura
+		} = await db
+    		.from("factura_pagos")
+    		.select("valor")
+    		.eq("factura_id", id);
+
+		if(errorPagosFactura){
+
+    		console.error(
+        	"ERROR CARGANDO ABONOS DE LA FACTURA:",
+        	errorPagosFactura
+    		);
+
+    		throw errorPagosFactura;
+		}
+
+		abonoAcumuladoActual =
+    		(pagosFactura || []).reduce(
+        	(suma, pago) =>
+            	suma + Number(pago.valor || 0),
+        	0
+   		);
+
+		console.log(
+    		"ABONO ACUMULADO REAL:",
+    		abonoAcumuladoActual
+		);
 
 
         // ==========================================
