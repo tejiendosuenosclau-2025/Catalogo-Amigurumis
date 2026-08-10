@@ -4461,6 +4461,20 @@ $("history").addEventListener("click", async e => {
     const id = btn.dataset.id;
     const action = btn.dataset.action;
 
+   if (action === "abono") {
+
+    const modal = $("modalAbono");
+
+    if (!modal) {
+        console.error("No existe el elemento #modalAbono");
+        return;
+    }
+
+    modal.classList.add("show");
+
+    return;
+    }
+
     if (action === "view") {
         await verFacturaDB(id);
     }
