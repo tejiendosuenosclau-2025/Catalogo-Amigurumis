@@ -1554,6 +1554,144 @@ function actualizarAbono(){
     calc();
 }
 
+/* =====================================================
+   CARGAR DATOS EN MODAL DE ABONO
+===================================================== */
+
+async function cargarDatosModalAbono(id) {
+
+    try {
+
+        if (!db) {
+            console.error("Supabase no está conectado.");
+            return;
+        }
+
+        /* ==========================================
+           BUSCAR FACTURA
+        ========================================== */
+
+        const { data: factura, error } = await db
+            .from("facturas")
+            .select(`
+                id,
+                numero,
+                total,
+                clientes (
+                    nombre
+                )
+            `)
+            .eq("id", id)
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "ERROR CARGANDO FACTURA:",
+                error
+            );
+
+            return;
+        }
+
+
+        /* ==========================================
+           BUSCAR ABONOS DE LA FACTURA
+        ========================================== */
+
+        const {
+            data: pagos,
+            error: errorPagos
+        } = await db
+            .from("factura_pagos")
+            .select("valor")
+            .eq("factura_id", id);
+
+
+        if (errorPagos) {
+
+            console.error(
+                "ERROR CARGANDO ABONOS:",
+                errorPagos
+            );
+
+            return;
+        }
+
+
+        /* ==========================================
+           CALCULAR VALORES
+        ========================================== */
+
+        const total =
+            Number(factura.total || 0);
+
+
+        const abonado =
+            (pagos || []).reduce(
+                (suma, pago) =>
+                    suma + Number(pago.valor || 0),
+                0
+            );
+
+
+        const saldo =
+            Math.max(
+                0,
+                total - abonado
+            );
+
+
+        /* ==========================================
+           MOSTRAR DATOS EN LA MODAL
+        ========================================== */
+
+        $("abonoFacturaNumero").textContent =
+            factura.numero || "-";
+
+
+        $("abonoClienteNombre").textContent =
+            factura.clientes?.nombre ||
+            "Sin nombre";
+
+
+        $("abonoTotalFactura").textContent =
+            money(total);
+
+
+        $("abonoYaPagado").textContent =
+            money(abonado);
+
+
+        $("abonoSaldo").textContent =
+            money(saldo);
+
+
+        /* ==========================================
+           GUARDAR FACTURA ACTUAL
+        ========================================== */
+
+        window.facturaAbonoActual = {
+            id: factura.id,
+            numero: factura.numero,
+            total: total,
+            abonado: abonado,
+            saldo: saldo
+        };
+
+
+    } catch (error) {
+
+        console.error(
+            "ERROR EN MODAL DE ABONO:",
+            error
+        );
+
+    }
+
+}
+
 function calcularSaldo(){
 
     // Usar el cálculo principal de la factura
@@ -4499,7 +4637,35 @@ $("history").addEventListener("click", async e => {
 
 });
 
+function cerrarModalAbono() {
 
+    const modal = $("modalAbono");
+
+    if (!modal) return;
+
+    modal.classList.remove("show");
+}
+
+$("cerrarModalAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+$("cancelarAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+$("modalAbono").addEventListener(
+    "click",
+    function(e) {
+
+        if (e.target === this) {
+            cerrarModalAbono();
+        }
+
+    }
+);
 
 (async()=>{
     initDB();
@@ -4525,10 +4691,12 @@ $("history").addEventListener("click", async e => {
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
 
-<button
-    type="button"
-    id="cerrarModalAbono"
-    onclick="document.getElementById('modalAbono').classList.remove('show')">×</button>
+<div id="modal" class="modal">
+    <div class="sheet">
+        <button class="close" id="x">×</button>
+        <div id="previewBox"></div>
+    </div>
+</div>
 <!-- ==========================================
      MODAL REGISTRAR ABONO
 ========================================== -->
@@ -4618,12 +4786,12 @@ $("history").addEventListener("click", async e => {
         <div class="modal-abono-botones">
 
             <button
-    		type="button"
-                class="modal-abono-botones"
-    		id="cancelarAbono"
-    		onclick="document.getElementById('modalAbono').classList.remove('show')">
-    		Cancelar
-	    </button>
+                type="button"
+                id="cancelarAbono"
+                class="btn gray"
+            >
+                Cancelar
+            </button>
 
             <button
                 type="button"
