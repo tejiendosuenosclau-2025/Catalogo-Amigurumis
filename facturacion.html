@@ -4525,12 +4525,10 @@ $("history").addEventListener("click", async e => {
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
 
-<div id="modal" class="modal">
-    <div class="sheet">
-        <button class="close" id="x">×</button>
-        <div id="previewBox"></div>
-    </div>
-</div>
+<button
+    type="button"
+    id="cerrarModalAbono"
+    onclick="document.getElementById('modalAbono').classList.remove('show')">×</button>
 <!-- ==========================================
      MODAL REGISTRAR ABONO
 ========================================== -->
@@ -4620,12 +4618,11 @@ $("history").addEventListener("click", async e => {
         <div class="modal-abono-botones">
 
             <button
-                type="button"
-                id="cancelarAbono"
-                class="btn gray"
-            >
-                Cancelar
-            </button>
+    		type="button"
+    		id="cancelarAbono"
+    		onclick="document.getElementById('modalAbono').classList.remove('show')">
+    		Cancelar
+	    </button>
 
             <button
                 type="button"
