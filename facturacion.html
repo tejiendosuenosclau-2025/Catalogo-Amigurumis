@@ -4462,6 +4462,20 @@ $("history").addEventListener("click", async e => {
     const id = btn.dataset.id;
     const action = btn.dataset.action;
 
+    if (action === "abono") {
+
+    const modal = $("modalAbono");
+
+    if (!modal) {
+        console.error("No existe #modalAbono");
+        return;
+    }
+
+    modal.classList.add("show");
+
+    return;
+    }
+
     if (action === "view") {
         await verFacturaDB(id);
     }
@@ -4512,6 +4526,7 @@ $("history").addEventListener("click", async e => {
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
+
 <div id="modal" class="modal">
     <div class="sheet">
         <button class="close" id="x">×</button>
