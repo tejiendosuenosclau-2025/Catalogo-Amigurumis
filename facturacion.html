@@ -1694,14 +1694,6 @@ async function cargarDatosModalAbono(id) {
 
 }
 
-function cerrarModalAbono() {
-
-    const modal = $("modalAbono");
-
-    if (!modal) return;
-
-    modal.classList.remove("show");
-}
 
 function calcularSaldo(){
 
@@ -4660,26 +4652,28 @@ function cerrarModalAbono() {
     modal.classList.remove("show");
 }
 
-$("cerrarModalAbono").addEventListener(
-    "click",
-    cerrarModalAbono
-);
+const botonCerrarAbono = $("cerrarModalAbono");
 
-$("cancelarAbono").addEventListener(
-    "click",
-    cerrarModalAbono
-);
+if (botonCerrarAbono) {
 
-$("modalAbono").addEventListener(
-    "click",
-    function(e) {
+    botonCerrarAbono.addEventListener(
+        "click",
+        cerrarModalAbono
+    );
 
-        if (e.target === this) {
-            cerrarModalAbono();
-        }
+}
+const botonCancelarAbono = $("cancelarAbono");
 
-    }
-);
+if (botonCancelarAbono) {
+
+    botonCancelarAbono.addEventListener(
+        "click",
+        cerrarModalAbono
+    );
+
+}
+
+
 
 (async()=>{
     initDB();
