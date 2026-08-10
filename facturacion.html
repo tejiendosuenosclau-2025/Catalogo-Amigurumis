@@ -4652,27 +4652,23 @@ function cerrarModalAbono() {
     modal.classList.remove("show");
 }
 
-const botonCerrarAbono = $("cerrarModalAbono");
 
-if (botonCerrarAbono) {
+/* ==========================================
+   CERRAR MODAL: X Y CANCELAR
+========================================== */
 
-    botonCerrarAbono.addEventListener(
-        "click",
-        cerrarModalAbono
-    );
+document.addEventListener("click", function (e) {
 
-}
-const botonCancelarAbono = $("cancelarAbono");
+    if (
+        e.target.closest("#cerrarModalAbono") ||
+        e.target.closest("#cancelarAbono")
+    ) {
 
-if (botonCancelarAbono) {
+        cerrarModalAbono();
 
-    botonCancelarAbono.addEventListener(
-        "click",
-        cerrarModalAbono
-    );
+    }
 
-}
-
+});
 
 
 (async()=>{
