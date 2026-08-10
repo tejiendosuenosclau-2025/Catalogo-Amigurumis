@@ -720,6 +720,23 @@ option {
     }
 }
 
+/* =====================================================
+   DASHBOARD FIJO AL HACER SCROLL
+   ===================================================== */
+
+.dashboard-fijo {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+
+    background: #fff;
+
+    padding-top: 10px;
+    padding-bottom: 14px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
 </style>
 </head>
 <body>
@@ -748,7 +765,7 @@ option {
 </nav>
 </aside>
 <main>
-
+<div class="dashboard-fijo">
 <!-- PERFIL / CERRAR SESIÓN -->
 <div class="perfil-dashboard">
     
@@ -929,8 +946,8 @@ option {
             </div>
         </div>
     </article>
-
 </section>
+</div>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
 <form id="form">
 <section class="grid datos-superiores">
