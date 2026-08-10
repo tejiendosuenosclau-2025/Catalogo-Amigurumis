@@ -5388,9 +5388,6 @@ document.addEventListener("click", function (e) {
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 
-<!-- ==========================================
-     MOSTRAR ESTADISTICA
-========================================== -->
 
 function mostrarEstadisticas() {
     const facturacion = document.getElementById("contenidoFacturacion");
@@ -5405,9 +5402,6 @@ function mostrarEstadisticas() {
     }
 }
 
-<!-- ==========================================
-     MOSTRAR FACTURACION
-========================================== -->
 
 function mostrarFacturacion() {
     const facturacion = document.getElementById("contenidoFacturacion");
@@ -5531,6 +5525,7 @@ function mostrarFacturacion() {
         </div>
 
     </div>
+</div>
 <iframe id="estadisticasFrame" src="estadisticas.html" style="display:none; width:100%; height:calc(100vh - 180px); border:0;"></iframe>
 </div>
 </body>
