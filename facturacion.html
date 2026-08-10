@@ -1697,10 +1697,6 @@ async function cargarDatosModalAbono(id) {
 
 }
 
-/* ==========================================
-   GUARDAR NUEVO ABONO
-========================================== */
-
 async function guardarNuevoAbono() {
 
     try {
@@ -1718,7 +1714,6 @@ async function guardarNuevoAbono() {
             return;
         }
 
-
         const input =
             $("nuevoAbono");
 
@@ -1728,17 +1723,16 @@ async function guardarNuevoAbono() {
         const mensaje =
             $("mensajeAbono");
 
-
         const valor =
             Number(input?.value || 0);
 
         const tipo =
-            select?.value;
+            select?.value || "Efectivo";
 
 
-        /* ==========================================
-           VALIDAR VALOR
-        ========================================== */
+        // ==========================================
+        // VALIDAR VALOR
+        // ==========================================
 
         if (!valor || valor <= 0) {
 
@@ -1751,11 +1745,11 @@ async function guardarNuevoAbono() {
         }
 
 
-        /* ==========================================
-           NO PERMITIR ABONO MAYOR AL SALDO
-        ========================================== */
+        // ==========================================
+        // NO PERMITIR ABONO MAYOR AL SALDO
+        // ==========================================
 
-        if (valor > factura.saldo) {
+        if (valor > Number(factura.saldo || 0)) {
 
             if (mensaje) {
                 mensaje.textContent =
@@ -1766,9 +1760,9 @@ async function guardarNuevoAbono() {
         }
 
 
-        /* ==========================================
-           USUARIO ACTUAL
-        ========================================== */
+        // ==========================================
+        // USUARIO ACTUAL
+        // ==========================================
 
         const {
             data: {
@@ -1789,13 +1783,13 @@ async function guardarNuevoAbono() {
         }
 
 
-        /* ==========================================
-           GUARDAR ABONO
-        ========================================== */
+        // ==========================================
+        // REGISTRAR ABONO EN factura_pagos
+        // ==========================================
 
         const {
             data: nuevoPago,
-            error
+            error: errorPago
         } = await db
             .from("factura_pagos")
             .insert({
@@ -1817,11 +1811,11 @@ async function guardarNuevoAbono() {
             .single();
 
 
-        if (error) {
+        if (errorPago) {
 
             console.error(
                 "ERROR REGISTRANDO ABONO:",
-                error
+                errorPago
             );
 
             if (mensaje) {
@@ -1839,30 +1833,224 @@ async function guardarNuevoAbono() {
         );
 
 
-        /* ==========================================
-           RECARGAR DATOS
-        ========================================== */
+        // ==========================================
+        // VOLVER A CONSULTAR TODOS LOS ABONOS
+        // ==========================================
+
+        const {
+            data: pagosActualizados,
+            error: errorPagos
+        } = await db
+            .from("factura_pagos")
+            .select("valor")
+            .eq(
+                "factura_id",
+                factura.id
+            );
+
+
+        if (errorPagos) {
+
+            console.error(
+                "ERROR CONSULTANDO ABONOS:",
+                errorPagos
+            );
+
+            throw errorPagos;
+        }
+
+
+        // ==========================================
+        // CALCULAR ABONADO REAL
+        // ==========================================
+
+        const totalAbonado =
+            (pagosActualizados || []).reduce(
+                (suma, pago) =>
+                    suma + Number(pago.valor || 0),
+                0
+            );
+
+
+        // ==========================================
+        // OBTENER TOTAL ACTUAL DE LA FACTURA
+        // ==========================================
+
+        const {
+            data: facturaDB,
+            error: errorFactura
+        } = await db
+            .from("facturas")
+            .select("total")
+            .eq(
+                "id",
+                factura.id
+            )
+            .single();
+
+
+        if (errorFactura) {
+
+            console.error(
+                "ERROR CONSULTANDO FACTURA:",
+                errorFactura
+            );
+
+            throw errorFactura;
+        }
+
+
+        const totalFactura =
+            Number(facturaDB?.total || 0);
+
+
+        // ==========================================
+        // CALCULAR SALDO REAL
+        // ==========================================
+
+        const saldoPendiente =
+            Math.max(
+                0,
+                totalFactura - totalAbonado
+            );
+
+
+        // ==========================================
+        // DETERMINAR ESTADO
+        // ==========================================
+
+        let nuevoEstado;
+
+        if (saldoPendiente === 0) {
+
+            nuevoEstado =
+                "Pagada";
+
+        } else if (totalAbonado > 0) {
+
+            nuevoEstado =
+                "Pendiente";
+
+        } else {
+
+            nuevoEstado =
+                "Pendiente";
+        }
+
+
+        // ==========================================
+        // ACTUALIZAR FACTURA
+        // ==========================================
+
+        const {
+            error: errorActualizarFactura
+        } = await db
+            .from("facturas")
+            .update({
+
+                abono_acumulado:
+                    totalAbonado,
+
+                valor_abono:
+                    valor,
+
+                saldo_pendiente:
+                    saldoPendiente,
+
+                estado:
+                    nuevoEstado,
+
+                forma_pago:
+                    "Abono",
+
+                tipo_abono:
+                    tipo
+
+            })
+            .eq(
+                "id",
+                factura.id
+            );
+
+
+        if (errorActualizarFactura) {
+
+            console.error(
+                "ERROR ACTUALIZANDO FACTURA:",
+                errorActualizarFactura
+            );
+
+            throw errorActualizarFactura;
+        }
+
+
+        // ==========================================
+        // ACTUALIZAR DATOS DE LA MODAL
+        // ==========================================
 
         await cargarDatosModalAbono(
             factura.id
         );
 
 
-        /* ==========================================
-           LIMPIAR INPUT
-        ========================================== */
+        // ==========================================
+        // LIMPIAR INPUT
+        // ==========================================
 
         if (input) {
             input.value = "";
         }
 
 
+        // ==========================================
+        // MENSAJE
+        // ==========================================
+
         if (mensaje) {
 
-            mensaje.textContent =
-                "✅ Abono registrado correctamente.";
+            if (saldoPendiente === 0) {
+
+                mensaje.textContent =
+                    "✅ Abono registrado. La factura está totalmente pagada.";
+
+            } else {
+
+                mensaje.textContent =
+                    "✅ Abono registrado correctamente.";
+
+            }
+        }
+
+
+        // ==========================================
+        // RECARGAR HISTORIAL
+        // ==========================================
+
+        if (typeof cargarHistorial === "function") {
+
+            await cargarHistorial();
+
+        } else if (typeof cargarFacturas === "function") {
+
+            await cargarFacturas();
 
         }
+
+
+        console.log(
+            "TOTAL ABONADO:",
+            totalAbonado
+        );
+
+        console.log(
+            "SALDO PENDIENTE:",
+            saldoPendiente
+        );
+
+        console.log(
+            "ESTADO:",
+            nuevoEstado
+        );
 
 
     } catch (error) {
@@ -1872,8 +2060,16 @@ async function guardarNuevoAbono() {
             error
         );
 
-    }
+        const mensaje =
+            $("mensajeAbono");
 
+        if (mensaje) {
+
+            mensaje.textContent =
+                "❌ Ocurrió un error al registrar el abono.";
+
+        }
+    }
 }
 
 /* ==========================================
