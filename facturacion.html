@@ -1704,7 +1704,9 @@ function cerrarModalAbono() {
 }
 
 
-const botonCerrarAbono = $("close");
+/* X */
+
+const botonCerrarAbono = $("cerrarModalAbono");
 
 if (botonCerrarAbono) {
 
@@ -1712,8 +1714,10 @@ if (botonCerrarAbono) {
         "click",
         cerrarModalAbono
     );
-
 }
+
+
+/* Cancelar */
 
 const botonCancelarAbono = $("cancelarAbono");
 
@@ -1723,7 +1727,6 @@ if (botonCancelarAbono) {
         "click",
         cerrarModalAbono
     );
-
 }
 
 function calcularSaldo(){
@@ -4728,12 +4731,6 @@ $("modalAbono").addEventListener(
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
 
-<div id="modal" class="modal">
-    <div class="sheet">
-        <button class="close" id="x">×</button>
-        <div id="previewBox"></div>
-    </div>
-</div>
 <!-- ==========================================
      MODAL REGISTRAR ABONO
 ========================================== -->
