@@ -62,6 +62,8 @@ table{width:100%;border-collapse:collapse;min-width:720px}th{background:var(--so
 .history-btn.wa{color:#198b4b}
 .history-btn.cancel{color:#d62828}
 .history-btn.delete{color:#b00020}
+.history-btn.abono{color:#198b4b}
+.history-btn.abono:hover{background:#e7f8ee}
 
 .status.Anulada{
     background:#ffe5e5;
@@ -767,6 +769,207 @@ option {
         pointer-events: auto;
     }
 }
+
+/* ==========================================
+   MODAL REGISTRAR ABONO
+========================================== */
+
+.modal-abono{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(0,0,0,.45);
+
+    padding:20px;
+}
+
+.modal-abono.show{
+    display:flex;
+}
+
+.modal-abono-contenido{
+    width:min(520px,100%);
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:24px;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.20);
+
+    position:relative;
+}
+
+.modal-abono-cerrar{
+    position:absolute;
+
+    top:10px;
+    right:12px;
+
+    width:34px;
+    height:34px;
+
+    border:0;
+    border-radius:50%;
+
+    background:#f7f2f4;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    color:#777;
+}
+
+.modal-abono-titulo{
+    font-size:20px;
+    font-weight:bold;
+
+    color:#555;
+
+    margin-bottom:20px;
+
+    padding-right:40px;
+}
+
+.modal-abono-datos{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.modal-abono-datos > div,
+.modal-abono-resumen > div{
+    background:#faf5f7;
+
+    border-radius:9px;
+
+    padding:10px;
+}
+
+.modal-abono-datos span,
+.modal-abono-resumen span{
+    display:block;
+
+    font-size:12px;
+
+    color:#888;
+
+    margin-bottom:4px;
+}
+
+.modal-abono-datos strong,
+.modal-abono-resumen strong{
+    display:block;
+
+    color:#555;
+
+    font-size:14px;
+}
+
+.modal-abono-resumen{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+    margin-bottom:18px;
+}
+
+.modal-abono-resumen > div:last-child{
+    background:#fff4df;
+}
+
+.modal-abono-contenido label{
+    display:block;
+
+    margin-top:12px;
+    margin-bottom:5px;
+
+    font-size:13px;
+
+    color:#555;
+
+    font-weight:bold;
+}
+
+.modal-abono-contenido input,
+.modal-abono-contenido select{
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:10px 12px;
+
+    border:1px solid #eadfe5;
+
+    border-radius:8px;
+
+    font-family:inherit;
+
+    font-size:14px;
+}
+
+.modal-abono-contenido input:focus,
+.modal-abono-contenido select:focus{
+    outline:none;
+
+    border-color:#e85c8b;
+
+    box-shadow:0 0 0 3px rgba(232,92,139,.10);
+}
+
+.mensaje-abono{
+    min-height:20px;
+
+    margin-top:10px;
+
+    font-size:13px;
+
+    color:#c62828;
+}
+
+.modal-abono-botones{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:10px;
+}
+
+@media(max-width:600px){
+
+    .modal-abono{
+        padding:12px;
+    }
+
+    .modal-abono-contenido{
+        padding:18px;
+    }
+
+    .modal-abono-datos{
+        grid-template-columns:1fr;
+    }
+
+    .modal-abono-resumen{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
 </head>
 <body>
@@ -3122,6 +3325,22 @@ async function cargarHistorialDB(){
                         : ""
                         }
 
+			${
+    			f.estado !== "Anulada" &&
+  			f.estado !== "Pagada"
+    			? `
+    			<button
+        		type="button"
+        		class="history-btn abono"
+        		title="Registrar abono"
+        		data-action="abono"
+        		data-id="${f.id}">
+        		<img src="img/abono.png" alt="PDF" class="grilla-icon">
+    			</button>
+    			`
+   			: ""
+			}
+
                         <button
                             type="button"
                             class="history-btn pdf"
@@ -3170,6 +3389,187 @@ async function cargarHistorialDB(){
         : '<tr><td colspan="6" class="muted">No hay facturas guardadas.</td></tr>';
         await cargarDashboardDB();
 }
+
+/* =====================================================
+   MODAL REGISTRAR ABONO
+===================================================== */
+
+let facturaAbonoActual = null;
+
+
+async function abrirModalAbono(id){
+
+    try{
+
+        if(!db){
+            alert("No hay conexión con Supabase.");
+            return;
+        }
+
+
+        const { data, error } = await db
+            .from("facturas")
+            .select(`
+                id,
+                numero,
+                total,
+                abono_acumulado,
+                saldo_pendiente,
+                estado,
+                clientes (
+                    nombre
+                )
+            `)
+            .eq("id", id)
+            .single();
+
+
+        if(error){
+            console.error(
+                "ERROR CARGANDO FACTURA PARA ABONO:",
+                error
+            );
+
+            alert(
+                "No se pudo cargar la información de la factura."
+            );
+
+            return;
+        }
+
+
+        facturaAbonoActual = data;
+
+
+        const total =
+            Number(data.total || 0);
+
+
+        const abonado =
+            Number(data.abono_acumulado || 0);
+
+
+        let saldo =
+            Number(data.saldo_pendiente);
+
+
+        if(!Number.isFinite(saldo)){
+            saldo = Math.max(
+                0,
+                total - abonado
+            );
+        }
+
+
+        $("abonoFacturaNumero").textContent =
+            data.numero || "-";
+
+
+        $("abonoClienteNombre").textContent =
+            data.clientes?.nombre || "Sin cliente";
+
+
+        $("abonoTotalFactura").textContent =
+            money(total);
+
+
+        $("abonoYaPagado").textContent =
+            money(abonado);
+
+
+        $("abonoSaldo").textContent =
+            money(saldo);
+
+
+        $("nuevoAbono").value = "";
+
+
+        $("nuevoAbono").max =
+            saldo;
+
+
+        $("nuevoTipoAbono").value =
+            "Efectivo";
+
+
+        $("mensajeAbono").textContent =
+            "";
+
+
+        $("guardarAbono").disabled =
+            saldo <= 0;
+
+
+        if(saldo <= 0){
+
+            $("mensajeAbono").textContent =
+                "Esta factura ya está completamente pagada.";
+
+        }
+
+
+        $("modalAbono").classList.add("show");
+
+
+        setTimeout(() => {
+
+            $("nuevoAbono").focus();
+
+        }, 100);
+
+
+    }catch(error){
+
+        console.error(
+            "ERROR ABRIENDO MODAL DE ABONO:",
+            error
+        );
+
+        alert(
+            "Ocurrió un error al abrir el registro de abono."
+        );
+
+    }
+
+}
+
+/* =====================================================
+   CERRAR MODAL ABONO
+===================================================== */
+
+function cerrarModalAbono(){
+
+    $("modalAbono").classList.remove("show");
+
+    facturaAbonoActual = null;
+
+}
+
+
+$("cerrarModalAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+
+$("cancelarAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+
+$("modalAbono").addEventListener(
+    "click",
+    e => {
+
+        if(e.target === $("modalAbono")){
+
+            cerrarModalAbono();
+
+        }
+
+    }
+);
 
 async function obtenerFacturaDB(id){
 
@@ -4248,6 +4648,10 @@ $("history").addEventListener("click", async e => {
     if (action === "edit") {
         await editarFacturaDB(id);
     }
+
+    if (action === "abono") {
+        await abrirModalAbono(id);
+    }
     
     if (action === "pdf") {
         await pdfFacturaDB(id);
@@ -4289,5 +4693,120 @@ $("history").addEventListener("click", async e => {
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 </script>
+<div id="modal" class="modal">
+    <div class="sheet">
+        <button class="close" id="x">×</button>
+        <div id="previewBox"></div>
+    </div>
+</div>
+<!-- ==========================================
+     MODAL REGISTRAR ABONO
+========================================== -->
+
+<div id="modalAbono" class="modal-abono">
+
+    <div class="modal-abono-contenido">
+
+        <button
+            type="button"
+            id="cerrarModalAbono"
+            class="modal-abono-cerrar"
+        >
+            ×
+        </button>
+
+        <div class="modal-abono-titulo">
+            <img src="img/abono.png" alt="PDF" class="grilla-icon"> Registrar abono
+        </div>
+
+        <div class="modal-abono-datos">
+
+            <div>
+                <span>Factura</span>
+                <strong id="abonoFacturaNumero">-</strong>
+            </div>
+
+            <div>
+                <span>Cliente</span>
+                <strong id="abonoClienteNombre">-</strong>
+            </div>
+
+        </div>
+
+        <div class="modal-abono-resumen">
+
+            <div>
+                <span>Total factura</span>
+                <strong id="abonoTotalFactura">$0</strong>
+            </div>
+
+            <div>
+                <span>Abonado</span>
+                <strong id="abonoYaPagado">$0</strong>
+            </div>
+
+            <div>
+                <span>Saldo pendiente</span>
+                <strong id="abonoSaldo">$0</strong>
+            </div>
+
+        </div>
+
+        <label for="nuevoAbono">
+            Nuevo abono
+        </label>
+
+        <input
+            id="nuevoAbono"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="Ej: 50000"
+        >
+
+        <label for="nuevoTipoAbono">
+            Tipo de abono
+        </label>
+
+        <select id="nuevoTipoAbono">
+
+            <option value="Efectivo">
+                Efectivo
+            </option>
+
+            <option value="Transferencia">
+                Transferencia
+            </option>
+
+        </select>
+
+        <div
+            id="mensajeAbono"
+            class="mensaje-abono"
+        ></div>
+
+        <div class="modal-abono-botones">
+
+            <button
+                type="button"
+                id="cancelarAbono"
+                class="btn gray"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="guardarAbono"
+                class="btn green"
+            >
+                <img src="img/abono.png" alt="PDF" class="grilla-icon"> Registrar abono
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
