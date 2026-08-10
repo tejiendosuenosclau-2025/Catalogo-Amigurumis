@@ -3390,7 +3390,213 @@ async function cargarHistorialDB(){
         await cargarDashboardDB();
 }
 
+/* =====================================================
+   ABRIR MODAL DE ABONO
+===================================================== */
 
+async function abrirModalAbono(id) {
+
+    try {
+
+        if (!db) {
+            alert("No hay conexión con Supabase.");
+            return;
+        }
+
+        const { data: factura, error } = await db
+            .from("facturas")
+            .select(`
+                id,
+                numero,
+                total,
+                estado,
+                clientes (
+                    nombre
+                )
+            `)
+            .eq("id", id)
+            .single();
+
+        if (error) {
+            console.error(
+                "ERROR CARGANDO FACTURA:",
+                error
+            );
+
+            alert(
+                "No se pudo cargar la factura."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Buscar los abonos existentes
+         */
+
+        const { data: pagos, error: errorPagos } =
+            await db
+                .from("factura_pagos")
+                .select("valor")
+                .eq("factura_id", id);
+
+
+        if (errorPagos) {
+
+            console.error(
+                "ERROR CARGANDO ABONOS:",
+                errorPagos
+            );
+
+            alert(
+                "No se pudieron cargar los abonos."
+            );
+
+            return;
+        }
+
+
+        const total =
+            Number(factura.total || 0);
+
+
+        const abonado =
+            (pagos || []).reduce(
+                (suma, pago) =>
+                    suma + Number(pago.valor || 0),
+                0
+            );
+
+
+        const saldo =
+            Math.max(
+                0,
+                total - abonado
+            );
+
+
+        /*
+         * Cargar información en el modal
+         */
+
+        $("abonoFacturaNumero").textContent =
+            factura.numero || "-";
+
+
+        $("abonoClienteNombre").textContent =
+            factura.clientes?.nombre ||
+            "Sin nombre";
+
+
+        $("abonoTotalFactura").textContent =
+            money(total);
+
+
+        $("abonoYaPagado").textContent =
+            money(abonado);
+
+
+        $("abonoSaldo").textContent =
+            money(saldo);
+
+
+        /*
+         * Limpiar campos
+         */
+
+        $("nuevoAbono").value = "";
+
+        $("nuevoTipoAbono").value =
+            "Efectivo";
+
+
+        $("mensajeAbono").textContent =
+            "";
+
+
+        /*
+         * Guardamos temporalmente
+         * la factura seleccionada
+         */
+
+        window.facturaAbonoActual = {
+            id: factura.id,
+            numero: factura.numero,
+            total: total,
+            abonado: abonado,
+            saldo: saldo
+        };
+
+
+        /*
+         * Abrir modal
+         */
+
+        $("modalAbono").classList.add("show");
+
+
+        setTimeout(() => {
+
+            $("nuevoAbono").focus();
+
+        }, 100);
+
+
+    } catch (error) {
+
+        console.error(
+            "ERROR ABRIENDO MODAL ABONO:",
+            error
+        );
+
+        alert(
+            "Ocurrió un error al abrir el abono."
+        );
+
+    }
+
+}
+
+/* =====================================================
+   CERRAR MODAL ABONO
+===================================================== */
+
+function cerrarModalAbono() {
+
+    const modal = $("modalAbono");
+
+    if (!modal) return;
+
+    modal.classList.remove("show");
+
+}
+
+
+$("cerrarModalAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+
+$("cancelarAbono").addEventListener(
+    "click",
+    cerrarModalAbono
+);
+
+
+$("modalAbono").addEventListener(
+    "click",
+    function(e) {
+
+        if (e.target === this) {
+
+            cerrarModalAbono();
+
+        }
+
+    }
+);
 
 async function obtenerFacturaDB(id){
 
@@ -4464,14 +4670,7 @@ $("history").addEventListener("click", async e => {
 
     if (action === "abono") {
 
-    const modal = $("modalAbono");
-
-    if (!modal) {
-        console.error("No existe #modalAbono");
-        return;
-    }
-
-    modal.classList.add("show");
+    await abrirModalAbono(id);
 
     return;
     }
