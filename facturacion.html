@@ -977,7 +977,7 @@ option {
 <aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
 <div class="brand"><img src="img/logo.png" alt="Tejiendo Sueños Clau"></div>
 <nav>
-<a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</a><a href="#historial"><img src="img/historial.png" alt="PDF" class="grilla-icon"> Historial</a><a href="#" onclick="mostrarEstadisticas(); return false;"><img src="img/estadistica.png" alt="PDF" class="grilla-icon"> Estadísticas</a>
+<a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</a><a href="#historial"><img src="img/historial.png" alt="PDF" class="grilla-icon"> Historial</a><a href="estadisticas.html"><img src="img/estadistica.png" alt="PDF" class="grilla-icon"> Estadísticas</a>
 </nav>
 </aside>
 <main>
@@ -1011,9 +1011,8 @@ option {
         </button>
 
     </div>
-</div>
 
-<div id="contenidoFacturacion">
+</div>
 
 <!-- ============================= -->
 <!-- DASHBOARD - RESUMEN -->
@@ -5102,35 +5101,6 @@ $("ident").addEventListener("input", function(){
 });
 
 
-function mostrarEstadisticas() {
-    const facturacion = document.getElementById("contenidoFacturacion");
-    const estadisticas = document.getElementById("estadisticasFrame");
-
-    if (facturacion) {
-        facturacion.style.display = "none";
-    }
-
-    if (estadisticas) {
-        estadisticas.style.display = "block";
-    }
-}
-
-
-function mostrarFacturacion() {
-    const facturacion = document.getElementById("contenidoFacturacion");
-    const estadisticas = document.getElementById("estadisticasFrame");
-
-    if (estadisticas) {
-        estadisticas.style.display = "none";
-    }
-
-    if (facturacion) {
-        facturacion.style.display = "";
-    }
-}
-
-
-
 // ------------------------------------------
 // Ocultar sugerencias al hacer clic afuera
 // ------------------------------------------
@@ -5416,7 +5386,6 @@ document.addEventListener("click", function (e) {
     row();
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
-
 </script>
 
 <!-- ==========================================
@@ -5526,9 +5495,7 @@ document.addEventListener("click", function (e) {
         </div>
 
     </div>
-</div>
-</div>
-<iframe id="estadisticasFrame" src="estadisticas.html" style="display:none; width:100%; height:calc(100vh - 180px); border:0;"></iframe>
+
 </div>
 </body>
 </html>
