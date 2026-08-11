@@ -5102,6 +5102,35 @@ $("ident").addEventListener("input", function(){
 });
 
 
+function mostrarEstadisticas() {
+    const facturacion = document.getElementById("contenidoFacturacion");
+    const estadisticas = document.getElementById("estadisticasFrame");
+
+    if (facturacion) {
+        facturacion.style.display = "none";
+    }
+
+    if (estadisticas) {
+        estadisticas.style.display = "block";
+    }
+}
+
+
+function mostrarFacturacion() {
+    const facturacion = document.getElementById("contenidoFacturacion");
+    const estadisticas = document.getElementById("estadisticasFrame");
+
+    if (estadisticas) {
+        estadisticas.style.display = "none";
+    }
+
+    if (facturacion) {
+        facturacion.style.display = "";
+    }
+}
+
+
+
 // ------------------------------------------
 // Ocultar sugerencias al hacer clic afuera
 // ------------------------------------------
@@ -5388,34 +5417,6 @@ document.addEventListener("click", function (e) {
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
 
-
-function mostrarEstadisticas() {
-    const facturacion = document.getElementById("contenidoFacturacion");
-    const estadisticas = document.getElementById("estadisticasFrame");
-
-    if (facturacion) {
-        facturacion.style.display = "none";
-    }
-
-    if (estadisticas) {
-        estadisticas.style.display = "block";
-    }
-}
-
-
-function mostrarFacturacion() {
-    const facturacion = document.getElementById("contenidoFacturacion");
-    const estadisticas = document.getElementById("estadisticasFrame");
-
-    if (estadisticas) {
-        estadisticas.style.display = "none";
-    }
-
-    if (facturacion) {
-        facturacion.style.display = "";
-    }
-}
-
 </script>
 
 <!-- ==========================================
@@ -5528,5 +5529,6 @@ function mostrarFacturacion() {
 </div>
 </div>
 <iframe id="estadisticasFrame" src="estadisticas.html" style="display:none; width:100%; height:calc(100vh - 180px); border:0;"></iframe>
+</div>
 </body>
 </html>
