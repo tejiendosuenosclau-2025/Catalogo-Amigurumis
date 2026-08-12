@@ -789,7 +789,7 @@ tr.hl td {
     const $=id=>document.getElementById(id);
     const meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     const mesesCortos=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-    let db=null,facturas=[],detalles=[],selectedYear=new Date().getFullYear(),selectedMonth=5;
+    let db=null,facturas=[],detalles=[],selectedYear=new Date().getFullYear(),selectedMonth=new Date().getMonth();
     function esc(s) {
         return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
     }
