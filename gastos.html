@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gastos | Tejiendo Sueños Clau</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<style>
+:root{--pink:#f43f7a;--green:#16a765;--muted:#675d70;--border:#eadde5}
+*{box-sizing:border-box}body{margin:0;font-family:"Century Gothic",Arial,sans-serif;color:#202020;background:#fff}
+.page{min-height:100vh;padding:28px;background:#fff}.header{margin-bottom:20px}.title{margin:0;color:var(--pink);font-size:25px}.sub{margin:5px 0;color:var(--muted);font-size:13px}
+.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}.card,.form{border:1px solid var(--border);border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(42,28,49,.06)}.card{padding:16px}.card span{display:block;color:var(--muted);font-size:11px}.card strong{display:block;margin-top:6px;font-size:22px}
+.form{padding:20px}.form h2{margin:0 0 18px;color:var(--pink);font-size:16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #d9cbd4;border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;outline:none;background:#fff}.field textarea{min-height:80px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,63,122,.08)}
+.buttons{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.btn{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.gray{background:#f1edf0;color:#555}.green{background:var(--green);color:#fff}.message{min-height:20px;margin-top:12px;font-size:12px;font-weight:700}.ok{color:var(--green)}.error{color:#d62828}
+@media(max-width:650px){.page{padding:18px}.summary,.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.buttons{flex-direction:column}.btn{width:100%}}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="header"><h1 class="title">💰 Gastos</h1><p class="sub">Registra los gastos para utilizarlos en tus estadísticas.</p></header>
+<section class="summary"><div class="card"><span>Gastos del mes</span><strong id="totalGastosMes">$0</strong></div><div class="card"><span>Registros</span><strong id="cantidadGastos">0</strong></div></section>
+<section class="form"><h2>Registrar gasto</h2>
+<form id="formGasto"><div class="grid">
+<div class="field"><label for="concepto">Concepto</label><input id="concepto" type="text" placeholder="Ej: Hilo rosado" required></div>
+<div class="field"><label for="categoria">Categoría</label><select id="categoria" required><option value="">Selecciona</option><option>Materiales</option><option>Empaques</option><option>Envíos</option><option>Servicios</option><option>Publicidad</option><option>Otros</option></select></div>
+<div class="field"><label for="valor">Valor</label><input id="valor" type="number" min="0" step="1" placeholder="Ej: 15000" required></div>
+<div class="field"><label for="fecha">Fecha</label><input id="fecha" type="date" required></div>
+<div class="field"><label for="formaPago">Forma de pago</label><select id="formaPago" required><option value="">Selecciona</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Nequi</option><option>Otro</option></select></div>
+<div class="field full"><label for="observacion">Observación</label><textarea id="observacion" placeholder="Observación opcional"></textarea></div>
+</div><div id="mensajeGasto" class="message"></div><div class="buttons"><button type="reset" class="btn gray">Limpiar</button><button type="submit" class="btn green">💾 Registrar gasto</button></div></form>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const money=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(v||0));
+const today=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+const db=()=>window.supabaseClient||window.supabaseDB||window.supabase;
+async function user(){const s=db();if(!s||!s.auth)throw new Error('No se encontró la conexión de Supabase. Revisa js/supabase-config.js.');const r=await s.auth.getUser();if(r.error)throw r.error;if(!r.data.user)throw new Error('No hay una sesión de Supabase activa.');return r.data.user}
+async function resumen(){try{const s=db();if(!s)return;const u=await user();const d=new Date(),desde=new Date(d.getFullYear(),d.getMonth(),1).toISOString().slice(0,10),hasta=new Date(d.getFullYear(),d.getMonth()+1,0).toISOString().slice(0,10);const r=await s.from('gastos').select('valor').eq('user_id',u.id).gte('fecha',desde).lte('fecha',hasta);if(r.error)throw r.error;const rows=r.data||[];$('totalGastosMes').textContent=money(rows.reduce((a,x)=>a+Number(x.valor||0),0));$('cantidadGastos').textContent=rows.length}catch(e){console.error('Error cargando gastos:',e)}}
+$('fecha').value=today();
+$('formGasto').addEventListener('submit',async function(e){e.preventDefault();const m=$('mensajeGasto');m.className='message';m.textContent='Guardando...';try{const s=db(),u=await user();const gasto={concepto:$('concepto').value.trim(),categoria:$('categoria').value,valor:Number($('valor').value),fecha:$('fecha').value,forma_pago:$('formaPago').value,observacion:$('observacion').value.trim()||null,user_id:u.id};if(!gasto.concepto)throw new Error('Escribe el concepto del gasto.');if(!gasto.categoria)throw new Error('Selecciona una categoría.');if(!gasto.valor||gasto.valor<=0)throw new Error('El valor debe ser mayor que cero.');if(!gasto.fecha)throw new Error('Selecciona la fecha.');if(!gasto.forma_pago)throw new Error('Selecciona la forma de pago.');const r=await s.from('gastos').insert(gasto);if(r.error)throw r.error;m.className='message ok';m.textContent='✅ Gasto registrado correctamente.';this.reset();$('fecha').value=today();await resumen()}catch(e){console.error('Error registrando gasto:',e);m.className='message error';m.textContent='❌ '+(e.message||'No fue posible registrar el gasto.')}});
+resumen();
+</script>
+</body>
+</html>
