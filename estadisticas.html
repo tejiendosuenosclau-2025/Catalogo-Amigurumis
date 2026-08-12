@@ -8,25 +8,28 @@
   </title>
   <style>
    :root{--p:#f43f7a;--g:#16a765;--o:#f07818;--v:#7650c8;--b:#3d91e8;--ink:#202020;--line:#eadde3;--soft:#fff1f6}*{box-sizing:border-box}body{margin:0;font-family:"Century Gothic",Arial,sans-serif;color:var(--ink);background:#fff}.main{width:100%;padding:28px 26px 12px;min-width:0}.top{display:flex;align-items:center;gap:24px}.title{min-width:245px}.title h1{margin:0;font-size:25px}.sub{color:#657080;font-size:12px;margin-top:7px}.sel,.date{border:1px solid #ead8df;border-radius:9px;background:#fff;padding:11px 16px;font-weight:700}.date{margin-left:auto;font-size:11px;font-weight:400}.profile{width:58px;height:58px;border:2px solid #f6dce5;border-radius:50%;background:#fff;font-size:29px;box-shadow:0 5px 18px #f4a8c533}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:24px}.card,.panel{border:1px solid #eee0e5;border-radius:10px;background:#fff;box-shadow:0 8px 25px #2a1c2312}.card{height:216px;padding:15px 10px 8px;text-align:center;position:relative;overflow:hidden}.icon{width:44px;height:44px;margin:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}.label{font-size:10px;font-weight:700;line-height:1.35;margin-top:14px;min-height:30px}.value{font-size:20px;font-weight:800;margin:10px 0 8px}.up{font-size:10px;color:#159b55}.down{font-size:10px;color:#ef4444}.spark{position:absolute;bottom:0;left:0;width:100%;height:42px}.pink .icon{background:#ffe9f1}.orange .icon{background:#ffead8}.green .icon{background:#dff7e9}.purple .icon{background:#eee7ff}.blue .icon{background:#e2f1ff}.yellow .icon{background:#fff0ce}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.panel{padding:15px}.panel h2{font-size:13px;margin:0 0 12px}.chart{height:220px}.chart svg{width:100%;height:100%}.three{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:12px}.piewrap{display:flex;align-items:center;gap:18px}.donut,.pie{width:145px;height:145px;border-radius:50%;position:relative;flex:none}.donut{background:conic-gradient(#18ad73 0 92.1%,#f07818 92.1% 92.8%,#7650c8 92.8% 100%)}.pie{background:conic-gradient(#f43f7a 0 37.5%,#f07818 37.5% 50%,#f5ad0a 50% 62.5%,#18ad73 62.5% 87.5%,#7650c8 87.5% 100%)}.donut:after,.pie:after{content:"";position:absolute;inset:33px;background:#fff;border-radius:50%}.donut:before{content:"🧶";position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px}.pie:before{content:"8\A Pedidos";white-space:pre;text-align:center;position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:800}.legend{font-size:10px;line-height:1.7}.legend b{font-size:13px}.cobros{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cobro{padding:10px 4px;text-align:center;border-radius:9px;border:1px solid #dcebd8;background:#f5fff5;font-size:10px}.cobro:nth-child(2){background:#fffaf0;border-color:#f4dfbd}.cobro:nth-child(3){background:#fff4f4;border-color:#f3cccc}.cobro strong{display:block;font-size:14px;margin-top:6px}.totals{display:grid;gap:7px;margin-top:10px;font-size:10px}.totals div{display:flex;justify-content:space-between}.lower{display:grid;grid-template-columns:1.05fr 1fr;gap:10px;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#f34a82;color:#fff;text-align:left;padding:7px}td{padding:6px;border-bottom:1px solid #eee}tr.hl td{color:var(--p);font-weight:700;background:#fff5f8}.year{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--soft);padding:10px;border-radius:7px;margin-top:8px;font-size:11px;font-weight:800}.products{display:grid;gap:10px}.prod{display:grid;grid-template-columns:20px 1fr 110px 25px;gap:7px;align-items:center;font-size:10px}.bar{height:5px;background:#eee;border-radius:8px}.bar i{display:block;height:100%;background:var(--p);border-radius:8px}.payments{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.paycircle{width:55px;height:55px;border-radius:50%;border:7px solid #f4e5ea;border-right-color:var(--p);margin:auto;display:flex;align-items:center;justify-content:center}.pay b{display:block;margin-top:5px}.pay span{font-size:9px}.last{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:12px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:10px}.total{display:flex;justify-content:space-between;background:var(--soft);padding:10px;margin-top:9px;font-size:11px;font-weight:800}.orders{display:grid;gap:7px}.order{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:6px;font-size:10px}.badge{padding:4px 7px;border-radius:8px;background:#fff0d9;color:#d67800}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compare div{background:#effaf2;padding:10px;border-radius:8px;font-size:9px}.compare p{margin:6px 0}.footer{text-align:center;margin-top:12px;color:#666;font-size:12px}@media(max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}.three,.last{grid-template-columns:1fr 1fr}}@media(max-width:700px){.main{padding:15px}.top{flex-wrap:wrap}.date{margin-left:0;flex:1}.cards,.grid2,.three,.lower,.last{grid-template-columns:1fr 1fr}.cards .card{height:190px}.piewrap{justify-content:center;flex-wrap:wrap}}@media(max-width:500px){.cards,.grid2,.three,.lower,.last{grid-template-columns:1fr}.payments{grid-template-columns:1fr 1fr}}
-.grilla-icon{
-    width:22px;
-    height:22px;
-    object-fit:contain;
-    vertical-align:middle;
-}
   </style>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+
  </head>
  <body style="margin:0;">
   <main class="main" style="width:100%;margin:0;">
    <header class="top">
     <div class="title">
      <h1>
-      <img src="img/estadistica.png" class="grilla-icon"> Estadísticas
+      📊 Estad&iacute;sticas
      </h1>
      <div class="sub">
       An&aacute;lisis financiero de Tejiendo Sue&ntilde;os Clau
      </div>
     </div>
+    <select class="sel">
+     <option>
+      📅 Junio 2026
+     </option>
+    </select>
    </header>
    <section class="cards">
     <script>
@@ -820,5 +823,537 @@
     ♡ Hecho con amor, paciencia y muchos sue&ntilde;os! ♡ 🧶
    </footer>
   </main>
+ 
+<script>
+/* =========================================================
+   ESTADÍSTICAS — DATOS REALES DESDE SUPABASE
+   El diseño visual existente no se modifica.
+   ========================================================= */
+
+(() => {
+    let db = null;
+    let facturas = [];
+    let detalles = [];
+    let mesSeleccionado = new Date().getMonth();
+    let anioSeleccionado = new Date().getFullYear();
+
+    const COP = new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
+    });
+
+    const MESES = [
+        "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+        "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+    ];
+
+    const MESES_CORTOS = [
+        "Ene","Feb","Mar","Abr","May","Jun",
+        "Jul","Ago","Sep","Oct","Nov","Dic"
+    ];
+
+    const money = n => COP.format(Number(n) || 0);
+    const num = n => Number(n) || 0;
+
+    function mesDe(fecha) {
+        if (!fecha) return null;
+        const d = new Date(String(fecha).slice(0,10) + "T00:00:00");
+        return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    function esMes(f, mes, anio) {
+        const d = mesDe(f.fecha);
+        return d && d.getFullYear() === anio && d.getMonth() === mes;
+    }
+
+    function facturasMes(mes, anio) {
+        return facturas.filter(f => esMes(f, mes, anio));
+    }
+
+    function totalVentas(mes, anio) {
+        return facturasMes(mes, anio)
+            .reduce((s,f) => s + num(f.total), 0);
+    }
+
+    function totalAbonos(mes, anio) {
+        return facturasMes(mes, anio)
+            .reduce((s,f) => s + num(f.abono_acumulado), 0);
+    }
+
+    function totalPendiente(mes, anio) {
+        return facturasMes(mes, anio)
+            .reduce((s,f) => s + num(f.saldo_pendiente), 0);
+    }
+
+    function porcentaje(actual, anterior) {
+        if (!anterior) return actual ? 100 : 0;
+        return ((actual - anterior) / anterior) * 100;
+    }
+
+    function tendencia(actual, anterior) {
+        const p = porcentaje(actual, anterior);
+        const abajo = p < 0;
+        return {
+            texto: `${abajo ? "↓" : "↑"} ${Math.abs(p).toFixed(0)}% vs ${MESES[(mesSeleccionado + 11) % 12].toLowerCase()}`,
+            clase: abajo ? "down" : "up"
+        };
+    }
+
+    function obtenerCards() {
+        return document.querySelectorAll(".cards .card");
+    }
+
+    function ponerCard(indice, valor, actualAnterior, green=false) {
+        const card = obtenerCards()[indice];
+        if (!card) return;
+
+        const value = card.querySelector(".value");
+        const trend = card.querySelector(".up, .down");
+
+        if (value) {
+            value.textContent = typeof valor === "number" ? money(valor) : String(valor);
+            if (green) value.style.color = "#087b2d";
+        }
+
+        if (trend) {
+            trend.classList.remove("up","down");
+            trend.classList.add(actualAnterior.clase);
+            trend.textContent = actualAnterior.texto;
+        }
+    }
+
+    function actualizarCabecera() {
+        const selector = document.querySelector(".sel");
+        const fecha = document.querySelector(".date");
+
+        if (selector) {
+            selector.innerHTML = MESES.map((m,i) =>
+                `<option value="${i}">📅 ${m} ${anioSeleccionado}</option>`
+            ).join("");
+            selector.value = String(mesSeleccionado);
+            selector.onchange = () => {
+                mesSeleccionado = Number(selector.value);
+                renderTodo();
+            };
+        }
+
+        if (fecha) {
+            fecha.textContent =
+                "📅  " +
+                new Date().toLocaleDateString("es-CO", {
+                    day:"2-digit",
+                    month:"long",
+                    year:"numeric"
+                });
+        }
+    }
+
+    function actualizarCards() {
+        const actual = facturasMes(mesSeleccionado, anioSeleccionado);
+        const anteriorMes = mesSeleccionado === 0 ? 11 : mesSeleccionado - 1;
+        const anteriorAnio = mesSeleccionado === 0 ? anioSeleccionado - 1 : anioSeleccionado;
+
+        const ventas = actual.reduce((s,f) => s + num(f.total), 0);
+        const ventasAnterior = totalVentas(anteriorMes, anteriorAnio);
+
+        const gastos = 0;
+        const gastosAnterior = 0;
+
+        const ganancia = ventas - gastos;
+        const gananciaAnterior = ventasAnterior - gastosAnterior;
+
+        const pedidos = actual.length;
+        const pedidosAnterior = facturasMes(anteriorMes, anteriorAnio).length;
+
+        const abonos = actual.reduce((s,f) => s + num(f.abono_acumulado), 0);
+        const abonosAnterior = facturasMes(anteriorMes, anteriorAnio)
+            .reduce((s,f) => s + num(f.abono_acumulado), 0);
+
+        const pendiente = actual.reduce((s,f) => s + num(f.saldo_pendiente), 0);
+        const pendienteAnterior = facturasMes(anteriorMes, anteriorAnio)
+            .reduce((s,f) => s + num(f.saldo_pendiente), 0);
+
+        ponerCard(0, ventas, tendencia(ventas, ventasAnterior));
+        ponerCard(1, gastos, tendencia(gastos, gastosAnterior));
+        ponerCard(2, ganancia, tendencia(ganancia, gananciaAnterior), true);
+        ponerCard(3, pedidos, tendencia(pedidos, pedidosAnterior));
+        ponerCard(4, abonos, tendencia(abonos, abonosAnterior));
+        ponerCard(5, pendiente, tendencia(pendiente, pendienteAnterior));
+    }
+
+    function actualizarResumenMensual() {
+        const panel = [...document.querySelectorAll(".lower .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("RESUMEN MENSUAL"));
+
+        if (!panel) return;
+
+        const tbody = panel.querySelector("tbody");
+        const year = panel.querySelector(".year");
+        if (!tbody) return;
+
+        tbody.innerHTML = MESES.map((mes,i) => {
+            const ventas = totalVentas(i, anioSeleccionado);
+            const gastos = 0;
+            const ganancia = ventas - gastos;
+            const clase = i === mesSeleccionado ? " class=\"hl\"" : "";
+
+            return `
+                <tr${clase}>
+                    <td>${mes}</td>
+                    <td>${money(ventas)}</td>
+                    <td>${money(gastos)}</td>
+                    <td>${money(ganancia)}</td>
+                </tr>`;
+        }).join("");
+
+        if (year) {
+            const ventasAnuales = MESES.reduce((s,_,i) => s + totalVentas(i, anioSeleccionado), 0);
+            const gastosAnuales = 0;
+            const gananciaAnual = ventasAnuales - gastosAnuales;
+
+            year.innerHTML = `
+                <span>TOTAL AÑO 🏆</span>
+                <span>${money(ventasAnuales)}</span>
+                <span>${money(gastosAnuales)}</span>
+                <span>${money(gananciaAnual)}</span>`;
+        }
+    }
+
+    function actualizarVentasPorMes() {
+        const panel = [...document.querySelectorAll(".grid2 .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("VENTAS POR MES"));
+
+        if (!panel) return;
+
+        const svg = panel.querySelector("svg");
+        if (!svg) return;
+
+        const barras = [...svg.querySelectorAll("rect")];
+        const ventas = MESES.map((_,i) => totalVentas(i, anioSeleccionado));
+        const max = Math.max(...ventas, 1);
+
+        const baseY = 215;
+        const alturaMax = 190;
+        const xs = [60,115,170,225,280,335,390,445,500,555,610,665];
+
+        barras.forEach((rect,i) => {
+            if (i >= ventas.length) return;
+            const h = Math.max(0, (ventas[i] / max) * alturaMax);
+            rect.setAttribute("x", xs[i] ?? (60 + i*55));
+            rect.setAttribute("y", String(baseY - h));
+            rect.setAttribute("height", String(h));
+            rect.setAttribute("width", "18");
+        });
+
+        const etiqueta = svg.querySelector("rect[fill='#f43f7a']");
+        const texto = [...svg.querySelectorAll("text")]
+            .find(t => String(t.textContent || "").includes("$378.000"));
+
+        const seleccionado = ventas[mesSeleccionado];
+        if (etiqueta && texto) {
+            const h = Math.max(0, (seleccionado / max) * alturaMax);
+            const x = xs[mesSeleccionado] ?? 60;
+            etiqueta.setAttribute("x", String(x - 15));
+            etiqueta.setAttribute("y", String(Math.max(3, baseY - h - 30)));
+            texto.setAttribute("x", String(x - 7));
+            texto.setAttribute("y", String(Math.max(21, baseY - h - 12)));
+            texto.textContent = money(seleccionado);
+        }
+
+        const labels = [...svg.querySelectorAll("text")].filter(t =>
+            MESES_CORTOS.includes(String(t.textContent || "").trim())
+        );
+        labels.forEach((t,i) => {
+            if (MESES_CORTOS[i]) t.textContent = MESES_CORTOS[i];
+        });
+    }
+
+    function actualizarDistribucion() {
+        const panel = [...document.querySelectorAll(".three .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("DISTRIBUCIÓN"));
+
+        if (!panel) return;
+
+        const ventas = totalVentas(mesSeleccionado, anioSeleccionado);
+        const gastos = 0;
+        const ganancia = ventas - gastos;
+        const total = Math.max(ventas + gastos + Math.max(ganancia,0), 1);
+
+        const donut = panel.querySelector(".donut");
+        if (donut) {
+            const pVentas = ventas / total * 100;
+            const pGastos = gastos / total * 100;
+            donut.style.background =
+                `conic-gradient(#18ad73 0 ${pVentas}%,#f07818 ${pVentas}% ${pVentas+pGastos}%,#7650c8 ${pVentas+pGastos}% 100%)`;
+        }
+
+        const h2 = panel.querySelector("h2");
+        if (h2) h2.textContent = `DISTRIBUCIÓN FINANCIERA — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
+
+        const legend = panel.querySelector(".legend");
+        if (legend) {
+            const pVentas = total ? (ventas/total*100) : 0;
+            const pGastos = total ? (gastos/total*100) : 0;
+            const pGanancia = total ? (Math.max(ganancia,0)/total*100) : 0;
+
+            legend.innerHTML = `
+                🟢 Ingresos<br>
+                <b>${money(ventas)}</b><br>
+                <span style="color:#16a765">${pVentas.toFixed(1)}%</span>
+                <br><br>
+                🟠 Gastos<br>
+                <b>${money(gastos)}</b><br>
+                <span style="color:#f07818">${pGastos.toFixed(1)}%</span>
+                <br><br>
+                🟣 Ganancia<br>
+                <b>${money(ganancia)}</b><br>
+                <span style="color:#7650c8">${pGanancia.toFixed(1)}%</span>`;
+        }
+    }
+
+    function actualizarCobros() {
+        const panel = [...document.querySelectorAll(".three .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("ESTADO DE COBROS"));
+
+        if (!panel) return;
+
+        const actual = facturasMes(mesSeleccionado, anioSeleccionado);
+        const vendido = actual.reduce((s,f) => s + num(f.total), 0);
+        const recibido = actual.reduce((s,f) => s + num(f.abono_acumulado), 0);
+        const pendiente = actual.reduce((s,f) => s + num(f.saldo_pendiente), 0);
+        const pagado = actual
+            .filter(f => num(f.saldo_pendiente) <= 0)
+            .reduce((s,f) => s + num(f.total), 0);
+        const abonado = actual
+            .filter(f => num(f.saldo_pendiente) > 0 && num(f.abono_acumulado) > 0)
+            .reduce((s,f) => s + num(f.abono_acumulado), 0);
+
+        const cobros = panel.querySelectorAll(".cobro");
+        if (cobros[0]) {
+            cobros[0].querySelector("strong").textContent = money(pagado);
+            cobros[0].lastChild.textContent = ` ${vendido ? (pagado/vendido*100).toFixed(1) : "0.0"}%`;
+        }
+        if (cobros[1]) {
+            cobros[1].querySelector("strong").textContent = money(abonado);
+            cobros[1].lastChild.textContent = ` ${vendido ? (abonado/vendido*100).toFixed(1) : "0.0"}%`;
+        }
+        if (cobros[2]) {
+            cobros[2].querySelector("strong").textContent = money(pendiente);
+            cobros[2].lastChild.textContent = ` ${vendido ? (pendiente/vendido*100).toFixed(1) : "0.0"}%`;
+        }
+
+        const totalValues = panel.querySelectorAll(".totals b");
+        if (totalValues[0]) totalValues[0].textContent = money(vendido);
+        if (totalValues[1]) totalValues[1].textContent = money(recibido);
+        if (totalValues[2]) totalValues[2].textContent = money(pendiente);
+
+        const h2 = panel.querySelector("h2");
+        if (h2) h2.textContent = `ESTADO DE COBROS — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
+    }
+
+    function actualizarProductos() {
+        const panel = [...document.querySelectorAll(".lower .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("TOP PRODUCTOS"));
+
+        if (!panel) return;
+
+        const actualIds = new Set(facturasMes(mesSeleccionado, anioSeleccionado).map(f => f.id));
+        const mapa = {};
+
+        detalles
+            .filter(d => actualIds.has(d.factura_id))
+            .forEach(d => {
+                const nombre = d.producto_nombre || "Producto";
+                mapa[nombre] = (mapa[nombre] || 0) + num(d.cantidad);
+            });
+
+        const top = Object.entries(mapa)
+            .sort((a,b) => b[1]-a[1])
+            .slice(0,5);
+
+        const max = top[0]?.[1] || 1;
+        const box = panel.querySelector(".products");
+
+        if (box) {
+            box.innerHTML = top.length ? top.map(([nombre,cantidad],i) => `
+                <div class="prod">
+                    <b>${i+1}</b>
+                    <span>${nombre}</span>
+                    <div class="bar"><i style="width:${Math.max(5,(cantidad/max)*100)}%"></i></div>
+                    <b>${cantidad}</b>
+                </div>
+            `).join("") : `<div class="prod"><span>No hay productos vendidos este mes.</span></div>`;
+        }
+
+        const h2 = panel.querySelector("h2");
+        if (h2) h2.textContent = `TOP PRODUCTOS — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
+    }
+
+    function actualizarMetodosPago() {
+        const panel = [...document.querySelectorAll(".lower .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("MÉTODOS DE PAGO"));
+
+        if (!panel) return;
+
+        const actual = facturasMes(mesSeleccionado, anioSeleccionado);
+        const mapa = {};
+
+        actual.forEach(f => {
+            const metodo = f.forma_pago || "Sin especificar";
+            mapa[metodo] = (mapa[metodo] || 0) + num(f.total);
+        });
+
+        const pagos = Object.entries(mapa).sort((a,b) => b[1]-a[1]).slice(0,4);
+        const total = pagos.reduce((s,[,v]) => s+v,0);
+        const box = panel.querySelector(".payments");
+
+        if (box) {
+            const iconos = ["💸","💵","💵","💳"];
+            box.innerHTML = pagos.length ? pagos.map(([nombre,valor],i) => `
+                <div class="pay">
+                    <div class="paycircle">${iconos[i] || "💰"}</div>
+                    <b>${total ? (valor/total*100).toFixed(0) : 0}%</b>
+                    <span>${nombre}<br>${money(valor)}</span>
+                </div>
+            `).join("") : `<div class="pay"><div class="paycircle">💰</div><b>0%</b><span>Sin ventas<br>$0</span></div>`;
+        }
+
+        const h2 = panel.querySelector("h2");
+        if (h2) h2.textContent = `MÉTODOS DE PAGO — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
+    }
+
+    function actualizarUltimosPedidos() {
+        const panel = [...document.querySelectorAll(".last .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("ÚLTIMOS PEDIDOS"));
+
+        if (!panel) return;
+
+        const box = panel.querySelector(".orders");
+        const ultimos = [...facturas]
+            .sort((a,b) => String(b.fecha).localeCompare(String(a.fecha)))
+            .slice(0,5);
+
+        if (box) {
+            box.innerHTML = ultimos.length ? ultimos.map(f => `
+                <div class="order">
+                    #${f.numero || f.id} $${num(f.total).toLocaleString("es-CO")}
+                    <span class="badge">${f.estado || "Pendiente"}</span>
+                </div>
+            `).join("") : `<div class="order">No hay facturas registradas.</div>`;
+        }
+    }
+
+    function actualizarComparativa() {
+        const panel = [...document.querySelectorAll(".last .panel")]
+            .find(p => p.querySelector("h2")?.textContent.includes("COMPARATIVA"));
+
+        if (!panel) return;
+
+        const anteriorMes = mesSeleccionado === 0 ? 11 : mesSeleccionado - 1;
+        const anteriorAnio = mesSeleccionado === 0 ? anioSeleccionado - 1 : anioSeleccionado;
+
+        const ventas = totalVentas(mesSeleccionado, anioSeleccionado);
+        const ventasAnt = totalVentas(anteriorMes, anteriorAnio);
+        const pedidos = facturasMes(mesSeleccionado, anioSeleccionado).length;
+        const pedidosAnt = facturasMes(anteriorMes, anteriorAnio).length;
+
+        const cols = panel.querySelectorAll(".compare div");
+        if (cols[0]) {
+            cols[0].innerHTML = `
+                <b>Vs ${MESES[anteriorMes]} ${anteriorAnio}</b>
+                <p>Ventas ${porcentaje(ventas,ventasAnt)>=0?"↑":"↓"} ${Math.abs(porcentaje(ventas,ventasAnt)).toFixed(0)}%</p>
+                <p>Gastos ↑ 0%</p>
+                <p>Ganancia ${porcentaje(ventas,ventasAnt)>=0?"↑":"↓"} ${Math.abs(porcentaje(ventas,ventasAnt)).toFixed(0)}%</p>
+                <p>Pedidos ${porcentaje(pedidos,pedidosAnt)>=0?"↑":"↓"} ${Math.abs(porcentaje(pedidos,pedidosAnt)).toFixed(0)}%</p>`;
+        }
+
+        if (cols[1]) {
+            cols[1].innerHTML = `
+                <b>Vs ${MESES[mesSeleccionado]} ${anioSeleccionado-1}</b>
+                <p>Ventas —</p>
+                <p>Gastos —</p>
+                <p>Ganancia —</p>
+                <p>Pedidos —</p>`;
+        }
+    }
+
+    async function cargarDatos() {
+        if (!window.supabase || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+            console.error("No se encontraron las credenciales de Supabase.");
+            return;
+        }
+
+        db = window.supabase.createClient(
+            window.SUPABASE_URL,
+            window.SUPABASE_ANON_KEY
+        );
+
+        const { data: { session } } = await db.auth.getSession();
+
+        if (!session) {
+            console.warn("No hay una sesión de Supabase activa.");
+            return;
+        }
+
+        const { data: f, error: errorFacturas } = await db
+            .from("facturas")
+            .select(`
+                id,
+                numero,
+                fecha,
+                forma_pago,
+                total,
+                estado,
+                valor_abono,
+                abono_acumulado,
+                saldo_pendiente
+            `)
+            .neq("estado","Anulada");
+
+        if (errorFacturas) {
+            console.error("Error cargando facturas:", errorFacturas);
+            return;
+        }
+
+        facturas = f || [];
+
+        const { data: d, error: errorDetalles } = await db
+            .from("factura_detalle")
+            .select(`
+                factura_id,
+                producto_nombre,
+                cantidad,
+                total
+            `);
+
+        if (errorDetalles) {
+            console.error("Error cargando detalles:", errorDetalles);
+            detalles = [];
+        } else {
+            detalles = d || [];
+        }
+
+        actualizarCabecera();
+        renderTodo();
+    }
+
+    function renderTodo() {
+        actualizarCabecera();
+        actualizarCards();
+        actualizarResumenMensual();
+        actualizarVentasPorMes();
+        actualizarDistribucion();
+        actualizarCobros();
+        actualizarProductos();
+        actualizarMetodosPago();
+        actualizarUltimosPedidos();
+        actualizarComparativa();
+    }
+
+    document.addEventListener("DOMContentLoaded", cargarDatos);
+})();
+</script>
+
  </body>
 </html>
