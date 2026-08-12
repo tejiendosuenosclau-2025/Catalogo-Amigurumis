@@ -878,14 +878,18 @@ function renderCards() {
     const ventas=cur.reduce((s,f)=>s+total(f),0),pv=prev.reduce((s,f)=>s+total(f),0);
     const pedidos=cur.length,pp=prev.length,ab=cur.reduce((s,f)=>s+paid(f),0),pab=prev.reduce((s,f)=>s+paid(f),0),saldo=cur.reduce((s,f)=>s+balance(f),0),ps=prev.reduce((s,f)=>s+balance(f),0);
     $("statVentas").textContent=money(ventas);
-    $("statGastos").textContent=money(0);
-    $("statGanancia").textContent=money(ventas);
+    const gastosMes = totalExpenses(selectedYear,selectedMonth);
+    $("statGastos").textContent = money(gastosMes);
+    $("statGanancia").textContent = money(ventas - gastosMes);
     $("statPedidos").textContent=pedidos;
     $("statAbonos").textContent=money(ab);
     $("statSaldo").textContent=money(saldo);
     setChange("statVentasCambio",ventas,pv,false);
-    setChange("statGastosCambio",0,0,true);
-    setChange("statGananciaCambio",ventas,pv,false);
+    const gastosAnterior = totalExpenses(selectedYear,selectedMonth ? selectedMonth - 1 : 11);
+    const gananciaActual = ventas - gastosMes;
+    const gananciaAnterior = pv - gastosAnterior;
+    setChange("statGastosCambio",gastosMes,gastosAnterior,false);
+    setChange("statGananciaCambio",gananciaActual,gananciaAnterior,false);
     setChange("statPedidosCambio",pedidos,pp,false);
     setChange("statAbonosCambio",ab,pab,false);
     setChange("statSaldoCambio",saldo,ps,true);
@@ -893,8 +897,9 @@ function renderCards() {
     for(let m=0;m<12;m++) {
         const q=monthRows(selectedYear,m),v=q.reduce((x,f)=>x+total(f),0);
         a.push(v);
-        g.push(0);
-        ga.push(v);
+        const gastoMes = totalExpenses(selectedYear,m);
+        g.push(gastoMes);
+        ga.push(v - gastoMes);
         p.push(q.length);
         r.push(q.reduce((x,f)=>x+paid(f),0));
         s.push(q.reduce((x,f)=>x+balance(f),0));
