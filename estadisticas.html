@@ -855,14 +855,28 @@ function renderCards() {
     const ventas=cur.reduce((s,f)=>s+total(f),0),pv=prev.reduce((s,f)=>s+total(f),0);
     const pedidos=cur.length,pp=prev.length,ab=cur.reduce((s,f)=>s+paid(f),0),pab=prev.reduce((s,f)=>s+paid(f),0),saldo=cur.reduce((s,f)=>s+balance(f),0),ps=prev.reduce((s,f)=>s+balance(f),0);
     $("statVentas").textContent=money(ventas);
-    $("statGastos").textContent=money(0);
-    $("statGanancia").textContent=money(ventas);
+    const gastosMes = totalGastos(
+    	expenseRows(selectedYear, selectedMonth)
+	);
+
+	const gananciaMes = ventas - gastosMes;
+
+	$("statGastos").textContent = money(gastosMes);
+	$("statGanancia").textContent = money(gananciaMes);
     $("statPedidos").textContent=pedidos;
     $("statAbonos").textContent=money(ab);
     $("statSaldo").textContent=money(saldo);
     setChange("statVentasCambio",ventas,pv,false);
-    setChange("statGastosCambio",0,0,true);
-    setChange("statGananciaCambio",ventas,pv,false);
+    const gastosAnterior = totalGastos(
+    	expenseRows(
+        selectedYear,
+        selectedMonth ? selectedMonth - 1 : 11
+    	)
+    );
+
+	const gananciaAnterior = pv - gastosAnterior;
+	setChange("statGastosCambio",gastosMes,gastosAnterior,true);
+	setChange("statGananciaCambio",gananciaMes,gananciaAnterior,false);
     setChange("statPedidosCambio",pedidos,pp,false);
     setChange("statAbonosCambio",ab,pab,false);
     setChange("statSaldoCambio",saldo,ps,true);
@@ -931,9 +945,62 @@ function renderCharts() {
     }
 }
 function renderFinance(cur) {
-    const v=cur.reduce((s,f)=>s+total(f),0),d=$("donutFinanciero"),l=$("legendFinanciero");
-    if(d)d.style.background=`conic-gradient(#18ad73 0 100%,#f07818 100% 100%)`;
-    if(l)l.innerHTML=`🟢 Ingresos<br><b>${money(v)}</b><br><span style="color:#16a765">${v?"100.0":"0.0"}%</span><br><br>🟠 Gastos<br><b>$0</b><br><span style="color:#f07818">0.0%</span><br><br>🟣 Ganancia<br><b>${money(v)}</b><br><span style="color:#7650c8">${v?"100.0":"0.0"}%</span>`;
+
+    const ingresos = cur.reduce(
+        (s, f) => s + total(f),
+        0
+    );
+
+    const gastosMes = totalGastos(
+        expenseRows(selectedYear, selectedMonth)
+    );
+
+    const ganancia = ingresos - gastosMes;
+
+    const d = $("donutFinanciero");
+    const l = $("legendFinanciero");
+
+    const base = Math.max(ingresos, 1);
+
+    const gastosPct =
+        Math.min(100, gastosMes / base * 100);
+
+    const gananciaPct =
+        Math.max(0, 100 - gastosPct);
+
+    if (d) {
+        d.style.background =
+            `conic-gradient(
+                #18ad73 0 ${gananciaPct}%,
+                #f07818 ${gananciaPct}% 100%
+            )`;
+    }
+
+    if (l) {
+        l.innerHTML = `
+            🟢 Ingresos<br>
+            <b>${money(ingresos)}</b><br>
+            <span style="color:#16a765">
+                ${ingresos ? "100.0" : "0.0"}%
+            </span>
+
+            <br><br>
+
+            🟠 Gastos<br>
+            <b>${money(gastosMes)}</b><br>
+            <span style="color:#f07818">
+                ${gastosPct.toFixed(1)}%
+            </span>
+
+            <br><br>
+
+            🟣 Ganancia<br>
+            <b>${money(ganancia)}</b><br>
+            <span style="color:#7650c8">
+                ${gananciaPct.toFixed(1)}%
+            </span>
+        `;
+    }
 }
 function renderCobros(cur) {
     const v=cur.reduce((s,f)=>s+total(f),0),pag=cur.filter(f=>balance(f)<=0).reduce((s,f)=>s+total(f),0),abo=cur.filter(f=>paid(f)>0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pen=cur.filter(f=>paid(f)<=0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pc=x=>v?(x/v*100).toFixed(1):"0.0",b=$("cobrosEstado");
@@ -973,19 +1040,54 @@ function renderPayments(cur) {
     if(el)el.innerHTML=rows.length?rows.map((r,i)=>`<div class="pay"><div class="paycircle" style="border-right-color:${["#f43f7a","#f07818","#16a765","#7650c8"][i]}">${["💸","💵","💵","💳"][i]}</div><b>${(r[1]/sum*100).toFixed(0)}%</b><span>${esc(r[0])}<br>${money(r[1])}</span></div>`).join(""):'<div class="pay"><div class="paycircle">💳</div><b>0%</b><span>Sin datos<br>$0</span></div>';
 }
 function renderSummary() {
-    const b=$("resumenMensualBody");
-    if(!b)return;
-    let tv=0,tg=0,html="";
-    for(let m=0;m<12;m++) {
-        const q=monthRows(selectedYear,m),v=q.reduce((s,f)=>s+total(f),0);
-        tv+=v;
-        html+=`<tr class="${m===selectedMonth?'hl':''}"><td>${meses[m]}</td><td>${money(v)}</td><td>$0</td><td>${money(v)}</td></tr>`;
+    const b = $("resumenMensualBody");
+
+    if (!b) return;
+
+    let tv = 0;
+    let tg = 0;
+    let html = "";
+
+    for (let m = 0; m < 12; m++) {
+
+        // Facturas del mes
+        const facturasMes = monthRows(selectedYear, m);
+
+        // Ventas del mes
+        const v = facturasMes.reduce(
+            (s, f) => s + total(f),
+            0
+        );
+
+        // Gastos del mes
+        const eg = expenseRows(selectedYear, m);
+
+        const g = totalGastos(eg);
+
+        // Ganancia del mes
+        const ganancia = v - g;
+
+        // Acumulados del año
+        tv += v;
+        tg += g;
+
+        html += `
+            <tr class="${m === selectedMonth ? "hl" : ""}">
+                <td>${meses[m]}</td>
+                <td>${money(v)}</td>
+                <td>${money(g)}</td>
+                <td>${money(ganancia)}</td>
+            </tr>
+        `;
     }
-    b.innerHTML=html;
-    $("totalAnualVentas").textContent=money(tv);
-    $("totalAnualGastos").textContent="$0";
-    $("totalAnualGanancia").textContent=money(tv);
+
+    b.innerHTML = html;
+
+    $("totalAnualVentas").textContent = money(tv);
+    $("totalAnualGastos").textContent = money(tg);
+    $("totalAnualGanancia").textContent = money(tv - tg);
 }
+
 function renderOrders(cur) {
     const rows=[...cur].sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha))).slice(0,5),e=$("ultimosPedidos");
     if(e)e.innerHTML=rows.length?rows.map(f=> {
@@ -993,9 +1095,49 @@ function renderOrders(cur) {
     }
     ).join(""):'<div class="order">No hay pedidos en este mes.</div>';
 }
+function gastoValor(g) {
+    return Number(g?.valor) || 0;
+}
+
+function expenseRows(y, m) {
+    return gastos.filter(g => inMonth(g, y, m));
+}
+
+function totalGastos(rows) {
+    return rows.reduce((s, g) => s + gastoValor(g), 0);
+}
+
 function renderExpenses() {
-    $("gastosLista").innerHTML='<div class="row"><span>Sin gastos registrados</span><span>—</span><span>$0</span></div>';
-    $("gastosTotal").textContent="$0";
+
+    const lista = $("gastosLista");
+    const totalEl = $("gastosTotal");
+
+    if (!lista || !totalEl) return;
+
+    const rows = expenseRows(selectedYear, selectedMonth);
+
+    if (!rows.length) {
+        lista.innerHTML =
+            '<div class="row"><span>Sin gastos registrados</span><span>—</span><span>$0</span></div>';
+
+        totalEl.textContent = "$0";
+        return;
+    }
+
+    lista.innerHTML = rows
+        .sort((a, b) =>
+            String(b.fecha).localeCompare(String(a.fecha))
+        )
+        .map(g => `
+            <div class="row">
+                <span>${esc(g.concepto || "")}</span>
+                <span>${esc(g.categoria || "")}</span>
+                <span>${money(gastoValor(g))}</span>
+            </div>
+        `)
+        .join("");
+
+    totalEl.textContent = money(totalGastos(rows));
 }
 function renderCompare() {
     const c=monthRows(selectedYear,selectedMonth),p=monthRows(selectedYear,selectedMonth?selectedMonth-1:11),cv=c.reduce((s,f)=>s+total(f),0),pv=p.reduce((s,f)=>s+total(f),0),cp=c.length,pp=p.length,ch=(a,b)=>!b?"—":`${a>=b?"↑":"↓"} ${Math.abs((a-b)/b*100).toFixed(0)}%`;
@@ -1045,7 +1187,29 @@ async function load() {
         const d=await db.from("factura_detalle").select("factura_id,producto_nombre,cantidad,total").in("factura_id",ids);
         if(d.error)console.error("Error cargando detalles:",d.error);
         detalles=d.data||[];
-    }
+	const gastosQuery = await db
+    	.from("gastos")
+    	.select(`
+        	id,
+        	concepto,
+        	categoria,
+        	valor,
+        	fecha,
+        	forma_pago,
+        	observacion,
+        	created_at
+    		`)
+    	.eq("user_id", session.user.id)
+    	.order("fecha", { ascending: false })
+    	.order("created_at", { ascending: false });
+
+	if (gastosQuery.error) {
+    		console.error("Error cargando gastos:", gastosQuery.error);
+    		gastos = [];
+	} else {
+    		gastos = gastosQuery.data || [];
+		}
+    	}
     renderAll();
 }
 initMonth();
