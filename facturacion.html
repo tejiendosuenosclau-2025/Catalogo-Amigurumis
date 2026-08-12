@@ -953,6 +953,82 @@ option {
     position: relative;
 }
 
+/* =========================================
+   MODAL DE GASTOS
+   ========================================= */
+
+.modal-gastos {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.modal-gastos.activo {
+    display: flex;
+}
+
+.modal-gastos-contenido {
+    position: relative;
+
+    width: min(1100px, 95vw);
+    height: min(800px, 92vh);
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+#gastosFrame {
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    display: block;
+}
+
+.cerrar-gastos {
+    position: absolute;
+
+    top: 10px;
+    right: 12px;
+
+    z-index: 20;
+
+    width: 38px;
+    height: 38px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #555555;
+
+    font-size: 28px;
+    line-height: 38px;
+
+    cursor: pointer;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+.cerrar-gastos:hover {
+    background: #fff0f6;
+    color: #f43f7a;
+}
+
 </style>
 </head>
 <body>
@@ -977,7 +1053,9 @@ option {
 <aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
 <div class="brand"><img src="img/logo.png" alt="Tejiendo Sueños Clau"></div>
 <nav>
-<a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</a><a href="#historial"><img src="img/historial.png" alt="PDF" class="grilla-icon"> Historial</a><a href="estadisticas.html" target="_blank" rel="noopener noreferrer"><img src="img/estadistica.png" alt="PDF" class="grilla-icon"> Estadísticas</a>
+<a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</a><a href="#historial"><img src="img/historial.png" alt="PDF" class="grilla-icon"> Historial</a><a href="estadisticas.html" target="_blank" rel="noopener noreferrer"><img src="img/estadistica.png" alt="PDF" class="grilla-icon"> Estadísticas</a><a href="#" id="abrirGastos"><img src="img/gastos.png" alt="Gastos" class="grilla-icon">
+    Gastos
+</a>
 </nav>
 </aside>
 <main>
@@ -5386,6 +5464,62 @@ document.addEventListener("click", function (e) {
     row();
  if(db){const {data:{session}}=await db.auth.getSession();if(session){currentUser=session.user;hideDBLogin();await cargarHistorialDB();await cargarClientesDB()}else showDBLogin();
  db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser)hideDBLogin();else showDBLogin()})}else showDBLogin("⚠️ Configura correctamente Supabase.")})();
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const abrirGastos = document.getElementById("abrirGastos");
+    const modalGastos = document.getElementById("modalGastos");
+    const cerrarGastos = document.getElementById("cerrarGastos");
+
+    if (!abrirGastos || !modalGastos || !cerrarGastos) {
+        console.warn("No se encontraron los elementos del modal de Gastos.");
+        return;
+    }
+
+    // Abrir Gastos
+    abrirGastos.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        modalGastos.classList.add("activo");
+
+        document.body.style.overflow = "hidden";
+    });
+
+    // Cerrar Gastos con X
+    cerrarGastos.addEventListener("click", function () {
+
+        modalGastos.classList.remove("activo");
+
+        document.body.style.overflow = "";
+    });
+
+    // Cerrar haciendo clic fuera de la ventana
+    modalGastos.addEventListener("click", function (e) {
+
+        if (e.target === modalGastos) {
+
+            modalGastos.classList.remove("activo");
+
+            document.body.style.overflow = "";
+        }
+    });
+
+    // Cerrar con tecla ESC
+    document.addEventListener("keydown", function (e) {
+
+        if (
+            e.key === "Escape" &&
+            modalGastos.classList.contains("activo")
+        ) {
+
+            modalGastos.classList.remove("activo");
+
+            document.body.style.overflow = "";
+        }
+    });
+
+});
 </script>
 
 <!-- ==========================================
@@ -5495,7 +5629,28 @@ document.addEventListener("click", function (e) {
         </div>
 
     </div>
-
 </div>
+ <!-- MODAL DE GASTOS -->
+    <div id="modalGastos" class="modal-gastos">
+
+        <div class="modal-gastos-contenido">
+
+            <button
+                type="button"
+                id="cerrarGastos"
+                class="cerrar-gastos"
+            >
+                ×
+            </button>
+
+            <iframe
+                src="gastos.html"
+                id="gastosFrame"
+                title="Gastos"
+            ></iframe>
+
+        </div>
+
+    </div>
 </body>
 </html>
