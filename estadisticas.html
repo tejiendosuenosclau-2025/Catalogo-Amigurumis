@@ -1,1359 +1,990 @@
 <!DOCTYPE html>
 <html lang="es">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <title>
-   Estad&iacute;sticas | Tejiendo Sue&ntilde;os Clau
-  </title>
-  <style>
-   :root{--p:#f43f7a;--g:#16a765;--o:#f07818;--v:#7650c8;--b:#3d91e8;--ink:#202020;--line:#eadde3;--soft:#fff1f6}*{box-sizing:border-box}body{margin:0;font-family:"Century Gothic",Arial,sans-serif;color:var(--ink);background:#fff}.main{width:100%;padding:28px 26px 12px;min-width:0}.top{display:flex;align-items:center;gap:24px}.title{min-width:245px}.title h1{margin:0;font-size:25px}.sub{color:#657080;font-size:12px;margin-top:7px}.sel,.date{border:1px solid #ead8df;border-radius:9px;background:#fff;padding:11px 16px;font-weight:700}.date{margin-left:auto;font-size:11px;font-weight:400}.profile{width:58px;height:58px;border:2px solid #f6dce5;border-radius:50%;background:#fff;font-size:29px;box-shadow:0 5px 18px #f4a8c533}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:24px}.card,.panel{border:1px solid #eee0e5;border-radius:10px;background:#fff;box-shadow:0 8px 25px #2a1c2312}.card{height:216px;padding:15px 10px 8px;text-align:center;position:relative;overflow:hidden}.icon{width:44px;height:44px;margin:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}.label{font-size:10px;font-weight:700;line-height:1.35;margin-top:14px;min-height:30px}.value{font-size:20px;font-weight:800;margin:10px 0 8px}.up{font-size:10px;color:#159b55}.down{font-size:10px;color:#ef4444}.spark{position:absolute;bottom:0;left:0;width:100%;height:42px}.pink .icon{background:#ffe9f1}.orange .icon{background:#ffead8}.green .icon{background:#dff7e9}.purple .icon{background:#eee7ff}.blue .icon{background:#e2f1ff}.yellow .icon{background:#fff0ce}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.panel{padding:15px}.panel h2{font-size:13px;margin:0 0 12px}.chart{height:220px}.chart svg{width:100%;height:100%}.three{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:12px}.piewrap{display:flex;align-items:center;gap:18px}.donut,.pie{width:145px;height:145px;border-radius:50%;position:relative;flex:none}.donut{background:conic-gradient(#18ad73 0 92.1%,#f07818 92.1% 92.8%,#7650c8 92.8% 100%)}.pie{background:conic-gradient(#f43f7a 0 37.5%,#f07818 37.5% 50%,#f5ad0a 50% 62.5%,#18ad73 62.5% 87.5%,#7650c8 87.5% 100%)}.donut:after,.pie:after{content:"";position:absolute;inset:33px;background:#fff;border-radius:50%}.donut:before{content:"🧶";position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px}.pie:before{content:"8\A Pedidos";white-space:pre;text-align:center;position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:800}.legend{font-size:10px;line-height:1.7}.legend b{font-size:13px}.cobros{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cobro{padding:10px 4px;text-align:center;border-radius:9px;border:1px solid #dcebd8;background:#f5fff5;font-size:10px}.cobro:nth-child(2){background:#fffaf0;border-color:#f4dfbd}.cobro:nth-child(3){background:#fff4f4;border-color:#f3cccc}.cobro strong{display:block;font-size:14px;margin-top:6px}.totals{display:grid;gap:7px;margin-top:10px;font-size:10px}.totals div{display:flex;justify-content:space-between}.lower{display:grid;grid-template-columns:1.05fr 1fr;gap:10px;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#f34a82;color:#fff;text-align:left;padding:7px}td{padding:6px;border-bottom:1px solid #eee}tr.hl td{color:var(--p);font-weight:700;background:#fff5f8}.year{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--soft);padding:10px;border-radius:7px;margin-top:8px;font-size:11px;font-weight:800}.products{display:grid;gap:10px}.prod{display:grid;grid-template-columns:20px 1fr 110px 25px;gap:7px;align-items:center;font-size:10px}.bar{height:5px;background:#eee;border-radius:8px}.bar i{display:block;height:100%;background:var(--p);border-radius:8px}.payments{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.paycircle{width:55px;height:55px;border-radius:50%;border:7px solid #f4e5ea;border-right-color:var(--p);margin:auto;display:flex;align-items:center;justify-content:center}.pay b{display:block;margin-top:5px}.pay span{font-size:9px}.last{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:12px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:10px}.total{display:flex;justify-content:space-between;background:var(--soft);padding:10px;margin-top:9px;font-size:11px;font-weight:800}.orders{display:grid;gap:7px}.order{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:6px;font-size:10px}.badge{padding:4px 7px;border-radius:8px;background:#fff0d9;color:#d67800}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compare div{background:#effaf2;padding:10px;border-radius:8px;font-size:9px}.compare p{margin:6px 0}.footer{text-align:center;margin-top:12px;color:#666;font-size:12px}@media(max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}.three,.last{grid-template-columns:1fr 1fr}}@media(max-width:700px){.main{padding:15px}.top{flex-wrap:wrap}.date{margin-left:0;flex:1}.cards,.grid2,.three,.lower,.last{grid-template-columns:1fr 1fr}.cards .card{height:190px}.piewrap{justify-content:center;flex-wrap:wrap}}@media(max-width:500px){.cards,.grid2,.three,.lower,.last{grid-template-columns:1fr}.payments{grid-template-columns:1fr 1fr}}
-  </style>
- 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Estadísticas | Tejiendo Sueños Clau</title>
+<style>
+:root {
+    --p:#f43f7a;
+    --g:#16a765;
+    --o:#f07818;
+    --v:#7650c8;
+    --b:#3d91e8;
+    --ink:#202020;
+    --line:#eadde3;
+    --soft:#fff1f6
+}
+* {
+    box-sizing:border-box
+}
+body {
+    margin:0;
+    font-family:"Century Gothic",Arial,sans-serif;
+    color:var(--ink);
+    background:#fff
+}
+.app {
+    display:block;
+    min-height:100vh;
+    border:1px solid #f0dce5
+}
 
- </head>
- <body style="margin:0;">
-  <main class="main" style="width:100%;margin:0;">
-   <header class="top">
-    <div class="title">
-     <h1>
-      📊 Estad&iacute;sticas
-     </h1>
-     <div class="sub">
-      An&aacute;lisis financiero de Tejiendo Sue&ntilde;os Clau
-     </div>
-    </div>
-    <select class="sel">
-     <option>
-      📅 Junio 2026
-     </option>
-    </select>
-   </header>
-   <section class="cards">
-    <script>
-     const C=[['pink','🛍️','TOTAL VENTAS','DEL MES','$378.000','↑ 32% vs mayo','#f43f7a'],['orange','💲','TOTAL GASTOS','DEL MES','$3.000','↓ 12% vs mayo','#f07818'],['green','💵','GANANCIA DEL MES','(CIERRE)','$375.000','↑ 45% vs mayo','#16a765'],['purple','📋','TOTAL PEDIDOS','DEL MES','8','↑ 14% vs mayo','#7650c8'],['blue','💳','TOTAL ABONOS','RECIBIDOS','$30.000','↑ 8% vs mayo','#3d91e8'],['yellow','⚠️','SALDO','PENDIENTE','$348.000','↓ 5% vs mayo','#f59e0b']];document.write(C.map(x=>`<article class="card ${x[0]}"><div class="icon">${x[1]}</div><div class="label">${x[2]}<br>${x[3]}</div><div class="value" ${x[0]=='green'?'style="color:#087b2d"':''}>${x[4]}</div><div class="${x[5][0]=='↓'?'down':'up'}">${x[5]}</div><svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none"><polyline points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="${x[6]}" stroke-width="2"/></svg></article>`).join(''))
-    </script>
-   </section>
-   <section class="grid2">
+.main {
+    flex:1;
+    padding:28px 26px 12px;
+    min-width:0
+}
+.top {
+    display:flex;
+    align-items:center;
+    gap:24px
+}
+.title {
+    min-width:245px
+}
+.title h1 {
+    margin:0;
+    font-size:25px
+}
+.sub {
+    color:#657080;
+    font-size:12px;
+    margin-top:7px
+}
+.sel,.date {
+    border:1px solid #ead8df;
+    border-radius:9px;
+    background:#fff;
+    padding:11px 16px;
+    font-weight:700
+}
+.date {
+    margin-left:auto;
+    font-size:11px;
+    font-weight:400
+}
+.profile {
+    width:58px;
+    height:58px;
+    border:2px solid #f6dce5;
+    border-radius:50%;
+    background:#fff;
+    font-size:29px;
+    box-shadow:0 5px 18px #f4a8c533
+}
+.cards {
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
+    margin-top:24px
+}
+.card,.panel {
+    border:1px solid #eee0e5;
+    border-radius:10px;
+    background:#fff;
+    box-shadow:0 8px 25px #2a1c2312
+}
+.card {
+    height:216px;
+    padding:15px 10px 8px;
+    text-align:center;
+    position:relative;
+    overflow:hidden
+}
+.icon {
+    width:44px;
+    height:44px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px
+}
+.label {
+    font-size:10px;
+    font-weight:700;
+    line-height:1.35;
+    margin-top:14px;
+    min-height:30px
+}
+.value {
+    font-size:20px;
+    font-weight:800;
+    margin:10px 0 8px
+}
+.up {
+    font-size:10px;
+    color:#159b55
+}
+.down {
+    font-size:10px;
+    color:#ef4444
+}
+.spark {
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:42px
+}
+.pink .icon {
+    background:#ffe9f1
+}
+.orange .icon {
+    background:#ffead8
+}
+.green .icon {
+    background:#dff7e9
+}
+.purple .icon {
+    background:#eee7ff
+}
+.blue .icon {
+    background:#e2f1ff
+}
+.yellow .icon {
+    background:#fff0ce
+}
+.grid2 {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:16px
+}
+.panel {
+    padding:15px
+}
+.panel h2 {
+    font-size:13px;
+    margin:0 0 12px
+}
+.chart {
+    height:220px
+}
+.chart svg {
+    width:100%;
+    height:100%
+}
+.three {
+    display:grid;
+    grid-template-columns:1.05fr 1fr 1fr;
+    gap:10px;
+    margin-top:12px
+}
+.piewrap {
+    display:flex;
+    align-items:center;
+    gap:18px
+}
+.donut,.pie {
+    width:145px;
+    height:145px;
+    border-radius:50%;
+    position:relative;
+    flex:none
+}
+.donut {
+    background:conic-gradient(#18ad73 0 92.1%,#f07818 92.1% 92.8%,#7650c8 92.8% 100%)
+}
+.pie {
+    background:conic-gradient(#f43f7a 0 37.5%,#f07818 37.5% 50%,#f5ad0a 50% 62.5%,#18ad73 62.5% 87.5%,#7650c8 87.5% 100%)
+}
+.donut:after,.pie:after {
+    content:"";
+    position:absolute;
+    inset:33px;
+    background:#fff;
+    border-radius:50%
+}
+.donut:before {
+    content:"🧶";
+    position:absolute;
+    z-index:2;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    font-size:28px
+}
+.pie:before {
+    content:"8\A Pedidos";
+    white-space:pre;
+    text-align:center;
+    position:absolute;
+    z-index:2;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    font-size:13px;
+    font-weight:800
+}
+.legend {
+    font-size:10px;
+    line-height:1.7
+}
+.legend b {
+    font-size:13px
+}
+.cobros {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px
+}
+.cobro {
+    padding:10px 4px;
+    text-align:center;
+    border-radius:9px;
+    border:1px solid #dcebd8;
+    background:#f5fff5;
+    font-size:10px
+}
+.cobro:nth-child(2) {
+    background:#fffaf0;
+    border-color:#f4dfbd
+}
+.cobro:nth-child(3) {
+    background:#fff4f4;
+    border-color:#f3cccc
+}
+.cobro strong {
+    display:block;
+    font-size:14px;
+    margin-top:6px
+}
+.totals {
+    display:grid;
+    gap:7px;
+    margin-top:10px;
+    font-size:10px
+}
+.totals div {
+    display:flex;
+    justify-content:space-between
+}
+.lower {
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:10px;
+    margin-top:12px
+}
+table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:10px
+}
+th {
+    background:#f34a82;
+    color:#fff;
+    text-align:left;
+    padding:7px
+}
+td {
+    padding:6px;
+    border-bottom:1px solid #eee
+}
+tr.hl td {
+    color:var(--p);
+    font-weight:700;
+    background:#fff5f8
+}
+.year {
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    background:var(--soft);
+    padding:10px;
+    border-radius:7px;
+    margin-top:8px;
+    font-size:11px;
+    font-weight:800
+}
+.products {
+    display:grid;
+    gap:10px
+}
+.prod {
+    display:grid;
+    grid-template-columns:20px 1fr 110px 25px;
+    gap:7px;
+    align-items:center;
+    font-size:10px
+}
+.bar {
+    height:5px;
+    background:#eee;
+    border-radius:8px
+}
+.bar i {
+    display:block;
+    height:100%;
+    background:var(--p);
+    border-radius:8px
+}
+.payments {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    text-align:center
+}
+.paycircle {
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    border:7px solid #f4e5ea;
+    border-right-color:var(--p);
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+.pay b {
+    display:block;
+    margin-top:5px
+}
+.pay span {
+    font-size:9px
+}
+.last {
+    display:grid;
+    grid-template-columns:1.05fr 1fr 1fr;
+    gap:10px;
+    margin-top:12px
+}
+.row {
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px solid #eee;
+    font-size:10px
+}
+.total {
+    display:flex;
+    justify-content:space-between;
+    background:var(--soft);
+    padding:10px;
+    margin-top:9px;
+    font-size:11px;
+    font-weight:800
+}
+.orders {
+    display:grid;
+    gap:7px
+}
+.order {
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid #eee;
+    padding-bottom:6px;
+    font-size:10px
+}
+.badge {
+    padding:4px 7px;
+    border-radius:8px;
+    background:#fff0d9;
+    color:#d67800
+}
+.compare {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px
+}
+.compare div {
+    background:#effaf2;
+    padding:10px;
+    border-radius:8px;
+    font-size:9px
+}
+.compare p {
+    margin:6px 0
+}
+.footer {
+    text-align:center;
+    margin-top:12px;
+    color:#666;
+    font-size:12px
+}
+@media(max-width:1050px) {
+    
+@media(max-width:700px) {
+    
+@media(max-width:500px) {
+    .cards,.grid2,.three,.lower,.last {
+        grid-template-columns:1fr
+    }
+    .payments {
+        grid-template-columns:1fr 1fr
+    }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+
+</script>
+<script src="js/supabase-config.js">
+
+</script>
+</head>
+<body>
+    <div class="app">
+<main class="main">
+            <header class="top">
+                <div class="title">
+                    <h1>📊 Estadísticas</h1>
+                    <div class="sub">Análisis financiero de Tejiendo Sueños Clau</div>
+                </div>
+                <select class="sel" id="mesEstadisticas" aria-label="Seleccionar mes">
+                </select>
+             </header>
+        <section class="cards">
+            <article class="card pink">
+                <div class="icon">🛍️</div>
+                <div class="label">TOTAL VENTAS<br>DEL MES</div>
+                <div class="value" id="statVentas">$0</div>
+                <div class="up" id="statVentasCambio">— vs mes anterior</div>
+                <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
+                <polyline id="sparkVentas" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f43f7a" stroke-width="2"/>
+            </svg>
+        </article>
+        <article class="card orange">
+            <div class="icon">💲</div>
+            <div class="label">TOTAL GASTOS<br>DEL MES</div>
+            <div class="value" id="statGastos">$0</div>
+            <div class="down" id="statGastosCambio">— vs mes anterior</div>
+            <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
+            <polyline id="sparkGastos" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f07818" stroke-width="2"/>
+        </svg>
+    </article>
+    <article class="card green">
+        <div class="icon">💵</div>
+        <div class="label">GANANCIA DEL MES<br>(CIERRE)</div>
+        <div class="value" id="statGanancia" style="color:#087b2d">$0</div>
+        <div class="up" id="statGananciaCambio">— vs mes anterior</div>
+        <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
+        <polyline id="sparkGanancia" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#16a765" stroke-width="2"/>
+    </svg>
+</article>
+<article class="card purple">
+    <div class="icon">📋</div>
+    <div class="label">TOTAL PEDIDOS<br>DEL MES</div>
+    <div class="value" id="statPedidos">0</div>
+    <div class="up" id="statPedidosCambio">— vs mes anterior</div>
+    <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
+    <polyline id="sparkPedidos" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#7650c8" stroke-width="2"/>
+</svg>
+</article>
+<article class="card blue">
+    <div class="icon">💳</div>
+    <div class="label">TOTAL ABONOS<br>RECIBIDOS</div>
+    <div class="value" id="statAbonos">$0</div>
+    <div class="up" id="statAbonosCambio">— vs mes anterior</div>
+    <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
+    <polyline id="sparkAbonos" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#3d91e8" stroke-width="2"/>
+</svg>
+</article>
+<article class="card yellow">
+    <div class="icon">⚠️</div>
+    <div class="label">SALDO<br>PENDIENTE</div>
+    <div class="value" id="statSaldo">$0</div>
+    <div class="down" id="statSaldoCambio">— vs mes anterior</div>
+    <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
+    <polyline id="sparkSaldo" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f59e0b" stroke-width="2"/>
+</svg>
+</article>
+</section>
+<section class="grid2">
     <div class="panel">
-     <h2>
-      INGRESOS VS GASTOS
-     </h2>
-     <div class="chart">
-      <svg viewbox="0 0 650 230">
-       <g stroke="#e8e8e8" stroke-dasharray="3 3">
-        <line x1="45" x2="635" y1="20" y2="20">
-        </line>
-        <line x1="45" x2="635" y1="70" y2="70">
-        </line>
-        <line x1="45" x2="635" y1="120" y2="120">
-        </line>
-        <line x1="45" x2="635" y1="170" y2="170">
-        </line>
-        <line x1="45" x2="635" y1="215" y2="215">
-        </line>
-       </g>
-       <g fill="#18ad73">
-        <rect height="25" width="18" x="60" y="190">
-        </rect>
-        <rect height="31" width="18" x="115" y="184">
-        </rect>
-        <rect height="45" width="18" x="170" y="170">
-        </rect>
-        <rect height="60" width="18" x="225" y="155">
-        </rect>
-        <rect height="40" width="18" x="280" y="175">
-        </rect>
-        <rect height="190" width="18" x="335" y="25">
-        </rect>
-        <rect height="78" width="18" x="390" y="137">
-        </rect>
-        <rect height="25" width="18" x="445" y="190">
-        </rect>
-        <rect height="10" width="18" x="500" y="205">
-        </rect>
-        <rect height="35" width="18" x="555" y="180">
-        </rect>
-        <rect height="90" width="18" x="610" y="125">
-        </rect>
-       </g>
-       <g fill="#f07818">
-        <rect height="2" width="18" x="60" y="213">
-        </rect>
-        <rect height="4" width="18" x="335" y="211">
-        </rect>
-       </g>
-       <polyline fill="none" points="69,195 124,190 179,110 234,116 289,75 344,35 399,137 454,182 509,201 564,181 619,140" stroke="#7650c8" stroke-width="3">
-       </polyline>
-       <g fill="#7650c8">
-        <circle cx="69" cy="195" r="4">
-        </circle>
-        <circle cx="124" cy="190" r="4">
-        </circle>
-        <circle cx="179" cy="110" r="4">
-        </circle>
-        <circle cx="234" cy="116" r="4">
-        </circle>
-        <circle cx="289" cy="75" r="4">
-        </circle>
-        <circle cx="344" cy="35" r="5">
-        </circle>
-        <circle cx="399" cy="137" r="4">
-        </circle>
-       </g>
-       <g fill="#444" font-size="10">
-        <text x="58" y="229">
-         Ene
-        </text>
-        <text x="113" y="229">
-         Feb
-        </text>
-        <text x="168" y="229">
-         Mar
-        </text>
-        <text x="223" y="229">
-         Abr
-        </text>
-        <text x="278" y="229">
-         May
-        </text>
-        <text x="333" y="229">
-         Jun
-        </text>
-        <text x="388" y="229">
-         Jul
-        </text>
-        <text x="443" y="229">
-         Ago
-        </text>
-        <text x="498" y="229">
-         Sep
-        </text>
-        <text x="553" y="229">
-         Oct
-        </text>
-        <text x="608" y="229">
-         Nov
-        </text>
-       </g>
-      </svg>
-     </div>
-    </div>
+        <h2>INGRESOS VS GASTOS</h2>
+        <div class="chart">
+            <svg id="chartIngresosGastos" viewBox="0 0 650 230">
+            <g stroke="#e8e8e8" stroke-dasharray="3 3">
+            <line x1="45" y1="20" x2="635" y2="20"/>
+            <line x1="45" y1="70" x2="635" y2="70"/>
+            <line x1="45" y1="120" x2="635" y2="120"/>
+            <line x1="45" y1="170" x2="635" y2="170"/>
+            <line x1="45" y1="215" x2="635" y2="215"/>
+        </g>
+        <g fill="#18ad73">
+        <rect x="60" y="190" width="18" height="25"/>
+        <rect x="115" y="184" width="18" height="31"/>
+        <rect x="170" y="170" width="18" height="45"/>
+        <rect x="225" y="155" width="18" height="60"/>
+        <rect x="280" y="175" width="18" height="40"/>
+        <rect x="335" y="25" width="18" height="190"/>
+        <rect x="390" y="137" width="18" height="78"/>
+        <rect x="445" y="190" width="18" height="25"/>
+        <rect x="500" y="205" width="18" height="10"/>
+        <rect x="555" y="180" width="18" height="35"/>
+        <rect x="610" y="125" width="18" height="90"/>
+    </g>
+    <g fill="#f07818">
+    <rect x="60" y="213" width="18" height="2"/>
+    <rect x="335" y="211" width="18" height="4"/>
+</g>
+<polyline points="69,195 124,190 179,110 234,116 289,75 344,35 399,137 454,182 509,201 564,181 619,140" fill="none" stroke="#7650c8" stroke-width="3"/>
+<g fill="#7650c8">
+<circle cx="69" cy="195" r="4"/>
+<circle cx="124" cy="190" r="4"/>
+<circle cx="179" cy="110" r="4"/>
+<circle cx="234" cy="116" r="4"/>
+<circle cx="289" cy="75" r="4"/>
+<circle cx="344" cy="35" r="5"/>
+<circle cx="399" cy="137" r="4"/>
+</g>
+<g font-size="10" fill="#444">
+<text x="58" y="229">Ene</text>
+<text x="113" y="229">Feb</text>
+<text x="168" y="229">Mar</text>
+<text x="223" y="229">Abr</text>
+<text x="278" y="229">May</text>
+<text x="333" y="229">Jun</text>
+<text x="388" y="229">Jul</text>
+<text x="443" y="229">Ago</text>
+<text x="498" y="229">Sep</text>
+<text x="553" y="229">Oct</text>
+<text x="608" y="229">Nov</text>
+</g>
+</svg>
+</div>
+</div>
+<div class="panel">
+    <h2>VENTAS POR MES — 2026</h2>
+    <div class="chart">
+        <svg id="chartVentasMes" viewBox="0 0 650 230">
+        <g stroke="#e8e8e8" stroke-dasharray="3 3">
+        <line x1="40" y1="20" x2="635" y2="20"/>
+        <line x1="40" y1="80" x2="635" y2="80"/>
+        <line x1="40" y1="140" x2="635" y2="140"/>
+        <line x1="40" y1="200" x2="635" y2="200"/>
+    </g>
+    <g fill="#f43f7a">
+    <rect x="55" y="90" width="20" height="110"/>
+    <rect x="105" y="180" width="20" height="20"/>
+    <rect x="155" y="95" width="20" height="105"/>
+    <rect x="205" y="120" width="20" height="80"/>
+    <rect x="255" y="145" width="20" height="55"/>
+    <rect x="305" y="25" width="20" height="175"/>
+    <rect x="355" y="100" width="20" height="100"/>
+</g>
+<g font-size="10" fill="#444">
+<text x="52" y="218">Ene</text>
+<text x="102" y="218">Feb</text>
+<text x="152" y="218">Mar</text>
+<text x="202" y="218">Abr</text>
+<text x="252" y="218">May</text>
+<text x="302" y="218">Jun</text>
+<text x="352" y="218">Jul</text>
+<text x="402" y="218">Ago</text>
+<text x="452" y="218">Sep</text>
+<text x="502" y="218">Oct</text>
+<text x="552" y="218">Nov</text>
+<text x="602" y="218">Dic</text>
+</g>
+<rect x="286" y="3" width="58" height="27" rx="6" fill="#f43f7a"/>
+<text x="294" y="21" fill="#fff" font-size="11">$378.000</text>
+</svg>
+</div>
+</div>
+</section>
+<section class="three">
     <div class="panel">
-     <h2>
-      VENTAS POR MES &mdash; 2026
-     </h2>
-     <div class="chart">
-      <svg viewbox="0 0 650 230">
-       <g stroke="#e8e8e8" stroke-dasharray="3 3">
-        <line x1="40" x2="635" y1="20" y2="20">
-        </line>
-        <line x1="40" x2="635" y1="80" y2="80">
-        </line>
-        <line x1="40" x2="635" y1="140" y2="140">
-        </line>
-        <line x1="40" x2="635" y1="200" y2="200">
-        </line>
-       </g>
-       <g fill="#f43f7a">
-        <rect height="110" width="20" x="55" y="90">
-        </rect>
-        <rect height="20" width="20" x="105" y="180">
-        </rect>
-        <rect height="105" width="20" x="155" y="95">
-        </rect>
-        <rect height="80" width="20" x="205" y="120">
-        </rect>
-        <rect height="55" width="20" x="255" y="145">
-        </rect>
-        <rect height="175" width="20" x="305" y="25">
-        </rect>
-        <rect height="100" width="20" x="355" y="100">
-        </rect>
-       </g>
-       <g fill="#444" font-size="10">
-        <text x="52" y="218">
-         Ene
-        </text>
-        <text x="102" y="218">
-         Feb
-        </text>
-        <text x="152" y="218">
-         Mar
-        </text>
-        <text x="202" y="218">
-         Abr
-        </text>
-        <text x="252" y="218">
-         May
-        </text>
-        <text x="302" y="218">
-         Jun
-        </text>
-        <text x="352" y="218">
-         Jul
-        </text>
-        <text x="402" y="218">
-         Ago
-        </text>
-        <text x="452" y="218">
-         Sep
-        </text>
-        <text x="502" y="218">
-         Oct
-        </text>
-        <text x="552" y="218">
-         Nov
-        </text>
-        <text x="602" y="218">
-         Dic
-        </text>
-       </g>
-       <rect fill="#f43f7a" height="27" rx="6" width="58" x="286" y="3">
-       </rect>
-       <text fill="#fff" font-size="11" x="294" y="21">
-        $378.000
-       </text>
-      </svg>
-     </div>
+        <h2>
+        <span id="tituloDistribucion">DISTRIBUCIÓN FINANCIERA — JUNIO 2026</span>
+    </h2>
+    <div class="piewrap">
+        <div class="donut" id="donutFinanciero">
+        </div>
+        <div class="legend" id="legendFinanciero">🟢 Ingresos<br>
+            <b>$378.000</b>
+            <br>
+            <span style="color:#16a765">92.1%</span>
+            <br>
+            <br>🟠 Gastos<br>
+            <b>$3.000</b>
+            <br>
+            <span style="color:#f07818">0.7%</span>
+            <br>
+            <br>🟣 Ganancia<br>
+            <b>$375.000</b>
+        </div>
     </div>
-   </section>
-   <section class="three">
-    <div class="panel">
-     <h2>
-      DISTRIBUCI&Oacute;N FINANCIERA &mdash; JUNIO 2026
-     </h2>
-     <div class="piewrap">
-      <div class="donut">
-      </div>
-      <div class="legend">
-       🟢 Ingresos
-       <br/>
-       <b>
-        $378.000
-       </b>
-       <br/>
-       <span style="color:#16a765">
-        92.1%
-       </span>
-       <br/>
-       <br/>
-       🟠 Gastos
-       <br/>
-       <b>
-        $3.000
-       </b>
-       <br/>
-       <span style="color:#f07818">
-        0.7%
-       </span>
-       <br/>
-       <br/>
-       🟣 Ganancia
-       <br/>
-       <b>
-        $375.000
-       </b>
-      </div>
-     </div>
+</div>
+<div class="panel">
+    <h2>PEDIDOS DEL MES</h2>
+    <div class="piewrap">
+        <div class="pie" id="piePedidos">
+        </div>
+        <div class="legend">🩷 Personalizados &nbsp;<b>3</b>
+        <br>🟠 Perritos y abuelos &nbsp;<b>1</b>
+        <br>🟡 Girasol &nbsp;<b>1</b>
+        <br>🟢 Perrito &nbsp;<b>2</b>
+        <br>🟣 Pareja fantasmas &nbsp;<b>1</b>
     </div>
+</div>
+</div>
+<div class="panel">
+    <h2>
+    <span id="tituloCobros">ESTADO DE COBROS — JUNIO 2026</span>
+</h2>
+<div class="cobros" id="cobrosEstado">
+    <div class="cobro">✅<b>Pagado</b>
+    <strong>$30.000</strong>8.0%</div>
+    <div class="cobro">◷<b>Abonado</b>
+    <strong>$348.000</strong>92.0%</div>
+    <div class="cobro">🛒<b>Pendiente</b>
+    <strong>$0</strong>0.0%</div>
+</div>
+<div class="totals">
+    <div>🛒 Total vendido <b id="totalVendidoCobros">$0</b>
+</div>
+<div>💳 Total recibido <b id="totalRecibidoCobros">$0</b>
+</div>
+<div>⚠️ Pendiente por cobrar <b id="totalPendienteCobros">$0</b>
+</div>
+</div>
+</div>
+</section>
+<section class="lower">
     <div class="panel">
-     <h2>
-      PEDIDOS DEL MES
-     </h2>
-     <div class="piewrap">
-      <div class="pie">
-      </div>
-      <div class="legend">
-       🩷 Personalizados &nbsp;
-       <b>
-        3
-       </b>
-       <br/>
-       🟠 Perritos y abuelos &nbsp;
-       <b>
-        1
-       </b>
-       <br/>
-       🟡 Girasol &nbsp;
-       <b>
-        1
-       </b>
-       <br/>
-       🟢 Perrito &nbsp;
-       <b>
-        2
-       </b>
-       <br/>
-       🟣 Pareja fantasmas &nbsp;
-       <b>
-        1
-       </b>
-      </div>
-     </div>
-    </div>
-    <div class="panel">
-     <h2>
-      ESTADO DE COBROS &mdash; JUNIO 2026
-     </h2>
-     <div class="cobros">
-      <div class="cobro">
-       ✅
-       <b>
-        Pagado
-       </b>
-       <strong>
-        $30.000
-       </strong>
-       8.0%
-      </div>
-      <div class="cobro">
-       ◷
-       <b>
-        Abonado
-       </b>
-       <strong>
-        $348.000
-       </strong>
-       92.0%
-      </div>
-      <div class="cobro">
-       🛒
-       <b>
-        Pendiente
-       </b>
-       <strong>
-        $0
-       </strong>
-       0.0%
-      </div>
-     </div>
-     <div class="totals">
-      <div>
-       🛒 Total vendido
-       <b>
-        $378.000
-       </b>
-      </div>
-      <div>
-       💳 Total recibido
-       <b>
-        $30.000
-       </b>
-      </div>
-      <div>
-       ⚠️ Pendiente por cobrar
-       <b>
-        $348.000
-       </b>
-      </div>
-     </div>
-    </div>
-   </section>
-   <section class="lower">
-    <div class="panel">
-     <h2>
-      RESUMEN MENSUAL &mdash; 2026
-     </h2>
-     <table>
-      <thead>
-       <tr>
-        <th>
-         Mes
-        </th>
-        <th>
-         Ventas
-        </th>
-        <th>
-         Gastos
-        </th>
-        <th>
-         Ganancia
-        </th>
-       </tr>
-      </thead>
-      <tbody>
-       <tr>
-        <td>
-         Enero
-        </td>
-        <td>
-         $173.300
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $173.300
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Febrero
-        </td>
-        <td>
-         $1.000
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $1.000
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Marzo
-        </td>
-        <td>
-         $137.000
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $137.000
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Abril
-        </td>
-        <td>
-         $114.000
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $114.000
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Mayo
-        </td>
-        <td>
-         $34.000
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $34.000
-        </td>
-       </tr>
-       <tr class="hl">
-        <td>
-         Junio
-        </td>
-        <td>
-         $378.000
-        </td>
-        <td>
-         $3.000
-        </td>
-        <td>
-         $375.000
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Julio
-        </td>
-        <td>
-         $173.000
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $173.000
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Agosto
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Septiembre
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Octubre
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Noviembre
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-       </tr>
-       <tr>
-        <td>
-         Diciembre
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-        <td>
-         $0
-        </td>
-       </tr>
-      </tbody>
-     </table>
-     <div class="year">
-      <span>
-       TOTAL A&Ntilde;O 🏆
-      </span>
-      <span>
-       $1.007.300
-      </span>
-      <span>
-       $3.000
-      </span>
-      <span>
-       $1.004.300
-      </span>
-     </div>
+        <h2>RESUMEN MENSUAL — 2026</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Ventas</th>
+                    <th>Gastos</th>
+                    <th>Ganancia</th>
+                </tr>
+            </thead>
+            <tbody id="resumenMensualBody">
+            </tbody>
+        </table>
+        <div class="year">
+            <span>TOTAL AÑO 🏆</span>
+            <span id="totalAnualVentas">$0</span>
+            <span id="totalAnualGastos">$0</span>
+            <span id="totalAnualGanancia">$0</span>
+        </div>
     </div>
     <div>
-     <div class="panel">
-      <h2>
-       TOP PRODUCTOS &mdash; JUNIO 2026
-      </h2>
-      <div class="products">
-       <div class="prod">
-        <b>
-         1
-        </b>
-        <span>
-         🧸 Perrito personalizado
-        </span>
-        <div class="bar">
-         <i style="width:100%">
-         </i>
+        <div class="panel">
+            <h2>
+            <span id="tituloTopProductos">TOP PRODUCTOS — JUNIO 2026</span>
+        </h2>
+        <div class="products" id="topProductos">
         </div>
-        <b>
-         3
-        </b>
-       </div>
-       <div class="prod">
-        <b>
-         2
-        </b>
-        <span>
-         🐶 Perrito
-        </span>
-        <div class="bar">
-         <i style="width:67%">
-         </i>
-        </div>
-        <b>
-         2
-        </b>
-       </div>
-       <div class="prod">
-        <b>
-         3
-        </b>
-        <span>
-         🐕 Perrito y abuelo
-        </span>
-        <div class="bar">
-         <i style="width:34%">
-         </i>
-        </div>
-        <b>
-         1
-        </b>
-       </div>
-       <div class="prod">
-        <b>
-         4
-        </b>
-        <span>
-         🌻 Girasol
-        </span>
-        <div class="bar">
-         <i style="width:34%">
-         </i>
-        </div>
-        <b>
-         1
-        </b>
-       </div>
-       <div class="prod">
-        <b>
-         5
-        </b>
-        <span>
-         👻 Pareja fantasmas
-        </span>
-        <div class="bar">
-         <i style="width:34%">
-         </i>
-        </div>
-        <b>
-         1
-        </b>
-       </div>
-      </div>
-     </div>
-     <div class="panel" style="margin-top:10px">
-      <h2>
-       M&Eacute;TODOS DE PAGO &mdash; JUNIO 2026
-      </h2>
-      <div class="payments">
-       <div class="pay">
-        <div class="paycircle">
-         💸
-        </div>
-        <b>
-         62%
-        </b>
-        <span>
-         Nequi
-         <br/>
-         $186.000
-        </span>
-       </div>
-       <div class="pay">
-        <div class="paycircle">
-         💵
-        </div>
-        <b>
-         25%
-        </b>
-        <span>
-         Nequi y efectivo
-         <br/>
-         $75.000
-        </span>
-       </div>
-       <div class="pay">
-        <div class="paycircle">
-         💵
-        </div>
-        <b>
-         13%
-        </b>
-        <span>
-         Efectivo
-         <br/>
-         $39.000
-        </span>
-       </div>
-       <div class="pay">
-        <div class="paycircle">
-         💳
-        </div>
-        <b>
-         0%
-        </b>
-        <span>
-         Tarjeta
-         <br/>
-         $0
-        </span>
-       </div>
-      </div>
-     </div>
     </div>
-   </section>
-   <section class="last">
+    <div class="panel" style="margin-top:10px">
+        <h2>
+        <span id="tituloMetodosPago">MÉTODOS DE PAGO — JUNIO 2026</span>
+    </h2>
+    <div class="payments" id="metodosPago">
+    </div>
+</div>
+</div>
+</section>
+<section class="last">
     <div class="panel">
-     <h2>
-      GASTOS DEL MES
-     </h2>
-     <div class="row">
-      <b>
-       Concepto / Material
-      </b>
-      <b>
-       Categor&iacute;a
-      </b>
-      <b>
-       Valor
-      </b>
-     </div>
-     <div class="row">
-      <span>
-       Ojitos
-      </span>
-      <span>
-       Materiales
-      </span>
-      <span>
-       $3.000
-      </span>
-     </div>
-     <div class="total">
-      <span>
-       TOTAL GASTOS
-      </span>
-      <span>
-       $3.000
-      </span>
-     </div>
+        <h2>GASTOS DEL MES</h2>
+        <div class="row">
+            <b>Concepto / Material</b>
+            <b>Categoría</b>
+            <b>Valor</b>
+        </div>
+        <div id="gastosLista">
+        </div>
+        <div class="total">
+            <span>TOTAL GASTOS</span>
+            <span id="gastosTotal">$0</span>
+        </div>
     </div>
     <div class="panel">
-     <h2>
-      &Uacute;LTIMOS PEDIDOS
-     </h2>
-     <div class="orders">
-      <div class="order">
-       #8 Pareja fantasmas $48.000
-       <span class="badge">
-        Abonado
-       </span>
-      </div>
-      <div class="order">
-       #7 Pitbull llavero $45.000
-       <span class="badge">
-        Abonado
-       </span>
-      </div>
-      <div class="order">
-       #6 2 pollitos del nacional $40.000
-       <span class="badge">
-        Abonado
-       </span>
-      </div>
-      <div class="order">
-       #5 Perrito $45.000
-       <span class="badge">
-        Abonado
-       </span>
-      </div>
-      <div class="order">
-       #4 Perrito $45.000
-       <span class="badge" style="background:#ffe8e8;color:#d33">
-        Pendiente
-       </span>
-      </div>
-     </div>
+        <h2>ÚLTIMOS PEDIDOS</h2>
+        <div class="orders" id="ultimosPedidos">
+        </div>
     </div>
     <div class="panel">
-     <h2>
-      COMPARATIVA
-     </h2>
-     <div class="compare">
-      <div>
-       <b>
-        Vs Mayo 2026
-       </b>
-       <p>
-        Ventas &uarr; 32%
-       </p>
-       <p>
-        Gastos &darr; 12%
-       </p>
-       <p>
-        Ganancia &uarr; 45%
-       </p>
-       <p>
-        Pedidos &uarr; 14%
-       </p>
-      </div>
-      <div>
-       <b>
-        Vs Junio 2025
-       </b>
-       <p>
-        Ventas &uarr; 58%
-       </p>
-       <p>
-        Gastos &darr; 8%
-       </p>
-       <p>
-        Ganancia &uarr; 60%
-       </p>
-       <p>
-        Pedidos &uarr; 25%
-       </p>
-      </div>
-     </div>
+        <h2>COMPARATIVA</h2>
+        <div class="compare" id="comparativa">
+        </div>
     </div>
-   </section>
-   <footer class="footer">
-    ♡ Hecho con amor, paciencia y muchos sue&ntilde;os! ♡ 🧶
-   </footer>
-  </main>
- 
+</div>
+</section>
+<footer class="footer">♡ Hecho con amor, paciencia y muchos sueños! ♡ 🧶</footer>
+</main>
+</div>
 <script>
-/* =========================================================
-   ESTADÍSTICAS — DATOS REALES DESDE SUPABASE
-   El diseño visual existente no se modifica.
-   ========================================================= */
-
-(() => {
-    let db = null;
-    let facturas = [];
-    let detalles = [];
-    let mesSeleccionado = new Date().getMonth();
-    let anioSeleccionado = new Date().getFullYear();
-
-    const COP = new Intl.NumberFormat("es-CO", {
-        style: "currency",
-        currency: "COP",
-        maximumFractionDigits: 0
-    });
-
-    const MESES = [
-        "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-        "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
-    ];
-
-    const MESES_CORTOS = [
-        "Ene","Feb","Mar","Abr","May","Jun",
-        "Jul","Ago","Sep","Oct","Nov","Dic"
-    ];
-
-    const money = n => COP.format(Number(n) || 0);
-    const num = n => Number(n) || 0;
-
-    function mesDe(fecha) {
-        if (!fecha) return null;
-        const d = new Date(String(fecha).slice(0,10) + "T00:00:00");
-        return Number.isNaN(d.getTime()) ? null : d;
+(function() {
+    "use strict";
+    const money=n=>new Intl.NumberFormat("es-CO", {
+        style:"currency",currency:"COP",maximumFractionDigits:0
     }
-
-    function esMes(f, mes, anio) {
-        const d = mesDe(f.fecha);
-        return d && d.getFullYear() === anio && d.getMonth() === mes;
+    ).format(Number(n)||0);
+    const $=id=>document.getElementById(id);
+    const meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    const mesesCortos=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    let db=null,facturas=[],detalles=[],selectedYear=new Date().getFullYear(),selectedMonth=5;
+    function esc(s) {
+        return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
     }
-
-    function facturasMes(mes, anio) {
-        return facturas.filter(f => esMes(f, mes, anio));
+    [m]));
+}
+function parseDate(v) {
+    if(!v)return null;
+    const d=new Date(String(v).slice(0,10)+"T00:00:00");
+    return Number.isNaN(d.getTime())?null:d;
+}
+function inMonth(x,y,m) {
+    const d=parseDate(x.fecha||x.created_at);
+    return !!d&&d.getFullYear()===y&&d.getMonth()===m;
+}
+function active() {
+    return facturas.filter(f=>String(f.estado||"").toLowerCase()!=="anulada");
+}
+function monthRows(y,m) {
+    return active().filter(f=>inMonth(f,y,m));
+}
+function total(f) {
+    return Number(f.total)||0;
+}
+function paid(f) {
+    return Number(f.abono_acumulado)||0;
+}
+function balance(f) {
+    const s=Number(f.saldo_pendiente);
+    return Number.isFinite(s)?Math.max(0,s):Math.max(0,total(f)-paid(f));
+}
+function dateText() {
+    const e=$("fechaEstadisticas");
+    if(e)e.textContent=new Date().toLocaleDateString("es-CO", {
+        day:"2-digit",month:"long",year:"numeric"
     }
-
-    function totalVentas(mes, anio) {
-        return facturasMes(mes, anio)
-            .reduce((s,f) => s + num(f.total), 0);
+    );
+}
+function initMonth() {
+    const s=$("mesEstadisticas");
+    s.innerHTML=meses.map((m,i)=>`<option value="${i}">📅 ${m} ${selectedYear}</option>`).join("");
+    s.value=selectedMonth;
+    s.addEventListener("change",()=> {
+        selectedMonth=+s.value;renderAll();
     }
-
-    function totalAbonos(mes, anio) {
-        return facturasMes(mes, anio)
-            .reduce((s,f) => s + num(f.abono_acumulado), 0);
+    );
+}
+function pct(a,b) {
+    return !b?null:((a-b)/Math.abs(b))*100;
+}
+function setChange(id,a,b,inverse) {
+    const e=$(id);
+    if(!e)return;
+    const p=pct(a,b);
+    e.textContent=p===null?"— vs mes anterior":`${p>=0?"↑":"↓"} ${Math.abs(p).toFixed(0)}% vs ${meses[(selectedMonth+11)%12].toLowerCase()}`;
+    e.className=(inverse?(p<=0):(p>=0))?"up":"down";
+}
+function spark(vals) {
+    const v=vals.map(Number),mx=Math.max(...v,1),mn=Math.min(...v,0);
+    return v.map((n,i)=>`${(i/11*200).toFixed(1)},${(38-((n-mn)/(mx-mn||1))*28).toFixed(1)}`).join(" ");
+}
+function renderCards() {
+    const cur=monthRows(selectedYear,selectedMonth),prev=monthRows(selectedYear,selectedMonth?selectedMonth-1:11);
+    const ventas=cur.reduce((s,f)=>s+total(f),0),pv=prev.reduce((s,f)=>s+total(f),0);
+    const pedidos=cur.length,pp=prev.length,ab=cur.reduce((s,f)=>s+paid(f),0),pab=prev.reduce((s,f)=>s+paid(f),0),saldo=cur.reduce((s,f)=>s+balance(f),0),ps=prev.reduce((s,f)=>s+balance(f),0);
+    $("statVentas").textContent=money(ventas);
+    $("statGastos").textContent=money(0);
+    $("statGanancia").textContent=money(ventas);
+    $("statPedidos").textContent=pedidos;
+    $("statAbonos").textContent=money(ab);
+    $("statSaldo").textContent=money(saldo);
+    setChange("statVentasCambio",ventas,pv,false);
+    setChange("statGastosCambio",0,0,true);
+    setChange("statGananciaCambio",ventas,pv,false);
+    setChange("statPedidosCambio",pedidos,pp,false);
+    setChange("statAbonosCambio",ab,pab,false);
+    setChange("statSaldoCambio",saldo,ps,true);
+    const a=[],g=[],ga=[],p=[],r=[],s=[];
+    for(let m=0;m<12;m++) {
+        const q=monthRows(selectedYear,m),v=q.reduce((x,f)=>x+total(f),0);
+        a.push(v);
+        g.push(0);
+        ga.push(v);
+        p.push(q.length);
+        r.push(q.reduce((x,f)=>x+paid(f),0));
+        s.push(q.reduce((x,f)=>x+balance(f),0));
     }
-
-    function totalPendiente(mes, anio) {
-        return facturasMes(mes, anio)
-            .reduce((s,f) => s + num(f.saldo_pendiente), 0);
-    }
-
-    function porcentaje(actual, anterior) {
-        if (!anterior) return actual ? 100 : 0;
-        return ((actual - anterior) / anterior) * 100;
-    }
-
-    function tendencia(actual, anterior) {
-        const p = porcentaje(actual, anterior);
-        const abajo = p < 0;
-        return {
-            texto: `${abajo ? "↓" : "↑"} ${Math.abs(p).toFixed(0)}% vs ${MESES[(mesSeleccionado + 11) % 12].toLowerCase()}`,
-            clase: abajo ? "down" : "up"
-        };
-    }
-
-    function obtenerCards() {
-        return document.querySelectorAll(".cards .card");
-    }
-
-    function ponerCard(indice, valor, actualAnterior, green=false) {
-        const card = obtenerCards()[indice];
-        if (!card) return;
-
-        const value = card.querySelector(".value");
-        const trend = card.querySelector(".up, .down");
-
-        if (value) {
-            value.textContent = typeof valor === "number" ? money(valor) : String(valor);
-            if (green) value.style.color = "#087b2d";
+    [["sparkVentas",a],["sparkGastos",g],["sparkGanancia",ga],["sparkPedidos",p],["sparkAbonos",r],["sparkSaldo",s]].forEach(([id,v])=>$(id)?.setAttribute("points",spark(v)));
+}
+function tx(x,y,t,sz=10,fill="#444",anchor="start") {
+    return `<text x="${x}" y="${y}" font-size="${sz}" fill="${fill}" text-anchor="${anchor}">${esc(t)}</text>`;
+}
+function renderCharts() {
+    const vals=[];
+    for(let m=0;m<12;m++)vals.push(monthRows(selectedYear,m).reduce((s,f)=>s+total(f),0));
+    const svg=$("chartIngresosGastos");
+    if(svg) {
+        const L=45,R=635,T=20,B=215,M=Math.max(...vals,1),step=(R-L)/11,sc=v=>B-(v/M)*(B-T);
+        let h='<g stroke="#e8e8e8" stroke-dasharray="3 3">';
+        for(let i=0;i<5;i++) {
+            const y=T+i*(B-T)/4;
+            h+=`<line x1="${L}" y1="${y}" x2="${R}" y2="${y}"/>`;
         }
-
-        if (trend) {
-            trend.classList.remove("up","down");
-            trend.classList.add(actualAnterior.clase);
-            trend.textContent = actualAnterior.texto;
+        h+="</g>";
+        vals.forEach((v,i)=> {
+            const x=L+step*i-9,y=sc(v);h+=`<rect x="${x}" y="${y}" width="18" height="${B-y}" fill="#18ad73"/>`;
         }
-    }
-
-    function actualizarCabecera() {
-        const selector = document.querySelector(".sel");
-        const fecha = document.querySelector(".date");
-
-        if (selector) {
-            selector.innerHTML = MESES.map((m,i) =>
-                `<option value="${i}">📅 ${m} ${anioSeleccionado}</option>`
-            ).join("");
-            selector.value = String(mesSeleccionado);
-            selector.onchange = () => {
-                mesSeleccionado = Number(selector.value);
-                renderTodo();
-            };
-        }
-
-        if (fecha) {
-            fecha.textContent =
-                "📅  " +
-                new Date().toLocaleDateString("es-CO", {
-                    day:"2-digit",
-                    month:"long",
-                    year:"numeric"
-                });
-        }
-    }
-
-    function actualizarCards() {
-        const actual = facturasMes(mesSeleccionado, anioSeleccionado);
-        const anteriorMes = mesSeleccionado === 0 ? 11 : mesSeleccionado - 1;
-        const anteriorAnio = mesSeleccionado === 0 ? anioSeleccionado - 1 : anioSeleccionado;
-
-        const ventas = actual.reduce((s,f) => s + num(f.total), 0);
-        const ventasAnterior = totalVentas(anteriorMes, anteriorAnio);
-
-        const gastos = 0;
-        const gastosAnterior = 0;
-
-        const ganancia = ventas - gastos;
-        const gananciaAnterior = ventasAnterior - gastosAnterior;
-
-        const pedidos = actual.length;
-        const pedidosAnterior = facturasMes(anteriorMes, anteriorAnio).length;
-
-        const abonos = actual.reduce((s,f) => s + num(f.abono_acumulado), 0);
-        const abonosAnterior = facturasMes(anteriorMes, anteriorAnio)
-            .reduce((s,f) => s + num(f.abono_acumulado), 0);
-
-        const pendiente = actual.reduce((s,f) => s + num(f.saldo_pendiente), 0);
-        const pendienteAnterior = facturasMes(anteriorMes, anteriorAnio)
-            .reduce((s,f) => s + num(f.saldo_pendiente), 0);
-
-        ponerCard(0, ventas, tendencia(ventas, ventasAnterior));
-        ponerCard(1, gastos, tendencia(gastos, gastosAnterior));
-        ponerCard(2, ganancia, tendencia(ganancia, gananciaAnterior), true);
-        ponerCard(3, pedidos, tendencia(pedidos, pedidosAnterior));
-        ponerCard(4, abonos, tendencia(abonos, abonosAnterior));
-        ponerCard(5, pendiente, tendencia(pendiente, pendienteAnterior));
-    }
-
-    function actualizarResumenMensual() {
-        const panel = [...document.querySelectorAll(".lower .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("RESUMEN MENSUAL"));
-
-        if (!panel) return;
-
-        const tbody = panel.querySelector("tbody");
-        const year = panel.querySelector(".year");
-        if (!tbody) return;
-
-        tbody.innerHTML = MESES.map((mes,i) => {
-            const ventas = totalVentas(i, anioSeleccionado);
-            const gastos = 0;
-            const ganancia = ventas - gastos;
-            const clase = i === mesSeleccionado ? " class=\"hl\"" : "";
-
-            return `
-                <tr${clase}>
-                    <td>${mes}</td>
-                    <td>${money(ventas)}</td>
-                    <td>${money(gastos)}</td>
-                    <td>${money(ganancia)}</td>
-                </tr>`;
-        }).join("");
-
-        if (year) {
-            const ventasAnuales = MESES.reduce((s,_,i) => s + totalVentas(i, anioSeleccionado), 0);
-            const gastosAnuales = 0;
-            const gananciaAnual = ventasAnuales - gastosAnuales;
-
-            year.innerHTML = `
-                <span>TOTAL AÑO 🏆</span>
-                <span>${money(ventasAnuales)}</span>
-                <span>${money(gastosAnuales)}</span>
-                <span>${money(gananciaAnual)}</span>`;
-        }
-    }
-
-    function actualizarVentasPorMes() {
-        const panel = [...document.querySelectorAll(".grid2 .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("VENTAS POR MES"));
-
-        if (!panel) return;
-
-        const svg = panel.querySelector("svg");
-        if (!svg) return;
-
-        const barras = [...svg.querySelectorAll("rect")];
-        const ventas = MESES.map((_,i) => totalVentas(i, anioSeleccionado));
-        const max = Math.max(...ventas, 1);
-
-        const baseY = 215;
-        const alturaMax = 190;
-        const xs = [60,115,170,225,280,335,390,445,500,555,610,665];
-
-        barras.forEach((rect,i) => {
-            if (i >= ventas.length) return;
-            const h = Math.max(0, (ventas[i] / max) * alturaMax);
-            rect.setAttribute("x", xs[i] ?? (60 + i*55));
-            rect.setAttribute("y", String(baseY - h));
-            rect.setAttribute("height", String(h));
-            rect.setAttribute("width", "18");
-        });
-
-        const etiqueta = svg.querySelector("rect[fill='#f43f7a']");
-        const texto = [...svg.querySelectorAll("text")]
-            .find(t => String(t.textContent || "").includes("$378.000"));
-
-        const seleccionado = ventas[mesSeleccionado];
-        if (etiqueta && texto) {
-            const h = Math.max(0, (seleccionado / max) * alturaMax);
-            const x = xs[mesSeleccionado] ?? 60;
-            etiqueta.setAttribute("x", String(x - 15));
-            etiqueta.setAttribute("y", String(Math.max(3, baseY - h - 30)));
-            texto.setAttribute("x", String(x - 7));
-            texto.setAttribute("y", String(Math.max(21, baseY - h - 12)));
-            texto.textContent = money(seleccionado);
-        }
-
-        const labels = [...svg.querySelectorAll("text")].filter(t =>
-            MESES_CORTOS.includes(String(t.textContent || "").trim())
         );
-        labels.forEach((t,i) => {
-            if (MESES_CORTOS[i]) t.textContent = MESES_CORTOS[i];
-        });
+        h+=`<polyline points="${vals.map((v,i)=>`$ {
+            L+step*i
+        }
+        ,$ {
+            sc(v)
+        }
+        `).join(" ")}" fill="none" stroke="#7650c8" stroke-width="3"/>`;
+        vals.forEach((v,i)=>h+=`<circle cx="${L+step*i}" cy="${sc(v)}" r="4" fill="#7650c8"/>`);
+        mesesCortos.forEach((m,i)=>h+=tx(L+step*i,B+14,m,10,"#444","middle"));
+        svg.innerHTML=h;
     }
-
-    function actualizarDistribucion() {
-        const panel = [...document.querySelectorAll(".three .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("DISTRIBUCIÓN"));
-
-        if (!panel) return;
-
-        const ventas = totalVentas(mesSeleccionado, anioSeleccionado);
-        const gastos = 0;
-        const ganancia = ventas - gastos;
-        const total = Math.max(ventas + gastos + Math.max(ganancia,0), 1);
-
-        const donut = panel.querySelector(".donut");
-        if (donut) {
-            const pVentas = ventas / total * 100;
-            const pGastos = gastos / total * 100;
-            donut.style.background =
-                `conic-gradient(#18ad73 0 ${pVentas}%,#f07818 ${pVentas}% ${pVentas+pGastos}%,#7650c8 ${pVentas+pGastos}% 100%)`;
+    const svg2=$("chartVentasMes");
+    if(svg2) {
+        const L=40,R=635,T=20,B=200,M=Math.max(...vals,1),step=(R-L)/12;
+        let h='<g stroke="#e8e8e8" stroke-dasharray="3 3">';
+        for(let i=0;i<4;i++) {
+            const y=T+i*(B-T)/3;
+            h+=`<line x1="${L}" y1="${y}" x2="${R}" y2="${y}"/>`;
         }
-
-        const h2 = panel.querySelector("h2");
-        if (h2) h2.textContent = `DISTRIBUCIÓN FINANCIERA — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
-
-        const legend = panel.querySelector(".legend");
-        if (legend) {
-            const pVentas = total ? (ventas/total*100) : 0;
-            const pGastos = total ? (gastos/total*100) : 0;
-            const pGanancia = total ? (Math.max(ganancia,0)/total*100) : 0;
-
-            legend.innerHTML = `
-                🟢 Ingresos<br>
-                <b>${money(ventas)}</b><br>
-                <span style="color:#16a765">${pVentas.toFixed(1)}%</span>
-                <br><br>
-                🟠 Gastos<br>
-                <b>${money(gastos)}</b><br>
-                <span style="color:#f07818">${pGastos.toFixed(1)}%</span>
-                <br><br>
-                🟣 Ganancia<br>
-                <b>${money(ganancia)}</b><br>
-                <span style="color:#7650c8">${pGanancia.toFixed(1)}%</span>`;
+        h+="</g>";
+        vals.forEach((v,i)=> {
+            const bh=(v/M)*(B-T),x=L+i*step+5;h+=`<rect x="${x}" y="${B-bh}" width="20" height="${bh}" rx="2" fill="#f43f7a"/>`;
         }
-    }
-
-    function actualizarCobros() {
-        const panel = [...document.querySelectorAll(".three .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("ESTADO DE COBROS"));
-
-        if (!panel) return;
-
-        const actual = facturasMes(mesSeleccionado, anioSeleccionado);
-        const vendido = actual.reduce((s,f) => s + num(f.total), 0);
-        const recibido = actual.reduce((s,f) => s + num(f.abono_acumulado), 0);
-        const pendiente = actual.reduce((s,f) => s + num(f.saldo_pendiente), 0);
-        const pagado = actual
-            .filter(f => num(f.saldo_pendiente) <= 0)
-            .reduce((s,f) => s + num(f.total), 0);
-        const abonado = actual
-            .filter(f => num(f.saldo_pendiente) > 0 && num(f.abono_acumulado) > 0)
-            .reduce((s,f) => s + num(f.abono_acumulado), 0);
-
-        const cobros = panel.querySelectorAll(".cobro");
-        if (cobros[0]) {
-            cobros[0].querySelector("strong").textContent = money(pagado);
-            cobros[0].lastChild.textContent = ` ${vendido ? (pagado/vendido*100).toFixed(1) : "0.0"}%`;
-        }
-        if (cobros[1]) {
-            cobros[1].querySelector("strong").textContent = money(abonado);
-            cobros[1].lastChild.textContent = ` ${vendido ? (abonado/vendido*100).toFixed(1) : "0.0"}%`;
-        }
-        if (cobros[2]) {
-            cobros[2].querySelector("strong").textContent = money(pendiente);
-            cobros[2].lastChild.textContent = ` ${vendido ? (pendiente/vendido*100).toFixed(1) : "0.0"}%`;
-        }
-
-        const totalValues = panel.querySelectorAll(".totals b");
-        if (totalValues[0]) totalValues[0].textContent = money(vendido);
-        if (totalValues[1]) totalValues[1].textContent = money(recibido);
-        if (totalValues[2]) totalValues[2].textContent = money(pendiente);
-
-        const h2 = panel.querySelector("h2");
-        if (h2) h2.textContent = `ESTADO DE COBROS — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
-    }
-
-    function actualizarProductos() {
-        const panel = [...document.querySelectorAll(".lower .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("TOP PRODUCTOS"));
-
-        if (!panel) return;
-
-        const actualIds = new Set(facturasMes(mesSeleccionado, anioSeleccionado).map(f => f.id));
-        const mapa = {};
-
-        detalles
-            .filter(d => actualIds.has(d.factura_id))
-            .forEach(d => {
-                const nombre = d.producto_nombre || "Producto";
-                mapa[nombre] = (mapa[nombre] || 0) + num(d.cantidad);
-            });
-
-        const top = Object.entries(mapa)
-            .sort((a,b) => b[1]-a[1])
-            .slice(0,5);
-
-        const max = top[0]?.[1] || 1;
-        const box = panel.querySelector(".products");
-
-        if (box) {
-            box.innerHTML = top.length ? top.map(([nombre,cantidad],i) => `
-                <div class="prod">
-                    <b>${i+1}</b>
-                    <span>${nombre}</span>
-                    <div class="bar"><i style="width:${Math.max(5,(cantidad/max)*100)}%"></i></div>
-                    <b>${cantidad}</b>
-                </div>
-            `).join("") : `<div class="prod"><span>No hay productos vendidos este mes.</span></div>`;
-        }
-
-        const h2 = panel.querySelector("h2");
-        if (h2) h2.textContent = `TOP PRODUCTOS — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
-    }
-
-    function actualizarMetodosPago() {
-        const panel = [...document.querySelectorAll(".lower .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("MÉTODOS DE PAGO"));
-
-        if (!panel) return;
-
-        const actual = facturasMes(mesSeleccionado, anioSeleccionado);
-        const mapa = {};
-
-        actual.forEach(f => {
-            const metodo = f.forma_pago || "Sin especificar";
-            mapa[metodo] = (mapa[metodo] || 0) + num(f.total);
-        });
-
-        const pagos = Object.entries(mapa).sort((a,b) => b[1]-a[1]).slice(0,4);
-        const total = pagos.reduce((s,[,v]) => s+v,0);
-        const box = panel.querySelector(".payments");
-
-        if (box) {
-            const iconos = ["💸","💵","💵","💳"];
-            box.innerHTML = pagos.length ? pagos.map(([nombre,valor],i) => `
-                <div class="pay">
-                    <div class="paycircle">${iconos[i] || "💰"}</div>
-                    <b>${total ? (valor/total*100).toFixed(0) : 0}%</b>
-                    <span>${nombre}<br>${money(valor)}</span>
-                </div>
-            `).join("") : `<div class="pay"><div class="paycircle">💰</div><b>0%</b><span>Sin ventas<br>$0</span></div>`;
-        }
-
-        const h2 = panel.querySelector("h2");
-        if (h2) h2.textContent = `MÉTODOS DE PAGO — ${MESES[mesSeleccionado].toUpperCase()} ${anioSeleccionado}`;
-    }
-
-    function actualizarUltimosPedidos() {
-        const panel = [...document.querySelectorAll(".last .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("ÚLTIMOS PEDIDOS"));
-
-        if (!panel) return;
-
-        const box = panel.querySelector(".orders");
-        const ultimos = [...facturas]
-            .sort((a,b) => String(b.fecha).localeCompare(String(a.fecha)))
-            .slice(0,5);
-
-        if (box) {
-            box.innerHTML = ultimos.length ? ultimos.map(f => `
-                <div class="order">
-                    #${f.numero || f.id} $${num(f.total).toLocaleString("es-CO")}
-                    <span class="badge">${f.estado || "Pendiente"}</span>
-                </div>
-            `).join("") : `<div class="order">No hay facturas registradas.</div>`;
-        }
-    }
-
-    function actualizarComparativa() {
-        const panel = [...document.querySelectorAll(".last .panel")]
-            .find(p => p.querySelector("h2")?.textContent.includes("COMPARATIVA"));
-
-        if (!panel) return;
-
-        const anteriorMes = mesSeleccionado === 0 ? 11 : mesSeleccionado - 1;
-        const anteriorAnio = mesSeleccionado === 0 ? anioSeleccionado - 1 : anioSeleccionado;
-
-        const ventas = totalVentas(mesSeleccionado, anioSeleccionado);
-        const ventasAnt = totalVentas(anteriorMes, anteriorAnio);
-        const pedidos = facturasMes(mesSeleccionado, anioSeleccionado).length;
-        const pedidosAnt = facturasMes(anteriorMes, anteriorAnio).length;
-
-        const cols = panel.querySelectorAll(".compare div");
-        if (cols[0]) {
-            cols[0].innerHTML = `
-                <b>Vs ${MESES[anteriorMes]} ${anteriorAnio}</b>
-                <p>Ventas ${porcentaje(ventas,ventasAnt)>=0?"↑":"↓"} ${Math.abs(porcentaje(ventas,ventasAnt)).toFixed(0)}%</p>
-                <p>Gastos ↑ 0%</p>
-                <p>Ganancia ${porcentaje(ventas,ventasAnt)>=0?"↑":"↓"} ${Math.abs(porcentaje(ventas,ventasAnt)).toFixed(0)}%</p>
-                <p>Pedidos ${porcentaje(pedidos,pedidosAnt)>=0?"↑":"↓"} ${Math.abs(porcentaje(pedidos,pedidosAnt)).toFixed(0)}%</p>`;
-        }
-
-        if (cols[1]) {
-            cols[1].innerHTML = `
-                <b>Vs ${MESES[mesSeleccionado]} ${anioSeleccionado-1}</b>
-                <p>Ventas —</p>
-                <p>Gastos —</p>
-                <p>Ganancia —</p>
-                <p>Pedidos —</p>`;
-        }
-    }
-
-    async function cargarDatos() {
-        if (!window.supabase || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
-            console.error("No se encontraron las credenciales de Supabase.");
-            return;
-        }
-
-        db = window.supabase.createClient(
-            window.SUPABASE_URL,
-            window.SUPABASE_ANON_KEY
         );
-
-        const { data: { session } } = await db.auth.getSession();
-
-        if (!session) {
-            console.warn("No hay una sesión de Supabase activa.");
-            return;
+        mesesCortos.forEach((m,i)=>h+=tx(L+i*step+15,B+18,m,10,"#444","middle"));
+        const v=vals[selectedMonth]||0,bh=(v/M)*(B-T),bx=L+selectedMonth*step+5;
+        if(v) {
+            h+=`<rect x="${bx-7}" y="${Math.max(2,B-bh-27)}" width="58" height="27" rx="6" fill="#f43f7a"/>`;
+            h+=tx(bx+22,Math.max(20,B-bh-9),money(v),11,"#fff","middle");
         }
-
-        const { data: f, error: errorFacturas } = await db
-            .from("facturas")
-            .select(`
-                id,
-                numero,
-                fecha,
-                forma_pago,
-                total,
-                estado,
-                valor_abono,
-                abono_acumulado,
-                saldo_pendiente
-            `)
-            .neq("estado","Anulada");
-
-        if (errorFacturas) {
-            console.error("Error cargando facturas:", errorFacturas);
-            return;
-        }
-
-        facturas = f || [];
-
-        const { data: d, error: errorDetalles } = await db
-            .from("factura_detalle")
-            .select(`
-                factura_id,
-                producto_nombre,
-                cantidad,
-                total
-            `);
-
-        if (errorDetalles) {
-            console.error("Error cargando detalles:", errorDetalles);
-            detalles = [];
-        } else {
-            detalles = d || [];
-        }
-
-        actualizarCabecera();
-        renderTodo();
+        svg2.innerHTML=h;
     }
-
-    function renderTodo() {
-        actualizarCabecera();
-        actualizarCards();
-        actualizarResumenMensual();
-        actualizarVentasPorMes();
-        actualizarDistribucion();
-        actualizarCobros();
-        actualizarProductos();
-        actualizarMetodosPago();
-        actualizarUltimosPedidos();
-        actualizarComparativa();
+}
+function renderFinance(cur) {
+    const v=cur.reduce((s,f)=>s+total(f),0),d=$("donutFinanciero"),l=$("legendFinanciero");
+    if(d)d.style.background=`conic-gradient(#18ad73 0 100%,#f07818 100% 100%)`;
+    if(l)l.innerHTML=`🟢 Ingresos<br><b>${money(v)}</b><br><span style="color:#16a765">${v?"100.0":"0.0"}%</span><br><br>🟠 Gastos<br><b>$0</b><br><span style="color:#f07818">0.0%</span><br><br>🟣 Ganancia<br><b>${money(v)}</b><br><span style="color:#7650c8">${v?"100.0":"0.0"}%</span>`;
+}
+function renderCobros(cur) {
+    const v=cur.reduce((s,f)=>s+total(f),0),pag=cur.filter(f=>balance(f)<=0).reduce((s,f)=>s+total(f),0),abo=cur.filter(f=>paid(f)>0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pen=cur.filter(f=>paid(f)<=0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pc=x=>v?(x/v*100).toFixed(1):"0.0",b=$("cobrosEstado");
+    if(b)b.innerHTML=`<div class="cobro">✅<b>Pagado</b><strong>${money(pag)}</strong>${pc(pag)}%</div><div class="cobro">◷<b>Abonado</b><strong>${money(abo)}</strong>${pc(abo)}%</div><div class="cobro">🛒<b>Pendiente</b><strong>${money(pen)}</strong>${pc(pen)}%</div>`;
+    $("totalVendidoCobros").textContent=money(v);
+    $("totalRecibidoCobros").textContent=money(cur.reduce((s,f)=>s+paid(f),0));
+    $("totalPendienteCobros").textContent=money(cur.reduce((s,f)=>s+balance(f),0));
+}
+function renderProducts(cur) {
+    const ids=cur.map(f=>f.id),map=new Map();
+    detalles.filter(d=>ids.includes(d.factura_id)).forEach(d=> {
+        const n=d.producto_nombre||"Producto",q=+d.cantidad||0,o=map.get(n)|| {
+            n,q:0
+        }
+        ;o.q+=q;map.set(n,o);
     }
-
-    document.addEventListener("DOMContentLoaded", cargarDatos);
-})();
+    );
+    const rows=[...map.values()].sort((a,b)=>b.q-a.q).slice(0,5),mx=Math.max(...rows.map(x=>x.q),1),el=$("topProductos");
+    if(el)el.innerHTML=rows.length?rows.map((r,i)=>`<div class="prod"><b>${i+1}</b><span>🧶 ${esc(r.n)}</span><div class="bar"><i style="width:${Math.max(4,r.q/mx*100)}%"></i></div><b>${r.q}</b></div>`).join(""):'<div class="prod"><span>No hay productos registrados.</span></div>';
+    const p=$("piePedidos");
+    if(p) {
+        let a=0,parts=[],colors=["#f43f7a","#f07818","#f5ad0a","#18ad73","#7650c8"],sum=rows.reduce((s,r)=>s+r.q,0)||1;
+        rows.forEach((r,i)=> {
+            let n=a+r.q/sum*100;parts.push(`${colors[i%5]} ${a}% ${n}%`);a=n;
+        }
+        );
+        p.style.background=parts.length?`conic-gradient(${parts.join(",")})`:"conic-gradient(#eee 0 100%)";
+    }
+}
+function renderPayments(cur) {
+    const m=new Map();
+    cur.forEach(f=> {
+        let k=f.forma_pago||"Otro";if(k==="Abono")k=f.tipo_abono||"Abono";m.set(k,(m.get(k)||0)+total(f));
+    }
+    );
+    const rows=[...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,4),sum=rows.reduce((s,r)=>s+r[1],0)||1,el=$("metodosPago");
+    if(el)el.innerHTML=rows.length?rows.map((r,i)=>`<div class="pay"><div class="paycircle" style="border-right-color:${["#f43f7a","#f07818","#16a765","#7650c8"][i]}">${["💸","💵","💵","💳"][i]}</div><b>${(r[1]/sum*100).toFixed(0)}%</b><span>${esc(r[0])}<br>${money(r[1])}</span></div>`).join(""):'<div class="pay"><div class="paycircle">💳</div><b>0%</b><span>Sin datos<br>$0</span></div>';
+}
+function renderSummary() {
+    const b=$("resumenMensualBody");
+    if(!b)return;
+    let tv=0,tg=0,html="";
+    for(let m=0;m<12;m++) {
+        const q=monthRows(selectedYear,m),v=q.reduce((s,f)=>s+total(f),0);
+        tv+=v;
+        html+=`<tr class="${m===selectedMonth?'hl':''}"><td>${meses[m]}</td><td>${money(v)}</td><td>$0</td><td>${money(v)}</td></tr>`;
+    }
+    b.innerHTML=html;
+    $("totalAnualVentas").textContent=money(tv);
+    $("totalAnualGastos").textContent="$0";
+    $("totalAnualGanancia").textContent=money(tv);
+}
+function renderOrders(cur) {
+    const rows=[...cur].sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha))).slice(0,5),e=$("ultimosPedidos");
+    if(e)e.innerHTML=rows.length?rows.map(f=> {
+        const st=balance(f)<=0?"Pagado":paid(f)>0?"Abonado":"Pendiente";return `<div class="order">#${esc(f.numero||"")} <span>${money(total(f))}</span> <span class="badge"${st==="Pendiente"?' style="background:#ffe8e8;color:#d33"':""}>${st}</span></div>`;
+    }
+    ).join(""):'<div class="order">No hay pedidos en este mes.</div>';
+}
+function renderExpenses() {
+    $("gastosLista").innerHTML='<div class="row"><span>Sin gastos registrados</span><span>—</span><span>$0</span></div>';
+    $("gastosTotal").textContent="$0";
+}
+function renderCompare() {
+    const c=monthRows(selectedYear,selectedMonth),p=monthRows(selectedYear,selectedMonth?selectedMonth-1:11),cv=c.reduce((s,f)=>s+total(f),0),pv=p.reduce((s,f)=>s+total(f),0),cp=c.length,pp=p.length,ch=(a,b)=>!b?"—":`${a>=b?"↑":"↓"} ${Math.abs((a-b)/b*100).toFixed(0)}%`;
+    $("comparativa").innerHTML=`<div><b>Vs ${meses[selectedMonth?selectedMonth-1:11]} ${selectedYear}</b><p>Ventas ${ch(cv,pv)}</p><p>Gastos —</p><p>Ganancia ${ch(cv,pv)}</p><p>Pedidos ${ch(cp,pp)}</p></div><div><b>Vs ${meses[selectedMonth]} ${selectedYear-1}</b><p>Ventas —</p><p>Gastos —</p><p>Ganancia —</p><p>Pedidos —</p></div>`;
+}
+function renderAll() {
+    const c=monthRows(selectedYear,selectedMonth),t=`${meses[selectedMonth]} ${selectedYear}`;
+    $("tituloDistribucion").textContent=`DISTRIBUCIÓN FINANCIERA — ${t.toUpperCase()}`;
+    $("tituloCobros").textContent=`ESTADO DE COBROS — ${t.toUpperCase()}`;
+    $("tituloTopProductos").textContent=`TOP PRODUCTOS — ${t.toUpperCase()}`;
+    $("tituloMetodosPago").textContent=`MÉTODOS DE PAGO — ${t.toUpperCase()}`;
+    renderCards();
+    renderCharts();
+    renderFinance(c);
+    renderCobros(c);
+    renderProducts(c);
+    renderPayments(c);
+    renderSummary();
+    renderExpenses();
+    renderOrders(c);
+    renderCompare();
+}
+async function load() {
+    if(!window.supabase||!window.SUPABASE_URL||!window.SUPABASE_ANON_KEY) {
+        console.error("Faltan las credenciales de Supabase.");
+        return;
+    }
+    db=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);
+    const {
+        data: {
+            session
+        }
+    }
+    =await db.auth.getSession();
+    if(!session) {
+        console.warn("No hay una sesión de Supabase activa.");
+        return;
+    }
+    const r=await db.from("facturas").select("id,numero,fecha,total,estado,forma_pago,tipo_abono,valor_abono,abono_acumulado,saldo_pendiente").neq("estado","Anulada");
+    if(r.error) {
+        console.error("Error cargando facturas:",r.error);
+        return;
+    }
+    facturas=r.data||[];
+    const ids=facturas.map(f=>f.id);
+    if(ids.length) {
+        const d=await db.from("factura_detalle").select("factura_id,producto_nombre,cantidad,total").in("factura_id",ids);
+        if(d.error)console.error("Error cargando detalles:",d.error);
+        detalles=d.data||[];
+    }
+    renderAll();
+}
+initMonth();
+dateText();
+load().catch(e=>console.error("Error general en Estadísticas:",e));
+}
+)();
 </script>
-
- </body>
+</body>
 </html>
