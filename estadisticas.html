@@ -789,7 +789,14 @@ tr.hl td {
     const $=id=>document.getElementById(id);
     const meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     const mesesCortos=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-    let db=null,facturas=[],detalles=[],selectedYear=new Date().getFullYear(),selectedMonth=new Date().getMonth();
+
+    let db=null,
+    facturas=[],
+    detalles=[],
+    gastos=[],
+    selectedYear=new Date().getFullYear(),
+    selectedMonth=new Date().getMonth();
+
     function esc(s) {
         return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
     }
@@ -809,6 +816,22 @@ function active() {
 }
 function monthRows(y,m) {
     return active().filter(f=>inMonth(f,y,m));
+}
+function monthExpenses(y, m) {
+
+    return gastos.filter(g =>
+        inMonth(g, y, m)
+    );
+
+}
+
+function totalExpenses(y, m) {
+
+    return monthExpenses(y, m).reduce(
+        (s, g) => s + (Number(g.valor) || 0),
+        0
+    );
+
 }
 function total(f) {
     return Number(f.total)||0;
@@ -994,8 +1017,92 @@ function renderOrders(cur) {
     ).join(""):'<div class="order">No hay pedidos en este mes.</div>';
 }
 function renderExpenses() {
-    $("gastosLista").innerHTML='<div class="row"><span>Sin gastos registrados</span><span>—</span><span>$0</span></div>';
-    $("gastosTotal").textContent="$0";
+
+    const lista = $("gastosLista");
+    const totalEl = $("gastosTotal");
+
+    if (!lista || !totalEl) return;
+
+
+    // ==========================================
+    // GASTOS DEL MES SELECCIONADO
+    // ==========================================
+
+    const gastosMes =
+        monthExpenses(
+            selectedYear,
+            selectedMonth
+        );
+
+
+    // ==========================================
+    // SI NO HAY GASTOS
+    // ==========================================
+
+    if (!gastosMes.length) {
+
+        lista.innerHTML =
+            '<div class="row">' +
+                '<span>Sin gastos registrados</span>' +
+                '<span>—</span>' +
+                '<span>$0</span>' +
+            '</div>';
+
+        totalEl.textContent = money(0);
+
+        return;
+    }
+
+
+    // ==========================================
+    // MOSTRAR GASTOS
+    // ==========================================
+
+    lista.innerHTML =
+        gastosMes
+            .sort((a, b) =>
+                String(b.fecha || "")
+                    .localeCompare(
+                        String(a.fecha || "")
+                    )
+            )
+            .map(g => {
+
+                const concepto =
+                    esc(g.concepto || "Sin concepto");
+
+                const categoria =
+                    esc(g.categoria || "Sin categoría");
+
+                const valor =
+                    Number(g.valor || 0);
+
+                return `
+                    <div class="row">
+                        <span>${concepto}</span>
+                        <span>${categoria}</span>
+                        <span>${money(valor)}</span>
+                    </div>
+                `;
+
+            })
+            .join("");
+
+
+    // ==========================================
+    // TOTAL DE GASTOS DEL MES
+    // ==========================================
+
+    const total =
+        gastosMes.reduce(
+            (suma, g) =>
+                suma + Number(g.valor || 0),
+            0
+        );
+
+
+    totalEl.textContent =
+        money(total);
 }
 function renderCompare() {
     const c=monthRows(selectedYear,selectedMonth),p=monthRows(selectedYear,selectedMonth?selectedMonth-1:11),cv=c.reduce((s,f)=>s+total(f),0),pv=p.reduce((s,f)=>s+total(f),0),cp=c.length,pp=p.length,ch=(a,b)=>!b?"—":`${a>=b?"↑":"↓"} ${Math.abs((a-b)/b*100).toFixed(0)}%`;
