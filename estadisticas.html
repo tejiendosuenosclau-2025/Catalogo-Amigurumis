@@ -959,9 +959,153 @@ function renderCharts() {
     }
 }
 function renderFinance(cur) {
-    const v=cur.reduce((s,f)=>s+total(f),0),d=$("donutFinanciero"),l=$("legendFinanciero");
-    if(d)d.style.background=`conic-gradient(#18ad73 0 100%,#f07818 100% 100%)`;
-    if(l)l.innerHTML=`🟢 Ingresos<br><b>${money(v)}</b><br><span style="color:#16a765">${v?"100.0":"0.0"}%</span><br><br>🟠 Gastos<br><b>$0</b><br><span style="color:#f07818">0.0%</span><br><br>🟣 Ganancia<br><b>${money(v)}</b><br><span style="color:#7650c8">${v?"100.0":"0.0"}%</span>`;
+
+    // ==========================================
+    // VENTAS DEL MES
+    // ==========================================
+
+    const ventas =
+        cur.reduce(
+            (suma, f) =>
+                suma + total(f),
+            0
+        );
+
+
+    // ==========================================
+    // GASTOS DEL MES
+    // ==========================================
+
+    const gastos =
+        totalExpenses(
+            selectedYear,
+            selectedMonth
+        );
+
+
+    // ==========================================
+    // GANANCIA REAL
+    // ==========================================
+
+    const ganancia =
+        ventas - gastos;
+
+
+    // ==========================================
+    // ELEMENTOS
+    // ==========================================
+
+    const donut =
+        $("donutFinanciero");
+
+    const legend =
+        $("legendFinanciero");
+
+
+    // ==========================================
+    // PORCENTAJES
+    // ==========================================
+
+    const totalDistribucion =
+        ventas || 1;
+
+
+    const porcentajeVentas =
+        ventas
+            ? (ventas / totalDistribucion * 100)
+            : 0;
+
+
+    const porcentajeGastos =
+        ventas
+            ? (gastos / totalDistribucion * 100)
+            : 0;
+
+
+    const porcentajeGanancia =
+        ventas
+            ? (ganancia / ventas * 100)
+            : 0;
+
+
+    // ==========================================
+    // DONUT
+    // ==========================================
+
+    if(donut){
+
+        const porcentajeGasto =
+            ventas
+                ? (gastos / ventas * 100)
+                : 0;
+
+        const inicioGastos =
+            Math.max(
+                0,
+                100 - porcentajeGasto
+            );
+
+
+        donut.style.background =
+            `conic-gradient(
+                #18ad73 0 ${inicioGastos}%,
+                #f07818 ${inicioGastos}% 100%
+            )`;
+    }
+
+
+    // ==========================================
+    // LEYENDA
+    // ==========================================
+
+    if(legend){
+
+        legend.innerHTML = `
+
+            🟢 Ingresos<br>
+
+            <b>
+                ${money(ventas)}
+            </b>
+
+            <br>
+
+            <span style="color:#16a765">
+                ${porcentajeVentas.toFixed(1)}%
+            </span>
+
+            <br><br>
+
+
+            🟠 Gastos<br>
+
+            <b>
+                ${money(gastos)}
+            </b>
+
+            <br>
+
+            <span style="color:#f07818">
+                ${porcentajeGastos.toFixed(1)}%
+            </span>
+
+            <br><br>
+
+
+            🟣 Ganancia<br>
+
+            <b>
+                ${money(ganancia)}
+            </b>
+
+            <br>
+
+            <span style="color:#7650c8">
+                ${porcentajeGanancia.toFixed(1)}%
+            </span>
+
+        `;
+    }
 }
 function renderCobros(cur) {
     const v=cur.reduce((s,f)=>s+total(f),0),pag=cur.filter(f=>balance(f)<=0).reduce((s,f)=>s+total(f),0),abo=cur.filter(f=>paid(f)>0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pen=cur.filter(f=>paid(f)<=0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pc=x=>v?(x/v*100).toFixed(1):"0.0",b=$("cobrosEstado");
@@ -1001,19 +1145,124 @@ function renderPayments(cur) {
     if(el)el.innerHTML=rows.length?rows.map((r,i)=>`<div class="pay"><div class="paycircle" style="border-right-color:${["#f43f7a","#f07818","#16a765","#7650c8"][i]}">${["💸","💵","💵","💳"][i]}</div><b>${(r[1]/sum*100).toFixed(0)}%</b><span>${esc(r[0])}<br>${money(r[1])}</span></div>`).join(""):'<div class="pay"><div class="paycircle">💳</div><b>0%</b><span>Sin datos<br>$0</span></div>';
 }
 function renderSummary() {
-    const b=$("resumenMensualBody");
-    if(!b)return;
-    let tv=0,tg=0,html="";
-    for(let m=0;m<12;m++) {
-        const q=monthRows(selectedYear,m),v=q.reduce((s,f)=>s+total(f),0);
-        tv+=v;
-        html+=`<tr class="${m===selectedMonth?'hl':''}"><td>${meses[m]}</td><td>${money(v)}</td><td>$0</td><td>${money(v)}</td></tr>`;
+
+    const b =
+        $("resumenMensualBody");
+
+    if(!b) return;
+
+
+    let totalVentasAnual = 0;
+
+    let totalGastosAnual = 0;
+
+    let html = "";
+
+
+    // ==========================================
+    // RECORRER LOS 12 MESES
+    // ==========================================
+
+    for(let m = 0; m < 12; m++){
+
+        const facturasMes =
+            monthRows(
+                selectedYear,
+                m
+            );
+
+
+        // VENTAS DEL MES
+
+        const ventasMes =
+            facturasMes.reduce(
+                (suma, factura) =>
+                    suma + total(factura),
+                0
+            );
+
+
+        // GASTOS DEL MES
+
+        const gastosMes =
+            totalExpenses(
+                selectedYear,
+                m
+            );
+
+
+        // GANANCIA DEL MES
+
+        const gananciaMes =
+            ventasMes - gastosMes;
+
+
+        // ACUMULAR TOTALES DEL AÑO
+
+        totalVentasAnual +=
+            ventasMes;
+
+        totalGastosAnual +=
+            gastosMes;
+
+
+        // FILA
+
+        html += `
+
+            <tr class="${m === selectedMonth ? "hl" : ""}">
+
+                <td>
+                    ${meses[m]}
+                </td>
+
+                <td>
+                    ${money(ventasMes)}
+                </td>
+
+                <td>
+                    ${money(gastosMes)}
+                </td>
+
+                <td>
+                    ${money(gananciaMes)}
+                </td>
+
+            </tr>
+
+        `;
     }
-    b.innerHTML=html;
-    $("totalAnualVentas").textContent=money(tv);
-    $("totalAnualGastos").textContent="$0";
-    $("totalAnualGanancia").textContent=money(tv);
+
+
+    // ==========================================
+    // MOSTRAR TABLA
+    // ==========================================
+
+    b.innerHTML =
+        html;
+
+
+    // ==========================================
+    // TOTALES DEL AÑO
+    // ==========================================
+
+    const totalGananciaAnual =
+        totalVentasAnual -
+        totalGastosAnual;
+
+
+    $("totalAnualVentas").textContent =
+        money(totalVentasAnual);
+
+
+    $("totalAnualGastos").textContent =
+        money(totalGastosAnual);
+
+
+    $("totalAnualGanancia").textContent =
+        money(totalGananciaAnual);
 }
+
 function renderOrders(cur) {
     const rows=[...cur].sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha))).slice(0,5),e=$("ultimosPedidos");
     if(e)e.innerHTML=rows.length?rows.map(f=> {
