@@ -276,16 +276,28 @@ body {
     font-size:28px
 }
 .pie:before {
-    content:"8\A Pedidos";
-    white-space:pre;
-    text-align:center;
-    position:absolute;
-    z-index:2;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    font-size:13px;
-    font-weight:800
+    content: none;
+}
+
+#totalPedidosPie {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 43%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+#totalPedidosPie + small {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 58%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 .legend {
     font-size:10px;
@@ -677,14 +689,19 @@ tr.hl td {
 </div>
 <div class="panel">
     <h2>PEDIDOS DEL MES</h2>
+
     <div class="piewrap">
+
         <div class="pie" id="piePedidos">
+            <span id="totalPedidosPie">0</span>
+            <small>Pedidos</small>
         </div>
-        <div class="legend">🩷 Personalizados &nbsp;<b>3</b>
-        <br>🟠 Perritos y abuelos &nbsp;<b>1</b>
-        <br>🟡 Girasol &nbsp;<b>1</b>
-        <br>🟢 Perrito &nbsp;<b>2</b>
-        <br>🟣 Pareja fantasmas &nbsp;<b>1</b>
+
+        <div
+            class="legend"
+            id="legendPedidos">
+        </div>
+
     </div>
 </div>
 </div>
@@ -1115,25 +1132,307 @@ function renderCobros(cur) {
     $("totalPendienteCobros").textContent=money(cur.reduce((s,f)=>s+balance(f),0));
 }
 function renderProducts(cur) {
-    const ids=cur.map(f=>f.id),map=new Map();
-    detalles.filter(d=>ids.includes(d.factura_id)).forEach(d=> {
-        const n=d.producto_nombre||"Producto",q=+d.cantidad||0,o=map.get(n)|| {
-            n,q:0
-        }
-        ;o.q+=q;map.set(n,o);
-    }
-    );
-    const rows=[...map.values()].sort((a,b)=>b.q-a.q).slice(0,5),mx=Math.max(...rows.map(x=>x.q),1),el=$("topProductos");
-    if(el)el.innerHTML=rows.length?rows.map((r,i)=>`<div class="prod"><b>${i+1}</b><span>🧶 ${esc(r.n)}</span><div class="bar"><i style="width:${Math.max(4,r.q/mx*100)}%"></i></div><b>${r.q}</b></div>`).join(""):'<div class="prod"><span>No hay productos registrados.</span></div>';
-    const p=$("piePedidos");
-    if(p) {
-        let a=0,parts=[],colors=["#f43f7a","#f07818","#f5ad0a","#18ad73","#7650c8"],sum=rows.reduce((s,r)=>s+r.q,0)||1;
-        rows.forEach((r,i)=> {
-            let n=a+r.q/sum*100;parts.push(`${colors[i%5]} ${a}% ${n}%`);a=n;
-        }
+
+    // ==========================================
+    // 1. FACTURAS DEL MES
+    // ==========================================
+
+    const ids =
+        cur.map(f => f.id);
+
+
+    // ==========================================
+    // 2. AGRUPAR PRODUCTOS REALES
+    // ==========================================
+
+    const map =
+        new Map();
+
+
+    detalles
+        .filter(d =>
+            ids.includes(d.factura_id)
+        )
+        .forEach(d => {
+
+            const nombre =
+                d.producto_nombre ||
+                "Producto";
+
+            const cantidad =
+                Number(d.cantidad) || 0;
+
+
+            const producto =
+                map.get(nombre) || {
+
+                    n: nombre,
+
+                    q: 0
+
+                };
+
+
+            producto.q += cantidad;
+
+            map.set(
+                nombre,
+                producto
+            );
+
+        });
+
+
+    // ==========================================
+    // 3. ORDENAR PRODUCTOS
+    // ==========================================
+
+    const rows =
+        [...map.values()]
+            .sort(
+                (a, b) =>
+                    b.q - a.q
+            );
+
+
+    // ==========================================
+    // 4. TOP PRODUCTOS
+    // ==========================================
+
+    const topRows =
+        rows.slice(0, 5);
+
+
+    const maxCantidad =
+        Math.max(
+            ...topRows.map(
+                x => x.q
+            ),
+            1
         );
-        p.style.background=parts.length?`conic-gradient(${parts.join(",")})`:"conic-gradient(#eee 0 100%)";
+
+
+    const topProductos =
+        $("topProductos");
+
+
+    if(topProductos){
+
+        topProductos.innerHTML =
+            topRows.length
+
+                ? topRows.map(
+                    (r, i) => `
+
+                        <div class="prod">
+
+                            <b>
+                                ${i + 1}
+                            </b>
+
+                            <span>
+                                🧶
+                                ${esc(r.n)}
+                            </span>
+
+                            <div class="bar">
+
+                                <i
+                                    style="
+                                        width:${Math.max(
+                                            4,
+                                            r.q /
+                                            maxCantidad *
+                                            100
+                                        )}%;
+                                    "
+                                ></i>
+
+                            </div>
+
+                            <b>
+                                ${r.q}
+                            </b>
+
+                        </div>
+
+                    `
+                ).join("")
+
+                : `
+                    <div class="prod">
+                        <span>
+                            No hay productos registrados.
+                        </span>
+                    </div>
+                `;
+
     }
+
+
+    // ==========================================
+    // 5. TOTAL PARA EL GRÁFICO
+    // ==========================================
+
+    const totalCantidad =
+        rows.reduce(
+            (suma, producto) =>
+                suma + producto.q,
+            0
+        );
+
+
+    // ==========================================
+    // 6. ACTUALIZAR NÚMERO DEL CENTRO
+    // ==========================================
+
+    const totalPedidosPie =
+        $("totalPedidosPie");
+
+
+    if(totalPedidosPie){
+
+        totalPedidosPie.textContent =
+            totalCantidad;
+
+    }
+
+
+    // ==========================================
+    // 7. ACTUALIZAR LEYENDA
+    // ==========================================
+
+    const legendPedidos =
+        $("legendPedidos");
+
+
+    if(legendPedidos){
+
+        const colores = [
+
+            "#f43f7a",
+            "#f07818",
+            "#f5ad0a",
+            "#18ad73",
+            "#7650c8"
+
+        ];
+
+
+        legendPedidos.innerHTML =
+            topRows.length
+
+                ? topRows.map(
+                    (r, i) => `
+
+                        <div>
+
+                            <span
+                                style="
+                                    color:${colores[i % colores.length]};
+                                    font-size:16px;
+                                "
+                            >
+                                ●
+                            </span>
+
+                            ${esc(r.n)}
+
+                            <b>
+                                ${r.q}
+                            </b>
+
+                        </div>
+
+                    `
+                ).join("")
+
+                : `
+                    <div>
+                        Sin pedidos
+                    </div>
+                `;
+
+    }
+
+
+    // ==========================================
+    // 8. CONSTRUIR GRÁFICO CIRCULAR
+    // ==========================================
+
+    const piePedidos =
+        $("piePedidos");
+
+
+    if(piePedidos){
+
+        const colores = [
+
+            "#f43f7a",
+            "#f07818",
+            "#f5ad0a",
+            "#18ad73",
+            "#7650c8"
+
+        ];
+
+
+        let inicio = 0;
+
+        const partes = [];
+
+
+        const totalGrafico =
+            topRows.reduce(
+                (suma, producto) =>
+                    suma + producto.q,
+                0
+            );
+
+
+        if(totalGrafico > 0){
+
+            topRows.forEach(
+                (producto, i) => {
+
+                    const porcentaje =
+                        producto.q /
+                        totalGrafico *
+                        100;
+
+
+                    const fin =
+                        inicio +
+                        porcentaje;
+
+
+                    partes.push(
+                        `${colores[i % colores.length]}
+                         ${inicio}%
+                         ${fin}%`
+                    );
+
+
+                    inicio =
+                        fin;
+
+                }
+            );
+
+        }
+
+
+        piePedidos.style.background =
+            partes.length
+
+                ? `conic-gradient(
+                    ${partes.join(",")}
+                  )`
+
+                : "conic-gradient(#eee 0 100%)";
+
+    }
+
 }
 function renderPayments(cur) {
     const m=new Map();
