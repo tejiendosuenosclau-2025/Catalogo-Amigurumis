@@ -495,6 +495,444 @@ tr.hl td {
         grid-template-columns:1fr 1fr
     }
 }
+
+
+/* =========================================================
+   ✨ EFECTOS VISUALES PREMIUM - ESTADÍSTICAS
+   No modifica HTML ni JavaScript
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   ENTRADA GENERAL
+   --------------------------------------------------------- */
+
+.main {
+    animation: dashboardEntrada .55s ease both;
+}
+
+@keyframes dashboardEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   TARJETAS PRINCIPALES
+   --------------------------------------------------------- */
+
+.card {
+    transition:
+        transform .28s cubic-bezier(.2,.8,.2,1),
+        box-shadow .28s ease,
+        border-color .28s ease;
+    
+    will-change: transform;
+}
+
+.card:hover {
+    transform: translateY(-7px) scale(1.015);
+
+    box-shadow:
+        0 14px 32px rgba(42,28,35,.14),
+        0 3px 8px rgba(244,63,122,.06);
+
+    border-color: #f2d6e0;
+}
+
+
+/* ---------------------------------------------------------
+   ICONOS DE LAS TARJETAS
+   --------------------------------------------------------- */
+
+.card .icon {
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.card:hover .icon {
+    transform: translateY(-3px) scale(1.08);
+
+    box-shadow:
+        0 6px 14px rgba(42,28,35,.10);
+}
+
+
+/* ---------------------------------------------------------
+   VALORES DE LAS TARJETAS
+   --------------------------------------------------------- */
+
+.card .value {
+    transition:
+        transform .25s ease,
+        letter-spacing .25s ease;
+}
+
+.card:hover .value {
+    transform: scale(1.04);
+    letter-spacing: .2px;
+}
+
+
+/* ---------------------------------------------------------
+   EFECTO EN LA LÍNEA INFERIOR DE LAS TARJETAS
+   --------------------------------------------------------- */
+
+.card .spark {
+    transition:
+        height .3s ease,
+        opacity .3s ease;
+}
+
+.card:hover .spark {
+    height: 48px;
+}
+
+.card:hover .spark::before {
+    opacity: .38;
+}
+
+
+/* ---------------------------------------------------------
+   PANELES
+   --------------------------------------------------------- */
+
+.panel {
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.panel:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(42,28,35,.10);
+
+    border-color: #ead3dc;
+}
+
+
+/* ---------------------------------------------------------
+   TÍTULOS DE LOS PANELES
+   --------------------------------------------------------- */
+
+.panel h2 {
+    transition:
+        color .25s ease;
+}
+
+.panel:hover h2 {
+    color: var(--p);
+}
+
+
+/* ---------------------------------------------------------
+   SELECTOR DE MES
+   --------------------------------------------------------- */
+
+.sel {
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .2s ease;
+}
+
+.sel:hover {
+    border-color: #f2a8be;
+
+    box-shadow:
+        0 5px 15px rgba(244,63,122,.10);
+}
+
+.sel:focus {
+    outline: none;
+
+    border-color: var(--p);
+
+    box-shadow:
+        0 0 0 3px rgba(244,63,122,.12);
+}
+
+
+/* ---------------------------------------------------------
+   FECHA
+   --------------------------------------------------------- */
+
+.date {
+    transition:
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.date:hover {
+    border-color: #f2cbd7;
+
+    box-shadow:
+        0 5px 15px rgba(42,28,35,.08);
+}
+
+
+/* ---------------------------------------------------------
+   PERFIL
+   --------------------------------------------------------- */
+
+.profile {
+    cursor: pointer;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.profile:hover {
+    transform: scale(1.08) rotate(3deg);
+
+    box-shadow:
+        0 8px 22px rgba(244,63,122,.20);
+}
+
+
+/* ---------------------------------------------------------
+   FILAS DE TABLAS / RESÚMENES
+   --------------------------------------------------------- */
+
+.panel .row {
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.panel .row:hover {
+    background: #fff8fa;
+    transform: translateX(3px);
+}
+
+
+/* ---------------------------------------------------------
+   FILA DEL MES SELECCIONADO
+   --------------------------------------------------------- */
+
+tr.hl {
+    transition:
+        box-shadow .25s ease,
+        transform .2s ease;
+}
+
+tr.hl:hover {
+    transform: translateX(3px);
+
+    box-shadow:
+        0 4px 12px rgba(244,63,122,.08);
+}
+
+
+/* ---------------------------------------------------------
+   PEDIDOS
+   --------------------------------------------------------- */
+
+.order {
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.order:hover {
+    transform: translateX(4px);
+
+    background: #fff8fa;
+
+    box-shadow:
+        0 4px 12px rgba(42,28,35,.06);
+}
+
+
+/* ---------------------------------------------------------
+   BADGES
+   --------------------------------------------------------- */
+
+.badge {
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.order:hover .badge {
+    transform: scale(1.04);
+
+    box-shadow:
+        0 3px 8px rgba(42,28,35,.08);
+}
+
+
+/* ---------------------------------------------------------
+   GRÁFICAS
+   --------------------------------------------------------- */
+
+.chart {
+    animation: graficaEntrada .7s ease both;
+}
+
+@keyframes graficaEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   DONUT / GRÁFICOS CIRCULARES
+   --------------------------------------------------------- */
+
+.donut,
+.pie {
+    transition:
+        transform .35s ease,
+        filter .35s ease;
+}
+
+.donut:hover,
+.pie:hover {
+    transform: scale(1.045) rotate(2deg);
+
+    filter:
+        drop-shadow(0 8px 12px rgba(42,28,35,.12));
+}
+
+
+/* ---------------------------------------------------------
+   BARRAS
+   --------------------------------------------------------- */
+
+.bar {
+    transition:
+        transform .25s ease,
+        filter .25s ease;
+}
+
+.bar:hover {
+    transform: scaleY(1.04);
+    filter: brightness(1.04);
+}
+
+
+/* ---------------------------------------------------------
+   EFECTO SUAVE EN VALORES IMPORTANTES
+   --------------------------------------------------------- */
+
+.value,
+.total,
+.compare {
+    transition:
+        opacity .25s ease;
+}
+
+
+/* ---------------------------------------------------------
+   GASTOS DEL MES
+   --------------------------------------------------------- */
+
+#gastosLista .row {
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+#gastosLista .row:hover {
+    background: #fff7f1;
+
+    transform: translateX(4px);
+}
+
+
+/* ---------------------------------------------------------
+   TOTAL DE GASTOS
+   --------------------------------------------------------- */
+
+#gastosTotal {
+    transition:
+        transform .25s ease,
+        color .25s ease;
+}
+
+#gastosTotal:hover {
+    transform: scale(1.04);
+    color: var(--o);
+}
+
+
+/* ---------------------------------------------------------
+   MOVIMIENTO SUAVE DEL SPARK
+   --------------------------------------------------------- */
+
+.card:hover .spark::before {
+    animation: sparkMovimiento 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes sparkMovimiento {
+    from {
+        transform: translateX(-2px);
+    }
+
+    to {
+        transform: translateX(2px);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   RESPETO POR USUARIOS QUE PREFIEREN MENOS ANIMACIÓN
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MÓVIL
+   --------------------------------------------------------- */
+
+@media (max-width:700px) {
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .panel:hover {
+        transform: none;
+    }
+
+    .profile:hover {
+        transform: scale(1.04);
+    }
+}
+
+
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 
@@ -504,7 +942,7 @@ tr.hl td {
 </script>
 </head>
 <body>
-    <div class="app">
+<div class="app">
 <main class="main">
             <header class="top">
                 <div class="title">
@@ -521,7 +959,7 @@ tr.hl td {
                 <div class="value" id="statVentas">$0</div>
                 <div class="up" id="statVentasCambio">— vs mes anterior</div>
                 <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
-                <polyline id="sparkVentas" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f43f7a" stroke-width="2"/>
+                <polyline id="sparkVentas" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f43f7a" stroke-      		width="2"/>
             </svg>
         </article>
         <article class="card orange">
@@ -530,7 +968,7 @@ tr.hl td {
             <div class="value" id="statGastos">$0</div>
             <div class="down" id="statGastosCambio">— vs mes anterior</div>
             <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
-            <polyline id="sparkGastos" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f07818" stroke-width="2"/>
+            <polyline id="sparkGastos" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#f07818" stroke-		width="2"/>
         </svg>
     </article>
     <article class="card green">
@@ -539,7 +977,7 @@ tr.hl td {
         <div class="value" id="statGanancia" style="color:#087b2d">$0</div>
         <div class="up" id="statGananciaCambio">— vs mes anterior</div>
         <svg class="spark" viewBox="0 0 200 45" preserveAspectRatio="none">
-        <polyline id="sparkGanancia" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#16a765" stroke-width="2"/>
+        <polyline id="sparkGanancia" points="0,38 20,32 38,35 55,22 72,30 90,15 108,28 125,18 142,27 160,12 180,25 200,14" fill="none" stroke="#16a765" stroke-		width="2"/>
     </svg>
 </article>
 <article class="card purple">
