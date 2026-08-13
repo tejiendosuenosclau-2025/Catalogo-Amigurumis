@@ -682,15 +682,85 @@ body {
     gap: 7px;
 }
 
+/* =========================
+   ESTADO DE COBROS
+   ========================= */
+
 .cobro {
-    padding: 10px 4px;
+    padding: 12px 6px;
     text-align: center;
-    border-radius: 9px;
+    border-radius: 12px;
     border: 1px solid #dcebd8;
     background: #f5fff5;
     font-size: 10px;
+
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        box-shadow .35s ease,
+        border-color .35s ease;
 }
 
+/* Línea luminosa superior */
+.cobro::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--g);
+
+    transform: scaleX(.35);
+    transform-origin: center;
+
+    transition:
+        transform .35s ease;
+}
+
+/* PAGADO */
+.cobro:nth-child(1)::before {
+    background: var(--g);
+}
+
+/* ABONADO */
+.cobro:nth-child(2)::before {
+    background: var(--o);
+}
+
+/* PENDIENTE */
+.cobro:nth-child(3)::before {
+    background: #ef4444;
+}
+
+.cobro:hover {
+    transform: translateY(-5px) scale(1.025);
+
+    box-shadow:
+        0 10px 22px rgba(42,28,35,.12);
+}
+
+.cobro:hover::before {
+    transform: scaleX(1);
+}
+
+.cobro strong {
+    display: block;
+    font-size: 14px;
+    margin-top: 6px;
+
+    transition:
+        transform .3s ease,
+        color .3s ease;
+}
+
+.cobro:hover strong {
+    transform: scale(1.08);
+}
+
+/* Colores originales de cada estado */
 .cobro:nth-child(2) {
     background: #fffaf0;
     border-color: #f4dfbd;
@@ -699,6 +769,17 @@ body {
 .cobro:nth-child(3) {
     background: #fff4f4;
     border-color: #f3cccc;
+}
+
+/* =========================
+   MÓVIL
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .cobro:hover {
+        transform: translateY(-3px) scale(1.015);
+    }
 }
 
 .cobro strong {
