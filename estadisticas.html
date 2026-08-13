@@ -490,71 +490,95 @@ body {
         color .3s ease;
 }
 
+/* =====================================================
+   PEDIDOS DEL MES — EFECTO PREMIUM
+   ===================================================== */
 
-/* =========================
-   EFECTOS AL PASAR EL MOUSE
-   ========================= */
+#piePedidos {
+    box-shadow:
+        0 8px 18px rgba(42, 28, 35, .10),
+        0 0 0 6px rgba(244, 63, 122, .035);
 
-.panel:hover .donut {
-    transform:
-        scale(1.05)
-        rotate(2deg);
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .4s ease,
+        filter .4s ease;
+}
+
+#piePedidos:hover {
+    transform: scale(1.07) rotate(-3deg);
 
     filter:
         drop-shadow(
-            0 10px 15px rgba(42,28,35,.15)
+            0 12px 18px rgba(42,28,35,.16)
         );
 
     box-shadow:
-        0 0 0 7px rgba(244,63,122,.035);
+        0 12px 25px rgba(42,28,35,.13),
+        0 0 0 8px rgba(244,63,122,.055);
 }
 
-.panel:hover .pie {
-    transform:
-        scale(1.05)
-        rotate(-2deg);
-
-    filter:
-        drop-shadow(
-            0 10px 15px rgba(42,28,35,.15)
-        );
-
-    box-shadow:
-        0 0 0 7px rgba(244,63,122,.035);
+#piePedidos::after {
+    transition:
+        inset .35s ease,
+        box-shadow .35s ease;
 }
 
-.panel:hover .donut::after,
-.panel:hover .pie::after {
+#piePedidos:hover::after {
     inset: 31px;
 
     box-shadow:
+        inset 0 1px 5px rgba(42,28,35,.035),
         0 0 18px rgba(255,255,255,.95);
 }
 
-.panel:hover .donut::before {
-    transform:
-        translate(-50%, -50%)
-        scale(1.13)
-        rotate(-8deg);
-
-    filter:
-        drop-shadow(
-            0 4px 5px rgba(42,28,35,.15)
-        );
+#piePedidos #totalPedidosPie {
+    transition:
+        transform .3s ease,
+        color .3s ease;
 }
 
-.panel:hover #totalPedidosPie {
+#piePedidos:hover #totalPedidosPie {
     transform:
         translate(-50%, -50%)
-        scale(1.08);
+        scale(1.12);
 
     color: var(--p);
 }
 
-.panel:hover #piePedidos small {
-    color: var(--p);
+#piePedidos small {
+    transition:
+        color .3s ease,
+        transform .3s ease;
 }
 
+#piePedidos:hover small {
+    color: var(--p);
+
+    transform:
+        translateX(-50%)
+        scale(1.05);
+}
+
+#legendPedidos {
+    transition:
+        transform .3s ease;
+}
+
+#legendPedidos:hover {
+    transform: translateX(4px);
+}
+
+#legendPedidos > div {
+    transition:
+        transform .25s ease,
+        padding-left .25s ease;
+}
+
+#legendPedidos > div:hover {
+    transform: translateX(4px);
+    padding-left: 3px;
+}
 
 /* =========================
    LEYENDA
@@ -568,21 +592,12 @@ body {
         transform .3s ease;
 }
 
-.panel:hover .legend {
-    transform: translateX(3px);
-}
-
 .legend b {
     font-size: 13px;
 
     transition:
         color .3s ease;
 }
-
-.panel:hover .legend b {
-    color: var(--p);
-}
-
 
 /* =========================
    ANIMACIONES
@@ -633,12 +648,14 @@ body {
         transform: translateY(-3px);
     }
 
-    .panel:hover .donut,
-    .panel:hover .pie {
+    #donutFinanciero:hover {
+        transform: scale(1.025);
+    }
+
+    #piePedidos:hover {
         transform: scale(1.025);
     }
 }
-
 
 /* =========================
    REDUCIR ANIMACIONES
