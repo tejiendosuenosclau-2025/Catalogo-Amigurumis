@@ -1163,6 +1163,115 @@ tr.hl td {
         display: none;
     }
 }
+
+/* =====================================================
+   EFECTO PREMIUM — DISTRIBUCIÓN FINANCIERA
+   SOLO afecta al donut financiero
+   ===================================================== */
+
+#donutFinanciero {
+    box-shadow:
+        0 8px 18px rgba(42, 28, 35, .10),
+        0 0 0 6px rgba(24, 173, 115, .035);
+
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .4s ease,
+        filter .4s ease;
+
+    animation:
+        financieroEntrada .7s cubic-bezier(.2,.8,.2,1);
+}
+
+#donutFinanciero:hover {
+    transform: scale(1.07) rotate(3deg);
+
+    filter:
+        drop-shadow(0 12px 18px rgba(42,28,35,.16));
+
+    box-shadow:
+        0 12px 25px rgba(42,28,35,.13),
+        0 0 0 8px rgba(24,173,115,.055);
+}
+
+#donutFinanciero::after {
+    transition:
+        inset .35s ease,
+        box-shadow .35s ease;
+}
+
+#donutFinanciero:hover::after {
+    inset: 31px;
+
+    box-shadow:
+        inset 0 1px 5px rgba(42,28,35,.035),
+        0 0 18px rgba(255,255,255,.95);
+}
+
+#donutFinanciero::before {
+    transition:
+        transform .4s cubic-bezier(.2,.8,.2,1),
+        filter .4s ease;
+}
+
+#donutFinanciero:hover::before {
+    transform:
+        translate(-50%, -50%)
+        scale(1.14)
+        rotate(-8deg);
+
+    filter:
+        drop-shadow(0 5px 6px rgba(42,28,35,.16));
+}
+
+#legendFinanciero {
+    transition:
+        transform .3s ease;
+}
+
+#legendFinanciero:hover {
+    transform: translateX(4px);
+}
+
+#legendFinanciero b {
+    transition:
+        color .3s ease,
+        transform .3s ease;
+}
+
+#legendFinanciero b:hover {
+    color: var(--g);
+    transform: translateX(3px);
+}
+
+@keyframes financieroEntrada {
+    from {
+        opacity: 0;
+        transform: scale(.78) rotate(-14deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@media (max-width: 700px) {
+
+    #donutFinanciero:hover {
+        transform: scale(1.03);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #donutFinanciero,
+    #legendFinanciero {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
