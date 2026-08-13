@@ -497,438 +497,261 @@ tr.hl td {
 }
 
 
-/* ============================================================
-   ✨ TARJETAS PREMIUM — TEJIENDO SUEÑOS CLAU
-   Solo CSS — no modifica JavaScript ni la funcionalidad
-   ============================================================ */
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU — EFECTOS VISUALES PREMIUM
+   Solo capa visual: no modifica JavaScript ni datos.
+   ========================================================= */
 
-/* Base */
 .card {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-
     transform-style: preserve-3d;
-
-    transition:
-        transform .45s cubic-bezier(.2,.8,.2,1),
-        box-shadow .45s ease,
-        border-color .45s ease;
-
     will-change: transform, box-shadow;
-}
-
-
-/* ------------------------------------------------------------
-   BORDE LUMINOSO
-   ------------------------------------------------------------ */
-
-.card::after {
-    content: "";
-    position: absolute;
-    inset: -1px;
-
-    border-radius: inherit;
-
-    padding: 1px;
-
-    background:
-        linear-gradient(
-            120deg,
-            transparent 15%,
-            rgba(255,255,255,.75) 35%,
-            transparent 55%
-        );
-
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-
-    opacity: 0;
-    transform: translateX(-70%);
-
     transition:
-        opacity .35s ease,
-        transform .8s cubic-bezier(.2,.8,.2,1);
-
-    pointer-events: none;
-    z-index: 5;
+        transform .38s cubic-bezier(.2,.8,.2,1),
+        box-shadow .38s ease,
+        border-color .38s ease;
 }
-
-
-/* ------------------------------------------------------------
-   HALO DE COLOR
-   ------------------------------------------------------------ */
 
 .card::before {
     content: "";
     position: absolute;
-
-    width: 170px;
-    height: 170px;
-
-    right: -70px;
-    top: -70px;
-
+    width: 190px;
+    height: 190px;
+    top: -105px;
+    right: -85px;
     border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.42) 0%,
-            rgba(255,255,255,.15) 35%,
-            transparent 70%
-        );
-
-    filter: blur(8px);
-
+    background: radial-gradient(
+        circle,
+        rgba(255,255,255,.58) 0%,
+        rgba(255,255,255,.18) 34%,
+        transparent 72%
+    );
     opacity: 0;
-
-    transform: scale(.5);
-
-    transition:
-        opacity .45s ease,
-        transform .55s cubic-bezier(.2,.8,.2,1);
-
+    transform: scale(.55);
+    transition: opacity .42s ease, transform .55s cubic-bezier(.2,.8,.2,1);
     pointer-events: none;
-
-    z-index: 1;
+    z-index: 0;
 }
 
+.card::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -90%;
+    width: 55%;
+    height: 160%;
+    background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(255,255,255,.05) 35%,
+        rgba(255,255,255,.58) 50%,
+        rgba(255,255,255,.05) 65%,
+        transparent 100%
+    );
+    transform: skewX(-18deg);
+    opacity: 0;
+    transition: left .75s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
+    pointer-events: none;
+    z-index: 4;
+}
 
-/* ------------------------------------------------------------
-   HOVER PRINCIPAL
-   ------------------------------------------------------------ */
+.card > * {
+    position: relative;
+    z-index: 2;
+}
 
 .card:hover {
-
-    transform:
-        translateY(-10px)
-        scale(1.025)
-        rotateX(1.5deg)
-        rotateY(-1.5deg);
-
+    transform: translateY(-8px) scale(1.018);
+    border-color: rgba(244,63,122,.22);
     box-shadow:
-        0 22px 45px rgba(42,28,35,.16),
-        0 8px 20px rgba(244,63,122,.10);
-
-    border-color: rgba(244,63,122,.25);
+        0 18px 38px rgba(42,28,35,.14),
+        0 5px 15px rgba(42,28,35,.06);
 }
-
-
-/* ------------------------------------------------------------
-   ACTIVAR BORDE
-   ------------------------------------------------------------ */
-
-.card:hover::after {
-    opacity: 1;
-    transform: translateX(70%);
-}
-
-
-/* ------------------------------------------------------------
-   ACTIVAR HALO
-   ------------------------------------------------------------ */
 
 .card:hover::before {
     opacity: 1;
-    transform: scale(1.25);
+    transform: scale(1.22);
 }
 
+.card:hover::after {
+    left: 150%;
+    opacity: 1;
+}
 
-/* ------------------------------------------------------------
-   ICONO
-   ------------------------------------------------------------ */
+.card.pink:hover {
+    box-shadow: 0 18px 38px rgba(244,63,122,.18), 0 0 28px rgba(244,63,122,.09);
+}
+.card.orange:hover {
+    box-shadow: 0 18px 38px rgba(240,120,24,.18), 0 0 28px rgba(240,120,24,.09);
+}
+.card.green:hover {
+    box-shadow: 0 18px 38px rgba(22,167,101,.18), 0 0 28px rgba(22,167,101,.09);
+}
+.card.purple:hover {
+    box-shadow: 0 18px 38px rgba(118,80,200,.18), 0 0 28px rgba(118,80,200,.09);
+}
+.card.blue:hover {
+    box-shadow: 0 18px 38px rgba(61,145,232,.18), 0 0 28px rgba(61,145,232,.09);
+}
+.card.yellow:hover {
+    box-shadow: 0 18px 38px rgba(245,158,11,.18), 0 0 28px rgba(245,158,11,.09);
+}
 
 .card .icon {
-    position: relative;
-    z-index: 4;
-
-    transform: translateZ(18px);
-
-    transition:
-        transform .45s cubic-bezier(.2,.8,.2,1),
-        box-shadow .45s ease,
-        filter .45s ease;
+    transition: transform .38s cubic-bezier(.2,.8,.2,1), box-shadow .38s ease, filter .38s ease;
 }
-
 .card:hover .icon {
-
-    transform:
-        translateZ(25px)
-        scale(1.12)
-        rotate(-5deg);
-
-    filter:
-        drop-shadow(0 7px 10px rgba(42,28,35,.15));
+    transform: translateY(-3px) scale(1.10) rotate(-4deg);
+    box-shadow: 0 8px 17px rgba(42,28,35,.12);
+    filter: drop-shadow(0 4px 6px rgba(42,28,35,.10));
 }
-
-
-/* ------------------------------------------------------------
-   CONTENIDO
-   ------------------------------------------------------------ */
 
 .card .label,
 .card .value,
 .card .up,
 .card .down {
-    position: relative;
-    z-index: 4;
+    transition: transform .32s ease, text-shadow .32s ease, letter-spacing .32s ease;
 }
-
-
-/* ------------------------------------------------------------
-   TÍTULO
-   ------------------------------------------------------------ */
-
-.card .label {
-    transition:
-        transform .35s ease,
-        color .35s ease;
-}
-
-.card:hover .label {
-    transform: translateX(3px);
-}
-
-
-/* ------------------------------------------------------------
-   VALOR PRINCIPAL
-   ------------------------------------------------------------ */
-
-.card .value {
-
-    transform: translateZ(22px);
-
-    transition:
-        transform .45s cubic-bezier(.2,.8,.2,1),
-        text-shadow .45s ease,
-        letter-spacing .45s ease;
-}
-
+.card:hover .label { transform: translateX(2px); }
 .card:hover .value {
-
-    transform:
-        translateZ(32px)
-        scale(1.065);
-
-    letter-spacing: .4px;
-
-    text-shadow:
-        0 5px 18px rgba(42,28,35,.12);
+    transform: scale(1.055);
+    letter-spacing: .2px;
+    text-shadow: 0 4px 14px rgba(42,28,35,.12);
 }
-
-
-/* ------------------------------------------------------------
-   CAMBIO %
-   ------------------------------------------------------------ */
-
-.card .up,
-.card .down {
-
-    transition:
-        transform .35s ease,
-        opacity .35s ease;
-}
-
 .card:hover .up,
-.card:hover .down {
-    transform: translateX(4px);
-}
-
-
-/* ------------------------------------------------------------
-   GRÁFICA / SPARK
-   ------------------------------------------------------------ */
+.card:hover .down { transform: translateX(3px); }
 
 .card .spark {
-
-    position: relative;
-    z-index: 3;
-
-    transition:
-        transform .5s cubic-bezier(.2,.8,.2,1),
-        filter .5s ease;
+    transition: transform .38s ease, filter .38s ease;
 }
-
 .card:hover .spark {
-
-    transform:
-        translateY(-2px)
-        scale(1.04);
-
-    filter:
-        drop-shadow(0 5px 7px rgba(42,28,35,.12));
+    transform: scale(1.035) translateY(-2px);
+    filter: drop-shadow(0 4px 7px rgba(42,28,35,.10));
 }
 
-
-/* ------------------------------------------------------------
-   REFLEJO QUE RECORRE LA TARJETA
-   ------------------------------------------------------------ */
-
-.card .spark::before {
-    transition:
-        opacity .35s ease;
+.panel {
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(42,28,35,.075);
+    border-color: rgba(244,63,122,.14);
 }
 
+.chart {
+    animation: dashboardChartIn .65s ease both;
+}
+.chart svg { overflow: visible; }
 
-/* ------------------------------------------------------------
-   ANIMACIÓN INICIAL
-   ------------------------------------------------------------ */
+.chart svg rect {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: chartBarIn .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.chart svg rect:nth-of-type(2) { animation-delay: .04s; }
+.chart svg rect:nth-of-type(3) { animation-delay: .08s; }
+.chart svg rect:nth-of-type(4) { animation-delay: .12s; }
+.chart svg rect:nth-of-type(5) { animation-delay: .16s; }
+.chart svg rect:nth-of-type(6) { animation-delay: .20s; }
+.chart svg rect:nth-of-type(7) { animation-delay: .24s; }
+.chart svg rect:nth-of-type(8) { animation-delay: .28s; }
+.chart svg rect:nth-of-type(9) { animation-delay: .32s; }
+.chart svg rect:nth-of-type(10) { animation-delay: .36s; }
+.chart svg rect:nth-of-type(11) { animation-delay: .40s; }
+.chart svg rect:nth-of-type(12) { animation-delay: .44s; }
+
+.chart svg circle {
+    transition: r .2s ease, filter .2s ease;
+}
+.chart svg circle:hover {
+    r: 5px;
+    filter: drop-shadow(0 3px 5px rgba(118,80,200,.25));
+}
+
+@keyframes dashboardChartIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes chartBarIn {
+    from { opacity: 0; transform: scaleY(0); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+.donut,
+.pie {
+    transition: transform .38s ease, filter .38s ease;
+    animation: donutIn .75s cubic-bezier(.2,.8,.2,1) both;
+}
+.donut:hover,
+.pie:hover {
+    transform: scale(1.045) rotate(2deg);
+    filter: drop-shadow(0 8px 12px rgba(42,28,35,.12));
+}
+@keyframes donutIn {
+    from { opacity: 0; transform: scale(.82) rotate(-10deg); }
+    to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+.panel .row,
+.order {
+    transition: background .22s ease, transform .22s ease, box-shadow .22s ease;
+}
+.panel .row:hover,
+.order:hover {
+    background: #fff8fa;
+    transform: translateX(3px);
+    box-shadow: 0 4px 10px rgba(42,28,35,.045);
+}
+
+.sel {
+    transition: border-color .25s ease, box-shadow .25s ease, transform .2s ease;
+}
+.sel:hover {
+    border-color: #f2b4c7;
+    box-shadow: 0 5px 14px rgba(244,63,122,.08);
+}
+.sel:focus {
+    outline: none;
+    border-color: var(--p);
+    box-shadow: 0 0 0 3px rgba(244,63,122,.12);
+}
 
 .card {
-    animation:
-        tarjetaPremiumEntrada
-        .65s
-        cubic-bezier(.2,.8,.2,1)
-        both;
+    animation: cardPremiumIn .6s cubic-bezier(.2,.8,.2,1) both;
+}
+.card:nth-child(1) { animation-delay: .03s; }
+.card:nth-child(2) { animation-delay: .08s; }
+.card:nth-child(3) { animation-delay: .13s; }
+.card:nth-child(4) { animation-delay: .18s; }
+.card:nth-child(5) { animation-delay: .23s; }
+.card:nth-child(6) { animation-delay: .28s; }
+
+@keyframes cardPremiumIn {
+    from { opacity: 0; transform: translateY(18px) scale(.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.card:nth-child(1) {
-    animation-delay: .05s;
+@media (max-width:700px) {
+    .card:hover { transform: translateY(-4px) scale(1.008); }
+    .card:hover .icon { transform: scale(1.05); }
+    .card:hover .value { transform: scale(1.025); }
+    .card::after { display: none; }
 }
-
-.card:nth-child(2) {
-    animation-delay: .10s;
-}
-
-.card:nth-child(3) {
-    animation-delay: .15s;
-}
-
-.card:nth-child(4) {
-    animation-delay: .20s;
-}
-
-.card:nth-child(5) {
-    animation-delay: .25s;
-}
-
-.card:nth-child(6) {
-    animation-delay: .30s;
-}
-
-@keyframes tarjetaPremiumEntrada {
-
-    from {
-        opacity: 0;
-        transform:
-            translateY(25px)
-            scale(.97);
-    }
-
-    to {
-        opacity: 1;
-        transform:
-            translateY(0)
-            scale(1);
-    }
-}
-
-
-/* ------------------------------------------------------------
-   PULSO MUY SUTIL PARA LOS VALORES
-   ------------------------------------------------------------ */
-
-.card:hover .value {
-    animation:
-        valorPremiumPulse
-        1.8s
-        ease-in-out
-        infinite;
-}
-
-@keyframes valorPremiumPulse {
-
-    0%,
-    100% {
-        filter: brightness(1);
-    }
-
-    50% {
-        filter: brightness(1.08);
-    }
-}
-
-
-/* ------------------------------------------------------------
-   EFECTO ESPECIAL PARA LA TARJETA DE GASTOS
-   ------------------------------------------------------------ */
-
-.card:has(.label) {
-    transition:
-        transform .45s cubic-bezier(.2,.8,.2,1),
-        box-shadow .45s ease;
-}
-
-
-/* ------------------------------------------------------------
-   MÓVIL
-   ------------------------------------------------------------ */
-
-@media (max-width: 700px) {
-
-    .card:hover {
-
-        transform:
-            translateY(-5px)
-            scale(1.01)
-            rotateX(0)
-            rotateY(0);
-
-        box-shadow:
-            0 14px 28px rgba(42,28,35,.13);
-    }
-
-    .card:hover .icon {
-        transform:
-            translateZ(0)
-            scale(1.06)
-            rotate(-3deg);
-    }
-
-    .card:hover .value {
-        transform:
-            translateZ(0)
-            scale(1.03);
-    }
-}
-
-
-/* ------------------------------------------------------------
-   ACCESIBILIDAD
-   ------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-
-    .card,
-    .card::before,
-    .card::after,
-    .card .icon,
-    .card .value,
-    .card .spark {
-
+    .card, .card::before, .card::after, .card .icon, .card .label,
+    .card .value, .card .up, .card .down, .card .spark, .panel,
+    .chart, .chart svg rect, .donut, .pie {
         animation: none !important;
-
         transition: none !important;
     }
-
-    .card:hover {
-        transform: none;
-    }
+    .card:hover { transform: none; }
 }
-
-
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-
-</script>
-<script src="js/supabase-config.js">
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
 </head>
 <body>
 <div class="app">
