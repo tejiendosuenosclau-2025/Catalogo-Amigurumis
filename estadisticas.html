@@ -497,129 +497,294 @@ tr.hl td {
 }
 
 
-/* =====================================================
-   EFECTO VISUAL NUEVO PARA LAS TARJETAS
-   ===================================================== */
+/* ============================================================
+   ✨ TARJETAS PREMIUM — TEJIENDO SUEÑOS CLAU
+   Solo CSS — no modifica JavaScript ni la funcionalidad
+   ============================================================ */
 
+/* Base */
 .card {
     position: relative;
+    isolation: isolate;
     overflow: hidden;
 
-    transition:
-        transform 0.35s cubic-bezier(.22,.61,.36,1),
-        box-shadow 0.35s ease,
-        border-color 0.35s ease;
+    transform-style: preserve-3d;
 
-    cursor: pointer;
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease,
+        border-color .45s ease;
+
+    will-change: transform, box-shadow;
 }
 
-/* Brillo que aparece al pasar el mouse */
+
+/* ------------------------------------------------------------
+   BORDE LUMINOSO
+   ------------------------------------------------------------ */
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+
+    border-radius: inherit;
+
+    padding: 1px;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 15%,
+            rgba(255,255,255,.75) 35%,
+            transparent 55%
+        );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    opacity: 0;
+    transform: translateX(-70%);
+
+    transition:
+        opacity .35s ease,
+        transform .8s cubic-bezier(.2,.8,.2,1);
+
+    pointer-events: none;
+    z-index: 5;
+}
+
+
+/* ------------------------------------------------------------
+   HALO DE COLOR
+   ------------------------------------------------------------ */
+
 .card::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: -120%;
 
-    width: 70%;
-    height: 100%;
+    width: 170px;
+    height: 170px;
 
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.45),
-        transparent
-    );
+    right: -70px;
+    top: -70px;
 
-    transform: skewX(-20deg);
+    border-radius: 50%;
 
-    transition: left .7s ease;
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.42) 0%,
+            rgba(255,255,255,.15) 35%,
+            transparent 70%
+        );
+
+    filter: blur(8px);
+
+    opacity: 0;
+
+    transform: scale(.5);
+
+    transition:
+        opacity .45s ease,
+        transform .55s cubic-bezier(.2,.8,.2,1);
 
     pointer-events: none;
+
+    z-index: 1;
 }
 
-/* Elevación */
+
+/* ------------------------------------------------------------
+   HOVER PRINCIPAL
+   ------------------------------------------------------------ */
+
 .card:hover {
-    transform: translateY(-10px) scale(1.025);
+
+    transform:
+        translateY(-10px)
+        scale(1.025)
+        rotateX(1.5deg)
+        rotateY(-1.5deg);
 
     box-shadow:
-        0 20px 40px rgba(42,28,35,.16),
-        0 6px 14px rgba(244,63,122,.10);
+        0 22px 45px rgba(42,28,35,.16),
+        0 8px 20px rgba(244,63,122,.10);
+
+    border-color: rgba(244,63,122,.25);
 }
 
-/* Brillo */
+
+/* ------------------------------------------------------------
+   ACTIVAR BORDE
+   ------------------------------------------------------------ */
+
+.card:hover::after {
+    opacity: 1;
+    transform: translateX(70%);
+}
+
+
+/* ------------------------------------------------------------
+   ACTIVAR HALO
+   ------------------------------------------------------------ */
+
 .card:hover::before {
-    left: 150%;
+    opacity: 1;
+    transform: scale(1.25);
 }
 
-/* Icono */
+
+/* ------------------------------------------------------------
+   ICONO
+   ------------------------------------------------------------ */
+
 .card .icon {
+    position: relative;
+    z-index: 4;
+
+    transform: translateZ(18px);
+
     transition:
-        transform .35s ease,
-        box-shadow .35s ease;
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease,
+        filter .45s ease;
 }
 
 .card:hover .icon {
-    transform: scale(1.12) rotate(-4deg);
 
-    box-shadow:
-        0 8px 18px rgba(42,28,35,.15);
+    transform:
+        translateZ(25px)
+        scale(1.12)
+        rotate(-5deg);
+
+    filter:
+        drop-shadow(0 7px 10px rgba(42,28,35,.15));
 }
 
-/* Título */
+
+/* ------------------------------------------------------------
+   CONTENIDO
+   ------------------------------------------------------------ */
+
+.card .label,
+.card .value,
+.card .up,
+.card .down {
+    position: relative;
+    z-index: 4;
+}
+
+
+/* ------------------------------------------------------------
+   TÍTULO
+   ------------------------------------------------------------ */
+
 .card .label {
     transition:
-        transform .3s ease,
-        color .3s ease;
+        transform .35s ease,
+        color .35s ease;
 }
 
 .card:hover .label {
     transform: translateX(3px);
 }
 
-/* Valor */
+
+/* ------------------------------------------------------------
+   VALOR PRINCIPAL
+   ------------------------------------------------------------ */
+
 .card .value {
+
+    transform: translateZ(22px);
+
     transition:
-        transform .35s ease,
-        letter-spacing .35s ease;
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        text-shadow .45s ease,
+        letter-spacing .45s ease;
 }
 
 .card:hover .value {
-    transform: scale(1.07);
-    letter-spacing: .3px;
+
+    transform:
+        translateZ(32px)
+        scale(1.065);
+
+    letter-spacing: .4px;
+
+    text-shadow:
+        0 5px 18px rgba(42,28,35,.12);
 }
 
-/* Texto inferior */
+
+/* ------------------------------------------------------------
+   CAMBIO %
+   ------------------------------------------------------------ */
+
 .card .up,
 .card .down {
-    transition:
-        transform .3s ease,
-        opacity .3s ease;
-}
 
-.card:hover .up,
-.card:hover .down {
-    transform: translateX(3px);
-}
-
-/* Línea/gráfico inferior */
-.card .spark {
     transition:
         transform .35s ease,
         opacity .35s ease;
 }
 
-.card:hover .spark {
-    transform: scale(1.04);
-    opacity: 1;
+.card:hover .up,
+.card:hover .down {
+    transform: translateX(4px);
 }
 
 
-/* =====================================================
-   ANIMACIÓN AL CARGAR LA PÁGINA
-   ===================================================== */
+/* ------------------------------------------------------------
+   GRÁFICA / SPARK
+   ------------------------------------------------------------ */
+
+.card .spark {
+
+    position: relative;
+    z-index: 3;
+
+    transition:
+        transform .5s cubic-bezier(.2,.8,.2,1),
+        filter .5s ease;
+}
+
+.card:hover .spark {
+
+    transform:
+        translateY(-2px)
+        scale(1.04);
+
+    filter:
+        drop-shadow(0 5px 7px rgba(42,28,35,.12));
+}
+
+
+/* ------------------------------------------------------------
+   REFLEJO QUE RECORRE LA TARJETA
+   ------------------------------------------------------------ */
+
+.card .spark::before {
+    transition:
+        opacity .35s ease;
+}
+
+
+/* ------------------------------------------------------------
+   ANIMACIÓN INICIAL
+   ------------------------------------------------------------ */
 
 .card {
-    animation: tarjetaEntrada .6s ease both;
+    animation:
+        tarjetaPremiumEntrada
+        .65s
+        cubic-bezier(.2,.8,.2,1)
+        both;
 }
 
 .card:nth-child(1) {
@@ -646,15 +811,113 @@ tr.hl td {
     animation-delay: .30s;
 }
 
-@keyframes tarjetaEntrada {
+@keyframes tarjetaPremiumEntrada {
+
     from {
         opacity: 0;
-        transform: translateY(18px);
+        transform:
+            translateY(25px)
+            scale(.97);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ------------------------------------------------------------
+   PULSO MUY SUTIL PARA LOS VALORES
+   ------------------------------------------------------------ */
+
+.card:hover .value {
+    animation:
+        valorPremiumPulse
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+@keyframes valorPremiumPulse {
+
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.08);
+    }
+}
+
+
+/* ------------------------------------------------------------
+   EFECTO ESPECIAL PARA LA TARJETA DE GASTOS
+   ------------------------------------------------------------ */
+
+.card:has(.label) {
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease;
+}
+
+
+/* ------------------------------------------------------------
+   MÓVIL
+   ------------------------------------------------------------ */
+
+@media (max-width: 700px) {
+
+    .card:hover {
+
+        transform:
+            translateY(-5px)
+            scale(1.01)
+            rotateX(0)
+            rotateY(0);
+
+        box-shadow:
+            0 14px 28px rgba(42,28,35,.13);
+    }
+
+    .card:hover .icon {
+        transform:
+            translateZ(0)
+            scale(1.06)
+            rotate(-3deg);
+    }
+
+    .card:hover .value {
+        transform:
+            translateZ(0)
+            scale(1.03);
+    }
+}
+
+
+/* ------------------------------------------------------------
+   ACCESIBILIDAD
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .card,
+    .card::before,
+    .card::after,
+    .card .icon,
+    .card .value,
+    .card .spark {
+
+        animation: none !important;
+
+        transition: none !important;
+    }
+
+    .card:hover {
+        transform: none;
     }
 }
 
