@@ -1871,6 +1871,155 @@ tr.hl:hover td {
     }
 }
 
+/* =========================
+   📊 ANIMACIÓN DE GRÁFICAS
+   ========================= */
+
+/* Entrada general de las gráficas */
+.chart {
+    animation: chartAppear .8s ease-out both;
+}
+
+@keyframes chartAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Líneas y trazados SVG */
+.chart svg path,
+.chart svg polyline {
+    animation:
+        chartLineAppear 1.2s ease-out both;
+}
+
+@keyframes chartLineAppear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* Círculos/puntos de las gráficas */
+.chart svg circle {
+    animation:
+        chartPointAppear .6s ease-out both;
+}
+
+@keyframes chartPointAppear {
+    from {
+        opacity: 0;
+        transform: scale(.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Barras SVG */
+.chart svg rect {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+
+    animation:
+        chartBarAppear .8s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes chartBarAppear {
+    from {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+
+/* =========================
+   🍩 DONUTS
+   ========================= */
+
+.donut,
+.pie {
+    animation:
+        donutAppear .8s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes donutAppear {
+    from {
+        opacity: 0;
+        transform: scale(.75) rotate(-15deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+
+/* Pequeño retraso para que no aparezca todo al mismo tiempo */
+
+.grid2 .panel:nth-child(1) .chart {
+    animation-delay: .15s;
+}
+
+.grid2 .panel:nth-child(2) .chart {
+    animation-delay: .30s;
+}
+
+
+/* =========================
+   📱 MÓVIL
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .chart {
+        animation-duration: .6s;
+    }
+
+    .donut,
+    .pie {
+        animation-duration: .6s;
+    }
+}
+
+
+/* =========================
+   ♿ ACCESIBILIDAD
+   ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .chart,
+    .chart svg path,
+    .chart svg polyline,
+    .chart svg circle,
+    .chart svg rect,
+    .donut,
+    .pie {
+        animation: none;
+    }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
