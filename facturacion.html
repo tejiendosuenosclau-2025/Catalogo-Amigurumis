@@ -322,20 +322,43 @@ option {
 }
 
 .resumen-card{
-    background:#ffffff;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #fffafb 100%
+        );
+
     border:1px solid #eee4e9;
-    border-radius:10px;
-    padding:12px 14px;
-    min-height:108px;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
+    border-radius:16px;
+
+    padding:14px 15px;
+
+    min-height:112px;
+
+    box-shadow:
+        0 5px 18px rgba(70,35,50,.07);
+
     position:relative;
     overflow:hidden;
-    transition:transform .2s ease, box-shadow .2s ease;
+
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+
+    animation:
+        tarjetaEntrada .55s ease both;
 }
 
 .resumen-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(0,0,0,.10);
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 14px 30px rgba(70,35,50,.13);
+
+    border-color:
+        rgba(216,91,120,.30);
 }
 
 .resumen-card::after{
@@ -347,30 +370,53 @@ option {
     height:2px;
 }
 
-/* Línea inferior de cada tarjeta */
+/* ==========================================
+   ANIMACIÓN DE ENTRADA
+   ========================================== */
 
-.resumen-card:nth-child(1)::after{
-    background:#f47da3;
+@keyframes tarjetaEntrada{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(16px)
+            scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
 }
 
-.resumen-card:nth-child(2)::after{
-    background:#8662a9;
+
+/* Entrada escalonada */
+
+.resumen-card:nth-child(1){
+    animation-delay:.05s;
 }
 
-.resumen-card:nth-child(3)::after{
-    background:#2196f3;
+.resumen-card:nth-child(2){
+    animation-delay:.10s;
 }
 
-.resumen-card:nth-child(4)::after{
-    background:#31b866;
+.resumen-card:nth-child(3){
+    animation-delay:.15s;
 }
 
-.resumen-card:nth-child(5)::after{
-    background:#f5a623;
+.resumen-card:nth-child(4){
+    animation-delay:.20s;
 }
 
-.resumen-card:nth-child(6)::after{
-    background:#e85c8b;
+.resumen-card:nth-child(5){
+    animation-delay:.25s;
+}
+
+.resumen-card:nth-child(6){
+    animation-delay:.30s;
 }
 
 
@@ -387,15 +433,34 @@ option {
 /* Círculo del icono */
 
 .resumen-icono{
-    width:42px;
-    height:42px;
-    min-width:42px;
-    border-radius:50%;
+    width:44px;
+    height:44px;
+    min-width:44px;
+
+    border-radius:14px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:20px;
-    box-shadow:0 3px 8px rgba(0,0,0,.08);
+
+    font-size:21px;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.07);
+
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease;
+}
+
+.resumen-card:hover .resumen-icono{
+
+    transform:
+        scale(1.08)
+        rotate(-3deg);
+
+    box-shadow:
+        0 7px 15px rgba(0,0,0,.10);
 }
 
 
@@ -444,11 +509,23 @@ option {
 }
 
 .resumen-valor{
-    font-size:18px;
-    font-weight:bold;
-    color:#222;
+    font-size:20px;
+    font-weight:800;
+
+    color:#2f272b;
+
     margin-bottom:6px;
+
     white-space:nowrap;
+
+    letter-spacing:-.3px;
+
+    transition:
+        transform .25s ease;
+}
+
+.resumen-card:hover .resumen-valor{
+    transform:translateX(2px);
 }
 
 .resumen-cambio{
