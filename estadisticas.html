@@ -2020,6 +2020,298 @@ tr.hl:hover td {
     }
 }
 
+/* =========================
+   📱 MEJORA EXPERIENCIA MÓVIL
+   ========================= */
+
+@media (max-width: 700px) {
+
+    /* Espaciado general */
+    .main {
+        padding: 14px 12px 20px;
+    }
+
+    /* Encabezado */
+    .top {
+        gap: 10px;
+    }
+
+    .title {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .title h1 {
+        font-size: 21px;
+    }
+
+    .sub {
+        font-size: 11px;
+    }
+
+    .sel,
+    .date {
+        padding: 9px 11px;
+        font-size: 10px;
+    }
+
+    .profile {
+        width: 48px;
+        height: 48px;
+        font-size: 23px;
+    }
+
+    /* =========================
+       PANELES
+       ========================= */
+
+    .panel {
+        padding: 13px;
+        border-radius: 12px;
+    }
+
+    .panel h2 {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    /* =========================
+       GRÁFICAS
+       ========================= */
+
+    .chart {
+        height: 210px;
+    }
+
+    .chart svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* =========================
+       DONUTS
+       ========================= */
+
+    .piewrap {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .donut,
+    .pie {
+        width: 125px;
+        height: 125px;
+    }
+
+    .donut:after,
+    .pie:after {
+        inset: 29px;
+    }
+
+    .donut:before {
+        font-size: 24px;
+    }
+
+    #totalPedidosPie {
+        font-size: 12px;
+    }
+
+    #piePedidos small {
+        font-size: 11px;
+    }
+
+    .legend {
+        font-size: 9px;
+    }
+
+    .legend b {
+        font-size: 12px;
+    }
+
+    /* =========================
+       PRODUCTOS
+       ========================= */
+
+    .prod {
+        grid-template-columns: 20px 1fr 80px 25px;
+        gap: 6px;
+        font-size: 9px;
+    }
+
+    .bar {
+        height: 6px;
+    }
+
+    /* =========================
+       MÉTODOS DE PAGO
+       ========================= */
+
+    .payments {
+        gap: 6px;
+    }
+
+    .pay {
+        padding: 6px 3px;
+    }
+
+    .paycircle {
+        width: 50px;
+        height: 50px;
+        border-width: 6px;
+    }
+
+    .pay b {
+        font-size: 11px;
+    }
+
+    .pay span {
+        font-size: 8px;
+    }
+
+    /* =========================
+       ÚLTIMOS PEDIDOS
+       ========================= */
+
+    .order {
+        padding: 8px 6px;
+        font-size: 9px;
+    }
+
+    .badge {
+        padding: 4px 6px;
+        font-size: 8px;
+    }
+
+    /* =========================
+       GASTOS
+       ========================= */
+
+    #gastosLista .row {
+        padding: 8px 6px;
+        font-size: 9px;
+    }
+
+    #gastosTotal {
+        font-size: 11px;
+    }
+
+    /* =========================
+       TABLAS
+       ========================= */
+
+    table {
+        font-size: 9px;
+    }
+
+    th,
+    td {
+        padding: 6px 5px;
+    }
+
+    /* =========================
+       COMPARATIVA
+       ========================= */
+
+    .compare {
+        grid-template-columns: 1fr;
+    }
+
+    .compare div {
+        padding: 9px;
+        font-size: 9px;
+    }
+
+    /* =========================
+       ANIMACIONES MÁS SUAVES
+       ========================= */
+
+    .panel:hover {
+        transform: translateY(-2px);
+    }
+
+    .prod:hover,
+    .order:hover,
+    #gastosLista .row:hover {
+        transform: translateX(2px);
+    }
+}
+
+
+/* =========================
+   📱 TELÉFONOS PEQUEÑOS
+   ========================= */
+
+@media (max-width: 500px) {
+
+    .main {
+        padding: 12px 9px 18px;
+    }
+
+    .title h1 {
+        font-size: 19px;
+    }
+
+    .top {
+        gap: 8px;
+    }
+
+    .date {
+        width: 100%;
+        flex-basis: 100%;
+        text-align: center;
+    }
+
+    .panel {
+        padding: 11px;
+    }
+
+    .chart {
+        height: 190px;
+    }
+
+    .donut,
+    .pie {
+        width: 115px;
+        height: 115px;
+    }
+
+    .donut:after,
+    .pie:after {
+        inset: 27px;
+    }
+
+    .piewrap {
+        gap: 10px;
+    }
+
+    .legend {
+        font-size: 8px;
+    }
+
+    .products {
+        gap: 7px;
+    }
+
+    .prod {
+        grid-template-columns: 18px 1fr 65px 22px;
+        font-size: 8px;
+    }
+
+    .payments {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 12px;
+    }
+
+    .paycircle {
+        width: 48px;
+        height: 48px;
+    }
+
+    .footer {
+        font-size: 10px;
+    }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
