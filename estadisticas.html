@@ -916,7 +916,7 @@ tr.hl:hover td {
     color: var(--p);
 }
 /* =========================
-   PRODUCTOS
+   PRODUCTOS MÁS VENDIDOS
    ========================= */
 
 .products {
@@ -930,19 +930,119 @@ tr.hl:hover td {
     gap: 7px;
     align-items: center;
     font-size: 10px;
+
+    padding: 8px 7px;
+    border-radius: 9px;
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        box-shadow .3s ease;
 }
 
+/* Efecto al pasar el mouse */
+.prod:hover {
+    transform: translateX(4px);
+
+    background: #fff7fa;
+
+    box-shadow:
+        0 6px 15px rgba(42,28,35,.08);
+}
+
+/* Número del ranking */
+.prod > b:first-child {
+    font-size: 11px;
+    transition:
+        transform .3s ease,
+        color .3s ease;
+}
+
+.prod:hover > b:first-child {
+    transform: scale(1.15);
+    color: var(--p);
+}
+
+/* Nombre del producto */
+.prod > span {
+    transition:
+        transform .3s ease,
+        color .3s ease;
+}
+
+.prod:hover > span {
+    transform: translateX(3px);
+    color: var(--p);
+}
+
+/* Barra */
 .bar {
-    height: 5px;
-    background: #eee;
-    border-radius: 8px;
+    height: 7px;
+    background: #f0e8ec;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+        inset 0 1px 2px rgba(42,28,35,.06);
 }
 
+/* Barra de cantidad */
 .bar i {
     display: block;
     height: 100%;
-    background: var(--p);
-    border-radius: 8px;
+    background:
+        linear-gradient(
+            90deg,
+            var(--p),
+            #ff78a4
+        );
+
+    border-radius: 10px;
+
+    transform-origin: left center;
+
+    transition:
+        transform .35s ease,
+        filter .35s ease;
+}
+
+.prod:hover .bar i {
+    transform: scaleY(1.35);
+
+    filter:
+        drop-shadow(
+            0 3px 5px rgba(244,63,122,.25)
+        );
+}
+
+/* Cantidad vendida */
+.prod > b:last-child {
+    text-align: right;
+
+    transition:
+        transform .3s ease,
+        color .3s ease;
+}
+
+.prod:hover > b:last-child {
+    transform: scale(1.12);
+    color: var(--p);
+}
+
+/* =========================
+   MÓVIL
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .prod:hover {
+        transform: translateX(2px);
+    }
+
+    .prod:hover .bar i {
+        transform: scaleY(1.15);
+    }
 }
 
 /* =========================
