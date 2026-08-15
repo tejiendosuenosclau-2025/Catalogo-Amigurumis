@@ -280,29 +280,35 @@ padding:0}
 
 
 /* ==========================================
-   RESUMEN FINANCIERO DE LA FACTURA
+   RESUMEN FINANCIERO
    ========================================== */
 
 .factura-resumen{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:12px;
+
     margin:16px 0 18px;
 }
 
+
+/* ==========================================
+   TARJETAS
+   ========================================== */
+
 .factura-resumen > div{
-    position:relative;
     min-height:82px;
 
-    padding:14px 16px;
-
-    border-radius:14px;
-
     display:flex;
-    flex-direction:column;
-    justify-content:center;
+    align-items:center;
 
-    overflow:hidden;
+    gap:14px;
+
+    padding:12px 16px;
+
+    border-radius:12px;
+
+    box-sizing:border-box;
 
     transition:
         transform .22s ease,
@@ -314,37 +320,15 @@ padding:0}
    ABONO ACUMULADO
    ========================================== */
 
-.factura-resumen > div:first-child{
+.resumen-abono{
+
     background:linear-gradient(
-        145deg,
-        #f0fff7,
-        #e6faef
+        135deg,
+        #f5fff9,
+        #eefaf4
     );
 
-    border:1px solid #c9eed9;
-}
-
-.factura-resumen > div:first-child::before{
-    content:"💰";
-
-    position:absolute;
-    right:14px;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:38px;
-    height:38px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#d8f5e5;
-
-    font-size:19px;
+    border:1px solid #c7ead7;
 }
 
 
@@ -352,62 +336,127 @@ padding:0}
    SALDO PENDIENTE
    ========================================== */
 
-.factura-resumen > div:last-child{
+.resumen-saldo{
+
     background:linear-gradient(
-        145deg,
-        #fff8ef,
-        #fff1df
+        135deg,
+        #fffaf5,
+        #fff6ed
     );
 
-    border:1px solid #f5d8b1;
-}
-
-.factura-resumen > div:last-child::before{
-    content:"💳";
-
-    position:absolute;
-    right:14px;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:38px;
-    height:38px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#ffe6c7;
-
-    font-size:19px;
+    border:1px solid #f5d9b8;
 }
 
 
 /* ==========================================
-   TEXTO
+   CÍRCULO DEL ICONO
    ========================================== */
 
-.factura-resumen span{
-    position:relative;
-    z-index:1;
+.factura-resumen .resumen-icono{
 
-    display:block;
+    width:62px;
+    height:62px;
 
-    font-size:11px;
-    font-weight:700;
+    min-width:62px;
 
-    margin-bottom:5px;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.factura-resumen > div:first-child span{
-    color:#24945a;
+
+/* VERDE */
+
+.resumen-abono .resumen-icono{
+
+    background:#d9f4e5;
 }
 
-.factura-resumen > div:last-child span{
-    color:#d97716;
+
+/* NARANJA */
+
+.resumen-saldo .resumen-icono{
+
+    background:#ffe6ce;
+}
+
+
+/* ==========================================
+   SVG
+   ========================================== */
+
+.factura-resumen .resumen-icono svg{
+
+    width:38px;
+    height:38px;
+
+    fill:none;
+
+    stroke-width:3;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* ICONO MONEDAS */
+
+.resumen-abono .resumen-icono svg{
+
+    stroke:#19a45b;
+}
+
+
+/* ICONO BILLETERA */
+
+.resumen-saldo .resumen-icono svg{
+
+    stroke:#f07818;
+}
+
+
+/* ==========================================
+   INFORMACIÓN
+   ========================================== */
+
+.resumen-datos{
+
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+}
+
+
+/* TÍTULO */
+
+.resumen-datos span{
+
+    font-size:12px;
+
+    font-weight:800;
+
+    margin-bottom:3px;
+}
+
+
+/* VERDE */
+
+.resumen-abono .resumen-datos span{
+
+    color:#159653;
+}
+
+
+/* NARANJA */
+
+.resumen-saldo .resumen-datos span{
+
+    color:#e86f15;
 }
 
 
@@ -415,36 +464,74 @@ padding:0}
    VALOR
    ========================================== */
 
-.factura-resumen strong{
-    position:relative;
-    z-index:1;
+.resumen-datos strong{
 
-    display:block;
+    font-size:21px;
 
-    font-size:20px;
     font-weight:800;
 
-    letter-spacing:-.3px;
+    line-height:1.2;
+
+    letter-spacing:-.4px;
 }
 
-.factura-resumen > div:first-child strong{
-    color:#198754;
+
+/* VERDE */
+
+.resumen-abono .resumen-datos strong{
+
+    color:#303036;
 }
 
-.factura-resumen > div:last-child strong{
-    color:#d66a0b;
+
+/* NARANJA */
+
+.resumen-saldo .resumen-datos strong{
+
+    color:#303036;
 }
 
 
 /* ==========================================
-   EFECTO AL PASAR EL MOUSE
+   TEXTO SECUNDARIO
+   ========================================== */
+
+.resumen-datos small{
+
+    margin-top:3px;
+
+    font-size:11px;
+
+    font-weight:600;
+}
+
+
+/* VERDE */
+
+.resumen-abono .resumen-datos small{
+
+    color:#159653;
+}
+
+
+/* NARANJA */
+
+.resumen-saldo .resumen-datos small{
+
+    color:#e86f15;
+}
+
+
+/* ==========================================
+   HOVER
    ========================================== */
 
 .factura-resumen > div:hover{
+
     transform:translateY(-2px);
 
     box-shadow:
-        0 8px 18px rgba(60,40,50,.08);
+        0 8px 20px rgba(50,30,40,.08);
 }
 
 
@@ -455,11 +542,12 @@ padding:0}
 @media(max-width:600px){
 
     .factura-resumen{
+
         grid-template-columns:1fr;
+
     }
 
 }
-
 
 
 
@@ -1755,23 +1843,75 @@ option {
        </div>
 
 
-        <!-- ============================= -->
-        <!-- ABONO ACUMULADO                -->
-        <!-- ============================= -->
+    <div class="factura-resumen">
 
-        <div class="factura-resumen">
+    <!-- ABONO ACUMULADO -->
+    <div class="resumen-abono">
 
-            <div>
-                <span>Abono acumulado</span>
-                <strong id="abonoAcumulado">$0</strong>
-            </div>
+        <div class="resumen-icono">
 
-            <div>
-                <span>Saldo pendiente</span>
-                <strong id="saldoPendiente">$0</strong>
-            </div>
+            <svg viewBox="0 0 64 64"
+                 aria-hidden="true">
+
+                <ellipse cx="32" cy="17"
+                         rx="18" ry="8"/>
+
+                <path d="M14 17v10c0 4 8 8 18 8s18-4 18-8V17"/>
+
+                <path d="M14 27v10c0 4 8 8 18 8s18-4 18-8V27"/>
+
+                <path d="M14 37v10c0 4 8 8 18 8s18-4 18-8V37"/>
+
+            </svg>
 
         </div>
+
+        <div class="resumen-datos">
+
+            <span>Abono acumulado</span>
+
+            <strong id="abonoAcumulado">$0</strong>
+
+            <small>Total abonado</small>
+
+        </div>
+
+    </div>
+
+
+    <!-- SALDO PENDIENTE -->
+    <div class="resumen-saldo">
+
+        <div class="resumen-icono">
+
+            <svg viewBox="0 0 64 64"
+                 aria-hidden="true">
+
+                <path d="M9 18h38a6 6 0 0 1 6 6v25a6 6 0 0 1-6 6H9a5 5 0 0 1-5-5V23a5 5 0 0 1 5-5Z"/>
+
+                <path d="M4 24h43a6 6 0 0 1 6 6v6H38a9 9 0 0 1 0-18h15"/>
+
+                <circle cx="39"
+                        cy="27"
+                        r="3"/>
+
+            </svg>
+
+        </div>
+
+        <div class="resumen-datos">
+
+            <span>Saldo pendiente</span>
+
+            <strong id="saldoPendiente">$0</strong>
+
+            <small>Por cobrar</small>
+
+        </div>
+
+    </div>
+
+</div>
 
 
         <label>Estado</label>
