@@ -3702,9 +3702,9 @@ async function cargarDatosModalAbono(id) {
     try {
 
         if (!db) {
-            console.error("Supabase no está conectado.");
-            return;
-        }
+    		mostrarToast('No se pudo conectar con la base de datos.','error','Sin conexión');
+    		return;
+	}
 
         /* ==========================================
            BUSCAR FACTURA
@@ -3847,9 +3847,9 @@ async function guardarNuevoAbono() {
             window.facturaAbonoActual;
 
         if (!factura) {
-            alert("No se ha seleccionado una factura.");
-            return;
-        }
+    		mostrarToast('Selecciona una factura antes de registrar un abono.','warning','Factura no seleccionada');
+    	    return;
+	}
 
         const input =
             $("nuevoAbono");
@@ -3877,6 +3877,7 @@ async function guardarNuevoAbono() {
                 mensaje.textContent =
                     "Ingresa un valor de abono válido.";
             }
+		mostrarToast('Ingresa un valor mayor que $0 para registrar el abono.','warning','Valor inválido');
 
             return;
         }
@@ -3892,6 +3893,7 @@ async function guardarNuevoAbono() {
                 mensaje.textContent =
                     "El abono no puede ser mayor al saldo pendiente.";
             }
+            	mostrarToast('El valor ingresado supera el saldo pendiente de la factura.','warning','Abono superior al saldo');
 
             return;
         }
@@ -3915,6 +3917,7 @@ async function guardarNuevoAbono() {
                 mensaje.textContent =
                     "No se pudo identificar el usuario.";
             }
+		mostrarToast('No fue posible identificar tu sesión. Inicia sesión nuevamente.','error','Sesión no válida');
 
             return;
         }
@@ -4149,12 +4152,13 @@ async function guardarNuevoAbono() {
 
                 mensaje.textContent =
                     "✅ Abono registrado. La factura está totalmente pagada.";
+		mostrarToast('El abono fue registrado y la factura quedó totalmente pagada.','success','¡Factura pagada!');
 
             } else {
 
                 mensaje.textContent =
                     "✅ Abono registrado correctamente.";
-
+		mostrarToast('El abono fue registrado correctamente.','success','Abono registrado');
             }
         }
 
@@ -4202,6 +4206,7 @@ async function guardarNuevoAbono() {
                 "❌ Ocurrió un error al registrar el abono.";
 
         }
+		mostrarToast(error?.message || 'No fue posible registrar el abono. Intenta nuevamente.','error','Error al registrar abono',6000);
     }
 }
 
