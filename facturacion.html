@@ -628,19 +628,6 @@ padding:0}
     opacity:.7;
 }
 
-#tipoAbonoBox{
-    margin-top:10px;
-}
-
-#tipoAbonoBox label{
-    display:block;
-    margin-bottom:5px;
-}
-
-#tipoAbonoBox select{
-    width:100%;
-}
-
 /* ==========================================
    FUENTE GENERAL DEL SISTEMA
    ========================================== */
@@ -2502,7 +2489,7 @@ function actualizarAbono(){
     if(pago === "Abono"){
 
         if(box){
-            box.style.display = "block";
+            box.style.display = "grid";
         }
 
         if(abono){
@@ -2579,7 +2566,7 @@ function actualizarAbono(){
     // ==========================================
 
     if(box){
-        box.style.display = "block";
+        box.style.display = "grid";
     }
 
     if(abono){
