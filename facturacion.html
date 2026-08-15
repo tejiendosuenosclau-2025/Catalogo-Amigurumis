@@ -1721,15 +1721,20 @@ option {
    ========================================== */
 
 #abonoBox .factura-campo > label{
-    display:block;
+    display:flex;
+    align-items:center;
 
-    font-size:11px;
-
-    font-weight:800;
-
-    color:#51464c;
+    height:16px;
 
     margin:0 0 6px;
+
+    font-size:11px;
+    line-height:16px;
+
+    font-weight:800;
+    color:#51464c;
+
+    box-sizing:border-box;
 }
 
 
@@ -1747,6 +1752,18 @@ option {
     width:100%;
 
     min-width:0;
+}
+
+#abonoBox .campo-icono{
+    height:44px;
+}
+
+#abonoBox .campo-icono input,
+#abonoBox .campo-icono select{
+    height:44px;
+    min-height:44px;
+    margin:0 !important;
+    box-sizing:border-box;
 }
 
 
