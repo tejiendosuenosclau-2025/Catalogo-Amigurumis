@@ -6510,41 +6510,66 @@ async function generarPDF(f){
 
     if(!window.html2pdf){
 
-        mostrarToast('No se pudo cargar el generador de PDF.','error','PDF no disponible',6000);
+        mostrarToast(
+            'No se pudo cargar el generador de PDF.',
+            'error',
+            'PDF no disponible',
+            6000
+        );
 
         return;
     }
 
 
-    let contenedor = null;
-
     try{
 
-        contenedor = document.createElement("div");
+        /* ==========================================
+           1. MOSTRAR LA MISMA FACTURA DE VISTA PREVIA
+           ========================================== */
 
-        contenedor.style.position = "fixed";
-        contenedor.style.left = "-100000px";
-        contenedor.style.top = "0";
-        contenedor.style.width = "794px";
-        contenedor.style.background = "#ffffff";
-        contenedor.style.zIndex = "-9999";
+        $("previewBox").innerHTML = sheet(f);
 
-
-        /*
-         * USAMOS EL MISMO DISEÑO
-         * QUE UTILIZA LA FACTURA
-         */
-        contenedor.innerHTML = sheet(f);
+        $("modal").classList.add("show");
 
 
-        document.body.appendChild(contenedor);
+        /* ==========================================
+           2. ESPERAR A QUE EL NAVEGADOR LA RENDERICE
+           ========================================== */
+
+        await new Promise(resolve => {
+
+            requestAnimationFrame(() => {
+
+                requestAnimationFrame(resolve);
+
+            });
+
+        });
 
 
-        /*
-         * Esperar a que carguen las imágenes
-         */
+        /* ==========================================
+           3. TOMAR LA FACTURA REAL
+           ========================================== */
+
+        const elemento =
+            $("previewBox").querySelector(".sheet");
+
+
+        if(!elemento){
+
+            throw new Error(
+                "No se encontró el contenido de la factura."
+            );
+
+        }
+
+
+        /* ==========================================
+           4. ESPERAR IMÁGENES
+           ========================================== */
+
         const imagenes =
-            contenedor.querySelectorAll("img");
+            elemento.querySelectorAll("img");
 
 
         await Promise.all(
@@ -6552,12 +6577,16 @@ async function generarPDF(f){
             Array.from(imagenes).map(img => {
 
                 if(img.complete){
+
                     return Promise.resolve();
+
                 }
+
 
                 return new Promise(resolve => {
 
                     img.onload = resolve;
+
                     img.onerror = resolve;
 
                 });
@@ -6567,16 +6596,23 @@ async function generarPDF(f){
         );
 
 
+        /* ==========================================
+           5. CONFIGURACIÓN DEL PDF
+           ========================================== */
+
         const opciones = {
 
-            margin: 10,
+            margin: 8,
 
             filename:
                 `${f.numero || "factura"}.pdf`,
 
             image: {
+
                 type: "jpeg",
+
                 quality: 0.98
+
             },
 
             html2canvas: {
@@ -6585,9 +6621,15 @@ async function generarPDF(f){
 
                 useCORS: true,
 
+                allowTaint: false,
+
                 backgroundColor: "#ffffff",
 
-                logging: false
+                logging: false,
+
+                scrollX: 0,
+
+                scrollY: 0
 
             },
 
@@ -6613,19 +6655,21 @@ async function generarPDF(f){
         };
 
 
-        /*
-         * CREAR PDF COMO BLOB
-         */
+        /* ==========================================
+           6. GENERAR PDF
+           ========================================== */
+
         const pdfBlob =
             await html2pdf()
                 .set(opciones)
-                .from(contenedor)
+                .from(elemento)
                 .outputPdf("blob");
 
 
-        /*
-         * ABRIR PDF
-         */
+        /* ==========================================
+           7. ABRIR PDF EN NUEVA PESTAÑA
+           ========================================== */
+
         const url =
             URL.createObjectURL(pdfBlob);
 
@@ -6639,18 +6683,40 @@ async function generarPDF(f){
 
         if(!ventana){
 
-            mostrarToast('El navegador bloqueó la ventana del PDF.','warning','PDF bloqueado',6000);
+            mostrarToast(
+                'El navegador bloqueó la ventana del PDF.',
+                'warning',
+                'PDF bloqueado',
+                6000
+            );
 
         }else{
 
-            mostrarToast('El PDF fue generado correctamente.','success','PDF listo',3500);
+            mostrarToast(
+                'El PDF fue generado correctamente.',
+                'success',
+                'PDF listo',
+                3500
+            );
 
         }
 
 
-        /*
-         * Liberar memoria
-         */
+        /* ==========================================
+           8. CERRAR LA VISTA PREVIA
+           ========================================== */
+
+        setTimeout(() => {
+
+            $("modal").classList.remove("show");
+
+        }, 500);
+
+
+        /* ==========================================
+           9. LIBERAR MEMORIA
+           ========================================== */
+
         setTimeout(() => {
 
             URL.revokeObjectURL(url);
@@ -6666,16 +6732,16 @@ async function generarPDF(f){
         );
 
 
-        mostrarToast(error?.message || 'No fue posible generar el PDF de la factura.','error','Error al generar PDF',6000);
+        $("modal").classList.remove("show");
 
 
-    }finally{
-
-        if(contenedor){
-
-            contenedor.remove();
-
-        }
+        mostrarToast(
+            error?.message ||
+            'No fue posible generar el PDF de la factura.',
+            'error',
+            'Error al generar PDF',
+            6000
+        );
 
     }
 
