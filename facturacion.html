@@ -3225,8 +3225,20 @@ let abonoAcumuladoActual = 0;
 let abonoAcumuladoAnterior = 0;
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
 function name(p){return Array.isArray(p?.nombre)?p.nombre.join(" "):(p?.nombre||"Producto")}
-function today(){return new Date().toISOString().slice(0,10)}
+
+function today(){
+
+    const fecha = new Date();
+
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+
+    return `${año}-${mes}-${dia}`;
+}
+
 async function load(){try{products=await (await fetch("data/productos.json")).json()}catch(e){console.error(e);products=[]}}
 
 async function nextInvoiceNumber(){
