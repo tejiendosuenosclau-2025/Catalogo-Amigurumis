@@ -1899,11 +1899,11 @@ option {
     width:44px;
     height:100%;
 
+    background:#fff0f5;
+
     display:flex;
     align-items:center;
     justify-content:center;
-
-    border-right:1px solid #f6d5df;
 
     border-radius:10px 0 0 10px;
 
@@ -1941,6 +1941,13 @@ option {
     box-sizing:border-box;
 
     resize:vertical;
+}
+
+/* Efecto al enfocar */
+
+.campo-estado:focus-within .icono-campo,
+.campo-observaciones:focus-within .icono-campo{
+    background:#ffe5ef;
 }
 
 </style>
