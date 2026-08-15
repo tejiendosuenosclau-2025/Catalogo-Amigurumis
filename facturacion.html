@@ -6522,30 +6522,33 @@ async function generarPDF(f){
         return;
     }
 
+    let contenedor = null;
+
     try{
 
         /* ==========================================
-           1. CREAR LA FACTURA
+           1. CREAR CONTENEDOR TEMPORAL
            ========================================== */
 
-        $("previewBox").innerHTML = sheet(f);
+        contenedor = document.createElement("div");
 
-        $("modal").classList.add("show");
+        contenedor.style.position = "fixed";
+        contenedor.style.left = "-10000px";
+        contenedor.style.top = "0";
+        contenedor.style.width = "1000px";
+        contenedor.style.background = "#ffffff";
+        contenedor.style.padding = "0";
+        contenedor.style.margin = "0";
+        contenedor.style.zIndex = "-1";
+
+        document.body.appendChild(contenedor);
 
 
         /* ==========================================
-           2. ESPERAR A QUE EL NAVEGADOR LA RENDERICE
+           2. CREAR LA FACTURA
            ========================================== */
 
-        await new Promise(resolve => {
-
-            requestAnimationFrame(() => {
-
-                requestAnimationFrame(resolve);
-
-            });
-
-        });
+        contenedor.innerHTML = sheet(f);
 
 
         /* ==========================================
@@ -6553,7 +6556,7 @@ async function generarPDF(f){
            ========================================== */
 
         const elemento =
-            $("previewBox").querySelector(".sheet");
+            contenedor.querySelector(".sheet");
 
 
         if(!elemento){
@@ -6566,7 +6569,17 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           4. ESPERAR LAS IMÁGENES
+           4. CONFIGURAR ANCHO REAL DE LA FACTURA
+           ========================================== */
+
+        elemento.style.width = "100%";
+        elemento.style.maxWidth = "none";
+        elemento.style.margin = "0";
+        elemento.style.boxSizing = "border-box";
+
+
+        /* ==========================================
+           5. ESPERAR LAS IMÁGENES
            ========================================== */
 
         const imagenes =
@@ -6586,7 +6599,6 @@ async function generarPDF(f){
                 return new Promise(resolve => {
 
                     img.onload = resolve;
-
                     img.onerror = resolve;
 
                 });
@@ -6597,35 +6609,22 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           5. APLICAR EL MISMO ANCHO DE IMPRESIÓN
+           6. ESPERAR RENDERIZADO
            ========================================== */
 
-        const estiloAnterior = {
+        await new Promise(resolve => {
 
-            width: elemento.style.width,
+            requestAnimationFrame(() => {
 
-            maxWidth: elemento.style.maxWidth,
+                requestAnimationFrame(resolve);
 
-            margin: elemento.style.margin,
+            });
 
-            padding: elemento.style.padding,
-
-            boxSizing: elemento.style.boxSizing
-
-        };
-
-
-        elemento.style.width = "100%";
-
-        elemento.style.maxWidth = "820px";
-
-        elemento.style.margin = "0 auto";
-
-        elemento.style.boxSizing = "border-box";
+        });
 
 
         /* ==========================================
-           6. CAPTURAR FACTURA
+           7. CAPTURAR FACTURA
            ========================================== */
 
         const canvas =
@@ -6646,30 +6645,12 @@ async function generarPDF(f){
 
                     scrollY: 0,
 
-                    windowWidth:
-                        elemento.scrollWidth
+                    windowWidth: 1000,
+
+                    windowHeight:
+                        elemento.scrollHeight
                 }
             );
-
-
-        /* ==========================================
-           7. RESTAURAR ESTILOS
-           ========================================== */
-
-        elemento.style.width =
-            estiloAnterior.width;
-
-        elemento.style.maxWidth =
-            estiloAnterior.maxWidth;
-
-        elemento.style.margin =
-            estiloAnterior.margin;
-
-        elemento.style.padding =
-            estiloAnterior.padding;
-
-        elemento.style.boxSizing =
-            estiloAnterior.boxSizing;
 
 
         /* ==========================================
@@ -6694,14 +6675,16 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           9. MÁRGENES IGUALES
+           9. DIMENSIONES A4
            ========================================== */
 
         const paginaAncho = 210;
-
         const paginaAlto = 297;
 
-        const margen = 5;
+
+        /* Márgenes iguales */
+
+        const margen = 8;
 
 
         const anchoDisponible =
@@ -6712,47 +6695,41 @@ async function generarPDF(f){
 
 
         /* ==========================================
-   	10. CALCULAR ESCALA
-   	========================================== */
+           10. CALCULAR PROPORCIÓN
+           ========================================== */
 
-	const proporcion =
-    		canvas.width / canvas.height;
-
-
-	/*
- 	* Usar prácticamente todo el ancho A4.
- 	* Si la altura supera el espacio disponible,
- 	* reducimos proporcionalmente.
- 	*/
-
-	let anchoPDF =
-    	anchoDisponible;
-
-	let altoPDF =
-    	anchoPDF / proporcion;
+        const proporcion =
+            canvas.width / canvas.height;
 
 
-	/*
- 	* Reducir solamente si realmente
- 	* no cabe verticalmente.
- 	*/
+        let anchoPDF =
+            anchoDisponible;
 
-	if(altoPDF > altoDisponible){
-
-    	const escala =
-        altoDisponible / altoPDF;
-
-    	anchoPDF =
-        anchoPDF * escala;
-
-    	altoPDF =
-        altoPDF * escala;
-
-	}
+        let altoPDF =
+            anchoPDF / proporcion;
 
 
         /* ==========================================
-           11. CENTRAR FACTURA
+           11. SI NO CABE VERTICALMENTE
+           REDUCIR PROPORCIONALMENTE
+           ========================================== */
+
+        if(altoPDF > altoDisponible){
+
+            const escala =
+                altoDisponible / altoPDF;
+
+            anchoPDF =
+                anchoPDF * escala;
+
+            altoPDF =
+                altoPDF * escala;
+
+        }
+
+
+        /* ==========================================
+           12. CENTRAR EN A4
            ========================================== */
 
         const x =
@@ -6763,7 +6740,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           12. AGREGAR FACTURA AL PDF
+           13. AGREGAR FACTURA AL PDF
            ========================================== */
 
         pdf.addImage(
@@ -6788,7 +6765,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           13. CREAR BLOB
+           14. CREAR BLOB
            ========================================== */
 
         const pdfBlob =
@@ -6796,7 +6773,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           14. ABRIR PDF
+           15. ABRIR PDF
            ========================================== */
 
         const url =
@@ -6832,17 +6809,6 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           15. CERRAR MODAL
-           ========================================== */
-
-        setTimeout(() => {
-
-            $("modal").classList.remove("show");
-
-        }, 500);
-
-
-        /* ==========================================
            16. LIBERAR MEMORIA
            ========================================== */
 
@@ -6861,9 +6827,6 @@ async function generarPDF(f){
         );
 
 
-        $("modal").classList.remove("show");
-
-
         mostrarToast(
             error?.message ||
             'No fue posible generar el PDF de la factura.',
@@ -6871,6 +6834,19 @@ async function generarPDF(f){
             'Error al generar PDF',
             6000
         );
+
+
+    }finally{
+
+        /* ==========================================
+           17. ELIMINAR CONTENEDOR TEMPORAL
+           ========================================== */
+
+        if(contenedor){
+
+            contenedor.remove();
+
+        }
 
     }
 
