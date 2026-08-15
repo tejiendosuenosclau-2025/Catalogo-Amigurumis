@@ -6649,17 +6649,19 @@ async function generarPDF(f){
 
         const paginaAlto = 297;
 
+        /* Márgenes del PDF */
 
-        /* Márgenes */
+	const margenHorizontal = 10;
+	const margenVertical = 10;
 
-        const margen = 18;
 
+	/* Espacio disponible */
 
-        const anchoDisponible =
-            paginaAncho - (margen * 2);
+	const anchoDisponible =
+    	paginaAncho - (margenHorizontal * 2);
 
-        const altoDisponible =
-            paginaAlto - (margen * 2);
+	const altoDisponible =
+    	paginaAlto - (margenVertical * 2);
 
 
         /* ==========================================
