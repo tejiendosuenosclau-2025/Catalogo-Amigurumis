@@ -1941,6 +1941,585 @@ option {
     resize:vertical;
 }
 
+
+/* ============================================================
+   🌸 TEJIENDO SUEÑOS CLAU
+   FASE 1 — PULIDO VISUAL PREMIUM
+   Específico para facturacion.html
+   NO modifica HTML, JavaScript ni Supabase.
+   ============================================================ */
+
+
+/* ============================================================
+   1. AJUSTE GENERAL DE LA IDENTIDAD
+   ============================================================ */
+
+:root{
+    --p:#f47da3;
+    --pd:#e85c8b;
+    --g:#31b866;
+    --v:#8662a9;
+    --ink:#40373b;
+    --mut:#7d7378;
+    --line:#eadfe4;
+    --soft:#fff3f7;
+
+    /* Nuevos tonos complementarios */
+    --ts-pale:#fff9fb;
+    --ts-pale-2:#fff5f8;
+    --ts-shadow:0 8px 26px rgba(64,55,59,.07);
+    --ts-shadow-hover:0 14px 34px rgba(64,55,59,.11);
+    --ts-border-soft:rgba(234,223,228,.85);
+}
+
+
+/* ============================================================
+   2. FONDO PRINCIPAL
+   ============================================================ */
+
+body{
+    background:
+        radial-gradient(
+            circle at 8% 0%,
+            rgba(244,125,163,.055),
+            transparent 26%
+        ),
+        radial-gradient(
+            circle at 96% 8%,
+            rgba(134,98,169,.045),
+            transparent 23%
+        ),
+        #fff;
+}
+
+
+/* ============================================================
+   3. TARJETAS PRINCIPALES
+   Usa la clase .card que YA existe en tu archivo
+   ============================================================ */
+
+.card{
+    border-color:var(--ts-border-soft);
+
+    box-shadow:
+        0 5px 18px rgba(64,55,59,.055);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.card:hover{
+    box-shadow:var(--ts-shadow);
+}
+
+
+/* ============================================================
+   4. TÍTULOS DE LAS TARJETAS
+   ============================================================ */
+
+.card .title{
+    color:var(--ink);
+
+    font-weight:800;
+
+    letter-spacing:-.015em;
+}
+
+.card .title i,
+.card .title svg{
+    color:var(--p);
+}
+
+
+/* ============================================================
+   5. DASHBOARD
+   Usa exclusivamente las clases reales:
+   .resumen-dashboard
+   .resumen-card
+   .resumen-contenido
+   .resumen-icono
+   .resumen-info
+   .resumen-titulo
+   .resumen-valor
+   .resumen-cambio
+   ============================================================ */
+
+.resumen-dashboard{
+    gap:16px;
+}
+
+
+/* Tarjetas */
+
+.resumen-card{
+    position:relative;
+
+    border:1px solid var(--ts-border-soft);
+
+    border-radius:18px;
+
+    background:#fff;
+
+    box-shadow:
+        0 5px 18px rgba(64,55,59,.055);
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+
+/* Línea decorativa */
+
+.resumen-card::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:14px;
+    right:14px;
+
+    height:3px;
+
+    border-radius:0 0 8px 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--p),
+            #f5aec7
+        );
+
+    opacity:.72;
+
+    pointer-events:none;
+}
+
+
+/* Hover */
+
+.resumen-card:hover{
+    transform:translateY(-3px);
+
+    border-color:
+        rgba(244,125,163,.22);
+
+    box-shadow:
+        var(--ts-shadow-hover);
+}
+
+
+/* Contenido */
+
+.resumen-contenido{
+    gap:13px;
+}
+
+
+/* ============================================================
+   6. ICONOS DEL DASHBOARD
+   ============================================================ */
+
+.resumen-icono{
+    border-radius:14px;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.resumen-card:hover .resumen-icono{
+    transform:scale(1.045);
+
+    box-shadow:
+        0 6px 16px rgba(64,55,59,.08);
+}
+
+
+/* ============================================================
+   7. TEXTOS DEL DASHBOARD
+   ============================================================ */
+
+.resumen-titulo{
+    color:var(--mut);
+
+    font-weight:700;
+
+    letter-spacing:.025em;
+}
+
+
+.resumen-valor{
+    color:var(--ink);
+
+    font-weight:850;
+
+    letter-spacing:-.035em;
+}
+
+
+/* Cambio */
+
+.resumen-cambio{
+    font-weight:750;
+}
+
+
+/* ============================================================
+   8. BOTONES EXISTENTES
+   No creamos nuevas clases.
+   Mejoramos .green, .pink, .purple, .white y .gray.
+   ============================================================ */
+
+.btn{
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+
+/* Principal — rosa */
+
+.btn.pink{
+    box-shadow:
+        0 5px 14px rgba(244,125,163,.18);
+}
+
+.btn.pink:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 9px 21px rgba(244,125,163,.25);
+}
+
+
+/* Verde */
+
+.btn.green{
+    box-shadow:
+        0 5px 14px rgba(49,184,102,.14);
+}
+
+.btn.green:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 9px 21px rgba(49,184,102,.22);
+}
+
+
+/* Morado */
+
+.btn.purple{
+    box-shadow:
+        0 5px 14px rgba(134,98,169,.14);
+}
+
+.btn.purple:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 9px 21px rgba(134,98,169,.22);
+}
+
+
+/* Blanco */
+
+.btn.white{
+    box-shadow:
+        0 3px 10px rgba(64,55,59,.04);
+}
+
+.btn.white:hover{
+    transform:translateY(-1px);
+
+    border-color:
+        rgba(244,125,163,.28);
+
+    box-shadow:
+        0 6px 15px rgba(64,55,59,.07);
+}
+
+
+/* Gris */
+
+.btn.gray{
+    box-shadow:
+        0 3px 9px rgba(64,55,59,.035);
+}
+
+.btn.gray:hover{
+    transform:translateY(-1px);
+}
+
+
+/* ============================================================
+   9. INPUTS — SOLO REFINAMIENTO
+   No cambiamos estructura ni tamaños existentes.
+   ============================================================ */
+
+input,
+select,
+textarea{
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+
+input:hover,
+select:hover,
+textarea:hover{
+    border-color:#e4cbd5;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:var(--p);
+
+    box-shadow:
+        0 0 0 3px rgba(244,125,163,.10);
+}
+
+
+/* ============================================================
+   10. ESTADOS DE FACTURA
+   Clases reales de tu archivo:
+   .Pagada
+   .Pendiente
+   .Enviada
+   .Anulada
+   ============================================================ */
+
+.Pagada,
+.Pendiente,
+.Enviada,
+.Anulada{
+    border-radius:999px;
+
+    font-weight:800;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+
+.Pagada:hover,
+.Pendiente:hover,
+.Enviada:hover,
+.Anulada:hover{
+    transform:translateY(-1px);
+}
+
+
+/* ============================================================
+   11. PERFIL DEL DASHBOARD
+   ============================================================ */
+
+.perfil-dashboard{
+    transition:
+        transform .2s ease;
+}
+
+
+.perfil-icon-logo-btn{
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.perfil-icon-logo-btn:hover{
+    transform:translateY(-1px) scale(1.02);
+
+    box-shadow:
+        0 8px 20px rgba(244,125,163,.18);
+}
+
+
+/* ============================================================
+   12. MENÚ DE PERFIL
+   ============================================================ */
+
+.perfil-menu{
+    border-color:var(--ts-border-soft);
+
+    box-shadow:
+        0 16px 38px rgba(64,55,59,.12);
+}
+
+
+/* ============================================================
+   13. ACCIONES
+   Mantiene tu grid existente.
+   ============================================================ */
+
+.actions{
+    gap:10px;
+}
+
+
+.actions .btn{
+    min-height:42px;
+}
+
+
+/* ============================================================
+   14. TABLAS
+   No modificamos dimensiones.
+   Solo refinamos lectura visual.
+   ============================================================ */
+
+table thead th{
+    letter-spacing:.025em;
+}
+
+
+table tbody tr{
+    transition:
+        background .16s ease;
+}
+
+
+table tbody tr:hover{
+    background:#fff9fb;
+}
+
+
+/* ============================================================
+   15. SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+
+
+::-webkit-scrollbar-track{
+    background:#fff8fa;
+}
+
+
+::-webkit-scrollbar-thumb{
+    background:#e6ccd7;
+
+    border-radius:999px;
+}
+
+
+::-webkit-scrollbar-thumb:hover{
+    background:#d9b3c3;
+}
+
+
+/* ============================================================
+   16. ANIMACIÓN DE DASHBOARD
+   Muy sutil para no distraer.
+   ============================================================ */
+
+.resumen-card{
+    animation:tsResumenEntrada .4s ease both;
+}
+
+
+.resumen-card:nth-child(1){
+    animation-delay:.02s;
+}
+
+.resumen-card:nth-child(2){
+    animation-delay:.06s;
+}
+
+.resumen-card:nth-child(3){
+    animation-delay:.10s;
+}
+
+.resumen-card:nth-child(4){
+    animation-delay:.14s;
+}
+
+.resumen-card:nth-child(5){
+    animation-delay:.18s;
+}
+
+.resumen-card:nth-child(6){
+    animation-delay:.22s;
+}
+
+
+@keyframes tsResumenEntrada{
+
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* ============================================================
+   17. CELULAR
+   Respetamos tus breakpoints actuales.
+   ============================================================ */
+
+@media(max-width:600px){
+
+    .resumen-dashboard{
+        gap:10px;
+    }
+
+    .resumen-card{
+        border-radius:15px;
+    }
+
+    .resumen-card:hover{
+        transform:none;
+
+        box-shadow:
+            0 5px 16px rgba(64,55,59,.06);
+    }
+
+    .btn{
+        min-height:42px;
+    }
+
+}
+
+
+/* ============================================================
+   18. REDUCIR ANIMACIONES SI EL USUARIO LO SOLICITA
+   ============================================================ */
+
+@media(prefers-reduced-motion:reduce){
+
+    .resumen-card,
+    .btn,
+    .card,
+    .perfil-icon-logo-btn{
+        animation:none !important;
+
+        transition:none !important;
+    }
+
+}
+
 </style>
 </head>
 <body>
