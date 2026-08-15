@@ -6701,7 +6701,7 @@ async function generarPDF(f){
 
         const paginaAlto = 297;
 
-        const margen = 8;
+        const margen = 5;
 
 
         const anchoDisponible =
@@ -6712,29 +6712,43 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           10. CALCULAR ESCALA
-           ========================================== */
+   	10. CALCULAR ESCALA
+   	========================================== */
 
-        const proporcion =
-            canvas.width / canvas.height;
-
-
-        let anchoPDF =
-            anchoDisponible;
-
-        let altoPDF =
-            anchoPDF / proporcion;
+	const proporcion =
+    		canvas.width / canvas.height;
 
 
-        if(altoPDF > altoDisponible){
+	/*
+ 	* Usar prácticamente todo el ancho A4.
+ 	* Si la altura supera el espacio disponible,
+ 	* reducimos proporcionalmente.
+ 	*/
 
-            altoPDF =
-                altoDisponible;
+	let anchoPDF =
+    	anchoDisponible;
 
-            anchoPDF =
-                altoPDF * proporcion;
+	let altoPDF =
+    	anchoPDF / proporcion;
 
-        }
+
+	/*
+ 	* Reducir solamente si realmente
+ 	* no cabe verticalmente.
+ 	*/
+
+	if(altoPDF > altoDisponible){
+
+    	const escala =
+        altoDisponible / altoPDF;
+
+    	anchoPDF =
+        anchoPDF * escala;
+
+    	altoPDF =
+        altoPDF * escala;
+
+	}
 
 
         /* ==========================================
