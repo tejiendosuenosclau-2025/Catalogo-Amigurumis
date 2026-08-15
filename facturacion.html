@@ -6510,7 +6510,7 @@ async function verFacturaDB(id){
 
 async function generarPDF(f){
 
-    if(!window.html2pdf){
+    if(!window.html2canvas || !window.jspdf){
 
         mostrarToast(
             'No se pudo cargar el generador de PDF.',
@@ -6522,11 +6522,10 @@ async function generarPDF(f){
         return;
     }
 
-
     try{
 
         /* ==========================================
-           1. MOSTRAR LA FACTURA
+           1. CREAR LA FACTURA
            ========================================== */
 
         $("previewBox").innerHTML = sheet(f);
@@ -6535,7 +6534,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           2. ESPERAR RENDERIZADO
+           2. ESPERAR A QUE EL NAVEGADOR LA RENDERICE
            ========================================== */
 
         await new Promise(resolve => {
@@ -6550,7 +6549,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           3. TOMAR LA FACTURA
+           3. TOMAR LA FACTURA REAL
            ========================================== */
 
         const elemento =
@@ -6567,7 +6566,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           4. ESPERAR IMÁGENES
+           4. ESPERAR LAS IMÁGENES
            ========================================== */
 
         const imagenes =
@@ -6598,7 +6597,35 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           5. CAPTURAR FACTURA COMPLETA
+           5. APLICAR EL MISMO ANCHO DE IMPRESIÓN
+           ========================================== */
+
+        const estiloAnterior = {
+
+            width: elemento.style.width,
+
+            maxWidth: elemento.style.maxWidth,
+
+            margin: elemento.style.margin,
+
+            padding: elemento.style.padding,
+
+            boxSizing: elemento.style.boxSizing
+
+        };
+
+
+        elemento.style.width = "100%";
+
+        elemento.style.maxWidth = "820px";
+
+        elemento.style.margin = "0 auto";
+
+        elemento.style.boxSizing = "border-box";
+
+
+        /* ==========================================
+           6. CAPTURAR FACTURA
            ========================================== */
 
         const canvas =
@@ -6617,13 +6644,36 @@ async function generarPDF(f){
 
                     scrollX: 0,
 
-                    scrollY: 0
+                    scrollY: 0,
+
+                    windowWidth:
+                        elemento.scrollWidth
                 }
             );
 
 
         /* ==========================================
-           6. CREAR PDF A4
+           7. RESTAURAR ESTILOS
+           ========================================== */
+
+        elemento.style.width =
+            estiloAnterior.width;
+
+        elemento.style.maxWidth =
+            estiloAnterior.maxWidth;
+
+        elemento.style.margin =
+            estiloAnterior.margin;
+
+        elemento.style.padding =
+            estiloAnterior.padding;
+
+        elemento.style.boxSizing =
+            estiloAnterior.boxSizing;
+
+
+        /* ==========================================
+           8. CREAR PDF A4
            ========================================== */
 
         const { jsPDF } = window.jspdf;
@@ -6636,36 +6686,33 @@ async function generarPDF(f){
 
                 unit: "mm",
 
-                format: "a4"
+                format: "a4",
+
+                compress: true
 
             });
 
 
         /* ==========================================
-           7. DIMENSIONES A4
+           9. MÁRGENES IGUALES
            ========================================== */
 
         const paginaAncho = 210;
 
         const paginaAlto = 297;
 
-        /* Márgenes del PDF */
-
-	const margenHorizontal = 10;
-	const margenVertical = 10;
+        const margen = 8;
 
 
-	/* Espacio disponible */
+        const anchoDisponible =
+            paginaAncho - (margen * 2);
 
-	const anchoDisponible =
-    	paginaAncho - (margenHorizontal * 2);
-
-	const altoDisponible =
-    	paginaAlto - (margenVertical * 2);
+        const altoDisponible =
+            paginaAlto - (margen * 2);
 
 
         /* ==========================================
-           8. PROPORCIÓN DE LA FACTURA
+           10. CALCULAR ESCALA
            ========================================== */
 
         const proporcion =
@@ -6679,11 +6726,6 @@ async function generarPDF(f){
             anchoPDF / proporcion;
 
 
-        /*
-         * Si por altura no cabe,
-         * reducir proporcionalmente.
-         */
-
         if(altoPDF > altoDisponible){
 
             altoPDF =
@@ -6696,7 +6738,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           9. CENTRAR EN LA HOJA
+           11. CENTRAR FACTURA
            ========================================== */
 
         const x =
@@ -6707,7 +6749,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           10. COLOCAR FACTURA COMPLETA
+           12. AGREGAR FACTURA AL PDF
            ========================================== */
 
         pdf.addImage(
@@ -6732,7 +6774,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           11. CREAR BLOB
+           13. CREAR BLOB
            ========================================== */
 
         const pdfBlob =
@@ -6740,7 +6782,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           12. ABRIR PDF
+           14. ABRIR PDF
            ========================================== */
 
         const url =
@@ -6766,17 +6808,17 @@ async function generarPDF(f){
         }else{
 
             mostrarToast(
-                'El PDF fue generado correctamente en una sola hoja.',
+                'El PDF fue generado correctamente.',
                 'success',
                 'PDF listo',
-                4000
+                3500
             );
 
         }
 
 
         /* ==========================================
-           13. CERRAR VISTA PREVIA
+           15. CERRAR MODAL
            ========================================== */
 
         setTimeout(() => {
@@ -6787,7 +6829,7 @@ async function generarPDF(f){
 
 
         /* ==========================================
-           14. LIBERAR MEMORIA
+           16. LIBERAR MEMORIA
            ========================================== */
 
         setTimeout(() => {
