@@ -1876,6 +1876,83 @@ option {
 
 }
 
+/* =====================================================
+   PASO 4 — ESTADO Y OBSERVACIONES
+   ===================================================== */
+
+.campo-estado,
+.campo-observaciones{
+    position:relative;
+    width:100%;
+}
+
+
+/* Zona del icono */
+
+.campo-estado .icono-campo,
+.campo-observaciones .icono-campo{
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:44px;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#fff0f5;
+
+    border-right:1px solid #f6d5df;
+
+    border-radius:10px 0 0 10px;
+
+    font-size:15px;
+
+    z-index:3;
+
+    pointer-events:none;
+}
+
+
+/* Estado */
+
+.campo-estado select{
+    width:100%;
+
+    height:44px;
+    min-height:44px;
+
+    padding-left:56px !important;
+
+    box-sizing:border-box;
+}
+
+
+/* Observaciones */
+
+.campo-observaciones textarea{
+    width:100%;
+
+    min-height:108px;
+
+    padding:14px 14px 14px 56px !important;
+
+    box-sizing:border-box;
+
+    resize:vertical;
+}
+
+
+/* Efecto al enfocar */
+
+.campo-estado:focus-within .icono-campo,
+.campo-observaciones:focus-within .icono-campo{
+    background:#ffe5ef;
+}
+
 </style>
 </head>
 <body>
@@ -2393,36 +2470,52 @@ option {
 </div>
 
 
-        <label>Estado</label>
+       <label>Estado</label>
 
-        <select id="estado">
+<div class="campo-icono campo-estado">
 
-            <option value="Pagada">
-                Pagada
-            </option>
+    <span class="icono-campo">
+        <img src="img/ok.png" class="grilla-icon">
+    </span>
 
-            <option value="Pendiente">
-                Pendiente
-            </option>
+    <select id="estado">
 
-            <option value="Enviada">
-                Enviada
-            </option>
+        <option value="Pagada">
+            Pagada
+        </option>
 
-            <option value="Anulada">
-                Anulada
-            </option>
+        <option value="Pendiente">
+            Pendiente
+        </option>
 
-        </select>
+        <option value="Enviada">
+            Enviada
+        </option>
+
+        <option value="Anulada">
+            Anulada
+        </option>
+
+    </select>
+
+</div>
 
 
-        <label>Observaciones</label>
+<label>Observaciones</label>
 
-        <textarea
-            id="obs"
-            rows="4"
-            placeholder="Gracias por tu compra 💗"
-        ></textarea>
+<div class="campo-icono campo-observaciones">
+
+    <span class="icono-campo">
+        <img src="img/notas.png" class="grilla-icon">
+    </span>
+
+    <textarea
+        id="obs"
+        rows="4"
+        placeholder="Gracias por tu compra 💗"
+    ></textarea>
+
+</div>
 
     </article>
 
