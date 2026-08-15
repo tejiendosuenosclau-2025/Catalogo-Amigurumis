@@ -1687,6 +1687,191 @@ option {
 
 }
 
+/* =====================================================
+   PASO 3 — ABONO + TIPO DE ABONO
+   ===================================================== */
+
+#abonoBox.factura-abono-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:12px;
+
+    width:100%;
+
+    margin:14px 0 16px;
+
+    box-sizing:border-box;
+}
+
+
+/* ==========================================
+   CAMPOS
+   ========================================== */
+
+#abonoBox .factura-campo{
+    min-width:0;
+}
+
+
+/* ==========================================
+   ETIQUETAS
+   ========================================== */
+
+#abonoBox .factura-campo > label{
+    display:block;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#51464c;
+
+    margin:0 0 6px;
+}
+
+
+/* ==========================================
+   CONTENEDOR DEL ICONO
+   ========================================== */
+
+#abonoBox .campo-icono{
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    width:100%;
+
+    min-width:0;
+}
+
+
+/* ==========================================
+   ICONOS
+   ========================================== */
+
+#abonoBox .campo-icono > span{
+    position:absolute;
+
+    left:12px;
+
+    z-index:2;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:15px;
+
+    pointer-events:none;
+}
+
+
+/* ==========================================
+   INPUT + SELECT
+   ========================================== */
+
+#abonoBox .campo-icono input,
+#abonoBox .campo-icono select{
+
+    width:100%;
+
+    min-height:44px;
+
+    box-sizing:border-box;
+
+    padding-left:38px !important;
+
+    border-radius:11px;
+
+    background:#fff;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+/* ==========================================
+   CAMPO ABONO
+   ========================================== */
+
+#abonoBox .campo-abono input{
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffafd,
+            #fff7fa
+        );
+}
+
+
+/* ==========================================
+   TIPO DE ABONO
+   ========================================== */
+
+#abonoBox .campo-tipo-abono select{
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffafd,
+            #fff8fb
+        );
+}
+
+
+/* ==========================================
+   HOVER
+   ========================================== */
+
+#abonoBox .campo-icono input:hover,
+#abonoBox .campo-icono select:hover{
+
+    border-color:#eaa4b8;
+
+}
+
+
+/* ==========================================
+   FOCUS
+   ========================================== */
+
+#abonoBox .campo-icono input:focus,
+#abonoBox .campo-icono select:focus{
+
+    outline:none;
+
+    border-color:#f47da3;
+
+    box-shadow:
+        0 0 0 3px rgba(244,125,163,.10);
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media(max-width:600px){
+
+    #abonoBox.factura-abono-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
 </style>
 </head>
 <body>
@@ -2074,37 +2259,66 @@ option {
         <!-- ABONO                          -->
         <!-- ============================= -->
 
-        <div id="abonoBox">
+        <!-- ==========================================
+     ABONO + TIPO DE ABONO
+     ========================================== -->
 
-          <label>Abono</label>
+<div id="abonoBox" class="factura-abono-grid">
+
+    <!-- ABONO -->
+
+    <div class="factura-campo">
+
+        <label>
+            Abono
+        </label>
+
+        <div class="campo-icono campo-abono">
+
+            <span>💰</span>
 
             <input
-             id="abono"
-             type="number"
-             min="0"
-             value="0"
-             placeholder="Ej: 50000"
-          >
+                id="abono"
+                type="number"
+                min="0"
+                value="0"
+                placeholder="Ej: 50000"
+            >
 
-         <div id="tipoAbonoBox">
+        </div>
 
-          <label>Tipo de abono</label>
+    </div>
+
+
+    <!-- TIPO DE ABONO -->
+
+    <div id="tipoAbonoBox" class="factura-campo">
+
+        <label>
+            Tipo de abono
+        </label>
+
+        <div class="campo-icono campo-tipo-abono">
+
+            <span>💳</span>
 
             <select id="tipoAbono">
 
-              <option value="Efectivo">
-                Efectivo
-              </option>
+                <option value="Efectivo">
+                    Efectivo
+                </option>
 
-              <option value="Transferencia">
-                Transferencia
-              </option>
+                <option value="Transferencia">
+                    Transferencia
+                </option>
 
-             </select>
+            </select>
 
-          </div>
+        </div>
 
-       </div>
+    </div>
+
+</div>
 
 
     <div class="factura-resumen">
