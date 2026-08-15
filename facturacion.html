@@ -3565,13 +3565,6 @@ table tbody tr:hover{
 
 })();
 
-
-mostrarToast(
-    'Factura guardada correctamente.',
-    'success'
-);
-
-
 const $=id=>document.getElementById(id);
 
 function actualizarAbono(){
@@ -6902,8 +6895,12 @@ async function guardarFacturaDB(e){
     if(!valid()) return;
 
     if(!db || !currentUser){
-        alert("Debes iniciar sesión.");
-        return;
+    mostrarToast(
+        'Debes iniciar sesión para guardar una factura.',
+        'warning',
+        'Sesión requerida'
+    );
+    return;
     }
 
     try{
@@ -6914,7 +6911,7 @@ async function guardarFacturaDB(e){
 
             await actualizarFacturaDB(f);
 
-            alert("Factura " + f.numero + " Actualizada Correctamente.");
+            mostrarToast('La Factura ' + f.numero + ' Actualizada Correctamente.','success','Factura actualizada');
 
             editingInvoiceId = null;
 
@@ -6924,7 +6921,7 @@ async function guardarFacturaDB(e){
 
             await guardarDB(f);
 
-            alert("Factura " + f.numero + " Guardada Correctamente.");
+            mostrarToast('La Factura ' + f.numero + ' Guardada Correctamente.','success','Factura guardada');
 
             $("form").reset();
 
@@ -6965,14 +6962,11 @@ async function guardarFacturaDB(e){
 
         }catch(err){
 
-          console.error("ERROR REAL AL GUARDAR:", err);
+    		console.error("ERROR REAL AL GUARDAR:", err);
 
-          alert(
-          "ERROR REAL:\n\n" +
-           (err?.message || JSON.stringify(err))
-          );
-        }
-        }
+    		mostrarToast(err?.message || 'No fue posible guardar la factura. Intenta nuevamente.','error','Error al guardar',6000);
+	}
+    }
 
 function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
 function hideDBLogin(){const s=$("loginScreen");if(s)s.style.display="none";document.body.classList.remove("locked")}
