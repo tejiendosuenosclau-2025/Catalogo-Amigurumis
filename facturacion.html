@@ -6470,7 +6470,7 @@ async function verFacturaDB(id){
 
         console.error(err);
 
-        alert("No se pudo cargar la factura.");
+        mostrarToast('No fue posible cargar la factura para mostrar la vista previa.','error','Error en vista previa',5000);
     }
 }
 
@@ -6494,7 +6494,7 @@ async function pdfFacturaDB(id){
 
         console.error(err);
 
-        alert("No se pudo generar el PDF de la factura.");
+        mostrarToast('No fue posible preparar la factura para PDF.','error','Error al generar PDF',6000);
 
     }
 
@@ -6518,7 +6518,7 @@ async function imprimirFacturaDB(id){
 
         console.error(err);
 
-        alert("No se pudo imprimir la factura.");
+        mostrarToast('No fue posible preparar la factura para impresión.','error','Error al imprimir',6000);
 
     }
 }
@@ -6540,7 +6540,7 @@ async function anularFacturaDB(id){
 
         if(error) throw error;
 
-        alert("Factura " + data.numero + " Anulada Correctamente.");
+        	mostrarToast('La factura ' + data.numero + ' fue anulada correctamente.','success','Factura anulada');
 
         await cargarHistorialDB();
 
@@ -6548,7 +6548,7 @@ async function anularFacturaDB(id){
 
         console.error(err);
 
-        alert("No se pudo anular la factura.");
+        mostrarToast(err?.message || 'No fue posible anular la factura. Intenta nuevamente.','error','Error al anular',6000);
     }
 }
 
@@ -6621,11 +6621,7 @@ async function eliminarFacturaDB(id){
         // 5. MENSAJE
         // ==========================================
 
-        alert(
-            "Factura " +
-            factura.numero +
-            " eliminada definitivamente."
-        );
+        mostrarToast('La factura ' + factura.numero + ' fue eliminada definitivamente.','success','Factura eliminada');
 
 
         // ==========================================
@@ -6642,10 +6638,7 @@ async function eliminarFacturaDB(id){
             err
         );
 
-        alert(
-            "No se pudo eliminar la factura.\n\n" +
-            "Revisa las políticas RLS de Supabase."
-        );
+        mostrarToast('No fue posible eliminar la factura. Revisa los permisos de Supabase.','error','Error al eliminar',6500);
     }
 }
 
@@ -6657,7 +6650,7 @@ async function editarFacturaDB(id){
 
         if(f.estado === "Anulada"){
 
-            alert("Factura anulada no se puede editar.");
+            mostrarToast('Las facturas anuladas no pueden modificarse.','warning','Factura no editable');
 
             return;
         }
@@ -6879,9 +6872,7 @@ async function editarFacturaDB(id){
 
         console.error(err);
 
-        alert(
-            "No se pudo cargar la factura para editar."
-        );
+        mostrarToast(err?.message || 'No fue posible cargar la factura para editarla.','error','Error al editar',6000);
 
     }
 
@@ -7327,15 +7318,24 @@ $("abono").oninput = () => {
 $("preview").onclick = () => show();
 
 $("print").onclick = () => {
+
     show();
-    setTimeout(() => print(), 200);
+
+    setTimeout(() => {
+
+        mostrarToast('Preparando la factura para impresión.','info','Imprimiendo factura',2500);
+
+        print();
+
+    }, 200);
+
 };
 
 $("pdf").onclick = () => {
     show();
 
     setTimeout(() => {
-        alert("Selecciona «Guardar como PDF» en la ventana de impresión.");
+        mostrarToast('En la ventana de impresión selecciona "Guardar como PDF".','info','Guardar factura en PDF',5000);
         print();
     }, 200);
 };
@@ -7351,17 +7351,45 @@ $("wa").onclick = () => {
         " 😊%0AFactura " + f.numero +
         "%0A" +
         f.items
-            .map(x => "• " + x.nombre + " x" + x.q + ": " + money(x.total))
+            .map(
+                x =>
+                "• " +
+                x.nombre +
+                " x" +
+                x.q +
+                ": " +
+                money(x.total)
+            )
             .join("%0A") +
-        "%0ATotal: " + money(f.total) +
+        "%0ATotal: " +
+        money(f.total) +
         "%0A¡Gracias por tu compra! 💗";
 
-    open(
+
+    const numero =
+        (f.cliente.tel || "573011810933")
+            .replace(/\D/g, "");
+
+
+    const ventana = open(
         "https://wa.me/" +
-        ((f.cliente.tel || "573011810933").replace(/\D/g, "")) +
-        "?text=" + txt,
+        numero +
+        "?text=" +
+        txt,
         "_blank"
     );
+
+
+    if(ventana){
+
+        mostrarToast('Se preparó el mensaje de la factura para WhatsApp.','success','WhatsApp listo',3500);
+
+    }else{
+
+        mostrarToast('El navegador bloqueó la ventana de WhatsApp. Permite ventanas emergentes e inténtalo nuevamente.','warning','WhatsApp bloqueado',6000);
+
+    }
+
 };
 
 $("new").onclick = async () => {
@@ -7388,7 +7416,7 @@ $("new").onclick = async () => {
 
         console.error(err);
 
-        alert("No se pudo generar el número de factura.");
+        mostrarToast('No fue posible generar el número de la nueva factura.','error','Error al crear factura',6000);
     }
 };
 
