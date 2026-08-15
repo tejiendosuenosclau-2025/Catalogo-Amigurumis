@@ -1473,6 +1473,220 @@ option {
     color: #f43f7a;
 }
 
+/* =====================================================
+   PASO 2 — DATOS PRINCIPALES DE LA FACTURA
+   ===================================================== */
+
+/* ---------- NÚMERO DE FACTURA ---------- */
+
+.factura-numero-bloque{
+    margin-bottom:16px;
+}
+
+.factura-numero-label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    font-size:11px;
+    font-weight:800;
+    color:#51464c;
+
+    margin-bottom:6px;
+}
+
+.factura-numero-campo{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+
+    min-height:48px;
+
+    border:1px solid #f4b8ca;
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        #fffafd,
+        #fff5f8
+    );
+
+    overflow:hidden;
+
+    transition:
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+.factura-numero-campo:hover{
+    border-color:#f47da3;
+
+    box-shadow:
+        0 5px 14px rgba(244,125,163,.10);
+}
+
+
+/* Icono del número */
+
+.factura-numero-icono{
+    width:45px;
+    min-width:45px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#ffe7ef;
+    color:#ed5f88;
+
+    font-size:17px;
+}
+
+
+/* Input del número */
+
+.factura-numero-campo input{
+    flex:1;
+
+    width:100%;
+
+    border:0 !important;
+    border-radius:0 !important;
+
+    background:transparent !important;
+
+    box-shadow:none !important;
+
+    padding:12px 10px;
+
+    font-size:16px;
+    font-weight:800;
+
+    color:#e84f79;
+}
+
+
+/* Etiqueta automático */
+
+.factura-automatico{
+    margin-right:9px;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    background:#ffe9f0;
+
+    color:#e84f79;
+
+    font-size:9px;
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+
+/* ---------- FECHA + FORMA DE PAGO ---------- */
+
+.factura-datos-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:12px;
+
+    margin-bottom:4px;
+}
+
+.factura-campo{
+    min-width:0;
+}
+
+.factura-campo label{
+    display:block;
+
+    font-size:11px;
+    font-weight:800;
+
+    color:#51464c;
+
+    margin:0 0 6px;
+}
+
+
+/* Contenedor del icono */
+
+.campo-icono{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+
+    min-width:0;
+}
+
+.campo-icono > span{
+    position:absolute;
+
+    left:12px;
+
+    z-index:2;
+
+    font-size:15px;
+
+    pointer-events:none;
+}
+
+
+/* Inputs y select */
+
+.campo-icono input,
+.campo-icono select{
+    width:100%;
+
+    min-height:44px;
+
+    padding-left:38px !important;
+
+    box-sizing:border-box;
+}
+
+
+/* ---------- EFECTO DE ENFOQUE ---------- */
+
+.factura-numero-campo:focus-within{
+    border-color:#f47da3;
+
+    box-shadow:
+        0 0 0 3px rgba(244,125,163,.10);
+}
+
+.campo-icono:focus-within input,
+.campo-icono:focus-within select{
+    border-color:#f47da3;
+
+    box-shadow:
+        0 0 0 3px rgba(244,125,163,.08);
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:600px){
+
+    .factura-datos-grid{
+        grid-template-columns:1fr;
+    }
+
+    .factura-automatico{
+        display:none;
+    }
+
+}
+
 </style>
 </head>
 <body>
@@ -1775,35 +1989,86 @@ option {
         <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
 
 
-        <label>Número de factura</label>
+        <!-- NÚMERO DE FACTURA -->
 
-        <input
-            id="numero"
-            readonly
-        >
+	<div class="factura-numero-bloque">
+
+    		<div class="factura-numero-label">
+        		<span>🏷️</span>
+        		Número de factura
+    		</div>
+
+    		<div class="factura-numero-campo">
+
+        		<span class="factura-numero-icono">
+            			🏷️
+        		</span>
+
+        		<input id="numero" readonly>
+
+        		<span class="factura-automatico">
+            			Automático ✨
+        		</span>
+
+    		</div>
+
+	</div>
 
 
-        <label>Fecha</label>
+	<!-- FECHA -->
 
-        <input
-            id="fecha"
-            type="date"
-        >
+	<div class="factura-datos-grid">
+
+    		<div class="factura-campo">
+
+        		<label>
+            			📅 Fecha
+        		</label>
+
+        		<div class="campo-icono">
+
+            			<span>📅</span>
+
+            			<input id="fecha" type="date">
+
+        		</div>
+
+    		</div>
 
 
-        <label>Forma de pago</label>
+    		<!-- FORMA DE PAGO -->
 
-        <select id="pago">
-            <option value="Seleccione">
-                Seleccione
-            </option>
-            <option value="Contado">
-                Contado
-            </option>
-            <option value="Abono">
-                Abono
-            </option>
-        </select>
+    		<div class="factura-campo">
+
+        		<label>
+            			💳 Forma de pago
+        		</label>
+
+        		<div class="campo-icono">
+
+            			<span>💳</span>
+
+            			<select id="pago">
+
+                			<option value="Seleccione">
+                    				Seleccione
+                			</option>
+
+                			<option value="Contado">
+                    				Contado
+                			</option>
+
+                			<option value="Abono">
+                    				Abono
+                			</option>
+
+            			</select>
+
+        		</div>
+
+    		</div>
+
+	</div>
 
 
         <!-- ============================= -->
