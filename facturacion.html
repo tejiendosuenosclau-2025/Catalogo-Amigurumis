@@ -2520,6 +2520,302 @@ table tbody tr:hover{
 
 }
 
+/* ============================================================
+   🌸 TOASTS — FASE 1
+   ============================================================ */
+
+#tsToastContainer{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+
+    z-index:999999;
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+
+    pointer-events:none;
+}
+
+
+/* Toast */
+
+.ts-toast{
+    position:relative;
+
+    min-width:300px;
+    max-width:390px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+
+    padding:14px 16px;
+
+    background:rgba(255,255,255,.97);
+
+    border:1px solid var(--line);
+
+    border-radius:15px;
+
+    box-shadow:
+        0 14px 35px rgba(64,55,59,.14);
+
+    color:var(--ink);
+
+    pointer-events:auto;
+
+    overflow:hidden;
+
+    animation:
+        tsToastEntrada .28s cubic-bezier(.2,.8,.2,1) both;
+}
+
+
+/* Barra lateral */
+
+.ts-toast::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    bottom:0;
+
+    width:4px;
+
+    background:var(--p);
+}
+
+
+.ts-toast.success::before{
+    background:var(--g);
+}
+
+
+.ts-toast.error::before{
+    background:#dc5b68;
+}
+
+
+.ts-toast.warning::before{
+    background:#e5a13c;
+}
+
+
+.ts-toast.info::before{
+    background:#6d91d9;
+}
+
+
+/* Icono */
+
+.ts-toast-icon{
+    width:34px;
+    height:34px;
+
+    flex:0 0 34px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:var(--soft);
+
+    color:var(--p);
+
+    font-size:17px;
+    font-weight:900;
+}
+
+
+.ts-toast.success .ts-toast-icon{
+    background:#eaf8ef;
+    color:var(--g);
+}
+
+
+.ts-toast.error .ts-toast-icon{
+    background:#fdebed;
+    color:#dc5b68;
+}
+
+
+.ts-toast.warning .ts-toast-icon{
+    background:#fff4df;
+    color:#c98a27;
+}
+
+
+.ts-toast.info .ts-toast-icon{
+    background:#edf3fc;
+    color:#5f82c5;
+}
+
+
+/* Contenido */
+
+.ts-toast-content{
+    flex:1;
+    min-width:0;
+}
+
+
+.ts-toast-title{
+    margin:0 0 3px;
+
+    font-size:.88rem;
+    font-weight:850;
+
+    color:var(--ink);
+}
+
+
+.ts-toast-message{
+    margin:0;
+
+    font-size:.78rem;
+    line-height:1.45;
+
+    color:var(--mut);
+}
+
+
+/* Botón cerrar */
+
+.ts-toast-close{
+    width:27px;
+    height:27px;
+
+    flex:0 0 27px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:#aaa;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    padding:0;
+
+    transition:
+        background .16s ease,
+        color .16s ease;
+}
+
+
+.ts-toast-close:hover{
+    background:#f8eef2;
+    color:var(--ink);
+}
+
+
+/* Barra de duración */
+
+.ts-toast-progress{
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    height:2px;
+
+    width:100%;
+
+    background:var(--p);
+
+    transform-origin:left;
+
+    animation:tsToastProgress 4s linear forwards;
+}
+
+
+.ts-toast.success .ts-toast-progress{
+    background:var(--g);
+}
+
+
+.ts-toast.error .ts-toast-progress{
+    background:#dc5b68;
+}
+
+
+.ts-toast.warning .ts-toast-progress{
+    background:#e5a13c;
+}
+
+
+.ts-toast.info .ts-toast-progress{
+    background:#6d91d9;
+}
+
+
+/* Animaciones */
+
+@keyframes tsToastEntrada{
+
+    from{
+        opacity:0;
+        transform:translateX(25px) scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0) scale(1);
+    }
+
+}
+
+
+@keyframes tsToastSalida{
+
+    from{
+        opacity:1;
+        transform:translateX(0) scale(1);
+    }
+
+    to{
+        opacity:0;
+        transform:translateX(25px) scale(.97);
+    }
+
+}
+
+
+/* Móvil */
+
+@media(max-width:600px){
+
+    #tsToastContainer{
+        right:12px;
+        left:12px;
+        bottom:12px;
+
+        align-items:stretch;
+    }
+
+    .ts-toast{
+        min-width:0;
+        max-width:none;
+        width:100%;
+    }
+
+}
+
 </style>
 </head>
 <body>
@@ -3124,6 +3420,158 @@ table tbody tr:hover{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script>
+
+
+/* ============================================================
+   🌸 SISTEMA DE TOASTS
+   ============================================================ */
+
+(function(){
+
+    // Crear contenedor una sola vez
+    let container = document.getElementById('tsToastContainer');
+
+    if(!container){
+
+        container = document.createElement('div');
+
+        container.id = 'tsToastContainer';
+
+        document.body.appendChild(container);
+
+    }
+
+
+    window.mostrarToast = function(
+        mensaje,
+        tipo = 'success',
+        titulo = null,
+        duracion = 4000
+    ){
+
+        const configuracion = {
+
+            success:{
+                icono:'✓',
+                titulo:'¡Listo!'
+            },
+
+            error:{
+                icono:'!',
+                titulo:'Ha ocurrido un problema'
+            },
+
+            warning:{
+                icono:'⚠',
+                titulo:'Atención'
+            },
+
+            info:{
+                icono:'i',
+                titulo:'Información'
+            }
+
+        };
+
+
+        const config =
+            configuracion[tipo] ||
+            configuracion.info;
+
+
+        const toast = document.createElement('div');
+
+        toast.className =
+            `ts-toast ${tipo}`;
+
+
+        toast.innerHTML = `
+
+            <div class="ts-toast-icon">
+                ${config.icono}
+            </div>
+
+            <div class="ts-toast-content">
+
+                <div class="ts-toast-title">
+                    ${titulo || config.titulo}
+                </div>
+
+                <p class="ts-toast-message">
+                    ${mensaje}
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="ts-toast-close"
+                aria-label="Cerrar">
+                ×
+            </button>
+
+            <div class="ts-toast-progress"></div>
+
+        `;
+
+
+        container.appendChild(toast);
+
+
+        const cerrar = () => {
+
+            if(!toast.isConnected) return;
+
+            toast.style.animation =
+                'tsToastSalida .22s ease forwards';
+
+
+            setTimeout(() => {
+
+                if(toast.isConnected){
+                    toast.remove();
+                }
+
+            }, 220);
+
+        };
+
+
+        const botonCerrar =
+            toast.querySelector('.ts-toast-close');
+
+
+        botonCerrar.addEventListener(
+            'click',
+            cerrar
+        );
+
+
+        const timer =
+            setTimeout(
+                cerrar,
+                duracion
+            );
+
+
+        // Si el usuario cierra manualmente,
+        // cancelamos el temporizador.
+        botonCerrar.addEventListener(
+            'click',
+            () => clearTimeout(timer)
+        );
+
+    };
+
+})();
+
+
+mostrarToast(
+    'Factura guardada correctamente.',
+    'success'
+);
+
+
 const $=id=>document.getElementById(id);
 
 function actualizarAbono(){
