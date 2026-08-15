@@ -280,34 +280,187 @@ padding:0}
 
 
 /* ==========================================
-   RESUMEN DE ABONOS
+   RESUMEN FINANCIERO DE LA FACTURA
    ========================================== */
 
 .factura-resumen{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin:12px 0;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin:16px 0 18px;
 }
 
 .factura-resumen > div{
-    background:#faf5f7;
-    border-radius:8px;
-    padding:10px;
+    position:relative;
+    min-height:82px;
+
+    padding:14px 16px;
+
+    border-radius:14px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+    overflow:hidden;
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease;
 }
+
+
+/* ==========================================
+   ABONO ACUMULADO
+   ========================================== */
+
+.factura-resumen > div:first-child{
+    background:linear-gradient(
+        145deg,
+        #f0fff7,
+        #e6faef
+    );
+
+    border:1px solid #c9eed9;
+}
+
+.factura-resumen > div:first-child::before{
+    content:"💰";
+
+    position:absolute;
+    right:14px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#d8f5e5;
+
+    font-size:19px;
+}
+
+
+/* ==========================================
+   SALDO PENDIENTE
+   ========================================== */
+
+.factura-resumen > div:last-child{
+    background:linear-gradient(
+        145deg,
+        #fff8ef,
+        #fff1df
+    );
+
+    border:1px solid #f5d8b1;
+}
+
+.factura-resumen > div:last-child::before{
+    content:"💳";
+
+    position:absolute;
+    right:14px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#ffe6c7;
+
+    font-size:19px;
+}
+
+
+/* ==========================================
+   TEXTO
+   ========================================== */
 
 .factura-resumen span{
+    position:relative;
+    z-index:1;
+
     display:block;
-    font-size:12px;
-    color:#777;
-    margin-bottom:4px;
+
+    font-size:11px;
+    font-weight:700;
+
+    margin-bottom:5px;
 }
 
-.factura-resumen strong{
-    display:block;
-    font-size:15px;
-    color:#555;
+.factura-resumen > div:first-child span{
+    color:#24945a;
 }
+
+.factura-resumen > div:last-child span{
+    color:#d97716;
+}
+
+
+/* ==========================================
+   VALOR
+   ========================================== */
+
+.factura-resumen strong{
+    position:relative;
+    z-index:1;
+
+    display:block;
+
+    font-size:20px;
+    font-weight:800;
+
+    letter-spacing:-.3px;
+}
+
+.factura-resumen > div:first-child strong{
+    color:#198754;
+}
+
+.factura-resumen > div:last-child strong{
+    color:#d66a0b;
+}
+
+
+/* ==========================================
+   EFECTO AL PASAR EL MOUSE
+   ========================================== */
+
+.factura-resumen > div:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(60,40,50,.08);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media(max-width:600px){
+
+    .factura-resumen{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
 
 
 /* ==========================================
