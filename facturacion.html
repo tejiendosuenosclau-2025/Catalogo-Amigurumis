@@ -7163,8 +7163,8 @@ async function enviarFacturaWhatsApp(f){
 
 
         /*
-         * Si el número viene como celular colombiano
-         * de 10 dígitos, agregamos 57.
+         * Si es celular colombiano de 10 dígitos
+         * agregamos el código de país 57.
          */
 
         if(
@@ -7201,23 +7201,13 @@ async function enviarFacturaWhatsApp(f){
                 "_"
             );
 
+
         const nombreArchivo =
             `${numeroFactura}.pdf`;
 
 
-        /*
-         * Ruta dentro de Storage.
-         *
-         * Usamos una carpeta para mantener
-         * organizadas las facturas.
-         */
-
-        const rutaPdf =
-            `facturas/${nombreArchivo}`;
-
-
         /* ==========================================
-           4. MENSAJE DE CARGA
+           4. MENSAJE
            ========================================== */
 
         mostrarToast(
@@ -7251,45 +7241,84 @@ async function enviarFacturaWhatsApp(f){
 
 
         /* ==========================================
-           6. SUBIR PDF A SUPABASE STORAGE
+           6. CONVERTIR PDF A BASE64
            ========================================== */
 
-        const { error: uploadError } =
-            await window.supabaseClient
-                .storage
-                .from("facturas-pdf")
-                .upload(
-
-                    rutaPdf,
-
-                    pdfBlob,
-
-                    {
-                        contentType: "application/pdf",
-
-                        upsert: true
-
-                    }
-
-                );
+        const arrayBuffer =
+            await pdfBlob.arrayBuffer();
 
 
-        if(uploadError){
-
-            console.error(
-                "ERROR SUBIENDO PDF:",
-                uploadError
+        const bytes =
+            new Uint8Array(
+                arrayBuffer
             );
 
+
+        let binary = "";
+
+
+        /*
+         * Procesamos por bloques para evitar
+         * exceder el límite de argumentos de
+         * String.fromCharCode().
+         */
+
+        const chunkSize =
+            0x8000;
+
+
+        for(
+            let i = 0;
+            i < bytes.length;
+            i += chunkSize
+        ){
+
+            binary +=
+                String.fromCharCode(
+                    ...bytes.subarray(
+                        i,
+                        Math.min(
+                            i + chunkSize,
+                            bytes.length
+                        )
+                    )
+                );
+
+        }
+
+
+        const pdfBase64 =
+            btoa(binary);
+
+
+        if(!pdfBase64){
+
             throw new Error(
-                "No se pudo subir la factura a Supabase."
+                "No fue posible convertir el PDF."
             );
 
         }
 
 
         /* ==========================================
-           7. LLAMAR EDGE FUNCTION
+           7. INFORMACIÓN
+           ========================================== */
+
+        console.log(
+            "PDF generado:",
+            nombreArchivo
+        );
+
+
+        console.log(
+            "Tamaño PDF:",
+            pdfBlob.size,
+            "bytes"
+        );
+
+
+        /* ==========================================
+           8. LLAMAR EDGE FUNCTION
            ========================================== */
 
         mostrarToast(
@@ -7305,36 +7334,38 @@ async function enviarFacturaWhatsApp(f){
         );
 
 
-        const { data, error } =
-            await window.supabaseClient.functions.invoke(
+        const {
+            data,
+            error
+        } =
+            await window.supabaseClient
+                .functions
+                .invoke(
 
-                "super-endpoint",
+                    "super-endpoint",
 
-                {
+                    {
 
-                    body: {
+                        body: {
 
-                        telefono:
+                            telefono:
+                                telefono,
 
-                            telefono,
+                            nombre_archivo:
+                                nombreArchivo,
 
-                        ruta_pdf:
+                            pdf_base64:
+                                pdfBase64
 
-                            rutaPdf,
-
-                        nombre_archivo:
-
-                            nombreArchivo
+                        }
 
                     }
 
-                }
-
-            );
+                );
 
 
         /* ==========================================
-           8. ERROR SUPABASE
+           9. ERROR AL INVOCAR EDGE FUNCTION
            ========================================== */
 
         if(error){
@@ -7344,40 +7375,74 @@ async function enviarFacturaWhatsApp(f){
                 error
             );
 
+
+            /*
+             * Intentamos mostrar el mensaje real
+             * devuelto por Supabase.
+             */
+
             throw new Error(
+
                 error.message ||
+
                 "No se pudo contactar con el servicio de WhatsApp."
+
             );
 
         }
 
 
         /* ==========================================
-           9. ERROR DEVUELTO POR LA FUNCIÓN
+           10. ERROR DEVUELTO POR LA EDGE FUNCTION
            ========================================== */
 
         if(!data?.ok){
 
             console.error(
-                "ERROR WHATSAPP:",
+                "ERROR DEVUELTO POR EDGE FUNCTION:",
                 data
             );
 
+
+            let mensaje =
+                "WhatsApp no pudo enviar la factura.";
+
+
+            if(
+                typeof data?.error === "string"
+            ){
+
+                mensaje =
+                    data.error;
+
+            }
+            else if(
+                data?.error?.error?.message
+            ){
+
+                mensaje =
+                    data.error.error.message;
+
+            }
+            else if(
+                data?.error?.message
+            ){
+
+                mensaje =
+                    data.error.message;
+
+            }
+
+
             throw new Error(
-
-                data?.error?.error?.message ||
-
-                data?.error?.message ||
-
-                "WhatsApp no pudo enviar la factura."
-
+                mensaje
             );
 
         }
 
 
         /* ==========================================
-           10. ÉXITO
+           11. ÉXITO
            ========================================== */
 
         mostrarToast(
@@ -7394,7 +7459,7 @@ async function enviarFacturaWhatsApp(f){
 
 
         console.log(
-            "FACTURA ENVIADA:",
+            "FACTURA ENVIADA CORRECTAMENTE:",
             data
         );
 
@@ -7402,7 +7467,12 @@ async function enviarFacturaWhatsApp(f){
         return data;
 
 
-    }catch(error){
+    }
+    catch(error){
+
+        /* ==========================================
+           12. ERROR GENERAL
+           ========================================== */
 
         console.error(
             "ERROR ENVIANDO FACTURA POR WHATSAPP:",
