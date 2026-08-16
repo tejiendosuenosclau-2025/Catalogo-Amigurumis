@@ -8631,28 +8631,35 @@ $("history").addEventListener("click", async e => {
 
     if (action === "view") {
         await verFacturaDB(id);
+	return;
     }
 
     if (action === "edit") {
         await editarFacturaDB(id);
+	return;
     }
     if (action === "pdf") {
         await pdfFacturaDB(id);
+	return;
     }
 
     if (action === "print") {
         await imprimirFacturaDB(id);
+	return;
     }
 
     if (action === "whatsapp") {
-    await enviarFacturaWhatsAppDB(id);
+    	await enviarFacturaWhatsAppDB(id);
+	return;
     }
 
     if (action === "cancel") {
         await anularFacturaDB(id);
+	return;
     }
     if (action === "delete") {
         await eliminarFacturaDB(id);
+	return;
 }
 
 });
