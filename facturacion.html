@@ -2816,6 +2816,115 @@ table tbody tr:hover{
 
 }
 
+/* ============================================================
+   📱 HISTORIAL RESPONSIVE — PASO 1
+   Solo afecta teléfonos.
+   No modifica JavaScript ni escritorio.
+   ============================================================ */
+
+@media (max-width: 600px){
+
+    /* La tabla deja de comportarse como una tabla rígida */
+    #historial table,
+    #historial thead,
+    #historial tbody,
+    #historial tr,
+    #historial td{
+        display:block;
+        width:100%;
+        box-sizing:border-box;
+    }
+
+    /* Ocultamos encabezados */
+    #historial thead{
+        display:none;
+    }
+
+    /* Cada factura se convierte en una tarjeta */
+    #historial tbody tr{
+        margin-bottom:14px;
+        padding:14px;
+        background:#fff;
+        border:1px solid #eadfe4;
+        border-radius:16px;
+        box-shadow:0 5px 18px rgba(64,55,59,.06);
+    }
+
+    /* Celdas */
+    #historial tbody td{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding:7px 0;
+        border:0;
+        min-height:32px;
+    }
+
+    /* Factura */
+    #historial tbody td:nth-child(1){
+        font-weight:800;
+        color:#e85c8b;
+        font-size:1rem;
+    }
+
+    /* Cliente */
+    #historial tbody td:nth-child(2){
+        color:#40373b;
+        font-weight:650;
+    }
+
+    /* Fecha */
+    #historial tbody td:nth-child(3){
+        color:#7d7378;
+        font-size:.88rem;
+    }
+
+    /* Total */
+    #historial tbody td:nth-child(4){
+        font-weight:800;
+        color:#40373b;
+    }
+
+    /* Estado */
+    #historial tbody td:nth-child(5){
+        justify-content:flex-start;
+    }
+
+    /* Acciones */
+    #historial tbody td:nth-child(6){
+        display:block;
+        padding-top:12px;
+        margin-top:7px;
+        border-top:1px solid #f0e5e9;
+    }
+
+    /* Botones */
+    #historial .history-actions{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        width:100%;
+    }
+
+    #historial .history-btn{
+        width:40px;
+        height:40px;
+        min-width:40px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:11px;
+    }
+
+    #historial .history-btn .grilla-icon{
+        width:18px;
+        height:18px;
+        object-fit:contain;
+    }
+
+}
+
 </style>
 </head>
 <body>
