@@ -7464,6 +7464,77 @@ async function pdfFacturaDB(id){
 
 }
 
+async function enviarFacturaWhatsAppDB(id){
+
+    try{
+
+        console.log(
+            "WHATSAPP → cargando factura:",
+            id
+        );
+
+
+        /* ==========================================
+           1. OBTENER FACTURA
+           ========================================== */
+
+        const f =
+            await obtenerFacturaDB(id);
+
+
+        if(!f){
+
+            mostrarToast(
+                'No se encontró la factura seleccionada.',
+                'warning',
+                'Factura no encontrada',
+                5000
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "WHATSAPP → factura encontrada:",
+            f
+        );
+
+
+        /* ==========================================
+           2. ENVIAR FACTURA
+           ========================================== */
+
+        await enviarFacturaWhatsApp(f);
+
+
+    }catch(err){
+
+        console.error(
+            "ERROR ENVIANDO FACTURA POR WHATSAPP:",
+            err
+        );
+
+
+        mostrarToast(
+
+            err?.message ||
+
+            'No fue posible enviar la factura por WhatsApp.',
+
+            'error',
+
+            'Error WhatsApp',
+
+            6000
+
+        );
+
+    }
+
+}
+
 async function imprimirFacturaDB(id){
 
     try{
