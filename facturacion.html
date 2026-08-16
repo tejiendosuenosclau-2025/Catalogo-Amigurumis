@@ -6369,6 +6369,15 @@ async function cargarHistorialDB(){
                             data-id="${f.id}">
                             <img src="img/imprimir.png" alt="PDF" class="grilla-icon">
                         </button>
+			
+			<button
+                            type="button"
+                            class="history-btn whatsapp"
+                            title="Enviar Factura via Whatsapp"
+                            data-action="whatsapp"
+                            data-id="${f.id}">
+                            <img src="img/whatsapp.png" alt="PDF" class="grilla-icon">
+                        </button>
                
                         ${
                             f.estado !== "Anulada"
@@ -6847,6 +6856,576 @@ async function generarPDF(f){
             contenedor.remove();
 
         }
+
+    }
+
+}
+
+async function generarPDFBlob(f){
+
+    if(!window.html2canvas || !window.jspdf){
+
+        throw new Error(
+            "No se pudo cargar el generador de PDF."
+        );
+
+    }
+
+    let contenedor = null;
+
+    try{
+
+        /* ==========================================
+           1. CREAR CONTENEDOR TEMPORAL
+           ========================================== */
+
+        contenedor = document.createElement("div");
+
+        contenedor.style.position = "fixed";
+        contenedor.style.left = "-10000px";
+        contenedor.style.top = "0";
+        contenedor.style.width = "1000px";
+        contenedor.style.background = "#ffffff";
+        contenedor.style.padding = "0";
+        contenedor.style.margin = "0";
+        contenedor.style.zIndex = "-1";
+
+        document.body.appendChild(contenedor);
+
+
+        /* ==========================================
+           2. CREAR LA FACTURA
+           ========================================== */
+
+        contenedor.innerHTML = sheet(f);
+
+
+        /* ==========================================
+           3. TOMAR LA FACTURA REAL
+           ========================================== */
+
+        const elemento =
+            contenedor.querySelector(".sheet");
+
+        if(!elemento){
+
+            throw new Error(
+                "No se encontró el contenido de la factura."
+            );
+
+        }
+
+
+        /* ==========================================
+           4. CONFIGURAR ANCHO
+           ========================================== */
+
+        elemento.style.width = "100%";
+        elemento.style.maxWidth = "none";
+        elemento.style.margin = "0";
+        elemento.style.boxSizing = "border-box";
+
+
+        /* ==========================================
+           5. ESPERAR IMÁGENES
+           ========================================== */
+
+        const imagenes =
+            elemento.querySelectorAll("img");
+
+        await Promise.all(
+
+            Array.from(imagenes).map(img => {
+
+                if(img.complete){
+
+                    return Promise.resolve();
+
+                }
+
+                return new Promise(resolve => {
+
+                    img.onload = resolve;
+                    img.onerror = resolve;
+
+                });
+
+            })
+
+        );
+
+
+        /* ==========================================
+           6. ESPERAR RENDERIZADO
+           ========================================== */
+
+        await new Promise(resolve => {
+
+            requestAnimationFrame(() => {
+
+                requestAnimationFrame(resolve);
+
+            });
+
+        });
+
+
+        /* ==========================================
+           7. CAPTURAR FACTURA
+           ========================================== */
+
+        const canvas =
+            await html2canvas(
+                elemento,
+                {
+                    scale: 2,
+
+                    useCORS: true,
+
+                    allowTaint: false,
+
+                    backgroundColor: "#ffffff",
+
+                    logging: false,
+
+                    scrollX: 0,
+
+                    scrollY: 0,
+
+                    windowWidth: 1000,
+
+                    windowHeight:
+                        elemento.scrollHeight
+                }
+            );
+
+
+        /* ==========================================
+           8. CREAR PDF A4
+           ========================================== */
+
+        const { jsPDF } = window.jspdf;
+
+        const pdf =
+            new jsPDF({
+
+                orientation: "portrait",
+
+                unit: "mm",
+
+                format: "a4",
+
+                compress: true
+
+            });
+
+
+        /* ==========================================
+           9. DIMENSIONES A4
+           ========================================== */
+
+        const paginaAncho = 210;
+        const paginaAlto = 297;
+
+        const margen = 8;
+
+        const anchoDisponible =
+            paginaAncho - (margen * 2);
+
+        const altoDisponible =
+            paginaAlto - (margen * 2);
+
+
+        /* ==========================================
+           10. PROPORCIÓN
+           ========================================== */
+
+        const proporcion =
+            canvas.width / canvas.height;
+
+        let anchoPDF =
+            anchoDisponible;
+
+        let altoPDF =
+            anchoPDF / proporcion;
+
+
+        /* ==========================================
+           11. AJUSTAR ALTURA
+           ========================================== */
+
+        if(altoPDF > altoDisponible){
+
+            const escala =
+                altoDisponible / altoPDF;
+
+            anchoPDF =
+                anchoPDF * escala;
+
+            altoPDF =
+                altoPDF * escala;
+
+        }
+
+
+        /* ==========================================
+           12. CENTRAR
+           ========================================== */
+
+        const x =
+            (paginaAncho - anchoPDF) / 2;
+
+        const y =
+            (paginaAlto - altoPDF) / 2;
+
+
+        /* ==========================================
+           13. AGREGAR IMAGEN
+           ========================================== */
+
+        pdf.addImage(
+
+            canvas,
+
+            "JPEG",
+
+            x,
+
+            y,
+
+            anchoPDF,
+
+            altoPDF,
+
+            undefined,
+
+            "FAST"
+
+        );
+
+
+        /* ==========================================
+           14. DEVOLVER BLOB
+           ========================================== */
+
+        return pdf.output("blob");
+
+
+    }finally{
+
+        if(contenedor){
+
+            contenedor.remove();
+
+        }
+
+    }
+
+}
+
+
+async function enviarFacturaWhatsApp(f){
+
+    try{
+
+        /* ==========================================
+           1. VALIDAR FACTURA
+           ========================================== */
+
+        if(!f){
+
+            throw new Error(
+                "No se encontró la factura."
+            );
+
+        }
+
+
+        /* ==========================================
+           2. VALIDAR TELÉFONO
+           ========================================== */
+
+        let telefono =
+            String(
+                f.cliente?.tel ||
+                ""
+            )
+            .replace(/\D/g, "");
+
+
+        if(!telefono){
+
+            throw new Error(
+                "El cliente no tiene un número de WhatsApp."
+            );
+
+        }
+
+
+        /*
+         * Si el número viene como celular colombiano
+         * de 10 dígitos, agregamos 57.
+         */
+
+        if(
+            telefono.length === 10 &&
+            telefono.startsWith("3")
+        ){
+
+            telefono =
+                "57" + telefono;
+
+        }
+
+
+        if(telefono.length < 11){
+
+            throw new Error(
+                "El número de WhatsApp del cliente no es válido."
+            );
+
+        }
+
+
+        /* ==========================================
+           3. NOMBRE DEL ARCHIVO
+           ========================================== */
+
+        const numeroFactura =
+            String(
+                f.numero ||
+                "factura"
+            )
+            .replace(
+                /[^a-zA-Z0-9_-]/g,
+                "_"
+            );
+
+        const nombreArchivo =
+            `${numeroFactura}.pdf`;
+
+
+        /*
+         * Ruta dentro de Storage.
+         *
+         * Usamos una carpeta para mantener
+         * organizadas las facturas.
+         */
+
+        const rutaPdf =
+            `facturas/${nombreArchivo}`;
+
+
+        /* ==========================================
+           4. MENSAJE DE CARGA
+           ========================================== */
+
+        mostrarToast(
+
+            "Generando el PDF y preparando el envío...",
+
+            "info",
+
+            "WhatsApp",
+
+            4000
+
+        );
+
+
+        /* ==========================================
+           5. GENERAR PDF
+           ========================================== */
+
+        const pdfBlob =
+            await generarPDFBlob(f);
+
+
+        if(!pdfBlob){
+
+            throw new Error(
+                "No se pudo generar el PDF."
+            );
+
+        }
+
+
+        /* ==========================================
+           6. SUBIR PDF A SUPABASE STORAGE
+           ========================================== */
+
+        const { error: uploadError } =
+            await window.supabaseClient
+                .storage
+                .from("facturas-pdf")
+                .upload(
+
+                    rutaPdf,
+
+                    pdfBlob,
+
+                    {
+                        contentType: "application/pdf",
+
+                        upsert: true
+
+                    }
+
+                );
+
+
+        if(uploadError){
+
+            console.error(
+                "ERROR SUBIENDO PDF:",
+                uploadError
+            );
+
+            throw new Error(
+                "No se pudo subir la factura a Supabase."
+            );
+
+        }
+
+
+        /* ==========================================
+           7. LLAMAR EDGE FUNCTION
+           ========================================== */
+
+        mostrarToast(
+
+            "PDF preparado. Enviándolo por WhatsApp...",
+
+            "info",
+
+            "WhatsApp",
+
+            4000
+
+        );
+
+
+        const { data, error } =
+            await window.supabaseClient.functions.invoke(
+
+                "super-endpoint",
+
+                {
+
+                    body: {
+
+                        telefono:
+
+                            telefono,
+
+                        ruta_pdf:
+
+                            rutaPdf,
+
+                        nombre_archivo:
+
+                            nombreArchivo
+
+                    }
+
+                }
+
+            );
+
+
+        /* ==========================================
+           8. ERROR SUPABASE
+           ========================================== */
+
+        if(error){
+
+            console.error(
+                "ERROR EDGE FUNCTION:",
+                error
+            );
+
+            throw new Error(
+                error.message ||
+                "No se pudo contactar con el servicio de WhatsApp."
+            );
+
+        }
+
+
+        /* ==========================================
+           9. ERROR DEVUELTO POR LA FUNCIÓN
+           ========================================== */
+
+        if(!data?.ok){
+
+            console.error(
+                "ERROR WHATSAPP:",
+                data
+            );
+
+            throw new Error(
+
+                data?.error?.error?.message ||
+
+                data?.error?.message ||
+
+                "WhatsApp no pudo enviar la factura."
+
+            );
+
+        }
+
+
+        /* ==========================================
+           10. ÉXITO
+           ========================================== */
+
+        mostrarToast(
+
+            `La factura ${f.numero || ""} fue enviada correctamente por WhatsApp.`,
+
+            "success",
+
+            "Factura enviada",
+
+            6000
+
+        );
+
+
+        console.log(
+            "FACTURA ENVIADA:",
+            data
+        );
+
+
+        return data;
+
+
+    }catch(error){
+
+        console.error(
+            "ERROR ENVIANDO FACTURA POR WHATSAPP:",
+            error
+        );
+
+
+        mostrarToast(
+
+            error?.message ||
+
+            "No fue posible enviar la factura por WhatsApp.",
+
+            "error",
+
+            "Error WhatsApp",
+
+            7000
+
+        );
+
+
+        return null;
 
     }
 
@@ -7922,6 +8501,10 @@ $("history").addEventListener("click", async e => {
 
     if (action === "print") {
         await imprimirFacturaDB(id);
+    }
+
+    if (action === "whatsapp") {
+    await enviarFacturaWhatsAppDB(id);
     }
 
     if (action === "cancel") {
