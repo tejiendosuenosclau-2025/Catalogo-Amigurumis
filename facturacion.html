@@ -339,78 +339,112 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     #historial .history-btn .grilla-icon { width: 17px; height: 17px; }
     .modal { padding: 0; }
     .sheet { max-width: 100%; margin: 0; padding: 16px; border-radius: 0; min-height: 100vh; }
-    .modal-abono { padding: 12px; }
-    .modal-abono-contenido { padding: 18px; }
-    .modal-abono-datos, .modal-abono-resumen { grid-template-columns: 1fr; }
-    .modal-abono-titulo { font-size: 18px; }
+    .modal-abono {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        max-width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        margin: 0;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        overflow-x: hidden;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    .modal-abono-contenido {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 18px;
+        border-radius: 14px;
+        overflow-x: hidden;
+    }
+    /* Botón X */
+    .modal-abono-cerrar {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        max-width: 36px;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+        line-height: 1;
+        z-index: 20;
+    }
+    /* Título: dejamos espacio para la X */
+    .modal-abono-titulo {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding-right: 48px;
+        margin: 0 0 18px;
+        overflow-wrap: break-word;
+    }
+    /* Todos los bloques internos */
+    .modal-abono-datos,
+    .modal-abono-resumen {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+    .modal-abono-datos > div,
+    .modal-abono-resumen > div {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Campos */
+    .modal-abono-contenido label {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .modal-abono-contenido input,
+    .modal-abono-contenido select {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    /* Botones */
+    .modal-abono-botones {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .modal-abono-botones button {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
     /* 📱 MODAL GASTOS - TELÉFONO */
-.modal-gastos {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100dvh;
-    padding: 0;
-    margin: 0;
-    display: none;
-    align-items: stretch;
-    justify-content: stretch;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
-.modal-gastos.activo {
-    display: flex;
-}
-
-.modal-gastos-contenido {
-    position: relative;
-    width: 100vw;
-    max-width: 100vw;
-    min-width: 0;
-    height: 100dvh;
-    max-height: 100dvh;
-    min-height: 0;
-    margin: 0;
-    padding: 0;
-    border-radius: 0;
-    overflow: hidden;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-}
-
-#gastosFrame {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    height: 100%;
-    min-height: 0;
-    flex: 1 1 auto;
-    border: 0;
-    box-sizing: border-box;
-}
-
-.cerrar-gastos {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 99999;
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: #fff;
-    color: #555;
-    font-size: 24px;
-    line-height: 36px;
-    text-align: center;
-    box-sizing: border-box;
-}
+    .modal-gastos {position: fixed;inset: 0;width: 100vw;height: 100dvh;padding: 0;margin: 0;display: none;align-items: stretch;justify-content: stretch;
+    overflow: hidden;box-sizing: border-box;}
+    .modal-gastos.activo {display: flex;}
+    .modal-gastos-contenido {position: relative;width: 100vw;max-width: 100vw;min-width: 0;height: 100dvh;max-height: 100dvh;min-height: 0;margin: 0;padding: 0;
+    border-radius: 0;overflow: hidden;box-sizing: border-box;display: flex;flex-direction: column;}
+    #gastosFrame {display: block;width: 100%;max-width: 100%;min-width: 0;height: 100%;min-height: 0;flex: 1 1 auto;border: 0;box-sizing: border-box;}
+    .cerrar-gastos {position: absolute;top: 8px;right: 8px;z-index: 99999;width: 36px;height: 36px;min-width: 36px;min-height: 36px;margin: 0;padding: 0;
+    border: 0;border-radius: 50%;background: #fff;color: #555;font-size: 24px;line-height: 36px;text-align: center;box-sizing: border-box;}
     .sugerencias-clientes { max-height: 180px; }
     .sugerencia-cliente { padding: 9px 10px; }
     .sugerencia-cliente strong { font-size: 13px; }
@@ -445,6 +479,50 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .login-card h1 { font-size: 22px; }
     .login-logo { width: 120px; }
     .login-button { padding: 13px; font-size: 15px; }
+    .modal-abono {
+        padding: 8px;
+    }
+
+    .modal-abono-contenido {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .modal-abono-cerrar {
+        top: 7px;
+        right: 7px;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        max-width: 34px;
+        font-size: 22px;
+    }
+
+    .modal-abono-titulo {
+        font-size: 17px;
+        padding-right: 42px;
+    }
+    .modal-abono-datos,
+    .modal-abono-resumen {
+        grid-template-columns: 1fr !important;
+    }
+
+    .modal-abono-contenido input,
+    .modal-abono-contenido select {
+        font-size: 16px;
+        min-height: 44px;
+    }
+
+    .modal-abono-botones {
+        flex-direction: column;
+    }
+
+    .modal-abono-botones button {
+        width: 100%;
+        min-height: 44px;
+    }
     table { min-width: 540px; }
     th, td { font-size: 11px; padding: 6px 4px; }
     .total { font-size: 15px; }
@@ -462,6 +540,29 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .factura-resumen .resumen-icono svg { width: 26px; height: 26px; }
     .login-card { padding: 20px 14px; }
     .login-card h1 { font-size: 20px; }
+    .modal-abono {
+        padding: 6px;
+    }
+
+    .modal-abono-contenido {
+        padding: 14px;
+        border-radius: 10px;
+    }
+
+    .modal-abono-cerrar {
+        top: 6px;
+        right: 6px;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        max-width: 32px;
+        font-size: 20px;
+    }
+
+    .modal-abono-titulo {
+        font-size: 16px;
+        padding-right: 38px;
+    }
     #historial .history-btn { width: 40px; height: 40px; min-width: 40px; }
 }
 
@@ -475,6 +576,241 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     main { margin: 0; padding: 0; }
     .modal { display: block !important; position: static; background: #fff; padding: 0; }
     .sheet { margin: 0; box-shadow: none; max-width: 100%; padding: 0; }
+}
+
+/* ============================================================
+   📱 ABONOS — CORRECCIÓN FINAL PARA TELÉFONOS
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+    #modalAbono {
+        width: 100%;
+        max-width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        padding: 10px;
+        margin: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #modalAbono .modal-abono-contenido {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 18px;
+        overflow-x: hidden;
+        overflow-y: visible;
+    }
+
+    /* X */
+    #modalAbono .modal-abono-cerrar {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        max-width: 36px;
+
+        padding: 0;
+        margin: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        box-sizing: border-box;
+        line-height: 1;
+        font-size: 24px;
+    }
+
+    /* Título */
+    #modalAbono .modal-abono-titulo {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+
+        padding-right: 45px;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        overflow-wrap: anywhere;
+    }
+
+    /* Datos de factura y cliente */
+    #modalAbono .modal-abono-datos {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+
+        grid-template-columns: 1fr !important;
+    }
+
+    #modalAbono .modal-abono-datos > div {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    /* Resumen */
+    #modalAbono .modal-abono-resumen {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+
+        grid-template-columns: 1fr !important;
+    }
+
+    #modalAbono .modal-abono-resumen > div {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    /* ETIQUETAS */
+    #modalAbono label {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* CAMPOS */
+    #modalAbono #nuevoAbono,
+    #modalAbono #nuevoTipoAbono {
+        display: block;
+
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
+        box-sizing: border-box;
+
+        margin-left: 0;
+        margin-right: 0;
+
+        font-size: 16px;
+        min-height: 46px;
+    }
+
+    /* Mensaje */
+    #modalAbono #mensajeAbono {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+
+        overflow-wrap: anywhere;
+    }
+
+    /* BOTONES */
+    #modalAbono .modal-abono-botones {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
+        box-sizing: border-box;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+    #modalAbono .modal-abono-botones .btn {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
+        box-sizing: border-box;
+
+        margin: 0;
+    }
+
+    #modalAbono .modal-abono-botones .grilla-icon {
+        width: 18px;
+        height: 18px;
+        max-width: 18px;
+        flex: 0 0 18px;
+    }
+}
+
+
+/* ============================================================
+   📱 TELÉFONO PEQUEÑO
+   ============================================================ */
+
+@media (max-width: 520px) {
+
+    #modalAbono {
+        padding: 6px;
+    }
+
+    #modalAbono .modal-abono-contenido {
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    #modalAbono .modal-abono-cerrar {
+        top: 7px;
+        right: 7px;
+
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        max-width: 34px;
+    }
+
+    #modalAbono .modal-abono-titulo {
+        font-size: 17px;
+        padding-right: 42px;
+    }
+
+    #modalAbono .modal-abono-datos > div,
+    #modalAbono .modal-abono-resumen > div {
+        overflow: hidden;
+    }
+
+    #modalAbono .modal-abono-datos strong,
+    #modalAbono .modal-abono-resumen strong {
+        display: block;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+}
+
+
+/* ============================================================
+   📱 TELÉFONOS MUY PEQUEÑOS
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    #modalAbono {
+        padding: 5px;
+    }
+
+    #modalAbono .modal-abono-contenido {
+        padding: 13px;
+    }
+
+    #modalAbono .modal-abono-titulo {
+        font-size: 16px;
+        padding-right: 40px;
+    }
 }
 
 </style>
