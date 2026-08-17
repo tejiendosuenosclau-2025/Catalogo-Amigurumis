@@ -17,54 +17,64 @@ body{min-width:0;}
 .form{padding:20px}.form h2{margin:0 0 18px;color:var(--pink);font-size:16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #d9cbd4;border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;outline:none;background:#fff}.field textarea{min-height:80px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,63,122,.08)}
 .buttons{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.btn{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.gray{background:#f1edf0;color:#555}.green{background:var(--green);color:#fff}.message{min-height:20px;margin-top:12px;font-size:12px;font-weight:700}.ok{color:var(--green)}.error{color:#d62828}
 
+/* ---------- Tablet / móvil grande ---------- */
+@media(max-width:700px){
+  .page{padding:20px 16px calc(20px + env(safe-area-inset-bottom));
+        padding-left:calc(16px + env(safe-area-inset-left));
+        padding-right:calc(16px + env(safe-area-inset-right))}
+  .title{font-size:22px}
+  .form{padding:16px;border-radius:12px}
+  .summary{gap:10px;margin-bottom:16px}
+  .card{padding:14px}
+  .card strong{font-size:19px}
+}
 
+/* ---------- Teléfono ---------- */
 @media(max-width:500px){
 
-    html,
-    body{
-        width:100%;
-        max-width:100%;
-        overflow-x:hidden;
-    }
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
 
-    .page{
-        width:100%;
-        max-width:100%;
-        min-width:0;
-        padding:18px;
-    }
+  .page{width:100%;max-width:100%;min-width:0;
+        padding:16px 14px calc(24px + env(safe-area-inset-bottom));
+        padding-left:calc(14px + env(safe-area-inset-left));
+        padding-right:calc(14px + env(safe-area-inset-right))}
 
-    .summary,
-    .grid{
-        grid-template-columns:1fr;
-        width:100%;
-        max-width:100%;
-    }
+  .summary,.grid{grid-template-columns:1fr;width:100%;max-width:100%}
 
-    .field{
-        min-width:0;
-        max-width:100%;
-    }
+  .field{min-width:0;max-width:100%}
+  .field.full{grid-column:auto}
 
-    .field.full{
-        grid-column:auto;
-    }
+  /* 16px evita el zoom automático de iOS al enfocar */
+  .field input,.field select,.field textarea{
+    width:100%;max-width:100%;min-width:0;
+    font-size:16px;padding:12px 12px;min-height:46px;
+    border-radius:10px;
+    -webkit-appearance:none;appearance:none;background:#fff}
+  .field select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
+                                linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+                background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;
+                background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+                padding-right:36px}
+  .field input[type="date"]{min-height:46px}
+  .field textarea{min-height:96px}
+  .field label{font-size:12px}
 
-    .field input,
-    .field select,
-    .field textarea{
-        width:100%;
-        max-width:100%;
-        min-width:0;
-    }
+  /* botones: el principal arriba y táctiles (48px) */
+  .buttons{flex-direction:column-reverse;gap:10px;margin-top:16px}
+  .btn{width:100%;min-height:48px;font-size:15px;padding:12px 16px}
 
-    .buttons{
-        flex-direction:column;
-    }
+  .message{font-size:13px}
+  .title{font-size:20px}
+  .sub{font-size:12.5px}
+}
 
-    .btn{
-        width:100%;
-    }
+/* ---------- Teléfonos pequeños ---------- */
+@media(max-width:380px){
+  .page{padding-left:calc(12px + env(safe-area-inset-left));
+        padding-right:calc(12px + env(safe-area-inset-right))}
+  .form{padding:14px}
+  .card strong{font-size:18px}
+  .title{font-size:19px}
 }
 </style>
 </head>

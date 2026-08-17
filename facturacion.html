@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Facturación | Tejiendo Sueños Clau</title>
 <link rel="icon" href="img/icon.png">
 <link rel="stylesheet" href="css/factura-bonita.css">
@@ -33,6 +33,7 @@ input:hover,select:hover,textarea:hover{border-color:#e4cbd5}
 input:focus,select:focus,textarea:focus{border-color:var(--p);background:#ffffff;box-shadow:0 0 0 3px rgba(244,125,163,.10)}
 input::placeholder,textarea::placeholder{color:#aaa0a5;opacity:1}
 table{width:100%;border-collapse:collapse;min-width:720px}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 th{background:var(--soft);color:var(--pd);padding:11px;text-align:left;font-size:13px;letter-spacing:.025em}
 td{border-bottom:1px solid #eee;padding:8px;font-size:13px}
 table tbody tr{transition:background .16s ease}
@@ -278,15 +279,15 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
    ============================================================ */
 
 @media (max-width: 850px) {
-    aside { width: min(82vw, 300px); transform: translateX(-105%); transition: transform .25s ease; }
+    aside { width: min(82vw, 300px); transform: translateX(-105%); transition: transform .25s ease; padding-top: calc(18px + env(safe-area-inset-top)); padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
     aside.open { transform: translateX(0); }
-    main { margin: 0; padding: 14px; max-width: 100%; }
-    .mobile { display: flex; position: sticky; top: 0; z-index: 30; background: #fff; border-bottom: 1px solid var(--line); padding: 10px 14px; gap: 10px; align-items: center; }
+    main { margin: 0; padding: 14px; padding-bottom: calc(14px + env(safe-area-inset-bottom)); max-width: 100%; }
+    .mobile { display: flex; position: sticky; top: 0; z-index: 30; background: #fff; border-bottom: 1px solid var(--line); padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top)); padding-left: calc(14px + env(safe-area-inset-left)); padding-right: calc(14px + env(safe-area-inset-right)); gap: 10px; align-items: center; }
     .mobile button { border: 0; background: var(--soft); font-size: 20px; border-radius: 8px; padding: 6px 10px; }
     .mobile b { font-size: 16px; color: var(--pd); }
     .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 10; }
     .overlay.show { display: block; }
-    .top { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 14px; }
+    .top { display: grid; grid-template-columns: minmax(0,1fr); gap: 6px; margin-bottom: 14px; }
     .top h1 { font-size: 22px; }
     .top p { font-size: 13px; }
     .card { padding: 16px; border-radius: 14px; margin-bottom: 14px; }
@@ -320,7 +321,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .total { font-size: 16px; padding: 11px !important; }
     .totals input { width: 60px !important; }
     .actions { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .btn { padding: 12px 8px; font-size: 13px; min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn { padding: 12px 8px; font-size: 13px; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 5px; }
     .btn .grilla-icon { width: 16px; height: 16px; }
     #historial .wrap { overflow-x: visible; }
     #historial table, #historial thead, #historial tbody, #historial tr, #historial td { display: block; width: 100%; box-sizing: border-box; }
@@ -334,7 +335,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     #historial tbody td:nth-child(5) { justify-content: flex-start; }
     #historial tbody td:nth-child(6) { display: block; padding-top: 10px; margin-top: 6px; border-top: 1px solid #f0e5e9; }
     #historial .history-actions { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
-    #historial .history-btn { width: 38px; height: 38px; min-width: 38px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+    #historial .history-btn { width: 44px; height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
     #historial .history-btn .grilla-icon { width: 17px; height: 17px; }
     .modal { padding: 0; }
     .sheet { max-width: 100%; margin: 0; padding: 16px; border-radius: 0; min-height: 100vh; }
@@ -386,6 +387,18 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .sheet { padding: 14px; }
     #historial tbody tr { padding: 12px; }
     #historial .history-btn { width: 36px; height: 36px; min-width: 36px; }
+}
+
+@media (max-width: 380px) {
+    main { padding: 10px; }
+    table { min-width: 480px; }
+    .btn { font-size: 12px; padding: 10px 6px; }
+    .resumen-datos strong { font-size: 16px; }
+    .factura-resumen .resumen-icono { width: 44px; height: 44px; }
+    .factura-resumen .resumen-icono svg { width: 26px; height: 26px; }
+    .login-card { padding: 20px 14px; }
+    .login-card h1 { font-size: 20px; }
+    #historial .history-btn { width: 40px; height: 40px; min-width: 40px; }
 }
 
 @media print {
