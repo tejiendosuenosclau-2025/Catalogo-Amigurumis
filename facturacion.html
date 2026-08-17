@@ -3576,7 +3576,7 @@ async function guardarDB(f){
     // 2. PRIMER ABONO
     // ==========================================
 
-    const nuevoAbono =
+    let nuevoAbono =
         Math.max(0, Number(f.abono) || 0);
 
 
@@ -3585,7 +3585,7 @@ async function guardarDB(f){
     //    EL ABONO ACUMULADO ES EL PRIMER ABONO
     // ==========================================
 
-    const abonoAcumulado =
+    let abonoAcumulado =
         nuevoAbono;
 
 
@@ -3593,7 +3593,7 @@ async function guardarDB(f){
     // 4. CALCULAR SALDO
     // ==========================================
 
-    const saldoPendiente = Math.max(
+    let saldoPendiente = Math.max(
         0,
         Number(f.total) - abonoAcumulado
     );
@@ -3612,6 +3612,22 @@ async function guardarDB(f){
     }else if(abonoAcumulado > 0){
 
         estadoFactura = "Pendiente";
+
+    }
+
+
+    // ==========================================
+    // ✅ CORRECCIÓN: una factura PAGADA siempre
+    //    queda con saldo 0 y el abono = total
+    // ==========================================
+
+    if(estadoFactura === "Pagada"){
+
+        saldoPendiente = 0;
+
+        abonoAcumulado = Number(f.total) || 0;
+
+        nuevoAbono = abonoAcumulado;
 
     }
 
@@ -3874,6 +3890,14 @@ async function actualizarFacturaDB(f){
 
         nuevoAbono =
             saldoAntes;
+    }
+
+    // ✅ CORRECCIÓN: si se marca PAGADA,
+    //    el abono cubre todo el saldo pendiente
+    if(f.estado === "Pagada" && saldoAntes > 0){
+
+        nuevoAbono = saldoAntes;
+
     }
 
 
@@ -4358,10 +4382,21 @@ async function cargarDashboardDB(){
         const dineroRecibido =
             (facturas || [])
             .reduce(
-                (suma,f) =>
-                    suma + Number(
+                (suma,f) => {
+
+                    // PAGADA = se recibió el total
+                    if(f.estado === "Pagada"){
+
+                        return suma + Number(f.total || 0);
+
+                    }
+
+                    // Pendiente/Enviada = lo abonado hasta ahora
+                    return suma + Number(
                         f.abono_acumulado || 0
-                    ),
+                    );
+
+                },
                 0
             );
 
@@ -4373,10 +4408,20 @@ async function cargarDashboardDB(){
         const porCobrar =
             (facturas || [])
             .reduce(
-                (suma,f) =>
-                    suma + Number(
+                (suma,f) => {
+
+                    // PAGADA no genera saldo por cobrar
+                    if(f.estado === "Pagada"){
+
+                        return suma;
+
+                    }
+
+                    return suma + Number(
                         f.saldo_pendiente || 0
-                    ),
+                    );
+
+                },
                 0
             );
 
