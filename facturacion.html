@@ -343,9 +343,10 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .modal-abono-contenido { padding: 18px; }
     .modal-abono-datos, .modal-abono-resumen { grid-template-columns: 1fr; }
     .modal-abono-titulo { font-size: 18px; }
-    .modal-gastos {padding: 0; width: 100%; height: 100dvh; inset: 0; overflow: hidden;}
-    .modal-gastos-contenido {width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; overflow: hidden;}
-    #gastosFrame {width: 100%; max-width: 100%; height: 100%; min-width: 0; min-height: 0; border: 0;}
+    .modal-gastos {padding: 0; width: 100%; height: 100dvh; inset: 0; overflow: hidden;box-sizing: border-box;}
+    .modal-gastos-contenido {width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; overflow: hidden;min-width: 0;min-height:0;
+    box-sizing: border-box;}
+    #gastosFrame {width: 100%; max-width: 100%; height: 100%; min-width: 0; min-height: 0; border: 0; display: block;}
     .cerrar-gastos {top: 8px; right: 8px; width: 36px; height: 36px; line-height: 36px; font-size: 25px;}
     .sugerencias-clientes { max-height: 180px; }
     .sugerencia-cliente { padding: 9px 10px; }
