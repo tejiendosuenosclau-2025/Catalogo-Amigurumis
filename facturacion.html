@@ -579,24 +579,17 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 }
 
 /* ============================================================
-   📱 MODAL ABONO — CORRECCIÓN DEFINITIVA
+   📱 MODAL ABONO — ANCHO CORRECTO EN TELÉFONOS
    ============================================================ */
 
 @media (max-width: 850px) {
 
-    /* CONTENEDOR OSCURO */
     #modalAbono {
         position: fixed !important;
-        top: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        left: 0 !important;
+        inset: 0 !important;
 
-        width: auto !important;
-        max-width: none !important;
-
+        width: 100% !important;
         height: 100dvh !important;
-        max-height: 100dvh !important;
 
         margin: 0 !important;
         padding: 10px !important;
@@ -616,21 +609,17 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
 
-    /* ========================================================
-       CAJA BLANCA
-       ======================================================== */
-
+    /* CAJA BLANCA */
     #modalAbono .modal-abono-contenido {
-
         position: relative !important;
 
         width: 100% !important;
-        max-width: 520px !important;
+        max-width: 500px !important;
         min-width: 0 !important;
 
         margin: 0 auto !important;
 
-        padding: 18px !important;
+        padding: 16px !important;
 
         box-sizing: border-box !important;
 
@@ -640,24 +629,17 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
 
-    /* ========================================================
-       TODO LO QUE ESTÉ DENTRO DEL MODAL
-       ======================================================== */
-
+    /* TODOS LOS ELEMENTOS */
     #modalAbono *,
     #modalAbono *::before,
     #modalAbono *::after {
-        max-width: 100%;
-        box-sizing: border-box;
+        box-sizing: border-box !important;
+        min-width: 0;
     }
 
 
-    /* ========================================================
-       TÍTULO
-       ======================================================== */
-
+    /* TÍTULO */
     #modalAbono .modal-abono-titulo {
-
         width: 100% !important;
         min-width: 0 !important;
 
@@ -667,48 +649,24 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
         gap: 7px !important;
 
         padding-right: 42px !important;
-
-        margin: 0 0 18px !important;
-
-        font-size: 18px;
+        margin-bottom: 16px !important;
 
         overflow: hidden !important;
     }
 
-    #modalAbono .modal-abono-titulo .grilla-icon {
 
-        width: 22px !important;
-        height: 22px !important;
-
-        min-width: 22px !important;
-        max-width: 22px !important;
-
-        flex: 0 0 22px !important;
-
-        object-fit: contain;
-    }
-
-
-    /* ========================================================
-       FACTURA / CLIENTE
-       ======================================================== */
-
+    /* FACTURA / CLIENTE */
     #modalAbono .modal-abono-datos {
-
         display: grid !important;
-
         grid-template-columns: 1fr !important;
 
         width: 100% !important;
-        min-width: 0 !important;
 
         gap: 8px !important;
-
         margin-bottom: 12px !important;
     }
 
     #modalAbono .modal-abono-datos > div {
-
         width: 100% !important;
         min-width: 0 !important;
 
@@ -716,26 +674,18 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
 
-    /* ========================================================
-       RESUMEN
-       ======================================================== */
-
+    /* RESUMEN */
     #modalAbono .modal-abono-resumen {
-
         display: grid !important;
-
         grid-template-columns: 1fr !important;
 
         width: 100% !important;
-        min-width: 0 !important;
 
         gap: 8px !important;
-
         margin-bottom: 16px !important;
     }
 
     #modalAbono .modal-abono-resumen > div {
-
         width: 100% !important;
         min-width: 0 !important;
 
@@ -743,14 +693,10 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
 
-    /* ========================================================
-       TEXTOS
-       ======================================================== */
-
+    /* TEXTOS */
     #modalAbono strong,
     #modalAbono span,
     #modalAbono label {
-
         max-width: 100% !important;
 
         overflow-wrap: anywhere !important;
@@ -758,36 +704,30 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
     #modalAbono strong {
-
         display: block !important;
-
         white-space: normal !important;
     }
 
 
     /* ========================================================
-       INPUT Y SELECT
+       CAMPOS
        ======================================================== */
 
     #modalAbono #nuevoAbono,
     #modalAbono #nuevoTipoAbono {
-
         display: block !important;
 
         width: 100% !important;
         max-width: 100% !important;
         min-width: 0 !important;
 
-        height: auto !important;
-        min-height: 46px !important;
-
         margin: 0 !important;
 
-        padding: 11px 12px !important;
+        padding: 10px 12px !important;
+
+        min-height: 44px !important;
 
         box-sizing: border-box !important;
-
-        font-size: 16px !important;
     }
 
 
@@ -796,15 +736,12 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
        ======================================================== */
 
     #modalAbono #mensajeAbono {
-
         width: 100% !important;
         max-width: 100% !important;
         min-width: 0 !important;
 
         overflow-wrap: anywhere !important;
         word-break: break-word !important;
-
-        box-sizing: border-box !important;
     }
 
 
@@ -813,19 +750,22 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
        ======================================================== */
 
     #modalAbono .modal-abono-botones {
-
         display: flex !important;
         flex-direction: column !important;
 
         width: 100% !important;
-        min-width: 0 !important;
+        max-width: 100% !important;
 
         gap: 8px !important;
 
         margin-top: 10px !important;
+
+        padding: 0 !important;
     }
 
-    #modalAbono .modal-abono-botones button {
+    #modalAbono .modal-abono-botones button,
+    #modalAbono .modal-abono-botones .btn {
+        display: flex !important;
 
         width: 100% !important;
         max-width: 100% !important;
@@ -833,26 +773,28 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 
         margin: 0 !important;
 
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+
         box-sizing: border-box !important;
+
+        align-items: center !important;
+        justify-content: center !important;
     }
 
 
-    /* ========================================================
-       BOTÓN X
-       ======================================================== */
-
+    /* BOTÓN X */
     #modalAbono .modal-abono-cerrar {
-
         position: absolute !important;
 
-        top: 8px !important;
-        right: 8px !important;
+        top: 7px !important;
+        right: 7px !important;
 
-        width: 36px !important;
-        height: 36px !important;
+        width: 34px !important;
+        height: 34px !important;
 
-        min-width: 36px !important;
-        max-width: 36px !important;
+        min-width: 34px !important;
+        max-width: 34px !important;
 
         margin: 0 !important;
         padding: 0 !important;
@@ -869,7 +811,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 
 
 /* ============================================================
-   📱 TELÉFONOS PEQUEÑOS
+   📱 TELÉFONO PEQUEÑO
    ============================================================ */
 
 @media (max-width: 520px) {
@@ -879,36 +821,34 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
     #modalAbono .modal-abono-contenido {
-
         width: 100% !important;
         max-width: 100% !important;
 
-        padding: 15px !important;
+        padding: 14px !important;
 
         border-radius: 12px !important;
     }
 
-    #modalAbono .modal-abono-titulo {
-        font-size: 17px !important;
-        padding-right: 40px !important;
+    #modalAbono #nuevoAbono,
+    #modalAbono #nuevoTipoAbono {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
     }
 
-    #modalAbono .modal-abono-cerrar {
+    #modalAbono .modal-abono-botones {
+        width: 100% !important;
+    }
 
-        width: 34px !important;
-        height: 34px !important;
-
-        min-width: 34px !important;
-        max-width: 34px !important;
-
-        top: 7px !important;
-        right: 7px !important;
+    #modalAbono .modal-abono-botones button {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 }
 
 
 /* ============================================================
-   📱 TELÉFONOS MUY PEQUEÑOS
+   📱 TELÉFONO MUY PEQUEÑO
    ============================================================ */
 
 @media (max-width: 380px) {
@@ -918,7 +858,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     }
 
     #modalAbono .modal-abono-contenido {
-        padding: 13px !important;
+        padding: 12px !important;
     }
 
     #modalAbono .modal-abono-titulo {
@@ -926,7 +866,6 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
         padding-right: 38px !important;
     }
 }
-
 </style>
 </head>
 <body>
