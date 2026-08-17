@@ -9,11 +9,63 @@
 <style>
 :root{--pink:#f43f7a;--green:#16a765;--muted:#675d70;--border:#eadde5}
 *{box-sizing:border-box}body{margin:0;font-family:"Century Gothic",Arial,sans-serif;color:#202020;background:#fff}
-.page{min-height:100vh;padding:28px;background:#fff}.header{margin-bottom:20px}.title{margin:0;color:var(--pink);font-size:25px}.sub{margin:5px 0;color:var(--muted);font-size:13px}
+html,body{width:100%; max-width:100%; margin:0; padding:0; overflow-x:hidden;}
+body{min-width:0;}
+.page{width:100%;max-width:100%;min-width:0;min-height:100vh;padding:28px;background:#fff}
+.header{margin-bottom:20px}.title{margin:0;color:var(--pink);font-size:25px}.sub{margin:5px 0;color:var(--muted);font-size:13px}
 .summary{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}.card,.form{border:1px solid var(--border);border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(42,28,49,.06)}.card{padding:16px}.card span{display:block;color:var(--muted);font-size:11px}.card strong{display:block;margin-top:6px;font-size:22px}
 .form{padding:20px}.form h2{margin:0 0 18px;color:var(--pink);font-size:16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #d9cbd4;border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;outline:none;background:#fff}.field textarea{min-height:80px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,63,122,.08)}
 .buttons{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.btn{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.gray{background:#f1edf0;color:#555}.green{background:var(--green);color:#fff}.message{min-height:20px;margin-top:12px;font-size:12px;font-weight:700}.ok{color:var(--green)}.error{color:#d62828}
-@media(max-width:650px){.page{padding:18px}.summary,.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.buttons{flex-direction:column}.btn{width:100%}}
+
+
+@media(max-width:650px){
+
+    html,
+    body{
+        width:100%;
+        max-width:100%;
+        overflow-x:hidden;
+    }
+
+    .page{
+        width:100%;
+        max-width:100%;
+        min-width:0;
+        padding:18px;
+    }
+
+    .summary,
+    .grid{
+        grid-template-columns:1fr;
+        width:100%;
+        max-width:100%;
+    }
+
+    .field{
+        min-width:0;
+        max-width:100%;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+        width:100%;
+        max-width:100%;
+        min-width:0;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+}
 </style>
 </head>
 <body>
