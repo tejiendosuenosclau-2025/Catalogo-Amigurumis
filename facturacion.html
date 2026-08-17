@@ -324,69 +324,47 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .btn { padding: 12px 8px; font-size: 13px; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 5px; }
     .btn .grilla-icon { width: 16px; height: 16px; }
     #historial .wrap { overflow-x: visible; }
+
+    /* La tabla se convierte en tarjetas (sin scroll horizontal) */
     #historial table, #historial thead, #historial tbody, #historial tr, #historial td { display: block; width: 100%; box-sizing: border-box; }
+
+    /* ★ CLAVE: anula table { min-width: 600px/540px/480px } que desbordaba la página en teléfonos */
+    #historial table { min-width: 0; }
+
+    /* Los encabezados pasan a ser etiquetas dentro de cada celda */
     #historial thead { display: none; }
+
     #historial tbody tr { margin-bottom: 12px; padding: 14px; background: #fff; border: 1px solid #eadfe4; border-radius: 14px; box-shadow: 0 4px 14px rgba(64,55,59,.06); }
-    #historial tbody td { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0; border: 0; min-height: 30px; font-size: 13px; }
+
+    /* Cada celda = fila con etiqueta (izq.) + valor (der.) */
+    #historial tbody td { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0; border: 0; min-height: 30px; font-size: 13px; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
+
+    /* Etiqueta de cada campo (reemplaza al thead oculto) */
+    #historial tbody td::before { flex-shrink: 0; color: #7d7378; font-size: 12px; font-weight: 700; }
+    #historial tbody td:nth-child(1)::before { content: "Factura"; }
+    #historial tbody td:nth-child(2)::before { content: "Cliente"; }
+    #historial tbody td:nth-child(3)::before { content: "Fecha"; }
+    #historial tbody td:nth-child(4)::before { content: "Total"; }
+    #historial tbody td:nth-child(5)::before { content: "Estado"; }
+
+    /* Estilos por columna (valor) */
     #historial tbody td:nth-child(1) { font-weight: 800; color: #e85c8b; font-size: 15px; }
     #historial tbody td:nth-child(2) { color: #40373b; font-weight: 600; }
     #historial tbody td:nth-child(3) { color: #7d7378; font-size: 12px; }
     #historial tbody td:nth-child(4) { font-weight: 800; color: #40373b; }
-    #historial tbody td:nth-child(5) { justify-content: flex-start; }
-    #historial tbody td:nth-child(6) { display: block; padding-top: 10px; margin-top: 6px; border-top: 1px solid #f0e5e9; }
-    /* ============================================================
-   📱 ACCIONES DE FACTURAS — ADAPTACIÓN REAL A TELÉFONOS
-   ============================================================ */
 
-#historial tbody td:last-child {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-}
+    /* Celda de acciones: bloque aparte con borde superior */
+    #historial tbody td:nth-child(6) { display: block; width: 100%; min-width: 0; max-width: 100%; padding-top: 10px; margin-top: 6px; border-top: 1px solid #f0e5e9; overflow: hidden; }
+    #historial tbody td:nth-child(6)::before { content: none; }
 
-#historial .history-actions {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 7px !important;
+    /* Botones de acción: cuadrícula de 4 columnas a ancho completo */
+    #historial .history-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
 
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
+    #historial .history-btn { width: 100%; min-width: 0; max-width: 100%; height: 44px; min-height: 44px; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-sizing: border-box; overflow: hidden; }
 
-    box-sizing: border-box !important;
-}
-
-#historial .history-btn {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-
-    height: 42px !important;
-    min-height: 42px !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    border-radius: 10px !important;
-    box-sizing: border-box !important;
-
-    overflow: hidden !important;
-}
-
-#historial .history-btn .grilla-icon {
-    width: 18px !important;
-    height: 18px !important;
-
-    max-width: 18px !important;
-    max-height: 18px !important;
-
-    flex: 0 0 auto !important;
-}
+    /* Mensaje "No hay facturas guardadas." centrado, sin etiqueta */
+    #historial tbody td.muted { justify-content: center; }
+    #historial tbody td.muted::before { content: none; }
 
     .modal { padding: 0; }
     .sheet { max-width: 100%; margin: 0; padding: 16px; border-radius: 0; min-height: 100vh; }
@@ -579,7 +557,6 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .total { font-size: 15px; }
     .sheet { padding: 14px; }
     #historial tbody tr { padding: 12px; }
-    #historial .history-btn { width: 36px; height: 36px; min-width: 36px; }
 
    #historial .history-actions {
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -634,7 +611,6 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
         font-size: 16px;
         padding-right: 38px;
     }
-    #historial .history-btn { width: 40px; height: 40px; min-width: 40px; }
 
     #historial .history-actions {
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
