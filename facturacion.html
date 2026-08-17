@@ -5671,17 +5671,48 @@ async function enviarFacturaWhatsApp(f){
 
 
             /*
-             * Intentamos mostrar el mensaje real
-             * devuelto por Supabase.
+             * Intentamos mostrar el mensaje REAL
+             * devuelto por la edge function:
+             * supabase-js pone el cuerpo en error.context
              */
 
-            throw new Error(
-
+            let mensajeReal =
                 error.message ||
+                "No se pudo contactar con el servicio de WhatsApp.";
 
-                "No se pudo contactar con el servicio de WhatsApp."
+            try {
 
-            );
+                const contexto =
+                    error?.context || error;
+
+                const cuerpo =
+                    typeof contexto === "string"
+                        ? JSON.parse(contexto)
+                        : contexto;
+
+                const errFn =
+                    cuerpo?.error;
+
+                if (typeof errFn === "string") {
+
+                    mensajeReal = errFn;
+
+                } else if (errFn) {
+
+                    mensajeReal =
+                        JSON.stringify(errFn).slice(0, 400);
+
+                } else if (cuerpo?.message) {
+
+                    mensajeReal = cuerpo.message;
+
+                }
+
+            } catch (_ignorado) {
+                // si no se puede parsear, dejamos el mensaje genérico
+            }
+
+            throw new Error(mensajeReal);
 
         }
 
