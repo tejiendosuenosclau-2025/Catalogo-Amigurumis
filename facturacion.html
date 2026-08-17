@@ -5641,6 +5641,13 @@ async function enviarFacturaWhatsApp(f){
                                     f.cliente?.nombre || ""
                                 ).trim(),
 
+                            // Número de factura para la
+                            // variable {{2}} de la plantilla
+                            numero_factura:
+                                String(
+                                    f.numero || ""
+                                ).trim(),
+
                             pdf_base64:
                                 pdfBase64
 
