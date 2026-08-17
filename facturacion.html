@@ -64,6 +64,11 @@ button{cursor:pointer}
 .Enviada{background:#e6efff;color:#3268b2}
 .Anulada{background:#ffe5e5;color:#c62828}
 .Pagada:hover,.Pendiente:hover,.Enviada:hover,.Anulada:hover{transform:translateY(-1px)}
+.estado-celda{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.entrega{display:inline-block;margin-top:2px;font-size:10px;font-weight:800;padding:3px 7px;border-radius:999px;white-space:nowrap}
+.entrega.ok{background:#e5f8ed;color:#198b4b}
+.entrega.fail{background:#ffe5e5;color:#c62828}
+.entrega.pend{background:#fff1d6;color:#a66b00}
 .modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:15px;overflow:auto}
 .modal.show{display:block}
 .sheet{background:#fff;max-width:820px;margin:20px auto;padding:28px;border-radius:12px}
@@ -4535,6 +4540,24 @@ async function cargarHistorialDB(){
         return;
     }
 
+    // Estados de entrega por WhatsApp (tabla factura_entregas)
+    let entregas = {};
+    try {
+        const { data: entregasData, error: errorEntregas } = await db
+            .from("factura_entregas")
+            .select("numero_factura, estado, error")
+            .order("updated_at", { ascending: false });
+        if (!errorEntregas) {
+            (entregasData || []).forEach(e => {
+                if (e.numero_factura && !(e.numero_factura in entregas)) {
+                    entregas[e.numero_factura] = e;
+                }
+            });
+        }
+    } catch (errEntrega) {
+        console.error("ERROR CARGANDO ENTREGAS:", errEntrega);
+    }
+
     $("history").innerHTML=data?.length
         ? data.map(f=>`
             <tr>
@@ -4547,9 +4570,23 @@ async function cargarHistorialDB(){
                 <td>${money(f.total)}</td>
 
                 <td>
-                    <span class="status ${esc(f.estado)}">
-                        ${esc(f.estado)}
-                    </span>
+                    <div class="estado-celda">
+                        <span class="status ${esc(f.estado)}">
+                            ${esc(f.estado)}
+                        </span>
+                        ${
+                            entregas[f.numero]
+                            ? (
+                                entregas[f.numero].estado === "delivered" ||
+                                entregas[f.numero].estado === "read"
+                                ? `<span class="entrega ok" title="Recibida en WhatsApp">✓ Recibida</span>`
+                                : entregas[f.numero].estado === "failed"
+                                ? `<span class="entrega fail" title="${esc(JSON.stringify(entregas[f.numero].error || "Error de entrega"))}">✗ No entregada</span>`
+                                : `<span class="entrega pend" title="Enviada, esperando confirmación">⏳ Enviada</span>`
+                            )
+                            : ""
+                        }
+                    </div>
                 </td>
 
                 <td>
@@ -5596,6 +5633,13 @@ async function enviarFacturaWhatsApp(f){
 
                             nombre_archivo:
                                 nombreArchivo,
+
+                            // Nombre del cliente para la
+                            // variable {{1}} de la plantilla
+                            nombre_cliente:
+                                String(
+                                    f.cliente?.nombre || ""
+                                ).trim(),
 
                             pdf_base64:
                                 pdfBase64
