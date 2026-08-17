@@ -334,9 +334,60 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     #historial tbody td:nth-child(4) { font-weight: 800; color: #40373b; }
     #historial tbody td:nth-child(5) { justify-content: flex-start; }
     #historial tbody td:nth-child(6) { display: block; padding-top: 10px; margin-top: 6px; border-top: 1px solid #f0e5e9; }
-    #historial .history-actions { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
-    #historial .history-btn { width: 44px; height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
-    #historial .history-btn .grilla-icon { width: 17px; height: 17px; }
+    /* ============================================================
+   📱 ACCIONES DE FACTURAS — ADAPTACIÓN REAL A TELÉFONOS
+   ============================================================ */
+
+#historial tbody td:last-child {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+#historial .history-actions {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+}
+
+#historial .history-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    height: 42px !important;
+    min-height: 42px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+}
+
+#historial .history-btn .grilla-icon {
+    width: 18px !important;
+    height: 18px !important;
+
+    max-width: 18px !important;
+    max-height: 18px !important;
+
+    flex: 0 0 auto !important;
+}
+
     .modal { padding: 0; }
     .sheet { max-width: 100%; margin: 0; padding: 16px; border-radius: 0; min-height: 100vh; }
     .modal-abono {
@@ -529,6 +580,26 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     .sheet { padding: 14px; }
     #historial tbody tr { padding: 12px; }
     #historial .history-btn { width: 36px; height: 36px; min-width: 36px; }
+
+   #historial .history-actions {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+    }
+
+    #historial .history-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 40px !important;
+        min-height: 40px !important;
+
+        border-radius: 9px !important;
+    }
+
+    #historial .history-btn .grilla-icon {
+        width: 17px !important;
+        height: 17px !important;
+    }
+   
 }
 
 @media (max-width: 380px) {
@@ -564,6 +635,23 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
         padding-right: 38px;
     }
     #historial .history-btn { width: 40px; height: 40px; min-width: 40px; }
+
+    #historial .history-actions {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 5px !important;
+    }
+
+    #historial .history-btn {
+        height: 38px !important;
+        min-height: 38px !important;
+        border-radius: 8px !important;
+    }
+
+    #historial .history-btn .grilla-icon {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
 }
 
 @media print {
