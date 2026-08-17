@@ -366,6 +366,87 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
     #historial tbody td.muted { justify-content: center; }
     #historial tbody td.muted::before { content: none; }
 
+    /* ============================================================
+       📱 TABLA DE PRODUCTOS — ADAPTACIÓN A TELÉFONOS
+       ============================================================ */
+    #tablaItems { min-width: 0; }
+    #tablaItems thead { display: none; }
+    #tablaItems tbody tr {
+        display: block;
+        margin-bottom: 12px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #eadfe4;
+        border-radius: 12px;
+    }
+    #tablaItems tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 4px 0;
+        border: 0;
+        font-size: 13px;
+        min-width: 0;
+    }
+    /* Etiqueta de cada campo */
+    #tablaItems tbody td::before {
+        flex-shrink: 0;
+        color: #7d7378;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    #tablaItems tbody td:nth-child(1)::before { content: "Producto"; }
+    #tablaItems tbody td:nth-child(2)::before { content: "Cantidad"; }
+    #tablaItems tbody td:nth-child(3)::before { content: "Precio"; }
+    #tablaItems tbody td:nth-child(4)::before { content: "Desc. %"; }
+    #tablaItems tbody td:nth-child(5)::before { content: "Total"; }
+    #tablaItems tbody td:nth-child(6)::before { content: none; }
+    /* Select e inputs ocupan el resto del ancho */
+    #tablaItems select, #tablaItems input {
+        flex: 1 1 auto;
+        width: 100% !important;
+        min-width: 0;
+        max-width: 100%;
+    }
+    #tablaItems td.lt { justify-content: flex-end; font-weight: 800; color: #40373b; }
+    /* Botón eliminar: fila aparte, alineado a la derecha */
+    #tablaItems tbody td:nth-child(6) {
+        justify-content: flex-end;
+        border-top: 1px solid #f0e5e9;
+        margin-top: 4px;
+        padding-top: 8px;
+    }
+    #tablaItems .del { font-size: 20px; }
+
+    /* ============================================================
+       📱 SEGURIDAD: nada desborda el ancho del teléfono
+       ============================================================ */
+    html { overflow-x: hidden; }
+
+    /* ============================================================
+       📱 VISTA PREVIA DE FACTURA — ADAPTACIÓN A TELÉFONOS
+       (Solo afecta la vista en pantalla dentro de #previewBox.
+        El PDF/WhatsApp se capturan desde su contenedor temporal
+        de 1000px, así que conservan el diseño de escritorio.)
+       ============================================================ */
+    #previewBox img { max-width: 100%; height: auto; }
+    #previewBox .invoice-header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+    #previewBox .invoice-logo { max-width: 110px; }
+    #previewBox .invoice-brand { flex: 1 1 auto; min-width: 0; }
+    #previewBox .invoice-brand h1, #previewBox .invoice-brand h2 { margin: 0; }
+    #previewBox .invoice-number { margin-left: auto; text-align: right; min-width: 0; overflow-wrap: anywhere; }
+    #previewBox .client-grid { display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+    #previewBox .client-card { min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
+    #previewBox .invoice-table { width: 100% !important; min-width: 0 !important; }
+    #previewBox .invoice-table th, #previewBox .invoice-table td { font-size: 11px; padding: 6px 4px; overflow-wrap: anywhere; word-break: break-word; }
+    #previewBox .product-name { min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
+    #previewBox .invoice-bottom { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+    #previewBox .status-column, #previewBox .totals-box { width: 100%; min-width: 0; }
+    #previewBox .total-row, #previewBox .final-total { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; overflow-wrap: anywhere; }
+    #previewBox .observations, #previewBox .observations-text { overflow-wrap: anywhere; word-break: break-word; }
+    #previewBox .invoice-footer { text-align: center; }
+
     .modal { padding: 0; }
     .sheet { max-width: 100%; margin: 0; padding: 16px; border-radius: 0; min-height: 100vh; }
     .modal-abono {
@@ -627,6 +708,9 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
         width: 16px !important;
         height: 16px !important;
     }
+
+    /* Vista previa: una sola columna en pantallas muy pequeñas */
+    #previewBox .client-grid { grid-template-columns: 1fr; }
 
 }
 
@@ -1498,7 +1582,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 
 </section>
 
-<section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
+<section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 </section>
