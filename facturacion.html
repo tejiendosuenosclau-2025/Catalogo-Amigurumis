@@ -79,13 +79,6 @@ button{cursor:pointer}
 .aviso-acciones{display:flex;align-items:center;gap:8px;margin-left:auto}
 .aviso-acciones button{background:#8a5a00;color:#fff;border:0;border-radius:999px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer}
 .aviso-cerrar{background:transparent !important;color:#8a5a00 !important;font-size:18px;padding:0 4px !important}
-.lista-abonos{margin:12px 0;padding:10px 12px;background:#faf6f7;border:1px solid #eadfe4;border-radius:12px}
-.lista-abonos-titulo{font-size:12px;font-weight:800;color:#e85c8b;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.abono-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed #eadfe4;font-size:13px}
-.abono-item:last-child{border-bottom:0}
-.abono-item span{color:#7d7378;font-size:12px}
-.abono-item strong{color:#40373b}
-.abono-vacio{color:#7d7378;font-size:12px;text-align:center;padding:8px 0}
 .modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:15px;overflow:auto}
 .modal.show{display:block}
 .sheet{background:#fff;max-width:820px;margin:20px auto;padding:28px;border-radius:12px}
@@ -1970,50 +1963,19 @@ async function cargarDatosModalAbono(id) {
            BUSCAR ABONOS DE LA FACTURA
         ========================================== */
 
-        /*
-         * ABONOS DE LA FACTURA
-         * Se consulta con created_at (fechas), pero si la tabla
-         * no tiene esa columna, se reintenta sin ella para que
-         * el modal SIEMPRE funcione.
-         */
+        const {
+            data: pagos,
+            error: errorPagos
+        } = await db
+            .from("factura_pagos")
+            .select("valor")
+            .eq("factura_id", id);
 
-        let pagos = [];
-
-        try {
-
-            const res = await db
-                .from("factura_pagos")
-                .select("valor, tipo_abono, created_at")
-                .eq("factura_id", id)
-                .order("created_at", { ascending: false });
-
-            if (!res.error) {
-
-                pagos = res.data || [];
-
-            } else {
-
-                console.error(
-                    "ERROR ABONOS (reintentando sin created_at):",
-                    res.error
-                );
-
-                const res2 = await db
-                    .from("factura_pagos")
-                    .select("valor, tipo_abono")
-                    .eq("factura_id", id);
-
-                if (!res2.error) {
-                    pagos = res2.data || [];
-                }
-
-            }
-
-        } catch (errAbonos) {
+        if (errorPagos) {
 
             console.error(
                 "ERROR CARGANDO ABONOS:",
-                errAbonos
+                errorPagos
             );
 
         }
@@ -2065,44 +2027,6 @@ async function cargarDatosModalAbono(id) {
 
         $("abonoSaldo").textContent =
             money(saldo);
-
-
-        /* ==========================================
-           HISTORIAL DE ABONOS DETALLADO
-        ========================================== */
-
-        const listaAbonos =
-            document.getElementById("listaAbonos");
-
-        const contenidoAbonos =
-            document.getElementById("listaAbonosContenido");
-
-        if (listaAbonos && contenidoAbonos) {
-
-            if ((pagos || []).length) {
-
-                listaAbonos.style.display = "block";
-
-                contenidoAbonos.innerHTML =
-                    pagos.map((pago, i) => `
-
-                        <div class="abono-item">
-                            <span>#${pagos.length - i}${pago.created_at ? " · " + fechaLegible(pago.created_at) : ""} · ${esc(pago.tipo_abono || "Abono")}</span>
-                            <strong>${money(pago.valor)}</strong>
-                        </div>
-
-                    `).join("");
-
-            } else {
-
-                listaAbonos.style.display = "block";
-
-                contenidoAbonos.innerHTML =
-                    '<div class="abono-vacio">Sin abonos registrados.</div>';
-
-            }
-
-        }
 
 
         /* ==========================================
@@ -7452,11 +7376,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong id="abonoSaldo">$0</strong>
             </div>
 
-        </div>
-
-        <div id="listaAbonos" class="lista-abonos" style="display:none">
-            <div class="lista-abonos-titulo">💳 Historial de abonos</div>
-            <div id="listaAbonosContenido"></div>
         </div>
 
         <label for="nuevoAbono">
