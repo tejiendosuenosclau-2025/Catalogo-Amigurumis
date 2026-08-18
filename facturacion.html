@@ -4648,23 +4648,6 @@ async function cargarDashboardDB(){
 
                 aviso.dataset.visible = "1";
 
-                if (apareceAhora) {
-
-                    // Suena la campana
-                    sonarAlerta();
-
-                    // La campana se agita
-                    const icono =
-                        aviso.querySelector(".aviso-icono");
-
-                    if (icono) {
-                        icono.classList.remove("agitando");
-                        void icono.offsetWidth;
-                        icono.classList.add("agitando");
-                    }
-
-                }
-
                 aviso.innerHTML = `
 
                     <div class="aviso-icono">🔔</div>
@@ -4685,6 +4668,23 @@ async function cargarDashboardDB(){
                     </div>
 
                 `;
+
+                if (apareceAhora) {
+
+                    // Suena la campana
+                    sonarAlerta();
+
+                    // La campana se agita (tras dibujar el HTML)
+                    const icono =
+                        aviso.querySelector(".aviso-icono");
+
+                    if (icono) {
+                        icono.classList.remove("agitando");
+                        void icono.offsetWidth;
+                        icono.classList.add("agitando");
+                    }
+
+                }
 
                 const btnVer =
                     document.getElementById("avisoVerHistorial");
