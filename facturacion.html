@@ -69,10 +69,60 @@ button{cursor:pointer}
 .entrega.ok{background:#e5f8ed;color:#198b4b}
 .entrega.fail{background:#ffe5e5;color:#c62828}
 .entrega.pend{background:#fff1d6;color:#a66b00}
-.historial-buscar{width:100%;box-sizing:border-box;padding:10px 14px;border:1px solid #eadfe4;border-radius:12px;font-size:14px;margin-bottom:12px;background:#fff}
+.historial-buscar-label{display:block;font-size:12px;font-weight:800;color:#7d7378;margin:6px 0 4px;letter-spacing:.15px}
+.historial-buscar{width:100%;box-sizing:border-box;padding:8px 30px 8px 2px;border:0;border-bottom:1.5px solid #d9cdd3;border-radius:0;font-size:14px;margin-bottom:12px;background:transparent;color:#40373b;outline:none;transition:border-color .18s ease;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e85c8b' stroke-width='2.4'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:18px}
+.historial-buscar:focus{border-bottom:2.5px solid #e85c8b}
+
+/* ============================================
+   ESTILO SUBRAYADO (Material) en ROSA — Cliente y Factura
+   ============================================ */
+.datos-superiores input,
+.datos-superiores select,
+.datos-superiores textarea,
+.factura-datos-grid input,
+.factura-datos-grid select,
+.factura-datos-grid textarea,
+#abonoBox input,
+#abonoBox select {
+    background:transparent;
+    border:0;
+    border-bottom:1.5px solid #d9cdd3;
+    border-radius:0;
+    padding:9px 2px;
+    box-shadow:none;
+    transition:border-color .18s ease;
+}
+.datos-superiores input:hover,
+.datos-superiores select:hover,
+.datos-superiores textarea:hover,
+.factura-datos-grid input:hover,
+.factura-datos-grid select:hover,
+.factura-datos-grid textarea:hover,
+#abonoBox input:hover,
+#abonoBox select:hover {
+    border-bottom-color:#c9b8c0;
+}
+.datos-superiores input:focus,
+.datos-superiores select:focus,
+.datos-superiores textarea:focus,
+.factura-datos-grid input:focus,
+.factura-datos-grid select:focus,
+.factura-datos-grid textarea:focus,
+#abonoBox input:focus,
+#abonoBox select:focus {
+    background:transparent;
+    border-bottom:2.5px solid #e85c8b;
+    box-shadow:none;
+}
+/* Mantener el espacio para los iconos de los campos con icono */
+.datos-superiores .campo-icono input,
+.factura-datos-grid .campo-icono input,
+#abonoBox .campo-icono input {
+    padding-left:44px;
+}
 .aviso-cobros{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:14px;background:#fff7e6;border:1px solid #f5d9a8;border-radius:14px;flex-wrap:wrap}
 .aviso-icono{font-size:22px;display:inline-block}
-.aviso-icono.agitando{animation:campanada .9s ease-in-out infinite}
+.aviso-icono.agitando{animation:campanada .9s ease-in-out}
 @keyframes campanada{
     0%{transform:rotate(0deg)}
     10%{transform:rotate(22deg)}
@@ -1622,7 +1672,9 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <section id="historial" class="card history">
     <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Historial de facturas</div>
 
-    <input type="search" id="historialBuscar" class="historial-buscar" placeholder="🔍 Buscar por factura, cliente, estado o fecha..." autocomplete="off">
+    <label class="historial-buscar-label" for="historialBuscar">Buscar</label>
+
+    <input type="search" id="historialBuscar" class="historial-buscar" placeholder="Busca por factura, cliente, estado o fecha..." autocomplete="off">
 
     <div class="wrap">
         <table>
