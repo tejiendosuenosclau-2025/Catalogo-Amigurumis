@@ -2892,10 +2892,19 @@ function renderFinance(cur) {
             );
 
 
+        const pG =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    porcentajeGasto
+                )
+            );
+
         donut.style.background =
             `conic-gradient(
-                #18ad73 0 ${inicioGastos}%,
-                #f07818 ${inicioGastos}% 100%
+                #f07818 0 ${pG}%,
+                #7650c8 ${pG}% 100%
             )`;
     }
 
