@@ -33,6 +33,20 @@ body {
     min-width: 0;
 }
 
+/* Red de seguridad: nada desborda horizontalmente en el teléfono */
+html { overflow-x: hidden; }
+
+/* Textos largos se parten bien en pantallas pequeñas */
+.prod span,
+.order span,
+#gastosLista .row span,
+.legend,
+.pay b,
+.pay span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 /* =========================
    ENCABEZADO
    ========================= */
@@ -2714,7 +2728,7 @@ function renderCards() {
     $("statVentas").textContent=money(ventas);
     const gastosMes = totalExpenses(selectedYear,selectedMonth);
     $("statGastos").textContent = money(gastosMes);
-    $("statGanancia").textContent = money(ventas - gastosMes);
+    $("statGanancia").textContent = money(ab - gastosMes);
     $("statPedidos").textContent=pedidos;
     $("statAbonos").textContent=money(ab);
     $("statSaldo").textContent=money(saldo);
@@ -2733,7 +2747,7 @@ function renderCards() {
         a.push(v);
         const gastoMes = totalExpenses(selectedYear,m);
         g.push(gastoMes);
-        ga.push(v - gastoMes);
+        ga.push(q.reduce((x,f)=>x+received(f),0) - gastoMes);
         p.push(q.length);
         r.push(q.reduce((x,f)=>x+received(f),0));
         s.push(q.reduce((x,f)=>x+balance(f),0));
@@ -2744,47 +2758,45 @@ function tx(x,y,t,sz=10,fill="#444",anchor="start") {
     return `<text x="${x}" y="${y}" font-size="${sz}" fill="${fill}" text-anchor="${anchor}">${esc(t)}</text>`;
 }
 function renderCharts() {
-    const vals=[];
-    for(let m=0;m<12;m++)vals.push(monthRows(selectedYear,m).reduce((s,f)=>s+total(f),0));
+    const ivals=[],gvals=[];
+    for(let m=0;m<12;m++){ivals.push(monthRows(selectedYear,m).reduce((s,f)=>s+total(f),0));gvals.push(totalExpenses(selectedYear,m));}
     const svg=$("chartIngresosGastos");
     if(svg) {
-        const L=45,R=635,T=20,B=215,M=Math.max(...vals,1),step=(R-L)/11,sc=v=>B-(v/M)*(B-T);
+        const L=45,R=635,T=20,B=215,M=Math.max(...ivals,...gvals,1),step=(R-L)/11,sc=v=>B-(v/M)*(B-T);
         let h='<g stroke="#e8e8e8" stroke-dasharray="3 3">';
         for(let i=0;i<5;i++) {
             const y=T+i*(B-T)/4;
             h+=`<line x1="${L}" y1="${y}" x2="${R}" y2="${y}"/>`;
         }
         h+="</g>";
-        vals.forEach((v,i)=> {
-            const x=L+step*i-9,y=sc(v);h+=`<rect x="${x}" y="${y}" width="18" height="${B-y}" fill="#18ad73"/>`;
+        ivals.forEach((v,i)=> {
+            const x=L+step*i-18,y=sc(v);h+=`<rect x="${x}" y="${y}" width="13" height="${B-y}" fill="#18ad73"/>`;
         }
         );
-        h+=`<polyline points="${vals.map((v,i)=>`$ {
-            L+step*i
+        gvals.forEach((v,i)=> {
+            const x=L+step*i-5,y=sc(v);h+=`<rect x="${x}" y="${y}" width="13" height="${B-y}" fill="#f49b3f"/>`;
         }
-        ,$ {
-            sc(v)
-        }
-        `).join(" ")}" fill="none" stroke="#7650c8" stroke-width="3"/>`;
-        vals.forEach((v,i)=>h+=`<circle cx="${L+step*i}" cy="${sc(v)}" r="4" fill="#7650c8"/>`);
+        );
+        h+=`<circle cx="${L+12}" cy="36" r="5" fill="#18ad73"/>`+tx(L+24,40,"Ingresos",10,"#444");
+        h+=`<circle cx="${L+104}" cy="36" r="5" fill="#f49b3f"/>`+tx(L+116,40,"Gastos",10,"#444");
         mesesCortos.forEach((m,i)=>h+=tx(L+step*i,B+14,m,10,"#444","middle"));
         svg.innerHTML=h;
     }
     const svg2=$("chartVentasMes");
     if(svg2) {
-        const L=40,R=635,T=20,B=200,M=Math.max(...vals,1),step=(R-L)/12;
+        const L=40,R=635,T=20,B=200,M=Math.max(...ivals,1),step=(R-L)/12;
         let h='<g stroke="#e8e8e8" stroke-dasharray="3 3">';
         for(let i=0;i<4;i++) {
             const y=T+i*(B-T)/3;
             h+=`<line x1="${L}" y1="${y}" x2="${R}" y2="${y}"/>`;
         }
         h+="</g>";
-        vals.forEach((v,i)=> {
+        ivals.forEach((v,i)=> {
             const bh=(v/M)*(B-T),x=L+i*step+5;h+=`<rect x="${x}" y="${B-bh}" width="20" height="${bh}" rx="2" fill="#f43f7a"/>`;
         }
         );
         mesesCortos.forEach((m,i)=>h+=tx(L+i*step+15,B+18,m,10,"#444","middle"));
-        const v=vals[selectedMonth]||0,bh=(v/M)*(B-T),bx=L+selectedMonth*step+5;
+        const v=ivals[selectedMonth]||0,bh=(v/M)*(B-T),bx=L+selectedMonth*step+5;
         if(v) {
             h+=`<rect x="${bx-7}" y="${Math.max(2,B-bh-27)}" width="58" height="27" rx="6" fill="#f43f7a"/>`;
             h+=tx(bx+22,Math.max(20,B-bh-9),money(v),11,"#fff","middle");
@@ -2801,7 +2813,7 @@ function renderFinance(cur) {
     const ventas =
         cur.reduce(
             (suma, f) =>
-                suma + total(f),
+                suma + received(f),
             0
         );
 
@@ -2942,7 +2954,7 @@ function renderFinance(cur) {
     }
 }
 function renderCobros(cur) {
-    const v=cur.reduce((s,f)=>s+total(f),0),pag=cur.filter(f=>balance(f)<=0).reduce((s,f)=>s+total(f),0),abo=cur.filter(f=>paid(f)>0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pen=cur.filter(f=>paid(f)<=0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pc=x=>v?(x/v*100).toFixed(1):"0.0",b=$("cobrosEstado");
+    const v=cur.reduce((s,f)=>s+total(f),0),pag=cur.filter(f=>balance(f)<=0).reduce((s,f)=>s+total(f),0),abo=cur.filter(f=>balance(f)>0).reduce((s,f)=>s+paid(f),0),pen=cur.reduce((s,f)=>s+balance(f),0),pc=x=>v?(x/v*100).toFixed(1):"0.0",b=$("cobrosEstado");
     if(b)b.innerHTML=`<div class="cobro">✅<b>Pagado</b><strong>${money(pag)}</strong>${pc(pag)}%</div><div class="cobro">◷<b>Abonado</b><strong>${money(abo)}</strong>${pc(abo)}%</div><div class="cobro">🛒<b>Pendiente</b><strong>${money(pen)}</strong>${pc(pen)}%</div>`;
     $("totalVendidoCobros").textContent=money(v);
     $("totalRecibidoCobros").textContent=money(cur.reduce((s,f)=>s+received(f),0));
@@ -3522,6 +3534,7 @@ async function load() {
         const d=await db.from("factura_detalle").select("factura_id,producto_nombre,cantidad,total").in("factura_id",ids);
         if(d.error)console.error("Error cargando detalles:",d.error);
         detalles=d.data||[];
+    }
 	const gastosQuery = await db
     	.from("gastos")
     	.select(`
@@ -3538,12 +3551,11 @@ async function load() {
     	.order("fecha", { ascending: false })
     	.order("created_at", { ascending: false });
 
-if (gastosQuery.error) {
-    console.error("Error cargando gastos:", gastosQuery.error);
-    gastos = [];
-} else {
-    gastos = gastosQuery.data || [];
-}
+    if (gastosQuery.error) {
+        console.error("Error cargando gastos:", gastosQuery.error);
+        gastos = [];
+    } else {
+        gastos = gastosQuery.data || [];
     }
     renderAll();
 }
