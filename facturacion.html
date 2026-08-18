@@ -1970,27 +1970,52 @@ async function cargarDatosModalAbono(id) {
            BUSCAR ABONOS DE LA FACTURA
         ========================================== */
 
-        const {
-            data: pagos,
-            error: errorPagos
-        } = await db
-            .from("factura_pagos")
-            .select("valor, tipo_abono, created_at")
-            .eq("factura_id", id)
-            .order("created_at", { ascending: false });
-        
-        console.log("FACTURA ID:", id);
-	console.log("ABONOS ENCONTRADOS:", pagos);
-	console.log("ERROR ABONOS:", errorPagos);
+        /*
+         * ABONOS DE LA FACTURA
+         * Se consulta con created_at (fechas), pero si la tabla
+         * no tiene esa columna, se reintenta sin ella para que
+         * el modal SIEMPRE funcione.
+         */
 
-        if (errorPagos) {
+        let pagos = [];
+
+        try {
+
+            const res = await db
+                .from("factura_pagos")
+                .select("valor, tipo_abono, created_at")
+                .eq("factura_id", id)
+                .order("created_at", { ascending: false });
+
+            if (!res.error) {
+
+                pagos = res.data || [];
+
+            } else {
+
+                console.error(
+                    "ERROR ABONOS (reintentando sin created_at):",
+                    res.error
+                );
+
+                const res2 = await db
+                    .from("factura_pagos")
+                    .select("valor, tipo_abono")
+                    .eq("factura_id", id);
+
+                if (!res2.error) {
+                    pagos = res2.data || [];
+                }
+
+            }
+
+        } catch (errAbonos) {
 
             console.error(
                 "ERROR CARGANDO ABONOS:",
-                errorPagos
+                errAbonos
             );
 
-            return;
         }
 
 
@@ -2062,7 +2087,7 @@ async function cargarDatosModalAbono(id) {
                     pagos.map((pago, i) => `
 
                         <div class="abono-item">
-                            <span>#${pagos.length - i} · ${fechaLegible(pago.created_at)} · ${esc(pago.tipo_abono || "Abono")}</span>
+                            <span>#${pagos.length - i}${pago.created_at ? " · " + fechaLegible(pago.created_at) : ""} · ${esc(pago.tipo_abono || "Abono")}</span>
                             <strong>${money(pago.valor)}</strong>
                         </div>
 
