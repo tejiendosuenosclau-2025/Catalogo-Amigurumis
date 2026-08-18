@@ -2669,8 +2669,13 @@ function paid(f) {
     return Number(f.abono_acumulado)||0;
 }
 function balance(f) {
+    if(f.estado === "Pagada") return 0;
     const s=Number(f.saldo_pendiente);
     return Number.isFinite(s)?Math.max(0,s):Math.max(0,total(f)-paid(f));
+}
+function received(f) {
+    if(f.estado === "Pagada") return total(f);
+    return paid(f);
 }
 function dateText() {
     const e=$("fechaEstadisticas");
@@ -2705,7 +2710,7 @@ function spark(vals) {
 function renderCards() {
     const cur=monthRows(selectedYear,selectedMonth),prev=monthRows(selectedYear,selectedMonth?selectedMonth-1:11);
     const ventas=cur.reduce((s,f)=>s+total(f),0),pv=prev.reduce((s,f)=>s+total(f),0);
-    const pedidos=cur.length,pp=prev.length,ab=cur.reduce((s,f)=>s+paid(f),0),pab=prev.reduce((s,f)=>s+paid(f),0),saldo=cur.reduce((s,f)=>s+balance(f),0),ps=prev.reduce((s,f)=>s+balance(f),0);
+    const pedidos=cur.length,pp=prev.length,ab=cur.reduce((s,f)=>s+received(f),0),pab=prev.reduce((s,f)=>s+received(f),0),saldo=cur.reduce((s,f)=>s+balance(f),0),ps=prev.reduce((s,f)=>s+balance(f),0);
     $("statVentas").textContent=money(ventas);
     const gastosMes = totalExpenses(selectedYear,selectedMonth);
     $("statGastos").textContent = money(gastosMes);
@@ -2730,7 +2735,7 @@ function renderCards() {
         g.push(gastoMes);
         ga.push(v - gastoMes);
         p.push(q.length);
-        r.push(q.reduce((x,f)=>x+paid(f),0));
+        r.push(q.reduce((x,f)=>x+received(f),0));
         s.push(q.reduce((x,f)=>x+balance(f),0));
     }
     [["sparkVentas",a],["sparkGastos",g],["sparkGanancia",ga],["sparkPedidos",p],["sparkAbonos",r],["sparkSaldo",s]].forEach(([id,v])=>$(id)?.setAttribute("points",spark(v)));
@@ -2940,7 +2945,7 @@ function renderCobros(cur) {
     const v=cur.reduce((s,f)=>s+total(f),0),pag=cur.filter(f=>balance(f)<=0).reduce((s,f)=>s+total(f),0),abo=cur.filter(f=>paid(f)>0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pen=cur.filter(f=>paid(f)<=0&&balance(f)>0).reduce((s,f)=>s+total(f),0),pc=x=>v?(x/v*100).toFixed(1):"0.0",b=$("cobrosEstado");
     if(b)b.innerHTML=`<div class="cobro">✅<b>Pagado</b><strong>${money(pag)}</strong>${pc(pag)}%</div><div class="cobro">◷<b>Abonado</b><strong>${money(abo)}</strong>${pc(abo)}%</div><div class="cobro">🛒<b>Pendiente</b><strong>${money(pen)}</strong>${pc(pen)}%</div>`;
     $("totalVendidoCobros").textContent=money(v);
-    $("totalRecibidoCobros").textContent=money(cur.reduce((s,f)=>s+paid(f),0));
+    $("totalRecibidoCobros").textContent=money(cur.reduce((s,f)=>s+received(f),0));
     $("totalPendienteCobros").textContent=money(cur.reduce((s,f)=>s+balance(f),0));
 }
 function renderProducts(cur) {
