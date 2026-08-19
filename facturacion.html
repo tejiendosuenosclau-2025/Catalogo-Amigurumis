@@ -4889,8 +4889,8 @@ function renderHistorial(){
                                 historialEntregas[f.numero].estado === "delivered" ||
                                 historialEntregas[f.numero].estado === "read"
                                 ? `<span class="entrega ok" title="Recibida en WhatsApp">✓ Recibida</span>`
-                                : entregas[f.numero].estado === "failed"
-                                ? `<span class="entrega fail" title="${esc(JSON.stringify(entregas[f.numero].error || "Error de entrega"))}">✗ No entregada</span>`
+                                : historialEntregas[f.numero].estado === "failed"
+                                ? `<span class="entrega fail" title="${esc(JSON.stringify(historialEntregas[f.numero].error || "Error de entrega"))}">✗ No entregada</span>`
                                 : `<span class="entrega pend" title="Enviada, esperando confirmación">⏳ Enviada</span>`
                             )
                             : ""
