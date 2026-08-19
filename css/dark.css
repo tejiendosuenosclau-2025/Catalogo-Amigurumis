@@ -1,1 +1,67 @@
-.dark{background:#1e1e1e;color:#eee}.dark .card{background:#2b2b2b}.fade-in{animation:fade .5s}@keyframes fade{from{opacity:0}to{opacity:1}}
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - dark.css
+   Modo oscuro basado en variables (se activa con .dark)
+   ========================================================= */
+
+.dark{
+  --bg:#1e1e1e;
+  --card:#2b2b2b;
+  --text:#eee;
+  --muted:#aaa;
+  --borde:#3a3a3a;
+  --sombra-suave:0 6px 18px rgba(0,0,0,.35);
+  --sombra-media:0 14px 32px rgba(0,0,0,.5);
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* Componentes que usan variables se adaptan solos;
+   ajustes puntuales para los que usan valores fijos: */
+
+/* Hero */
+.dark .hero{background:linear-gradient(160deg, #262626 0%, #1e1e1e 100%)}
+.dark .hero h1{color:var(--text)}
+.dark .hero-descripcion{color:var(--muted)}
+.dark .hero-etiqueta{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(229,168,132,.4);
+  color:#e0a884;
+}
+.dark .hero-cta-whatsapp{background:transparent;color:var(--whatsapp);border-color:var(--whatsapp)}
+.dark .hero-cta-whatsapp:hover{background:var(--whatsapp);color:#fff}
+
+/* Tarjetas y categorías */
+.dark .card{background:#2b2b2b}
+.dark .categoria{background:var(--card);color:var(--text)}
+.dark .categoria:hover{background:var(--verde);color:#fff}
+.dark .categoria.activa{background:var(--verde);color:#fff}
+
+/* Menú */
+.dark nav{background:var(--card)}
+.dark nav a{background:rgba(255,255,255,.08);color:var(--text)}
+.dark nav a:hover{background:#f8c8d8;color:#fff}
+.dark .menu-logo img{background:var(--card)}
+
+/* Beneficios */
+.dark .beneficio{background:var(--card);border-color:var(--borde)}
+.dark .beneficio h3{color:var(--text)}
+.dark .beneficio p{color:var(--muted)}
+.dark .beneficio-icono{background:rgba(255,255,255,.06)}
+
+/* Modal */
+.dark .modal-contenido{background:var(--card);color:var(--text)}
+
+/* Catálogo */
+.dark .nombre{color:var(--text)}
+.dark .descripcion{color:var(--muted)}
+.dark .card-body{color:var(--text)}
+.dark #paginacion button{background:#3a3a3a;color:var(--text)}
+.dark #paginacion button:hover,
+.dark #paginacion button.activo{background:var(--primario);color:#fff}
+
+/* Footer */
+.dark .footer-artesanal{background:var(--bg)}
+.dark .creditos{background:#141414;color:#c9b8ad}
+
+.fade-in{animation:fade .5s}
+@keyframes fade{from{opacity:0}to{opacity:1}}

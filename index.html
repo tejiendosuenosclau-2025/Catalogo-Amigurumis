@@ -27,7 +27,7 @@
     <meta property="og:site_name" content="Tejiendo Sueños Clau">
     <meta property="og:image:alt" content="Logo de Tejiendo Sueños Clau">
     <meta name="theme-color" content="#F47DA3">
-    
+
     <script type="application/ld+json">
      {
       "@context":"https://schema.org",
@@ -48,6 +48,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/header.css">
 <link rel="stylesheet" href="css/cards.css">
+<link rel="stylesheet" href="css/catalogo.css">
 <link rel="stylesheet" href="css/animations.css">
 <link rel="stylesheet" href="css/filtros.css">
 <link rel="stylesheet" href="css/modal.css">
@@ -56,83 +57,124 @@
 <link rel="icon" type="image/png" href="img/icon.png">
 </head>
 <body>
-<header class="header-banner">
-       <button class="menu-toggle" id="menuToggle">
+<header class="header-banner" id="inicio">
+       <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú">
         ☰
         </button>
 </header>
-        <nav id="menu">
+        <nav id="menu" aria-label="Menú principal">
 	<div class="menu-logo">
         <img src="img/logo.png" alt="Tejiendo Sueños Clau">
        	</div>
         <a href="#inicio">🏠 Inicio</a>
         <a href="#categorias">🧶 Categorías</a>
         <a href="#catalogo">🧸 Catálogo</a>
+        <a href="#beneficios">💝 Beneficios</a>
         <a href="#contacto">💬 Contacto</a>
         <a href="facturacion.html">🧾 Facturación</a>
         </nav>
-<section id="categorias">
 
-    <h2>Nuestros Amigurumis</h2>
+<main>
+    <!-- ===== HERO ===== -->
+    <section class="hero" aria-labelledby="hero-titulo">
+        <p class="hero-etiqueta">✦ Tejido a mano con amor ✦</p>
+        <h1 id="hero-titulo">Amigurumis únicos para regalar y coleccionar</h1>
+        <p class="hero-descripcion">Diseños personalizados en crochet, hechos con materiales de calidad y dedicación artesanal. Cada muñeco cuenta una historia.</p>
+        <div class="hero-acciones">
+            <a href="#catalogo" class="hero-cta hero-cta-primario">Ver catálogo</a>
+            <a href="https://wa.me/573011810933?text=Hola,%20quiero%20información%20sobre%20los%20amigurumis." target="_blank" rel="noopener" class="hero-cta hero-cta-whatsapp">Pedir por WhatsApp</a>
+        </div>
+    </section>
 
-    <div class="categorias">
+    <!-- ===== CATEGORÍAS ===== -->
+    <section id="categorias" aria-labelledby="categorias-titulo">
 
-        <article class="categoria" data-categoria="Todos">
-            🏠 Inicio(<span id="totalProductos">0</span>)
-        </article>
-        <article class="categoria" data-categoria="Disponibles">
-            Disponibles
-        </article>
-        <article class="categoria" data-categoria="Animales">
-            Animales
-        </article>
-        <article class="categoria" data-categoria="Personajes">
-            Personajes
-        </article>
-        <article class="categoria" data-categoria="Llaveros">
-            Llaveros
-        </article>
-        <article class="categoria" data-categoria="Personalizados">
-            Personalizados
-        </article>
-    </div>
-	<!--<div class="buscador-menu">
-       	 <input 
-            type="text" 
-            id="buscar" 
-            placeholder="🔎 Buscar...">
-    	</div>-->
+        <h2 id="categorias-titulo">Nuestros Amigurumis</h2>
 
-</section>
+        <div class="categorias">
 
-<section id="catalogo">
-<!--<h2>Productos destacados</h2>-->
-<div id="productos">
-<!-- Aquí se cargarán los productos desde productos.json -->
-</div>
-</section>
-<section id="beneficios">
-<h2>¿Por qué elegirnos?</h2>
-<ul>
-<li>100% hecho a mano</li>
-<li>Personalización</li>
-<li>Materiales de calidad</li>
-<li>Envíos nacionales</li>
-</ul>
-</section>
+            <button type="button" class="categoria" data-categoria="Todos">
+                🏠 Inicio(<span id="totalProductos">0</span>)
+            </button>
+            <button type="button" class="categoria" data-categoria="Disponibles">
+                Disponibles
+            </button>
+            <button type="button" class="categoria" data-categoria="Animales">
+                Animales
+            </button>
+            <button type="button" class="categoria" data-categoria="Personajes">
+                Personajes
+            </button>
+            <button type="button" class="categoria" data-categoria="Llaveros">
+                Llaveros
+            </button>
+            <button type="button" class="categoria" data-categoria="Personalizados">
+                Personalizados
+            </button>
+        </div>
+
+    </section>
+
+    <!-- ===== CATÁLOGO ===== -->
+    <section id="catalogo" aria-labelledby="catalogo-titulo">
+        <h2 id="catalogo-titulo">Nuestro catálogo</h2>
+        <div id="productos">
+        <!-- Aquí se cargan los productos desde productos.json -->
+        </div>
+    </section>
+
+    <!-- ===== BENEFICIOS ===== -->
+    <section id="beneficios" aria-labelledby="beneficios-titulo">
+        <h2 id="beneficios-titulo">¿Por qué elegirnos?</h2>
+        <div class="beneficios-grid">
+            <article class="beneficio">
+                <span class="beneficio-icono" aria-hidden="true">🧶</span>
+                <h3>100% hecho a mano</h3>
+                <p>Cada amigurumi se teje punto a punto, sin máquinas.</p>
+            </article>
+            <article class="beneficio">
+                <span class="beneficio-icono" aria-hidden="true">🎨</span>
+                <h3>Personalización</h3>
+                <p>Colores, tamaños y diseños creados a tu gusto.</p>
+            </article>
+            <article class="beneficio">
+                <span class="beneficio-icono" aria-hidden="true">🧵</span>
+                <h3>Materiales de calidad</h3>
+                <p>Hilos suaves y seguros, pensados para durar.</p>
+            </article>
+            <article class="beneficio">
+                <span class="beneficio-icono" aria-hidden="true">📦</span>
+                <h3>Envíos nacionales</h3>
+                <p>Recibe tu pedido en cualquier ciudad de Colombia.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- ===== CONTACTO ===== -->
+    <section id="contacto" class="contacto" aria-labelledby="contacto-titulo">
+        <h2 id="contacto-titulo">¡Hablemos!</h2>
+        <p>¿Quieres un diseño especial o tienes dudas? Escríbenos por tu red favorita y te respondemos con mucho gusto.</p>
+        <div class="contacto-botones">
+            <a href="https://wa.me/573011810933?text=Hola,%20quiero%20información%20sobre%20los%20amigurumis." target="_blank" rel="noopener" class="contacto-enlace contacto-whatsapp">WhatsApp</a>
+            <a href="https://www.instagram.com/tejiendo_suenos_clau_/" target="_blank" rel="noopener" class="contacto-enlace contacto-instagram">Instagram</a>
+            <a href="https://www.tiktok.com/@tejiendo.suenos.clau" target="_blank" rel="noopener" class="contacto-enlace contacto-tiktok">TikTok</a>
+        </div>
+    </section>
+</main>
 
 <footer class="footer-artesanal">
-    <img src="img/footer.png" alt="Tejiendo Sueños Clau" class="footer-banner">
+    <img src="img/footer.png" alt="Tejiendo Sueños Clau" class="footer-banner" loading="lazy">
+    <p class="creditos">© 2026 Tejiendo Sueños Clau · Amigurumis hechos con amor 🧶</p>
 </footer>
 
 <div class="redes-flotantes">
-<a href="https://wa.me/573011810933?text=Hola,%20quiero%20información%20sobre%20los%20amigurumis." class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+<a href="https://wa.me/573011810933?text=Hola,%20quiero%20información%20sobre%20los%20amigurumis." class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
     <img src="img/whatsapp.png" alt="WhatsApp">
 </a>
-<a href="https://www.instagram.com/tejiendo_suenos_clau_/" class="instagram-float" target="_blank" aria-label="Instagram">
+<a href="https://www.instagram.com/tejiendo_suenos_clau_/" class="instagram-float" target="_blank" rel="noopener" aria-label="Instagram">
    <img src="img/instagram.png" alt="Instagram">
 </a>
-<a href="https://www.tiktok.com/@tejiendo.suenos.clau" class="tiktok-float" target="_blank" aria-label="TikTok">
+<a href="https://www.tiktok.com/@tejiendo.suenos.clau" class="tiktok-float" target="_blank" rel="noopener" aria-label="TikTok">
     <img src="img/tiktok.png" alt="TikTok">
 </a>
 </div>

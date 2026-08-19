@@ -1,2 +1,14 @@
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - animations.css
+   (corregido: sin fill-mode "both", el hover de las tarjetas
+   vuelve a funcionar)
+   ========================================================= */
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-.hero,.card{animation:fadeUp .8s ease both}
+.hero,.card{animation:fadeUp .8s ease}
+
+/* Respeta la preferencia de menos movimiento del usuario */
+@media (prefers-reduced-motion: reduce){
+  .hero,.card{animation:none}
+  *,*::before,*::after{transition-duration:.01ms !important}
+}

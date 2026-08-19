@@ -1,1116 +1,337 @@
-/* ENCABEZADO */
-.header-banner{
-    width:100%;
-    height:850px;
-    max-height:45vw;
-    background-image:url("../img/fondo.png");
-    background-repeat:no-repeat;
-    background-position:center;
-    background-size:cover;
-    display:flex;
-    justify-content:flex-end;
-    align-items:flex-start;
-
-    padding:20px 40px;
-    position:relative;
-}
-
-/* Tablet */
-@media (max-width:1024px){
-    .header-banner{
-        background-image:url("../img/fondo-mobile.png");
-        width:100%;
-        height:500px;
-        display:block;
-       }
-}
-/* Telefono */
-
-@media (max-width:768px){
-    .header-banner{
-        background-image:url("../img/fondo-mobile.png");
-        width:100%;
-        height:auto;
-        display:block;   
-        }
-
-    .header-banner nav{
-        position: absolute;
-        top: 80px;     /* Distancia desde la parte superior */
-        right: 40px;   /* Distancia desde la derecha */
-
-    }
-
-    .header-banner nav a{
-        font-size:14px;
-        padding:8px 15px;
-    }
-}
-/* Capa para mejorar la lectura */
-.header-banner::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(255,255,255,.20);
-}
-
-nav{
-    width:100%;
-    display:flex;
-    justify-content:flex-end;   /* Envía el menú a la derecha */
-    align-items:center;
-    gap:20px;
-    padding:15px 40px;
-}
-
-nav a{
-    text-decoration:none;
-    color:#4b2e2e;
-    font-weight:bold;
-    font-size:18px;
-    background:rgba(255,255,255,.7);
-    padding:10px 18px;
-    border-radius:30px;
-    transition:.3s;
-	font-family:century gothic;
-}
-
-nav a:hover{
-    background:#f8c8d8;
-    color:#fff;
-}
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - style.css
+   Versión mejorada: hero, beneficios, contacto y base pulida
+   ========================================================= */
 
 :root{
- --bg:#fdf8f3;
- --primary:#b56b45;
- --secondary:#f7d8c4;
- --text:#43352d;
---font-family:century gothic;
- --card:#fff;
- --shadow:0 10px 25px rgba(0,0,0,.12);
+  --bg:#fdf8f3;
+  --card:#fff;
+  --text:#43352d;
+  --muted:#7d6b5e;
+  --borde:#efe3d8;
+  --primario:#b56b45;          /* marrón: títulos y acentos */
+  --primario-oscuro:#9a5736;
+  --primario-suave:#f3e0d2;
+  --verde:#40AD55;             /* verde: acciones y categorías */
+  --verde-oscuro:#359247;
+  --whatsapp:#25D366;
+  --instagram:#E1306C;
+  --tiktok:#000;
+  --sombra-suave:0 6px 18px rgba(67,53,45,.08);
+  --sombra-media:0 14px 32px rgba(67,53,45,.14);
+  --radius:18px;
+  --font-family:"Century Gothic", CenturyGothic, AppleGothic, "Segoe UI", sans-serif;
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:20px}
+
 body{
-font-family:century gothic;
-color:var(--text);
-line-height:1.6;
+  font-family:var(--font-family);
+  color:var(--text);
+  line-height:1.6;
+  background:var(--bg);
+  overflow-x:hidden;
 }
 
-nav a{
-text-decoration:none;
-margin-left:20px;
-color:var(--text);
-font-weight:bold;
-transition:.3s;
-font-family:century gothic;
+img{max-width:100%;height:auto;display:block}
 
+::selection{background:var(--primario-suave);color:var(--primario-oscuro)}
+
+a:focus-visible,button:focus-visible{
+  outline:3px solid var(--primario);
+  outline-offset:2px;
+  border-radius:8px;
 }
-nav a:hover{color:var(--primary)}
+
+/* ===== HERO ===== */
 .hero{
-padding:90px 8%;
-text-align:center;
-background:linear-gradient(135deg,#ffe7da,#fff7f1);
+  position:relative;
+  text-align:center;
+  padding:110px 8%;
+  background:
+    radial-gradient(600px 300px at 85% 10%, rgba(244,125,163,.18), transparent 60%),
+    radial-gradient(500px 260px at 10% 90%, rgba(181,107,69,.14), transparent 60%),
+    linear-gradient(160deg, #fff7f1 0%, #ffefe4 55%, #ffe7da 100%);
+  overflow:hidden;
 }
-.hero h2{font-size:3rem;color:var(--primary)}
-.hero p{margin:20px auto;max-width:700px}
-.hero a{
-display:inline-block;
-padding:14px 28px;
-background:var(--primary);
-color:white;
-text-decoration:none;
-border-radius:30px;
-transition:.3s;
+.hero-etiqueta{
+  display:inline-block;
+  padding:8px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(181,107,69,.25);
+  color:var(--primario);
+  font-weight:bold;
+  font-size:.95rem;
+  letter-spacing:1px;
+  margin-bottom:18px;
+  backdrop-filter:blur(4px);
 }
-.hero a:hover{transform:translateY(-3px)}
+.hero h1{
+  font-size:clamp(2rem, 5.5vw, 3.4rem);
+  line-height:1.15;
+  margin-bottom:16px;
+  color:var(--text);
+}
+.hero-descripcion{
+  max-width:640px;
+  margin:0 auto 30px;
+  font-size:clamp(1rem, 1.5vw, 1.15rem);
+  color:#6b5a4e;
+}
+.hero-acciones{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.hero-cta{
+  display:inline-block;
+  padding:14px 30px;
+  border-radius:999px;
+  font-weight:bold;
+  font-size:1.05rem;
+  text-decoration:none;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.hero-cta-primario{
+  background:linear-gradient(135deg, var(--verde), var(--verde-oscuro));
+  color:#fff;
+  box-shadow:0 8px 20px rgba(64,173,85,.35);
+}
+.hero-cta-primario:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 26px rgba(64,173,85,.45);
+}
+.hero-cta-whatsapp{
+  background:#fff;
+  color:var(--whatsapp);
+  border:2px solid var(--whatsapp);
+}
+.hero-cta-whatsapp:hover{
+  background:var(--whatsapp);
+  color:#fff;
+  transform:translateY(-3px);
+}
+
 section{padding:70px 8%}
-.categorias{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-margin-top:30px;
-}
-.categorias article,#productos .card{
-background:var(--card);
-border-radius:18px;
-padding:25px;
-box-shadow:var(--shadow);
-transition:.3s;
-text-align:center;
-}
-.categorias article:hover,#productos .card:hover{
-transform:translateY(-8px) scale(1.02);
-}
-#productos{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
-}
-footer{
-background:#3f3129;
-color:#fff;
-padding:40px;
-text-align:center;
-margin-top:50px;
-}
-@media(max-width:768px){
-header{flex-direction:column}
-nav{margin-top:15px}
-.hero h2{font-size:2rem}
+
+/* ===== Títulos de sección ===== */
+#categorias,#catalogo,#beneficios,#contacto{text-align:center}
+#categorias h2,#catalogo h2,#beneficios h2,#contacto h2{
+  font-size:clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom:30px;
+  color:var(--primario);
+  letter-spacing:.5px;
 }
 
-
-/* ===== Tarjetas de productos ===== */
-
-.card{
-    background:#fff;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 10px 20px rgba(0,0,0,.15);
-}
-
-.producto-img{
-    width:100%;
-    height:auto;
-    max-height:300px;
-    object-fit:contain;
-    display:block;
-    background:#fff;
-    padding:10px;
-}
-
-.card-body{
-    padding:15px;
-}
-
-.precio{
-    font-size:22px;
-    font-weight:bold;
-    color:#b56b45;
-}
-
-.btn{
-    display:inline-block;
-    margin-top:15px;
-    padding:10px 20px;
-    background:#40AD55;
-    color:#fff;
-    text-decoration:none;
-    border-radius:25px;
-}
 /* ===== Categorías ===== */
+#categorias{padding:40px 0}
 
 .categorias{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
-    margin:30px 0;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  margin:30px 0;
 }
 
 .categoria{
-    background:#ffffff;
-    border:2px solid #40AD55;
-    border-radius:18px;
-    padding:16px 26px;
-    cursor:pointer;
-    font-weight:bold;
-    transition:all .35s ease;
-    user-select:none;
+  background:var(--card);
+  border:2px solid var(--verde);
+  border-radius:var(--radius);
+  padding:16px 26px;
+  cursor:pointer;
+  font-weight:bold;
+  font-family:inherit;
+  font-size:1rem;
+  color:var(--text);
+  user-select:none;
+  box-shadow:var(--sombra-suave);
+  transition:transform .35s ease, background .35s ease, color .35s ease, box-shadow .35s ease;
 }
-
 .categoria:hover{
-    transform:translateY(-4px);
-    background:#f8efe9;
+  transform:translateY(-5px);
+  background:var(--verde);
+  color:#fff;
+  box-shadow:0 10px 20px rgba(64,173,85,.35);
+}
+.categoria.activa{
+  background:var(--verde);
+  color:#fff;
+  border-color:var(--verde);
+  box-shadow:0 10px 20px rgba(181,107,69,.30);
 }
 
-.categoria.activa{
-    background:#40AD55;
-    color:white;
-    border-color:#40AD55;
-    box-shadow:0 8px 18px rgba(181,107,69,.35);
-}
+/* ===== Productos ===== */
 #productos{
-    transition:opacity .35s ease;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+  transition:opacity .35s ease;
+}
+#productos.oculto{opacity:0}
+#productos.visible{opacity:1}
+
+/* ===== Beneficios ===== */
+.beneficios-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:22px;
+}
+.beneficio{
+  background:var(--card);
+  border:1px solid var(--borde);
+  border-radius:var(--radius);
+  padding:28px 22px;
+  box-shadow:var(--sombra-suave);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.beneficio:hover{
+  transform:translateY(-6px);
+  box-shadow:var(--sombra-media);
+}
+.beneficio-icono{
+  display:inline-flex;
+  width:64px;
+  height:64px;
+  align-items:center;
+  justify-content:center;
+  font-size:1.8rem;
+  background:linear-gradient(135deg, #fff1e6, #ffe7da);
+  border-radius:50%;
+  margin-bottom:14px;
+}
+.beneficio h3{font-size:1.15rem;margin-bottom:8px;color:var(--text)}
+.beneficio p{font-size:.95rem;color:var(--muted);margin:0}
+
+/* ===== Contacto ===== */
+.contacto{padding:70px 8% 90px}
+.contacto > p{
+  max-width:560px;
+  margin:0 auto 30px;
+  color:var(--muted);
+}
+.contacto-botones{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.contacto-enlace{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:13px 26px;
+  border-radius:999px;
+  font-weight:bold;
+  text-decoration:none;
+  color:#fff;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.contacto-enlace:hover{transform:translateY(-3px)}
+.contacto-whatsapp{
+  background:var(--whatsapp);
+  box-shadow:0 8px 18px rgba(37,211,102,.35);
+}
+.contacto-instagram{
+  background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow:0 8px 18px rgba(220,39,67,.30);
+}
+.contacto-tiktok{
+  background:#111;
+  box-shadow:0 8px 18px rgba(0,0,0,.30);
 }
 
-#productos.oculto{
-    opacity:0;
+/* ===== Footer ===== */
+.footer-artesanal{
+  position:relative;
+  left:50%;
+  margin-left:-50vw;
+  width:100vw;
+  padding:0;
+  margin-top:40px;
+  line-height:0;
+  overflow:hidden;
+  background:#fff;
+}
+.footer-banner{display:block;width:100%;height:auto}
+.creditos{
+  background:#3f3129;
+  color:#e8d9cf;
+  text-align:center;
+  padding:18px 20px;
+  font-size:.9rem;
+  line-height:1.5;
 }
 
-#productos.visible{
-    opacity:1;
+/* ===== Botón comprar (imagen WhatsApp) ===== */
+.btn-whatsapp{display:flex;justify-content:center;margin-top:15px}
+.btn-whatsapp img{
+  width:130px;
+  height:auto;
+  display:block;
+  margin:12px auto 0;
+  transition:.3s;
+}
+.btn-whatsapp img:hover{transform:scale(1.05)}
+
+/* ===== Redes flotantes ===== */
+.redes-flotantes{
+  position:fixed;
+  right:20px;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  z-index:9999;
+}
+.whatsapp-float,.instagram-float,.tiktok-float{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.whatsapp-float{background:var(--whatsapp)}
+.instagram-float{background:var(--instagram)}
+.tiktok-float{background:var(--tiktok)}
+.whatsapp-float:hover,.instagram-float:hover,.tiktok-float:hover{
+  transform:scale(1.1);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+}
+.whatsapp-float img,.instagram-float img,.tiktok-float img{
+  width:28px;
+  height:28px;
+  object-fit:contain;
 }
 
-@keyframes aparecer{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.card{
-    animation:aparecer .5s ease;
-}
-/*=================================================
-        ENTREGA 1 - MENÚ PROFESIONAL
-==================================================*/
-
-#categorias{
-    padding:40px 0;
-    text-align:center;
-}
-
-#categorias h2{
-    font-size:2rem;
-    margin-bottom:30px;
-    color:#7b4b30;
-}
-
-.categorias{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-}
-
-.categoria{
-
-    background:white;
-
-    border:2px solid #40AD55;
-
-    border-radius:18px;
-    padding:16px 26px;
-
-    cursor:pointer;
-
-    font-weight:bold;
-
-    transition:.35s;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-
-}
-
-.categoria:hover{
-
-    transform:translateY(-5px);
-
-    background:#40AD55;
-
-}
-
-.categoria.activa{
-
-    background:#40AD55;
-
-    color:white;
-
-    border-color:#40AD55;
-
-    box-shadow:0 10px 20px rgba(181,107,69,.30);
-
-}
-/*=====================================
-        BUSCADOR
-======================================*/
-
-.busqueda{
-
-    display:flex;
-
-    justify-content:center;
-
-    margin:40px 0;
-
-}
-
-#buscar{
-
-    width:450px;
-
-    max-width:90%;
-
-    padding:15px 20px;
-
-    border-radius:40px;
-
-    border:2px solid #d8b08c;
-
-    outline:none;
-
-    font-size:18px;
-
-    transition:.3s;
-
-}
-
-#buscar:focus{
-
-    border-color:#b56b45;
-
-    box-shadow:0 0 12px rgba(181,107,69,.25);
-
-}
-/*=============================
-    MENÚ + BUSCADOR
-==============================*/
-
-.menu-categorias{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-    margin-top:25px;
-
-}
-
-.buscador-menu{
-
-    display:flex;
-
-    justify-content:flex-end;
-
-}
-
-#buscar{
-
-    width:280px;
-
-    padding:12px 18px;
-
-    border-radius:30px;
-
-    border:2px solid #d8b08c;
-
-    outline:none;
-
-    transition:.3s;
-
-    font-size:16px;
-
-}
-
-#buscar:focus{
-
-    border-color:#b56b45;
-}
-/*=====================================
-    EFECTO HOVER PRODUCTOS
-======================================*/
-
-.card{
-    transition: transform .35s ease,
-                box-shadow .35s ease;
-    cursor:pointer;
-    border:2px solid transparent;
-}
-
-.card:hover{
-    transform:translateY(-10px) scale(1.03);
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
-    border-color:#40AD55;
-}
-
-.producto-img{
-    transition:transform .4s ease;
-}
-
-.card:hover .producto-img{
-    transform:scale(1.08);
-}
-
-.card-body{
-    transition:background .35s ease;
-}
-
-.card:hover .card-body{
-    background:#fff8f3;
-}
-
-.precio{
-    transition:color .35s ease;
-}
-
-.card:hover .precio{
-    color:#40AD55;
-}
-
-/* =====================================================
-   RESPONSIVE - CELULARES Y TABLETS
-===================================================== */
-
-/* Todas las imágenes se adaptan */
-img{
-    max-width:100%;
-    height:auto;
-    display:block;
-}
-
-/* Tablets */
+/* ===== Responsive ===== */
 @media (max-width:992px){
-
-    .hero{
-        padding:60px 30px;
-    }
-
-    .hero h2{
-        font-size:2.4rem;
-    }
-
-    nav{
-        gap:12px;
-    }
-
-    #productos{
-        grid-template-columns:repeat(2,1fr);
-    }
-
+  .hero{padding:80px 30px}
+  #productos{grid-template-columns:repeat(2,1fr)}
 }
 
-/* Celulares */
 @media (max-width:768px){
-
-    body{
-        overflow-x:hidden;
-    }
-
-    /* Encabezado */
-
-    .header-banner{
-        padding:15px;
-        min-height:220px;
-        aspect-ratio:auto;
-        background-size:cover;
-        background-position:center;
-    }
-
-    nav{
-        width:100%;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        padding:15px;
-        gap:10px;
-    }
-
-    nav a{
-        width:100%;
-        max-width:300px;
-        text-align:center;
-        margin:0;
-        font-size:16px;
-    }
-
-    /* Hero */
-
-    .hero{
-        padding:40px 20px;
-    }
-
-    .hero h2{
-        font-size:1rem;
-    }
-
-    .hero p{
-        font-size:16px;
-    }
-
-    /* Buscador */
-
-    .menu-categorias{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .buscador-menu{
-        width:100%;
-        justify-content:center;
-    }
-
-    #buscar{
-        width:100%;
-        max-width:350px;
-    }
-
-    /* Categorías */
-
-    .categorias{
-        justify-content:center;
-    }
-
-    .categoria{
-        width:90%;
-        max-width:320px;
-        text-align:center;
-    }
-
-    /* Productos */
-
-    #productos{
-        grid-template-columns:1fr;
-        gap:20px;
-    }
-
-    .card{
-        width:100%;
-    }
-
-    .producto-img{
-        width:100%;
-        height:auto;
-        max-height:240px;
-        object-fit:contain;
-    }
-
-    .card-body{
-        padding:18px;
-    }
-
-    .precio{
-        font-size:20px;
-    }
-
-    .btn{
-        width:100%;
-        padding:14px;
-        text-align:center;
-    }
-
-    footer{
-        padding:25px;
-        font-size:14px;
-    }
-
+  .hero{padding:60px 20px}
+  .hero h1{font-size:clamp(1.7rem, 7vw, 2.2rem)}
+  .hero-descripcion{font-size:16px}
+  .hero-cta{width:100%;max-width:320px;text-align:center}
+  #productos{grid-template-columns:1fr;gap:20px}
+  .card{width:100%}
+  section{padding:50px 20px}
 }
-
-/* Celulares muy pequeños */
 
 @media (max-width:480px){
-
-    .hero h2{
-        font-size:1rem;
-    }
-
-    .hero p{
-        font-size:15px;
-    }
-
-    .producto-img{
-        max-height:180px;
-    }
-
-    .categoria{
-        padding:12px;
-    }
-
-    nav a{
-        font-size:15px;
-    }
-
+  .hero-etiqueta{font-size:.85rem}
+  .categoria{padding:12px}
+  .beneficio{padding:22px 16px}
+  .contacto-botones{flex-direction:column;align-items:stretch}
+  .contacto-enlace{justify-content:center}
 }
-/*==================================
-      MENÚ LATERAL
-===================================*/
-
-.menu-toggle{
-    display:none;
-}
-
-/* COMPUTADOR */
-@media (min-width:769px){
-
-    .menu-toggle{
-        display:none;
-    }
-
-    nav{
-        display:flex;
-        justify-content:center;
-        gap:20px;
-        position:static;
-        background:transparent;
-        box-shadow:none;
-    }
-
-}
-
-/* CELULAR */
-@media (max-width:768px){
-
-    .header-banner{
-        position:relative;
-    }
-
-    .menu-toggle{
-
-    display:block;
-
-    position:fixed;
-
-    top:15px;
-
-    right:15px;
-
-    width:50px;
-
-    height:50px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#40AD55;
-
-    color:white;
-
-    font-size:30px;
-
-    cursor:pointer;
-
-    z-index:9999;
-
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-
-    transition:all .3s ease;
-
-    }
-    .menu-toggle:hover{
-    transform:scale(1.08);
-    }
-    .menu-toggle:active{
-    transform:scale(.95);
-    }
-
-    nav{
-
-        position:fixed;
-
-        top:0;
-
-        right:-280px;
-
-        width:260px;
-
-        height:100vh;
-
-        background:white;
-
-        display:flex;
-
-        flex-direction:column;
-
-        padding-top:80px;
-
-        transition:right .35s ease;
-
-        box-shadow:-5px 0 20px rgba(0,0,0,.25);
-
-        z-index:1000;
-
-    }
-
-    nav.activo{
-
-        right:0;
-
-    }
-
-    nav a{
-
-        width:100%;
-
-        padding:18px;
-
-        text-align:left;
-
-        font-size:18px;
-
-        border-bottom:1px solid #eee;
-
-        background:none;
-
-        border-radius:0;
-
-    }
-
-}
-/*==============================
-      CABECERA DEL MENÚ
-===============================*/
-
-.menu-logo{
-
-    color:white;
-
-    text-align:center;
-
-    padding:30px 20px;
-
-    margin-bottom:20px;
-
-}
-
-.menu-logo img{
-
-    width:200px;
-    height:200px;
-    object-fit:contain;
-
-    object-fit:contain;
-
-    background:white;
-
-    border-radius:50%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:0px 0px;
-
-    box-shadow:0 20px 20px rgba(0,0,0,.20);
-
-    margin-bottom:5px;
-
-}
-/* ===========================
-   LOGO DEL MENÚ
-=========================== */
-
-/* En computador NO se muestra */
-.menu-logo{
-    display:none;
-}
-
-/* En celulares SÍ se muestra */
-@media (max-width:768px){
-
-    .menu-logo{
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        padding:30px 20px;
-        
-    }
-
-    .menu-logo img{
-        width:200px;
-    height:200px;
-    object-fit:contain;
-
-    object-fit:contain;
-
-    background:white;
-
-    border-radius:50%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:0px 0px;
-
-    box-shadow:0 20px 20px rgba(0,0,0,.20);
-
-    margin-bottom:5px;
-    }
-
-}
-
-.redes-flotantes{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    z-index: 9999;
-}
-
-/*==============================
-   WHATSAPP - CELULAR
-==============================*/
-
-.whatsapp-float{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #25D366;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    box-shadow: 0 6px 15px rgba(0,0,0,.25);
-    z-index: 9999;
-}
-
-.whatsapp-float:hover{
-
-    transform:scale(1.1);
-    transform:scale(1.12);
-    box-shadow:0 12px 28px rgba(0,0,0,.35);
-
-}
-
-.whatsapp-float img{
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-}
-
-@keyframes whatsappPulse{
-
-    0%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.12);
-    }
-
-    100%{
-        transform:scale(1);
-    }
-
-}
-/* ===============================
-   WHATSAPP - COMPUTADOR
-================================= */
-
-.whatsapp-float{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #25D366;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,.25);
-    z-index: 9999;
-}
-
-.whatsapp-float img{
-    width: 28px;
-    height: 28px;
-}
-
-/*==============================
-   INSTAGRAM - CELULAR
-==============================*/
-
-.instagram-float{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background:#E1306C;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    box-shadow: 0 6px 15px rgba(0,0,0,.25);
-    z-index: 9999;
-}
-
-.instagram-float:hover{
-
-    transform:scale(1.1);
-
-}
-
-.instagram-float img{
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-}
-
-@keyframes whatsappPulse{
-
-    0%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.12);
-    }
-
-    100%{
-        transform:scale(1);
-    }
-
-}
-/* ===============================
-   INSTAGRAM - COMPUTADOR
-================================= */
-
-.instagram-float{
-    position: fixed;
-    bottom:100px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background:#E1306C;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,.25);
-    z-index: 9999;
-}
-
-.instagram-float img{
-    width: 28px;
-    height: 28px;
-}
-
-/*==============================
-   TIKTOK - CELULAR
-==============================*/
-
-.tiktok-float{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background:#000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    box-shadow: 0 6px 15px rgba(0,0,0,.25);
-    z-index: 9999;
-}
-
-.tiktok-float:hover{
-
-    transform:scale(1.1);
-
-}
-
-.tiktok-float img{
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-}
-
-@keyframes whatsappPulse{
-
-    0%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.12);
-    }
-
-    100%{
-        transform:scale(1);
-    }
-
-}
-/* ===============================
-   TIKTOK - COMPUTADOR
-================================= */
-
-.tiktok-float{
-    position: fixed;
-    bottom: 180px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background:#000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,.25);
-    z-index: 9999;
-}
-
-.tiktok-float img{
-    width: 28px;
-    height: 28px;
-}
-
-
-
-/*=============================
-      BOTON COMPRAR
-==============================*/
-.btn-whatsapp{
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-}
-
-.btn-whatsapp img{
-    width: 130px;
-    height: auto;
-    display: block;
-    margin: 12px auto 0;
-    transition: 0.3s;
-}
-
-.btn-whatsapp img:hover{
-    transform: scale(1.05);
-}
-/*=============================
-      PIE DE PÁGINA
-==============================*/
-
-.footer-artesanal{
-    position: relative;
-    left: 50%;
-    margin-left: -50vw;
-    width: 100vw;
-
-    padding:0;
-    margin-top:40px;
-    line-height:0;
-    overflow:hidden;
-
-    background:#fff;
-}
-
-.footer-banner{
-    display:block;
-    width:100%;
-    height:auto;
-}
-body{
-
-    margin:0;
-    overflow-x:hidden;
-
-}
-

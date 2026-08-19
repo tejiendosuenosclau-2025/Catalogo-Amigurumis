@@ -1,2 +1,19 @@
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - filtros.css
+   ========================================================= */
+
 #filtros{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
-#buscar,#categoria{padding:10px;border-radius:10px;border:1px solid #ccc}
+
+#buscar,#categoria{
+  padding:12px 18px;
+  border-radius:30px;
+  border:2px solid #d8b08c;
+  font-family:inherit;
+  font-size:16px;
+  outline:none;
+  transition:border-color .3s ease, box-shadow .3s ease;
+}
+#buscar:focus,#categoria:focus{
+  border-color:var(--primario);
+  box-shadow:0 0 12px rgba(181,107,69,.25);
+}

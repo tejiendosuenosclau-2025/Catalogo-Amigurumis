@@ -1,5 +1,61 @@
-.card{position:relative;overflow:hidden;border-radius:22px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);box-shadow:0 15px 30px rgba(0,0,0,.12);transition:.35s}
-.card:hover{transform:translateY(-10px)}
-.badge{position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:20px;color:#fff;font-size:.8rem}
-.badge.nuevo{background:#3bb273}.badge.oferta{background:#e85d75}.badge.hecho{background:#b56b45}
-.btn{display:inline-block;padding:12px 20px;border-radius:999px;background:#b56b45;color:#fff;text-decoration:none}
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - cards.css
+   Tarjetas de producto + badges + botones
+   ========================================================= */
+
+.card{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(12px);
+  box-shadow:var(--sombra-suave);
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  cursor:pointer;
+  border:2px solid transparent;
+}
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:var(--sombra-media);
+  border-color:var(--verde);
+}
+
+.badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  padding:6px 10px;
+  border-radius:20px;
+  color:#fff;
+  font-size:.8rem;
+  font-weight:bold;
+  letter-spacing:.4px;
+  z-index:2;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+.badge.nuevo{background:linear-gradient(135deg,#3bb273,#2e9a5f)}
+.badge.oferta{background:linear-gradient(135deg,#e85d75,#d9445e)}
+.badge.hecho{background:linear-gradient(135deg,var(--primario),var(--primario-oscuro))}
+
+.btn{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 20px;
+  border-radius:999px;
+  background:linear-gradient(135deg, var(--verde), var(--verde-oscuro));
+  color:#fff;
+  text-decoration:none;
+  border:none;
+  font-family:inherit;
+  font-size:1rem;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 6px 16px rgba(64,173,85,.30);
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(64,173,85,.40);
+  filter:brightness(1.05);
+}
+

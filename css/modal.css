@@ -1,4 +1,54 @@
-#modalProducto{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;z-index:2000}
-.modal-contenido{background:#fff;padding:24px;border-radius:18px;max-width:520px;width:90%;position:relative}
-#cerrarModal{position:absolute;right:10px;top:10px;border:none;background:none;font-size:2rem;cursor:pointer}
-#modalImg{width:100%;border-radius:12px}
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - modal.css
+   Modal con entrada animada y scroll interno
+   ========================================================= */
+
+#modalProducto{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  align-items:center;
+  justify-content:center;
+  z-index:10000;   /* por encima del menú ☰ (9999) */
+  padding:16px;
+}
+
+.modal-contenido{
+  background:var(--card);
+  padding:24px;
+  border-radius:18px;
+  max-width:520px;
+  width:90%;
+  max-height:90vh;
+  overflow-y:auto;
+  position:relative;
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+  animation:modalEntrar .3s ease;
+}
+
+@keyframes modalEntrar{
+  from{opacity:0;transform:translateY(24px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+
+#cerrarModal{
+  position:absolute;
+  right:10px;
+  top:10px;
+  border:none;
+  background:none;
+  font-size:2rem;
+  line-height:1;
+  cursor:pointer;
+  color:var(--text);
+  transition:transform .2s ease;
+}
+#cerrarModal:hover{transform:scale(1.15) rotate(90deg)}
+
+#modalImg{
+  width:100%;
+  max-height:60vh;
+  object-fit:contain;
+  border-radius:12px;
+}

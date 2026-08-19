@@ -1,34 +1,45 @@
-.producto-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px}
+/* =========================================================
+   TEJIENDO SUEÑOS CLAU - catalogo.css
+   Imágenes uniformes, textos del producto y paginación
+   (ahora enlazado en index.html)
+   ========================================================= */
+
+.producto-img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:18px;
+  background:var(--card);
+  transition:transform .4s ease;
+}
+.card:hover .producto-img{transform:scale(1.05)}
+
 .card-body{padding:18px}
 .nombre{font-size:1.3rem;margin-bottom:8px}
-.descripcion{color:#666;margin-bottom:12px}
-.precio{font-size:1.5rem;color:#b56b45;font-weight:bold;margin-bottom:15px}
-.acciones{display:flex;gap:10px}
-.btn.secundario{background:#25D366}
+.descripcion{color:var(--muted);margin-bottom:12px}
+.precio{font-size:1.5rem;color:var(--primario);font-weight:bold;margin-bottom:15px}
+.acciones{display:flex;gap:10px;flex-wrap:wrap}
+.btn.secundario{background:var(--whatsapp)}
+.btn.secundario:hover{background:#1eb255}
 
+/* ===== Paginación ===== */
 #paginacion{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin:40px 0;
-    flex-wrap:wrap;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:40px 0;
+  flex-wrap:wrap;
 }
-
 #paginacion button{
-    padding:10px 16px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    background:#f2e5da;
-    transition:.3s;
+  padding:10px 16px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:#f2e5da;
+  font-family:inherit;
+  font-size:1rem;
+  transition:.3s;
 }
-
-#paginacion button:hover{
-    background:#b56b45;
-    color:#fff;
-}
-
-#paginacion button.activo{
-    background:#b56b45;
-    color:#fff;
-}
+#paginacion button:hover{background:var(--primario);color:#fff}
+#paginacion button.activo{background:var(--primario);color:#fff}
+#paginacion button:focus-visible{outline:3px solid var(--primario);outline-offset:2px}
