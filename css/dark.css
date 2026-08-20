@@ -32,21 +32,15 @@
 
 /* Tarjetas y categorías */
 .dark .card{background:#2b2b2b}
-.dark .categoria{background:var(--card);color:var(--text)}
-.dark .categoria:hover{background:var(--verde);color:#fff}
-.dark .categoria.activa{background:var(--verde);color:#fff}
+.dark .categoria{background:var(--card);color:var(--text);border-color:var(--borde)}
+.dark .categoria:hover{background:#24402b;border-color:var(--verde);color:#b8e6c2}
+.dark .categoria.activa{background:linear-gradient(135deg, var(--verde), var(--verde-oscuro));color:#fff}
 
 /* Menú */
 .dark nav{background:var(--card)}
 .dark nav a{background:rgba(255,255,255,.08);color:var(--text)}
 .dark nav a:hover{background:#f8c8d8;color:#fff}
 .dark .menu-logo img{background:var(--card)}
-
-/* Beneficios */
-.dark .beneficio{background:var(--card);border-color:var(--borde)}
-.dark .beneficio h3{color:var(--text)}
-.dark .beneficio p{color:var(--muted)}
-.dark .beneficio-icono{background:rgba(255,255,255,.06)}
 
 /* Modal */
 .dark .modal-contenido{background:var(--card);color:var(--text)}
