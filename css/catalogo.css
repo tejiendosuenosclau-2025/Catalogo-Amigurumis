@@ -7,9 +7,10 @@
 .producto-img{
   width:100%;
   aspect-ratio:1/1;
-  object-fit:cover;
+  object-fit:contain;   /* la imagen completa, sin recortes ni estiramiento */
+  background:#fff;
+  padding:12px;
   border-radius:18px;
-  background:var(--card);
   transition:transform .4s ease;
 }
 .card:hover .producto-img{transform:scale(1.05)}

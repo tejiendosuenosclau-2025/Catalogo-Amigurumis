@@ -141,12 +141,14 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
 #categorias{padding-top:clamp(32px, 5vw, 56px)}
 
 .categorias{
-  display:flex;
-  justify-content:center;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));   /* tablet: 3 + 3 */
   gap:clamp(10px, 1.5vw, 16px);
-  flex-wrap:wrap;
-  margin:30px auto;
   max-width:1280px;
+  margin:30px auto;
+}
+@media (min-width:1200px){
+  .categorias{grid-template-columns:repeat(6,minmax(0,1fr))}  /* escritorio: los 6 en una fila */
 }
 
 .categoria{
@@ -155,7 +157,7 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   background:var(--card);
   border:2px solid var(--borde);
   border-radius:999px;                 /* píldora */
-  padding:14px 26px;
+  padding:14px 18px;
   cursor:pointer;
   font-weight:bold;
   font-size:clamp(.95rem, 2vw, 1.05rem);
@@ -165,6 +167,8 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   box-shadow:var(--sombra-suave);
   display:inline-flex;
   align-items:center;
+  justify-content:center;
+  width:100%;
   gap:8px;
   transition:transform .3s ease, background .3s ease, color .3s ease,
              box-shadow .3s ease, border-color .3s ease;
@@ -296,15 +300,8 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
 
 /* Móviles pequeños */
 @media (max-width:600px){
-  section{padding:44px 16px}
-  #productos{grid-template-columns:1fr;gap:16px}
-  .card{width:100%}
-  .categoria{
-    width:100%;
-    max-width:400px;
-    justify-content:center;
-    padding:13px 20px;
-  }
+  .categorias{grid-template-columns:1fr;justify-items:center}
+  .categoria{max-width:400px;padding:13px 20px}
   .hero-cta{max-width:100%}
   .hero-etiqueta{font-size:.85rem}
   .creditos{font-size:.85rem}

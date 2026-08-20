@@ -13,7 +13,11 @@
   transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
   cursor:pointer;
   border:2px solid transparent;
+  min-width:0;
 }
+
+.card img{max-width:100%;height:auto}
+
 .card:hover{
   transform:translateY(-10px);
   box-shadow:var(--sombra-media);
