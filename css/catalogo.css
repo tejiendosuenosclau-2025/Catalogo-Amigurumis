@@ -48,4 +48,5 @@
 @media (max-width:600px){
   .producto-img{padding:0px}
   #productos{gap:12px}
+  #catalogo{padding-left:10px;padding-right:10px}   /* tarjetas más anchas */
 }
