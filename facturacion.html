@@ -152,17 +152,108 @@ button{cursor:pointer}
 footer{text-align:center;color:var(--mut);padding:20px}
 .mobile{display:none}
 
-.login-screen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#fff3f7,#fff)}
-.login-card{width:100%;max-width:420px;background:#fff;padding:35px 30px;border-radius:20px;box-shadow:0 15px 50px #00000018;border:1px solid var(--line);text-align:center}
-.login-logo{width:150px;max-width:80%;margin-bottom:15px}
-.login-card h1{margin:5px 0;color:var(--pd);font-size:28px}
-.login-subtitle{color:var(--mut);margin-bottom:25px}
-.login-card label{text-align:left}
-.password-box{position:relative}.password-box input{padding-right:50px}.password-box button{position:absolute;right:5px;top:3px;height:38px;width:42px;border:0;background:transparent;font-size:18px}
-.login-button{width:100%;margin-top:20px;padding:14px;border:0;border-radius:10px;background:var(--p);color:#fff;font-weight:bold;font-size:16px}
-.login-button:hover{background:var(--pd)}
-.login-error{color:#d62828;font-weight:bold;min-height:20px;margin-top:12px}
-.login-footer{color:var(--mut);margin-top:25px;font-size:13px}
+/* ============================================
+   🔐 LOGIN — PANTALLA DE ACCESO PREMIUM
+   ============================================ */
+.login-screen{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(640px 320px at 85% 12%, rgba(244,125,163,.16), transparent 62%),
+    radial-gradient(540px 300px at 8% 88%, rgba(134,98,169,.14), transparent 60%),
+    linear-gradient(135deg,#fff3f7 0%,#fff 100%);
+  overflow:auto;
+}
+.login-screen::before{
+  content:"";position:absolute;top:-130px;right:-90px;width:360px;height:360px;
+  background:radial-gradient(circle,#ffd9e6,transparent 70%);
+  pointer-events:none;
+}
+.login-screen::after{
+  content:"";position:absolute;bottom:-150px;left:-110px;width:400px;height:400px;
+  background:radial-gradient(circle,#e9dcf7,transparent 70%);
+  pointer-events:none;
+}
+.login-card{
+  position:relative;
+  width:100%;max-width:420px;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  padding:38px 32px 30px;
+  border-radius:24px;
+  border:1px solid rgba(244,125,163,.16);
+  box-shadow:0 26px 70px rgba(64,55,59,.15),0 2px 14px rgba(244,125,163,.08);
+  text-align:center;
+  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both;
+  overflow:hidden;
+}
+.login-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--p),#f5aec7,var(--v));
+}
+@keyframes loginEntrar{
+  from{opacity:0;transform:translateY(18px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.login-logo{
+  width:118px;height:118px;max-width:80%;object-fit:contain;
+  background:#fff;border-radius:50%;padding:10px;
+  box-shadow:0 0 0 6px rgba(244,125,163,.08),0 12px 28px rgba(244,125,163,.20);
+  margin-bottom:18px;
+}
+.login-card h1{margin:6px 0 4px;color:var(--pd);font-size:26px;letter-spacing:-.01em}
+.login-subtitle{color:var(--mut);margin:0 0 20px;font-size:14px}
+.login-card label{
+  display:flex;align-items:center;gap:7px;
+  text-align:left;font-size:12px;font-weight:800;color:#51464c;
+  margin:14px 0 7px;letter-spacing:.15px;
+}
+.login-card label .grilla-icon{width:15px;height:15px}
+.login-card input[type=email],
+.login-card input[type=password]{
+  width:100%;padding:13px 15px;
+  border:1.5px solid #eadfe4;border-radius:13px;
+  background:#fff;font-family:inherit;font-size:15px;color:var(--ink);
+  outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.login-card input:focus{
+  border-color:var(--p);
+  box-shadow:0 0 0 4px rgba(244,125,163,.12);
+}
+.login-card input::placeholder{color:#b9aeb4}
+.password-box{position:relative}
+.password-box input{padding-right:52px}
+.password-box button{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  height:36px;width:40px;border:0;border-radius:9px;
+  background:#fdf2f6;font-size:17px;cursor:pointer;
+  transition:background .18s ease;
+}
+.password-box button:hover{background:#fbe3ec}
+.login-button{
+  width:100%;margin-top:20px;padding:14px;
+  border:0;border-radius:13px;
+  background:linear-gradient(135deg,#f47da3,#e85c8b);
+  color:#fff;font-weight:bold;font-size:16px;font-family:inherit;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(244,125,163,.35);
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.login-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(244,125,163,.42);
+  filter:brightness(1.04);
+}
+.login-button:active{transform:translateY(0)}
+.login-error{
+  color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;
+}
+.login-footer{color:var(--mut);margin-top:22px;font-size:13px}
+@media(prefers-reduced-motion:reduce){.login-card{animation:none}}
+
 
 .history-actions{display:flex;gap:5px;flex-wrap:wrap}
 .history-btn{border:0;border-radius:7px;padding:6px 8px;font-size:14px;cursor:pointer;background:#f7f2f4;transition:transform .16s ease,filter .16s ease}
