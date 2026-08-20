@@ -1,6 +1,6 @@
 /* =========================================================
    TEJIENDO SUEÑOS CLAU - header.css
-   Banner, navegación, menú hamburguesa y logo
+   Banner, navegación, menú hamburguesa y logo (responsive)
    ========================================================= */
 
 .header-banner{
@@ -14,7 +14,7 @@
   display:flex;
   justify-content:flex-end;
   align-items:flex-start;
-  padding:20px 40px;
+  padding:20px clamp(16px, 4vw, 40px);
   position:relative;
 }
 
@@ -32,14 +32,15 @@ nav{
   display:flex;
   justify-content:flex-end;
   align-items:center;
-  gap:20px;
-  padding:15px 40px;
+  gap:clamp(10px, 1.5vw, 20px);
+  flex-wrap:wrap;
+  padding:15px clamp(16px, 4vw, 40px);
 }
 nav a{
   text-decoration:none;
   color:var(--text);
   font-weight:bold;
-  font-size:18px;
+  font-size:clamp(15px, 2vw, 18px);
   background:rgba(255,255,255,.7);
   padding:10px 18px;
   border-radius:30px;
@@ -85,15 +86,16 @@ nav a:hover{
   .menu-toggle{
     display:block;
     position:fixed;
-    top:15px;
-    right:15px;
-    width:50px;
-    height:50px;
+    top:12px;
+    right:12px;
+    width:46px;
+    height:46px;
     border:none;
     border-radius:10px;
     background:rgba(255,255,255,.9);
     color:var(--verde);
-    font-size:30px;
+    font-size:26px;
+    line-height:1;
     cursor:pointer;
     z-index:9999;
     box-shadow:0 6px 18px rgba(0,0,0,.25);
@@ -108,15 +110,19 @@ nav a:hover{
     position:fixed;
     top:0;
     right:-280px;
-    width:260px;
+    width:min(80vw, 280px);
     height:100vh;
+    height:100dvh;              /* se adapta a la barra del navegador móvil */
     background:var(--card);
     display:flex;
     flex-direction:column;
     justify-content:flex-start;
     align-items:stretch;
-    padding:0;
+    padding:0 0 40px;
     gap:0;
+    overflow-y:auto;            /* si el menú es más alto que la pantalla */
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:contain;
     transition:right .35s ease;
     box-shadow:-5px 0 20px rgba(0,0,0,.25);
     z-index:1000;
@@ -127,7 +133,7 @@ nav a:hover{
     width:100%;
     padding:18px 20px;
     text-align:left;
-    font-size:18px;
+    font-size:clamp(16px, 4.5vw, 18px);
     border-bottom:1px solid var(--borde);
     border-radius:0;
     background:none;
@@ -145,12 +151,28 @@ nav a:hover{
     padding:30px 20px;
   }
   .menu-logo img{
-    width:200px;
-    height:200px;
+    width:clamp(140px, 40vw, 200px);
+    height:clamp(140px, 40vw, 200px);
     object-fit:contain;
     background:var(--card);
     border-radius:50%;
     box-shadow:0 20px 20px rgba(0,0,0,.20);
     margin-bottom:5px;
   }
+}
+
+/* Móviles muy pequeños */
+@media (max-width:480px){
+  .menu-toggle{
+    top:10px;
+    right:10px;
+    width:42px;
+    height:42px;
+    font-size:24px;
+  }
+}
+
+/* Móvil en horizontal (pantallas bajas) */
+@media (max-height:500px) and (orientation:landscape){
+  nav{padding-top:56px}   /* deja espacio para el botón ☰ fijo */
 }
