@@ -44,3 +44,9 @@
 #paginacion button:hover{background:var(--primario);color:#fff}
 #paginacion button.activo{background:var(--primario);color:#fff}
 #paginacion button:focus-visible{outline:3px solid var(--primario);outline-offset:2px}
+
+/* En móviles la foto ocupa más espacio de la tarjeta */
+@media (max-width:600px){
+  .producto-img{padding:6px}
+  #productos{gap:14px}
+}
