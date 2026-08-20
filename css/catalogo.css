@@ -5,12 +5,13 @@
    ========================================================= */
 
 .producto-img{
-  width:100%;
+  width:calc(100% + 4px);   /* cubre la tarjeta de borde a borde */
+  margin:-2px;              /* compensa el borde de 2px de la tarjeta */
   aspect-ratio:1/1;
-  object-fit:contain;   /* la imagen completa, sin recortes ni estiramiento */
+  object-fit:contain;       /* la foto completa, sin recortes */
   background:#fff;
-  padding:12px;
-  border-radius:18px;
+  padding:0;
+  border-radius:0;          /* la tarjeta recorta las esquinas */
   transition:transform .4s ease;
 }
 .card:hover .producto-img{transform:scale(1.05)}
@@ -45,8 +46,8 @@
 #paginacion button.activo{background:var(--primario);color:#fff}
 #paginacion button:focus-visible{outline:3px solid var(--primario);outline-offset:2px}
 
+/* En móviles las tarjetas aprovechan más el ancho */
 @media (max-width:600px){
-  .producto-img{padding:0px}
   #productos{gap:12px}
-  #catalogo{padding-left:10px;padding-right:10px}   /* tarjetas más anchas */
+  #catalogo{padding-left:10px;padding-right:10px}
 }
