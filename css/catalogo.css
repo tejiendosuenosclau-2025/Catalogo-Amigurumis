@@ -8,7 +8,7 @@
   width:calc(100% + 4px);   /* cubre la tarjeta de borde a borde */
   margin:-2px;              /* compensa el borde de 2px de la tarjeta */
   aspect-ratio:1/1;
-  object-fit:contain;       /* la foto completa, sin recortes */
+  object-fit:cover;       /* la foto completa, sin recortes */
   background:#fff;
   padding:0;
   border-radius:0;          /* la tarjeta recorta las esquinas */
