@@ -159,10 +159,7 @@ footer{text-align:center;color:var(--mut);padding:20px}
   position:fixed;inset:0;z-index:1000;
   display:flex;align-items:center;justify-content:center;
   padding:20px;
-  background:
-    radial-gradient(640px 320px at 85% 12%, rgba(244,125,163,.16), transparent 62%),
-    radial-gradient(540px 300px at 8% 88%, rgba(134,98,169,.14), transparent 60%),
-    linear-gradient(135deg,#fff3f7 0%,#fff 100%);
+  background:linear-gradient(135deg,#fff3f7 0%,#fdf0f5 45%,#f7ecfa 100%);
   overflow:auto;
 }
 .login-screen::before{
@@ -175,35 +172,54 @@ footer{text-align:center;color:var(--mut);padding:20px}
   background:radial-gradient(circle,#e9dcf7,transparent 70%);
   pointer-events:none;
 }
+
+/* ===== Panel de marca (izquierda) ===== */
+.login-panel{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;text-align:center;
+  width:min(400px,42%);
+  min-height:min(580px,92vh);
+  background:linear-gradient(160deg,#f47da3 0%,#e85c8b 55%,#c96bd8 100%);
+  border-radius:28px 0 0 28px;
+  padding:40px 30px;
+  color:#fff;
+  box-shadow:-12px 18px 45px rgba(232,92,139,.25);
+}
+.login-panel::before{
+  content:"";position:absolute;top:-70px;right:-70px;width:220px;height:220px;
+  background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);
+}
+.login-panel::after{
+  content:"";position:absolute;bottom:-90px;left:-60px;width:240px;height:240px;
+  background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);
+}
+.login-panel .login-logo{
+  width:120px;height:120px;background:#fff;border-radius:50%;padding:10px;object-fit:contain;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+  margin-bottom:6px;
+}
+.login-panel-titulo{font-size:26px;font-weight:800;margin:0;text-shadow:0 2px 10px rgba(0,0,0,.15)}
+.login-panel-sub{font-size:14px;margin:0;opacity:.95}
+.login-panel-frase{font-size:14px;font-style:italic;max-width:280px;line-height:1.6;margin:12px 0 0;opacity:.94}
+.login-panel-emojis{font-size:28px;letter-spacing:12px;margin-top:16px;opacity:.95}
+
+/* ===== Tarjeta de acceso (derecha) ===== */
 .login-card{
   position:relative;
-  width:100%;max-width:420px;
-  background:rgba(255,255,255,.86);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  padding:38px 32px 30px;
-  border-radius:24px;
-  border:1px solid rgba(244,125,163,.16);
-  box-shadow:0 26px 70px rgba(64,55,59,.15),0 2px 14px rgba(244,125,163,.08);
+  width:min(440px,52%);max-width:440px;
+  background:#fff;
+  padding:40px 34px 26px;
+  border-radius:0 28px 28px 0;
+  box-shadow:12px 18px 45px rgba(64,55,59,.13);
   text-align:center;
   animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both;
-  overflow:hidden;
-}
-.login-card::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:4px;
-  background:linear-gradient(90deg,var(--p),#f5aec7,var(--v));
 }
 @keyframes loginEntrar{
   from{opacity:0;transform:translateY(18px) scale(.98)}
   to{opacity:1;transform:translateY(0) scale(1)}
 }
-.login-logo{
-  width:118px;height:118px;max-width:80%;object-fit:contain;
-  background:#fff;border-radius:50%;padding:10px;
-  box-shadow:0 0 0 6px rgba(244,125,163,.08),0 12px 28px rgba(244,125,163,.20);
-  margin-bottom:18px;
-}
-.login-card h1{margin:6px 0 4px;color:var(--pd);font-size:26px;letter-spacing:-.01em}
+.login-card h1{margin:0 0 4px;color:var(--pd);font-size:26px;letter-spacing:-.01em}
 .login-subtitle{color:var(--mut);margin:0 0 20px;font-size:14px}
 .login-card label{
   display:flex;align-items:center;gap:7px;
@@ -224,6 +240,15 @@ footer{text-align:center;color:var(--mut);padding:20px}
   box-shadow:0 0 0 4px rgba(244,125,163,.12);
 }
 .login-card input::placeholder{color:#b9aeb4}
+/* quita el fondo azul del autocompletado del navegador */
+.login-card input:-webkit-autofill,
+.login-card input:-webkit-autofill:hover,
+.login-card input:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 1000px #fff inset;
+  box-shadow:0 0 0 1000px #fff inset;
+  -webkit-text-fill-color:var(--ink);
+  caret-color:var(--ink);
+}
 .password-box{position:relative}
 .password-box input{padding-right:52px}
 .password-box button{
@@ -252,10 +277,19 @@ footer{text-align:center;color:var(--mut);padding:20px}
   color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;
 }
 .login-footer{color:var(--mut);margin-top:22px;font-size:13px}
-@media(prefers-reduced-motion:reduce){.login-card{animation:none}}
-
 .login-volver{display:inline-block;margin-top:16px;padding:9px 18px;border-radius:999px;border:1.5px solid rgba(244,125,163,.35);background:#fff7fa;color:var(--pd);font-weight:bold;font-size:13px;font-family:inherit;text-decoration:none;transition:background .18s ease,border-color .18s ease,transform .18s ease}
 .login-volver:hover{background:#fbe3ec;border-color:rgba(244,125,163,.55);transform:translateY(-1px)}
+
+/* Logo para móvil (el panel de marca se oculta) */
+.login-logo-movil{display:none;width:96px;height:96px;object-fit:contain;background:#fff;border-radius:50%;padding:8px;box-shadow:0 8px 20px rgba(244,125,163,.2);margin:0 auto 12px}
+
+/* Responsive del login */
+@media (max-width:850px){
+  .login-panel{display:none}   /* en pantallas chicas solo queda la tarjeta */
+  .login-card{width:100%;max-width:420px;border-radius:24px}
+  .login-logo-movil{display:block}
+}
+@media(prefers-reduced-motion:reduce){.login-card{animation:none}}
 
 
 .history-actions{display:flex;gap:5px;flex-wrap:wrap}
@@ -1197,8 +1231,15 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <body>
 
 <div id="loginScreen" class="login-screen">
-<div class="login-card">
+<div class="login-panel">
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
+<h2 class="login-panel-titulo">Tejiendo Sueños Clau</h2>
+<p class="login-panel-sub">Amigurumis artesanales · Hecho con amor</p>
+<p class="login-panel-frase">"Cada amigurumi cuenta una historia tejida a mano, punto a punto."</p>
+<div class="login-panel-emojis" aria-hidden="true">🧶🧸💗</div>
+</div>
+<div class="login-card">
+<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
 <h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
 <form id="loginForm" autocomplete="off">
 <label for="loginUser"><img src="img/user.png" alt="PDF" class="grilla-icon"> Correo electrónico</label>
