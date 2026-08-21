@@ -173,6 +173,21 @@ footer{text-align:center;color:var(--mut);padding:20px}
   pointer-events:none;
 }
 
+/* ===== Emojis flotantes de fondo ===== */
+.login-flotante{
+  position:absolute;opacity:.14;pointer-events:none;z-index:0;
+  animation:flotar 9s ease-in-out infinite;
+  user-select:none;
+}
+.login-flotante.f1{top:12%;left:6%;font-size:64px}
+.login-flotante.f2{bottom:14%;left:14%;font-size:48px;animation-delay:1.4s}
+.login-flotante.f3{top:20%;right:8%;font-size:56px;animation-delay:2.2s}
+.login-flotante.f4{bottom:18%;right:16%;font-size:44px;animation-delay:3s}
+@keyframes flotar{
+  0%,100%{transform:translateY(0) rotate(-4deg)}
+  50%{transform:translateY(-22px) rotate(5deg)}
+}
+
 /* ===== Panel de marca (izquierda) ===== */
 .login-panel{
   position:relative;overflow:hidden;
@@ -180,11 +195,18 @@ footer{text-align:center;color:var(--mut);padding:20px}
   gap:10px;text-align:center;
   width:min(400px,42%);
   min-height:min(580px,92vh);
-  background:linear-gradient(160deg,#f47da3 0%,#e85c8b 55%,#c96bd8 100%);
+  background:linear-gradient(160deg,#f47da3,#e85c8b,#c96bd8,#e85c8b);
+  background-size:300% 300%;
+  animation:panelGrad 16s ease infinite;
   border-radius:28px 0 0 28px;
   padding:40px 30px;
   color:#fff;
   box-shadow:-12px 18px 45px rgba(232,92,139,.25);
+}
+@keyframes panelGrad{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 .login-panel::before{
   content:"";position:absolute;top:-70px;right:-70px;width:220px;height:220px;
@@ -198,6 +220,11 @@ footer{text-align:center;color:var(--mut);padding:20px}
   width:120px;height:120px;background:#fff;border-radius:50%;padding:10px;object-fit:contain;
   box-shadow:0 12px 30px rgba(0,0,0,.18);
   margin-bottom:6px;
+  animation:logoPulso 3.2s ease-in-out infinite;
+}
+@keyframes logoPulso{
+  0%,100%{box-shadow:0 12px 30px rgba(0,0,0,.18),0 0 0 0 rgba(255,255,255,.5)}
+  50%{box-shadow:0 12px 30px rgba(0,0,0,.18),0 0 0 14px rgba(255,255,255,0)}
 }
 .login-panel-titulo{font-size:26px;font-weight:800;margin:0;text-shadow:0 2px 10px rgba(0,0,0,.15)}
 .login-panel-sub{font-size:14px;margin:0;opacity:.95}
@@ -226,10 +253,9 @@ footer{text-align:center;color:var(--mut);padding:20px}
   text-align:left;font-size:12px;font-weight:800;color:#51464c;
   margin:14px 0 7px;letter-spacing:.15px;
 }
-.login-card label .grilla-icon{width:15px;height:15px}
 .login-card input[type=email],
 .login-card input[type=password]{
-  width:100%;padding:13px 15px;
+  width:100%;padding:13px 15px 13px 44px;
   border:1.5px solid #eadfe4;border-radius:13px;
   background:#fff;font-family:inherit;font-size:15px;color:var(--ink);
   outline:none;
@@ -240,6 +266,14 @@ footer{text-align:center;color:var(--mut);padding:20px}
   box-shadow:0 0 0 4px rgba(244,125,163,.12);
 }
 .login-card input::placeholder{color:#b9aeb4}
+/* Campo con icono SVG dentro */
+.campo{position:relative}
+.campo-icono{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:18px;height:18px;stroke:#c9a0b2;pointer-events:none;
+  transition:stroke .2s ease;
+}
+.campo:focus-within .campo-icono{stroke:var(--p)}
 /* quita el fondo azul del autocompletado del navegador */
 .login-card input:-webkit-autofill,
 .login-card input:-webkit-autofill:hover,
@@ -259,6 +293,7 @@ footer{text-align:center;color:var(--mut);padding:20px}
 }
 .password-box button:hover{background:#fbe3ec}
 .login-button{
+  position:relative;overflow:hidden;
   width:100%;margin-top:20px;padding:14px;
   border:0;border-radius:13px;
   background:linear-gradient(135deg,#f47da3,#e85c8b);
@@ -267,6 +302,13 @@ footer{text-align:center;color:var(--mut);padding:20px}
   box-shadow:0 10px 24px rgba(244,125,163,.35);
   transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
 }
+.login-button::after{
+  content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+  transform:skewX(-20deg);
+  transition:left .5s ease;
+}
+.login-button:hover::after{left:130%}
 .login-button:hover{
   transform:translateY(-2px);
   box-shadow:0 14px 30px rgba(244,125,163,.42);
@@ -289,7 +331,12 @@ footer{text-align:center;color:var(--mut);padding:20px}
   .login-card{width:100%;max-width:420px;border-radius:24px}
   .login-logo-movil{display:block}
 }
-@media(prefers-reduced-motion:reduce){.login-card{animation:none}}
+@media(prefers-reduced-motion:reduce){
+  .login-card{animation:none}
+  .login-panel{animation:none}
+  .login-panel .login-logo{animation:none}
+  .login-flotante{animation:none}
+}
 
 
 .history-actions{display:flex;gap:5px;flex-wrap:wrap}
@@ -1231,6 +1278,10 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <body>
 
 <div id="loginScreen" class="login-screen">
+<span class="login-flotante f1" aria-hidden="true">🧶</span>
+<span class="login-flotante f2" aria-hidden="true">🧸</span>
+<span class="login-flotante f3" aria-hidden="true">💗</span>
+<span class="login-flotante f4" aria-hidden="true">🧵</span>
 <div class="login-panel">
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
 <h2 class="login-panel-titulo">Tejiendo Sueños Clau</h2>
@@ -1242,10 +1293,16 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
 <h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
 <form id="loginForm" autocomplete="off">
-<label for="loginUser"><img src="img/user.png" alt="PDF" class="grilla-icon"> Correo electrónico</label>
+<label for="loginUser">Correo electrónico</label>
+<div class="campo">
+<svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 6 10-6"/></svg>
 <input type="email" id="loginUser" placeholder="correo@ejemplo.com" required autocomplete="username">
-<label for="loginPass"><img src="img/key.png" alt="PDF" class="grilla-icon"> Contraseña</label>
-<div class="password-box"><input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword">👁️</button></div>
+</div>
+<label for="loginPass">Contraseña</label>
+<div class="campo password-box">
+<svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+<input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword">👁️</button>
+</div>
 <button type="submit" class="login-button">🔐 Ingresar</button><button type="button" id="forgotPassword" class="forgot-password"> ¿Olvidaste tu contraseña?</button>
 <p id="loginError" class="login-error"></p>
 </form>
