@@ -242,6 +242,40 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   color:var(--muted);
 }
 
+/* Contador del hero: elegante y visible al entrar */
+.visitas-hero{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin-top:28px;
+  padding:11px 26px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#f47da3,#c96bd8);
+  color:#fff;
+  box-shadow:0 12px 30px rgba(244,125,163,.45);
+  animation:visitasFlotar 3.5s ease-in-out infinite;
+}
+.visitas-ojo{
+  font-size:1.35rem;
+  line-height:1;
+  animation:ojoPulso 2.2s ease-in-out infinite;
+}
+.visitas-num{
+  font-size:1.4rem;
+  font-weight:800;
+  line-height:1;
+}
+.visitas-txt{
+  font-size:.85rem;
+  font-weight:600;
+  opacity:.95;
+}
+@keyframes visitasFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes ojoPulso{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@media (prefers-reduced-motion:reduce){
+  .visitas-hero,.visitas-ojo{animation:none}
+}
+
 /* ===== Botón comprar (imagen WhatsApp) ===== */
 .btn-whatsapp{display:flex;justify-content:center;margin-top:15px}
 .btn-whatsapp img{

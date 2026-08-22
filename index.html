@@ -82,6 +82,11 @@
             <a href="#catalogo" class="hero-cta hero-cta-primario">Ver catálogo</a>
             <a href="https://wa.me/573011810933?text=Hola,%20quiero%20información%20sobre%20los%20amigurumis." target="_blank" rel="noopener" class="hero-cta hero-cta-whatsapp">Pedir por WhatsApp</a>
         </div>
+        <div class="visitas-hero" aria-label="Contador de visitas al catálogo">
+            <span class="visitas-ojo">👁️</span>
+            <span class="visitas-num" id="contadorVisitas">···</span>
+            <span class="visitas-txt">visitas al catálogo</span>
+        </div>
     </section>
 
     <!-- ===== CATEGORÍAS ===== -->
@@ -124,7 +129,7 @@
 
 <footer class="footer-artesanal">
     <div class="visitas-caja">
-        <span class="visitas-chip">👁️ <span id="contadorVisitas">···</span> visitas</span>
+        <span class="visitas-chip">👁️ <span id="contadorVisitasPie">···</span> visitas</span>
     </div>
     <img src="img/footer.png" alt="Tejiendo Sueños Clau" class="footer-banner" loading="lazy">
     <p class="creditos">© 2026 Tejiendo Sueños Clau · Amigurumis hechos con amor 🧶</p>
@@ -146,20 +151,21 @@
 <script>
 /* Contador de visitas (Supabase) - cuenta 1 visita por dispositivo */
 (function(){
-  var chip=document.getElementById('contadorVisitas');
-  if(!chip||!window.supabaseClient)return;
+  var chips=[document.getElementById('contadorVisitas'),document.getElementById('contadorVisitasPie')].filter(Boolean);
+  if(!chips.length||!window.supabaseClient)return;
   var clave='tsv_visitado';
   var nuevo=!localStorage.getItem(clave);
   var cliente=window.supabaseClient;
+  function mostrar(n){chips.forEach(function(c){c.textContent=n})}
   function terminar(r){
     if(nuevo)localStorage.setItem(clave,'1');
-    if(r&&r.count!=null)chip.textContent=r.count.toLocaleString('es-CO');
-    else chip.textContent='—';
+    if(r&&r.count!=null)mostrar(r.count.toLocaleString('es-CO'));
+    else mostrar('—');
   }
   var peticion=nuevo
     ? cliente.from('visitas').insert([{}]).then(function(){return cliente.from('visitas').select('id',{count:'exact',head:true})})
     : cliente.from('visitas').select('id',{count:'exact',head:true});
-  peticion.then(terminar).catch(function(){chip.textContent='—'});
+  peticion.then(terminar).catch(function(){mostrar('—')});
 })();
 </script>
 <script type="module" src="js/modal.js"></script>
