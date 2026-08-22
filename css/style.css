@@ -191,6 +191,15 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   outline-offset:2px;
 }
 
+/* Iconos SVG de las categorías */
+.cat-icono{
+  width:16px;
+  height:16px;
+  stroke:currentColor;
+  vertical-align:-2px;
+  margin-right:4px;
+}
+
 /* ===== Productos ===== */
 #productos{
   display:grid;
