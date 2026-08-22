@@ -384,8 +384,20 @@
 @media print {
     @page { size: A4 portrait; margin: 5mm; }
 
-    /* Fuerza a caber en UNA sola hoja A4 (Chrome/Edge) */
-    .sheet { zoom: .93; }
+    /* Distribuye TODO el contenido de forma equitativa en UNA sola hoja A4 */
+    .sheet {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 287mm !important;      /* alto A4 (297mm) - márgenes (5+5mm) */
+        max-height: 287mm !important;
+    }
+    .invoice-header { flex: none !important; }
+    .invoice-content {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+    }
 
     html, body {
         width: 100%;
@@ -434,25 +446,25 @@
     /* ENCABEZADO */
     .invoice-header {
         display: grid !important;
-        grid-template-columns: 150px minmax(0, 1fr) 180px !important;
+        grid-template-columns: 160px minmax(0, 1fr) 190px !important;
         align-items: center !important;
-        gap: 14px !important;
-        padding: 16px 25px 14px !important;
-        min-height: 130px !important;
+        gap: 16px !important;
+        padding: 20px 28px 16px !important;
+        min-height: 150px !important;
         border-bottom: 3px solid var(--rosa) !important;
         background: linear-gradient(135deg, #ffffff 0%, #fff8fb 100%) !important;
     }
     .invoice-logo {
-        width: 110px !important;
-        height: 110px !important;
+        width: 120px !important;
+        height: 120px !important;
         margin: auto !important;
         object-fit: contain !important;
     }
     .invoice-brand { text-align: center !important; }
-    .invoice-brand h1 { margin: 0 !important; font-size: 34px !important; line-height: 1 !important; color: var(--rosa) !important; }
-    .invoice-brand h2 { margin: 4px 0 8px !important; font-size: 26px !important; line-height: 1 !important; color: var(--morado) !important; }
-    .invoice-brand p { margin: 0 !important; font-size: 14px !important; }
-    .invoice-brand p span { font-size: 16px !important; color: var(--rosa) !important; }
+    .invoice-brand h1 { margin: 0 !important; font-size: 38px !important; line-height: 1 !important; color: var(--rosa) !important; }
+    .invoice-brand h2 { margin: 4px 0 8px !important; font-size: 30px !important; line-height: 1 !important; color: var(--morado) !important; }
+    .invoice-brand p { margin: 0 !important; font-size: 15px !important; }
+    .invoice-brand p span { font-size: 17px !important; color: var(--rosa) !important; }
 
     /* NÚMERO DE FACTURA */
     .invoice-number {
@@ -463,45 +475,45 @@
         text-align: center !important;
         overflow: hidden !important;
     }
-    .invoice-number h3 { margin: 0 0 6px !important; font-size: 18px !important; color: var(--rosa) !important; }
+    .invoice-number h3 { margin: 0 0 6px !important; font-size: 20px !important; color: var(--rosa) !important; }
     .invoice-number .number {
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
-        padding: 9px 8px !important;
+        padding: 10px 10px !important;
         margin-bottom: 6px !important;
         border-radius: 13px !important;
-        font-size: 18px !important;
+        font-size: 20px !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         text-align: center !important;
     }
-    .invoice-date { font-size: 12px !important; }
+    .invoice-date { font-size: 13px !important; }
 
     /* CONTENIDO */
-    .invoice-content { padding: 14px 25px 10px !important; }
+    .invoice-content { padding: 18px 28px 14px !important; }
 
     /* CLIENTE */
     .client-grid {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
-        gap: 10px !important;
-        margin-bottom: 12px !important;
+        gap: 12px !important;
+        margin-bottom: 0 !important;
     }
     .client-card {
-        min-height: 52px !important;
-        padding: 9px 12px !important;
+        min-height: 58px !important;
+        padding: 10px 14px !important;
         border-radius: 12px !important;
         background: linear-gradient(135deg, #fffafa, #fff4f8) !important;
     }
-    .client-label { margin-bottom: 3px !important; font-size: 9px !important; }
+    .client-label { margin-bottom: 3px !important; font-size: 10px !important; }
     .client-value { font-size: 13px !important; line-height: 1.25 !important; }
 
     /* PRODUCTOS */
-    .products-title { margin-bottom: 6px !important; font-size: 16px !important; }
-    .products-title .ball { font-size: 18px !important; }
+    .products-title { margin-bottom: 10px !important; font-size: 17px !important; }
+    .products-title .ball { font-size: 19px !important; }
     .invoice-table {
         width: 100% !important;
         min-width: 0 !important;
@@ -509,40 +521,40 @@
         overflow: visible !important;
         border-radius: 12px !important;
     }
-    .invoice-table thead th { padding: 7px 9px !important; font-size: 10px !important; }
-    .invoice-table tbody td { padding: 7px 9px !important; font-size: 11px !important; }
-    .product-name { font-size: 12px !important; gap: 8px !important; }
-    .product-total { font-size: 12px !important; }
+    .invoice-table thead th { padding: 8px 10px !important; font-size: 11px !important; }
+    .invoice-table tbody td { padding: 8px 10px !important; font-size: 12px !important; }
+    .product-name { font-size: 12.5px !important; gap: 8px !important; }
+    .product-total { font-size: 12.5px !important; }
 
     /* PARTE INFERIOR */
     .invoice-bottom {
         display: grid !important;
         grid-template-columns: 1fr 1.25fr !important;
-        gap: 14px !important;
-        margin-top: 10px !important;
+        gap: 16px !important;
+        margin-top: 0 !important;
     }
     .status-column { gap: 8px !important; }
-    .info-box { padding: 9px 12px !important; border-radius: 12px !important; }
-    .info-box-label { margin-bottom: 4px !important; font-size: 9px !important; }
-    .info-box-value { font-size: 13px !important; }
-    .status-paid { padding: 4px 12px !important; font-size: 13px !important; }
+    .info-box { padding: 12px 14px !important; border-radius: 12px !important; }
+    .info-box-label { margin-bottom: 4px !important; font-size: 10px !important; }
+    .info-box-value { font-size: 14px !important; }
+    .status-paid { padding: 5px 14px !important; font-size: 14px !important; }
 
     /* TOTALES */
-    .totals-box { padding: 10px 14px !important; border-radius: 12px !important; }
-    .total-row { padding: 4px 0 !important; font-size: 13px !important; }
-    .final-total { margin-top: 5px !important; padding: 9px 12px !important; border-radius: 9px !important; font-size: 17px !important; }
+    .totals-box { padding: 12px 16px !important; border-radius: 12px !important; }
+    .total-row { padding: 5px 0 !important; font-size: 14px !important; }
+    .final-total { margin-top: 6px !important; padding: 10px 12px !important; border-radius: 9px !important; font-size: 18px !important; }
 
     /* OBSERVACIONES */
-    .observations { margin-top: 8px !important; padding: 10px 14px !important; border-radius: 12px !important; }
-    .observations-title { margin-bottom: 4px !important; font-size: 14px !important; }
-    .observations-text { font-size: 12px !important; line-height: 1.35 !important; }
+    .observations { margin-top: 0 !important; padding: 12px 16px !important; border-radius: 12px !important; }
+    .observations-title { margin-bottom: 4px !important; font-size: 15px !important; }
+    .observations-text { font-size: 12.5px !important; line-height: 1.4 !important; }
 
     /* PIE DE FACTURA */
-    .invoice-footer { padding: 10px 20px 12px !important; min-height: 55px !important; }
-    .invoice-footer h3 { margin-bottom: 3px !important; font-size: 17px !important; }
-    .invoice-footer p { margin: 3px !important; font-size: 13px !important; }
-    .invoice-footer small { font-size: 10px !important; }
-    .footer-decoration { right: 15px !important; bottom: 4px !important; font-size: 28px !important; }
+    .invoice-footer { padding: 16px 20px 18px !important; min-height: 62px !important; }
+    .invoice-footer h3 { margin-bottom: 4px !important; font-size: 18px !important; }
+    .invoice-footer p { margin: 3px !important; font-size: 14px !important; }
+    .invoice-footer small { font-size: 11px !important; }
+    .footer-decoration { right: 15px !important; bottom: 5px !important; font-size: 32px !important; }
 
     /* ABONO */
     .payment-summary { break-inside: avoid; page-break-inside: avoid; }
