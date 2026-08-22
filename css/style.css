@@ -349,7 +349,7 @@ body:not(.modo-admin) .visitas-caja{display:none !important}
 /* Móviles pequeños */
 @media (max-width:600px){
   section{padding:44px 16px}
-  #productos{grid-template-columns:1fr;gap:16px}
+  #productos{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .card{width:100%}
   .categorias{grid-template-columns:1fr;justify-items:center}
   .categoria{max-width:400px;padding:13px 20px}
