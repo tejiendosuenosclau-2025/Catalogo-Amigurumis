@@ -214,6 +214,13 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
 .categoria.activa .cat-icono{
   transform:scale(1.05);
 }
+/* Texto de la categoría (evita espacios raros con el contador) */
+.cat-texto{
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+  white-space:nowrap;
+}
 
 /* ===== Productos ===== */
 #productos{
