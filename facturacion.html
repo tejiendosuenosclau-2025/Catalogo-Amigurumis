@@ -336,9 +336,27 @@ footer{text-align:center;color:var(--mut);padding:20px}
   filter:brightness(1.04);
 }
 .login-button:active{transform:translateY(0)}
-.login-error{
-  color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;
+
+/* Pulso de luz continuo en el botón */
+.login-button{
+  animation:loginEntrar .5s ease forwards, pulsarBoton 2.4s ease-in-out .8s infinite;
 }
+@keyframes pulsarBoton{
+  0%,100%{box-shadow:0 10px 24px rgba(244,125,163,.35)}
+  50%{box-shadow:0 10px 36px rgba(244,125,163,.65)}
+}
+/* 🎉 Confeti (se crea con JS al iniciar sesión) */
+.confeti{
+  position:fixed;top:-20px;z-index:99999;pointer-events:none;
+  border-radius:2px;
+  animation:caerConfeti linear forwards;
+}
+@keyframes caerConfeti{
+  0%{transform:translateY(0) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:.9}
+}
+
+.login-error{color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;}
 .login-footer{color:var(--mut);margin-top:22px;font-size:13px}
 .login-volver{display:inline-block;margin-top:16px;padding:9px 18px;border-radius:999px;border:1.5px solid rgba(244,125,163,.35);background:#fff7fa;color:var(--pd);font-weight:bold;font-size:13px;font-family:inherit;text-decoration:none;transition:background .18s ease,border-color .18s ease,transform .18s ease}
 .login-volver:hover{background:#fbe3ec;border-color:rgba(244,125,163,.55);transform:translateY(-1px)}
@@ -1355,6 +1373,42 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <p class="login-footer">Tejiendo Sueños Clau 💗</p>
 </div>
 </div>
+
+<script>
+/* 🎉 Confeti al iniciar sesión correctamente (no toca el login existente) */
+(function(){
+  var pantalla=document.getElementById('loginScreen');
+  var formulario=document.getElementById('loginForm');
+  if(!pantalla||!formulario)return;
+  var armado=false;
+  formulario.addEventListener('submit',function(){armado=true});
+  var anterior=pantalla.style.display;
+  new MutationObserver(function(){
+    var actual=pantalla.style.display;
+    if(armado && anterior!=='none' && actual==='none'){ lanzarConfeti(); armado=false; }
+    anterior=actual;
+  }).observe(pantalla,{attributes:true,attributeFilter:['style']});
+
+  function lanzarConfeti(){
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    var colores=['#f47da3','#e85c8b','#c96bd8','#f5aec7','#ffd166','#4ecdc4','#fff'];
+    for(var i=0;i<70;i++){
+      (function(){
+        var p=document.createElement('span');
+        p.className='confeti';
+        p.style.left=(Math.random()*100)+'vw';
+        p.style.background=colores[Math.floor(Math.random()*colores.length)];
+        p.style.animationDelay=(Math.random()*0.5)+'s';
+        p.style.animationDuration=(2.5+Math.random()*2)+'s';
+        p.style.width=(6+Math.random()*8)+'px';
+        p.style.height=(10+Math.random()*12)+'px';
+        document.body.appendChild(p);
+        setTimeout(function(){p.remove()},6000);
+      })();
+    }
+  }
+})();
+</script>
 
 <div class="mobile"><button id="open">☰</button><b><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</b></div><div id="ov" class="overlay"></div>
 <aside id="side"><button id="close" style="float:right;border:0;background:#fff;font-size:30px">×</button>
