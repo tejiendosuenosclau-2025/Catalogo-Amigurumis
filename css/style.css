@@ -191,20 +191,28 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   outline-offset:2px;
 }
 
-/* Iconos SVG de las categorías */
+/* Iconos SVG de las categorías (a color) */
 .cat-icono{
-  width:17px;
-  height:17px;
-  stroke:currentColor;
-  vertical-align:-3px;
-  margin-right:5px;
+  width:30px;
+  height:30px;
+  padding:6px;
+  box-sizing:border-box;
+  border-radius:9px;
+  vertical-align:-6px;
+  margin-right:7px;
   transition:transform .3s ease;
 }
+.c-Inicio{background:#f3e0d2;stroke:#b56b45}
+.c-Disponibles{background:#e5f7e9;stroke:#40AD55}
+.c-Animales{background:#ffe3ed;stroke:#e85c8b}
+.c-Personajes{background:#fff0d2;stroke:#e08a3c}
+.c-Llaveros{background:#eee4ff;stroke:#a98be8}
+.c-Personalizados{background:#dff0ff;stroke:#5f8fe0}
 .categoria:hover .cat-icono{
-  transform:scale(1.2) rotate(-6deg);
+  transform:scale(1.15) rotate(-6deg);
 }
 .categoria.activa .cat-icono{
-  transform:scale(1.1);
+  transform:scale(1.05);
 }
 
 /* ===== Productos ===== */
