@@ -384,6 +384,9 @@
 @media print {
     @page { size: A4 portrait; margin: 5mm; }
 
+    /* Fuerza a caber en UNA sola hoja A4 (Chrome/Edge) */
+    .sheet { zoom: .93; }
+
     html, body {
         width: 100%;
         min-height: 100%;
