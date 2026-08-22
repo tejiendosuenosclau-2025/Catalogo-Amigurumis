@@ -624,7 +624,7 @@ font-size:14px;
 cursor:pointer}
 .forgot-password:hover{text-decoration:underline}
 
-.resumen-dashboard{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;width:100%;margin:0 0 24px 0}
+.resumen-dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;width:100%;margin:0 0 24px 0}
 .resumen-card{
 position:relative;
 border:1px solid var(--ts-border-soft);
@@ -674,6 +674,7 @@ transition:transform .2s ease,box-shadow .2s ease}
 .icon-recibido{background:#ddf8e9}
 .icon-cobrar{background:#fff0d2}
 .icon-clientes{background:#ffe3ed}
+.icon-visitas{background:#e6dcf7}
 .resumen-info{min-width:0;flex:1}
 .resumen-titulo{
 font-size:11px;
@@ -2221,6 +2222,30 @@ animation:tsToastProgress 4s linear forwards}
             </div>
         </div>
     </article>
+
+
+    <!-- Visitas al catálogo -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-visitas">
+                👁️
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Visitas al catálogo
+                </div>
+
+                <div class="resumen-valor" id="dashboardVisitas">
+                    0
+                </div>
+
+                <div class="resumen-cambio positivo" id="dashboardVisitasHoy">
+                    👁️ 0 hoy
+                </div>
+            </div>
+        </div>
+    </article>
 </section>
 </div>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
@@ -2621,6 +2646,28 @@ animation:tsToastProgress 4s linear forwards}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="js/supabase-config.js"></script>
+<script>
+/* Visitas del catálogo en el dashboard */
+(function(){
+  function cargarVisitas(){
+    var el=document.getElementById('dashboardVisitas');
+    if(!el||!window.supabaseClient)return;
+    var hoy=new Date(); hoy.setHours(0,0,0,0);
+    var cliente=window.supabaseClient;
+    cliente.from('visitas').select('id',{count:'exact',head:true})
+      .then(function(r){
+        if(r&&r.count!=null) el.textContent=r.count.toLocaleString('es-CO');
+      }).catch(function(){});
+    cliente.from('visitas').select('id',{count:'exact',head:true}).gte('creada_en',hoy.toISOString())
+      .then(function(r){
+        var h=document.getElementById('dashboardVisitasHoy');
+        if(h&&r&&r.count!=null) h.textContent='👁️ '+r.count.toLocaleString('es-CO')+' hoy';
+      }).catch(function(){});
+  }
+  cargarVisitas();
+  setInterval(cargarVisitas,60000);
+})();
+</script>
 <script>
 
 
@@ -4439,15 +4486,7 @@ function sheet(f) {
 
                 <p class="observaciones-nota">
 
-                    - Qué cubre<br>
-			* Defectos de elaboración que afecten la calidad o idoneidad del amigurumi.<br>
-			* Desprendimiento o falla de una parte por un problema atribuible a la elaboración.<br>
-			* Que el producto no corresponda con las características acordadas en el pedido.<br>
-		    - Qué no cubre<br>
-			* Daños ocasionados por jalones, cortes, mordeduras o manipulación inadecuada.<br>
-			* Daños ocasionados por mascotas.<br>
-			* Lavado, secado o limpieza realizados de manera inadecuada.<br>
-			* Daños producidos después de la entrega por accidentes o uso diferente al recomendado.<br>
+                    * Garantía 15 días por defectos de fabricación · Los amigurumis se hacen a mano, pueden variar levemente · Cambios dentro de 8 días.
 
                 </p>
 

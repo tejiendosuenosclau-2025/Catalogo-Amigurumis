@@ -149,6 +149,31 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script>
+/* Modo admin: contador visible solo para el administrador */
+(function(){
+  /* Activar: enlace con ?admin=1 o tocando 5 veces el título */
+  if(new URLSearchParams(location.search).get('admin')==='1'){
+    sessionStorage.setItem('tsv_admin','1');
+  }
+  if(sessionStorage.getItem('tsv_admin')==='1'){
+    document.body.classList.add('modo-admin');
+  }
+  var titulo=document.getElementById('hero-titulo'), toques=0, t=null;
+  if(titulo){
+    titulo.addEventListener('click',function(){
+      toques++;
+      clearTimeout(t);
+      t=setTimeout(function(){toques=0},1200);
+      if(toques>=5){
+        toques=0;
+        sessionStorage.setItem('tsv_admin','1');
+        document.body.classList.add('modo-admin');
+      }
+    });
+  }
+})();
+</script>
+<script>
 /* Contador de visitas (Supabase) - cuenta 1 visita por dispositivo */
 (function(){
   var chips=[document.getElementById('contadorVisitas'),document.getElementById('contadorVisitasPie')].filter(Boolean);

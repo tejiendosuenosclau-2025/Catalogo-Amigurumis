@@ -276,6 +276,10 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   .visitas-hero,.visitas-ojo{animation:none}
 }
 
+/* Contador SOLO visible para el administrador (modo admin) */
+body:not(.modo-admin) .visitas-hero,
+body:not(.modo-admin) .visitas-caja{display:none !important}
+
 /* ===== Botón comprar (imagen WhatsApp) ===== */
 .btn-whatsapp{display:flex;justify-content:center;margin-top:15px}
 .btn-whatsapp img{
