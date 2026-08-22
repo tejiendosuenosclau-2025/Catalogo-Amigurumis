@@ -82,6 +82,26 @@
     background: #fff4f8;
 }
 
+/* Total en letras */
+.total-letras{
+    font-size: 12px;
+    font-style: italic;
+    color: #8a5a6b;
+    text-align: right;
+    margin-top: 8px;
+}
+
+/* Política de garantía */
+.observaciones-nota{
+    font-size: 10px;
+    color: #999;
+    font-style: italic;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+
+
 /* TODA LA FACTURA USA CENTURY GOTHIC */
 .sheet,
 .sheet * {
@@ -591,6 +611,7 @@
     .invoice-footer p { margin: 3px !important; font-size: 14px !important; }
     .invoice-footer small { font-size: 11px !important; }
     .footer-decoration { right: 15px !important; bottom: 5px !important; font-size: 32px !important; }
+    .total-letras { font-size: 11px !important; margin-top: 6px !important; }
 
     /* ABONO */
     .payment-summary { break-inside: avoid; page-break-inside: avoid; }
