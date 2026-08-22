@@ -261,6 +261,8 @@ footer{text-align:center;color:var(--mut);padding:20px}
   display:flex;align-items:center;justify-content:center;
   padding:20px;
   background:
+    radial-gradient(640px 320px at 15% 15%, rgba(201,107,216,.12), transparent 60%),
+    radial-gradient(700px 380px at 90% 85%, rgba(244,125,163,.14), transparent 62%),
     radial-gradient(rgba(244,125,163,.07) 1.2px,transparent 1.6px) 0 0/26px 26px,
     linear-gradient(135deg,#fff3f7 0%,#fdf0f5 45%,#f7ecfa 100%);
   overflow:auto;
@@ -287,8 +289,10 @@ footer{text-align:center;color:var(--mut);padding:20px}
   gap:10px;text-align:center;
   width:min(400px,42%);
   min-height:min(580px,92vh);
-  background:linear-gradient(160deg,#f47da3,#e85c8b,#c96bd8,#e85c8b);
-  background-size:300% 300%;
+  background:
+    radial-gradient(rgba(255,255,255,.16) 1px,transparent 1.4px) 0 0/22px 22px,
+    linear-gradient(160deg,#f47da3,#e85c8b,#c96bd8,#e85c8b);
+  background-size:22px 22px,300% 300%;
   animation:panelGrad 16s ease infinite;
   border-radius:28px 0 0 28px;
   padding:40px 30px;
@@ -296,9 +300,9 @@ footer{text-align:center;color:var(--mut);padding:20px}
   box-shadow:-12px 18px 45px rgba(232,92,139,.25);
 }
 @keyframes panelGrad{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0%{background-position:0 0,0% 50%}
+  50%{background-position:0 0,100% 50%}
+  100%{background-position:0 0,0% 50%}
 }
 .login-panel::before{
   content:"";position:absolute;top:-70px;right:-70px;width:220px;height:220px;
@@ -332,7 +336,10 @@ footer{text-align:center;color:var(--mut);padding:20px}
 @keyframes tituloBrillo{to{background-position:200% center}}
 .login-panel-sub{font-size:14px;margin:0;opacity:.95}
 .login-panel-frase{font-size:14px;font-style:italic;max-width:280px;line-height:1.6;margin:12px 0 0;opacity:.94}
-.login-panel-emojis{font-size:28px;letter-spacing:12px;margin-top:16px;opacity:.95}
+.login-panel-ornamento{display:flex;gap:14px;justify-content:center;margin-top:16px}
+.ornamento-icono{width:26px;height:26px;stroke:#fff;opacity:.9}
+.chip-icono{width:13px;height:13px;stroke:#fff;flex:none}
+.btn-icono{width:17px;height:17px;stroke:currentColor;vertical-align:-3px;margin-right:6px}
 .login-panel-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
 .login-chip{
 padding:6px 13px;
@@ -356,9 +363,13 @@ backdrop-filter:blur(4px)}
              conic-gradient(from var(--angulo),#f47da3,#c96bd8,#f5aec7,#f47da3) border-box;
   box-shadow:12px 18px 45px rgba(64,55,59,.13);
   text-align:center;
-  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both, girarAngulo 8s linear infinite;
+  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both, girarAngulo 8s linear infinite, respiro 5s ease-in-out infinite;
 }
 @keyframes girarAngulo{to{--angulo:360deg}}
+@keyframes respiro{
+  0%,100%{box-shadow:12px 18px 45px rgba(64,55,59,.13)}
+  50%{box-shadow:12px 18px 62px rgba(244,125,163,.30)}
+}
 @keyframes loginEntrar{
   from{opacity:0;transform:translateY(18px) scale(.98)}
   to{opacity:1;transform:translateY(0) scale(1)}
@@ -366,7 +377,7 @@ backdrop-filter:blur(4px)}
 .login-card h1{margin:0 0 4px;color:var(--pd);font-size:26px;letter-spacing:-.01em}
 .login-subtitle{color:var(--mut);margin:0 0 20px;font-size:14px}
 /* Entrada escalonada: cada elemento aparece uno tras otro */
-.login-card h1,.login-subtitle,.login-card label,.login-card .campo,.login-button,.forgot-password,.login-volver,.login-footer{
+.login-card h1,.login-subtitle,.login-card label,.login-card .campo,.login-button,.forgot-password,.login-footer{
   opacity:0;
   animation:loginEntrar .5s ease forwards;
 }
@@ -375,7 +386,6 @@ backdrop-filter:blur(4px)}
 .login-card .campo{animation-delay:.26s}
 .login-button{animation-delay:.34s}
 .forgot-password{animation-delay:.4s}
-.login-volver{animation-delay:.46s}
 .login-footer{animation-delay:.52s}
 .login-card label{
   display:flex;align-items:center;gap:7px;
@@ -404,6 +414,20 @@ backdrop-filter:blur(4px)}
   transition:stroke .2s ease;
 }
 .login-card .campo:focus-within .campo-icono{stroke:var(--p)}
+/* Línea brillante al enfocar un campo */
+.login-card .campo::after{
+  content:"";position:absolute;left:14px;right:14px;bottom:0;height:2px;
+  background:linear-gradient(90deg,#f47da3,#c96bd8,#f47da3);
+  background-size:200% auto;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .3s ease;
+  border-radius:2px;
+}
+.login-card .campo:focus-within::after{
+  transform:scaleX(1);
+  animation:lineaBrillo 2.5s linear infinite;
+}
+@keyframes lineaBrillo{to{background-position:200% center}}
 /* quita el fondo azul del autocompletado del navegador */
 .login-card input:-webkit-autofill,
 .login-card input:-webkit-autofill:hover,
@@ -467,20 +491,7 @@ backdrop-filter:blur(4px)}
   color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;
 }
 .login-footer{color:var(--mut);margin-top:22px;font-size:13px}
-.login-volver{
-display:inline-block;
-margin-top:16px;
-padding:9px 18px;
-border-radius:999px;
-border:1.5px solid rgba(244,125,163,.35);
-background:#fff7fa;
-color:var(--pd);
-font-weight:bold;
-font-size:13px;
-font-family:inherit;
-text-decoration:none;
-transition:background .18s ease,border-color .18s ease,transform .18s ease}
-.login-volver:hover{background:#fbe3ec;border-color:rgba(244,125,163,.55);transform:translateY(-1px)}
+
 
 /* Logo para móvil (el panel de marca se oculta) */
 .login-logo-movil{
@@ -494,21 +505,6 @@ padding:8px;
 box-shadow:0 8px 20px rgba(244,125,163,.2);
 margin:0 auto 12px}
 
-/* Emojis flotantes de fondo */
-.login-flotante{
-  position:absolute;opacity:.14;pointer-events:none;z-index:0;
-  animation:flotar 9s ease-in-out infinite;
-  user-select:none;
-}
-.login-flotante.f1{top:12%;left:6%;font-size:64px}
-.login-flotante.f2{bottom:14%;left:14%;font-size:48px;animation-delay:1.4s}
-.login-flotante.f3{top:20%;right:8%;font-size:56px;animation-delay:2.2s}
-.login-flotante.f4{bottom:18%;right:16%;font-size:44px;animation-delay:3s}
-@keyframes flotar{
-  0%,100%{transform:translateY(0) rotate(-4deg)}
-  50%{transform:translateY(-22px) rotate(5deg)}
-}
-
 /* Responsive del login */
 @media (max-width:850px){
   .login-panel{display:none}   /* en pantallas chicas solo queda la tarjeta */
@@ -519,9 +515,8 @@ margin:0 auto 12px}
   .login-card{animation:none}
   .login-panel{animation:none}
   .login-panel .login-logo{animation:none}
-  .login-flotante{animation:none}
   .login-screen::before,.login-screen::after{animation:none}
-  .login-card h1,.login-subtitle,.login-card label,.login-card .campo,.login-button,.forgot-password,.login-volver,.login-footer{
+  .login-card h1,.login-subtitle,.login-card label,.login-card .campo,.login-button,.forgot-password,.login-footer{
     opacity:1 !important;animation:none !important;
   }
   .login-panel-titulo{animation:none;-webkit-text-fill-color:#fff;color:#fff}
@@ -1969,20 +1964,20 @@ animation:tsToastProgress 4s linear forwards}
 <body>
 
 <div id="loginScreen" class="login-screen">
-<span class="login-flotante f1" aria-hidden="true">🧶</span>
-<span class="login-flotante f2" aria-hidden="true">🧸</span>
-<span class="login-flotante f3" aria-hidden="true">💗</span>
-<span class="login-flotante f4" aria-hidden="true">🧵</span>
 <div class="login-panel">
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
 <h2 class="login-panel-titulo">Tejiendo Sueños Clau</h2>
 <p class="login-panel-sub">Amigurumis artesanales · Hecho con amor</p>
 <p class="login-panel-frase">"Cada amigurumi cuenta una historia tejida a mano, punto a punto."</p>
-<div class="login-panel-emojis" aria-hidden="true">🧶🧸💗</div>
+<div class="login-panel-ornamento" aria-hidden="true">
+<svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12M18 6L6 18"/></svg>
+<svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4.5 16 3 11C2 7.5 4 5 6.8 5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3C20 5 22 7.5 21 11c-1.5 5-9 9.5-9 9.5z"/></svg>
+<svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></svg>
+</div>
 <div class="login-panel-chips">
-<span class="login-chip">🧶 Tejido a mano</span>
-<span class="login-chip">💗 Con amor</span>
-<span class="login-chip">📦 Envíos</span>
+<span class="login-chip"><svg class="chip-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12M18 6L6 18"/></svg> Tejido a mano</span>
+<span class="login-chip"><svg class="chip-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4.5 16 3 11C2 7.5 4 5 6.8 5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3C20 5 22 7.5 21 11c-1.5 5-9 9.5-9 9.5z"/></svg> Con amor</span>
+<span class="login-chip"><svg class="chip-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> Envíos</span>
 </div>
 </div>
 <div class="login-card">
@@ -1999,11 +1994,10 @@ animation:tsToastProgress 4s linear forwards}
 <svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
 <input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword">👁️</button>
 </div>
-<button type="submit" class="login-button">🔐 Ingresar</button><button type="button" id="forgotPassword" class="forgot-password"> ¿Olvidaste tu contraseña?</button>
+<button type="submit" class="login-button"><svg class="btn-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Ingresar</button><button type="button" id="forgotPassword" class="forgot-password"> ¿Olvidaste tu contraseña?</button>
 <p id="loginError" class="login-error"></p>
 </form>
-<a href="index.html" class="login-volver">🧸 Volver al catálogo de amigurumis</a>
-<p class="login-footer">Tejiendo Sueños Clau 💗</p>
+<p class="login-footer">Tejiendo Sueños Clau ♥</p>
 </div>
 </div>
 <script>
