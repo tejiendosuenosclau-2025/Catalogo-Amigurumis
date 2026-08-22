@@ -1,3 +1,5 @@
+===== INICIO DEL ARCHIVO =====
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -257,13 +259,13 @@ footer{text-align:center;color:var(--mut);padding:20px}
 .login-card h1{margin:0 0 4px;color:var(--pd);font-size:26px;letter-spacing:-.01em}
 .login-subtitle{color:var(--mut);margin:0 0 20px;font-size:14px}
 /* Entrada escalonada: cada elemento aparece uno tras otro */
-.login-card h1,.login-subtitle,.login-card label,.campo,.login-button,.forgot-password,.login-volver,.login-footer{
+.login-card h1,.login-subtitle,.login-card label,.login-card .campo,.login-button,.forgot-password,.login-volver,.login-footer{
   opacity:0;
   animation:loginEntrar .5s ease forwards;
 }
 .login-subtitle{animation-delay:.1s}
 .login-card label{animation-delay:.18s}
-.campo{animation-delay:.26s}
+.login-card .campo{animation-delay:.26s}
 .login-button{animation-delay:.34s}
 .forgot-password{animation-delay:.4s}
 .login-volver{animation-delay:.46s}
@@ -287,14 +289,14 @@ footer{text-align:center;color:var(--mut);padding:20px}
   box-shadow:0 0 0 4px rgba(244,125,163,.12);
 }
 .login-card input::placeholder{color:#b9aeb4}
-/* Campo con icono SVG dentro */
-.campo{position:relative}
-.campo-icono{
+/* Campo con icono SVG dentro (SOLO login; no debe tocar el formulario) */
+.login-card .campo{position:relative}
+.login-card .campo-icono{
   position:absolute;left:14px;top:50%;transform:translateY(-50%);
   width:18px;height:18px;stroke:#c9a0b2;pointer-events:none;
   transition:stroke .2s ease;
 }
-.campo:focus-within .campo-icono{stroke:var(--p)}
+.login-card .campo:focus-within .campo-icono{stroke:var(--p)}
 /* quita el fondo azul del autocompletado del navegador */
 .login-card input:-webkit-autofill,
 .login-card input:-webkit-autofill:hover,
@@ -336,7 +338,6 @@ footer{text-align:center;color:var(--mut);padding:20px}
   filter:brightness(1.04);
 }
 .login-button:active{transform:translateY(0)}
-
 /* Pulso de luz continuo en el botón */
 .login-button{
   animation:loginEntrar .5s ease forwards, pulsarBoton 2.4s ease-in-out .8s infinite;
@@ -355,8 +356,9 @@ footer{text-align:center;color:var(--mut);padding:20px}
   0%{transform:translateY(0) rotate(0deg);opacity:1}
   100%{transform:translateY(110vh) rotate(720deg);opacity:.9}
 }
-
-.login-error{color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;}
+.login-error{
+  color:#d62828;font-weight:bold;min-height:22px;margin-top:14px;font-size:13px;
+}
 .login-footer{color:var(--mut);margin-top:22px;font-size:13px}
 .login-volver{display:inline-block;margin-top:16px;padding:9px 18px;border-radius:999px;border:1.5px solid rgba(244,125,163,.35);background:#fff7fa;color:var(--pd);font-weight:bold;font-size:13px;font-family:inherit;text-decoration:none;transition:background .18s ease,border-color .18s ease,transform .18s ease}
 .login-volver:hover{background:#fbe3ec;border-color:rgba(244,125,163,.55);transform:translateY(-1px)}
@@ -391,7 +393,7 @@ footer{text-align:center;color:var(--mut);padding:20px}
   .login-panel .login-logo{animation:none}
   .login-flotante{animation:none}
   .login-screen::before,.login-screen::after{animation:none}
-  .login-card h1,.login-subtitle,.login-card label,.campo,.login-button,.forgot-password,.login-volver,.login-footer{
+  .login-card h1,.login-subtitle,.login-card label,.login-card .campo,.login-button,.forgot-password,.login-volver,.login-footer{
     opacity:1 !important;animation:none !important;
   }
   .login-panel-titulo{animation:none;-webkit-text-fill-color:#fff;color:#fff}
@@ -974,7 +976,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
         width: 17px !important;
         height: 17px !important;
     }
-   
+
 }
 
 @media (max-width: 380px) {
@@ -1373,7 +1375,6 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <p class="login-footer">Tejiendo Sueños Clau 💗</p>
 </div>
 </div>
-
 <script>
 /* 🎉 Confeti al iniciar sesión correctamente (no toca el login existente) */
 (function(){
@@ -1423,7 +1424,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <div class="dashboard-fijo">
 <!-- PERFIL / CERRAR SESIÓN -->
 <div class="perfil-dashboard">
-    
+
     <div class="fecha-perfil">
         <span class="fecha-icono"><img src="img/fecha.png" class="grilla-icon"></span>
         <span id="fechaPerfil"></span>
@@ -1640,7 +1641,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
             <label>Cédula / NIT</label>
 
             <input
-                id="ident"              
+                id="ident"             
                 autocomplete="off"
             >
 
@@ -1693,83 +1694,83 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 
         <!-- NÚMERO DE FACTURA -->
 
-	<div class="factura-numero-bloque">
+        <div class="factura-numero-bloque">
 
-    		<div class="factura-numero-label">
-        		Número de factura
-    		</div>
+                <div class="factura-numero-label">
+                        Número de factura
+                </div>
 
-    		<div class="factura-numero-campo">
+                <div class="factura-numero-campo">
 
-        		<span class="factura-numero-icono">
-            			🏷️
-        		</span>
+                        <span class="factura-numero-icono">
+                                🏷️
+                        </span>
 
-        		<input id="numero" readonly>
+                        <input id="numero" readonly>
 
-        		<span class="factura-automatico">
-            			Automático ✨
-        		</span>
+                        <span class="factura-automatico">
+                                Automático ✨
+                        </span>
 
-    		</div>
+                </div>
 
-	</div>
-
-
-	<!-- FECHA -->
-
-	<div class="factura-datos-grid">
-
-    		<div class="factura-campo">
-
-        		<label>
-            			Fecha
-        		</label>
-
-        		<div class="campo-icono">
-
-            			<span><img src="img/fecha.png" class="grilla-icon"></span>
-
-            			<input id="fecha" type="date">
-
-        		</div>
-
-    		</div>
+        </div>
 
 
-    		<!-- FORMA DE PAGO -->
+        <!-- FECHA -->
 
-    		<div class="factura-campo">
+        <div class="factura-datos-grid">
 
-        		<label>
-            			Forma de pago
-        		</label>
+                <div class="factura-campo">
 
-        		<div class="campo-icono">
+                        <label>
+                                Fecha
+                        </label>
 
-            			<span><img src="img/dinero.png" class="grilla-icon"></span>
+                        <div class="campo-icono">
 
-            			<select id="pago">
+                                <span><img src="img/fecha.png" class="grilla-icon"></span>
 
-                			<option value="" selected>
-                    				Seleccione
-                			</option>
+                                <input id="fecha" type="date">
 
-                			<option value="Contado">
-                    				Contado
-                			</option>
+                        </div>
 
-                			<option value="Abono">
-                    				Abono
-                			</option>
+                </div>
 
-            			</select>
 
-        		</div>
+                <!-- FORMA DE PAGO -->
 
-    		</div>
+                <div class="factura-campo">
 
-	</div>
+                        <label>
+                                Forma de pago
+                        </label>
+
+                        <div class="campo-icono">
+
+                                <span><img src="img/dinero.png" class="grilla-icon"></span>
+
+                                <select id="pago">
+
+                                        <option value="" selected>
+                                                Seleccione
+                                        </option>
+
+                                        <option value="Contado">
+                                                Contado
+                                        </option>
+
+                                        <option value="Abono">
+                                                Abono
+                                        </option>
+
+                                </select>
+
+                        </div>
+
+                </div>
+
+        </div>
 
 
         <!-- ============================= -->
@@ -1814,7 +1815,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
             <span><img src="img/tipo-abono.png" class="grilla-icon"></span>
 
             <select id="tipoAbono">
-		<option value="" selected>
+                <option value="" selected>
                     Seleccione
                 </option>
 
@@ -2286,9 +2287,9 @@ async function cargarDatosModalAbono(id) {
     try {
 
         if (!db) {
-    		mostrarToast('No se pudo conectar con la base de datos.','error','Sin conexión');
-    		return;
-	}
+                mostrarToast('No se pudo conectar con la base de datos.','error','Sin conexión');
+                return;
+        }
 
         /* ==========================================
            BUSCAR FACTURA
@@ -2426,9 +2427,9 @@ async function guardarNuevoAbono() {
             window.facturaAbonoActual;
 
         if (!factura) {
-    		mostrarToast('Selecciona una factura antes de registrar un abono.','warning','Factura no seleccionada');
-    	    return;
-	}
+                mostrarToast('Selecciona una factura antes de registrar un abono.','warning','Factura no seleccionada');
+            return;
+        }
 
         const input =
             $("nuevoAbono");
@@ -2456,7 +2457,7 @@ async function guardarNuevoAbono() {
                 mensaje.textContent =
                     "Ingresa un valor de abono válido.";
             }
-		mostrarToast('Ingresa un valor mayor que $0 para registrar el abono.','warning','Valor inválido');
+                mostrarToast('Ingresa un valor mayor que $0 para registrar el abono.','warning','Valor inválido');
 
             return;
         }
@@ -2472,7 +2473,7 @@ async function guardarNuevoAbono() {
                 mensaje.textContent =
                     "El abono no puede ser mayor al saldo pendiente.";
             }
-            	mostrarToast('El valor ingresado supera el saldo pendiente de la factura.','warning','Abono superior al saldo');
+                mostrarToast('El valor ingresado supera el saldo pendiente de la factura.','warning','Abono superior al saldo');
 
             return;
         }
@@ -2496,7 +2497,7 @@ async function guardarNuevoAbono() {
                 mensaje.textContent =
                     "No se pudo identificar el usuario.";
             }
-		mostrarToast('No fue posible identificar tu sesión. Inicia sesión nuevamente.','error','Sesión no válida');
+                mostrarToast('No fue posible identificar tu sesión. Inicia sesión nuevamente.','error','Sesión no válida');
 
             return;
         }
@@ -2731,26 +2732,26 @@ async function guardarNuevoAbono() {
 
                 mensaje.textContent =
                     "✅ Abono registrado. La factura está totalmente pagada.";
-		mostrarToast('El abono fue registrado y la factura quedó totalmente pagada.','success','¡Factura pagada!');
+                mostrarToast('El abono fue registrado y la factura quedó totalmente pagada.','success','¡Factura pagada!');
 
             } else {
 
                 mensaje.textContent =
                     "✅ Abono registrado correctamente.";
-		mostrarToast('El abono fue registrado correctamente.','success','Abono registrado');
+                mostrarToast('El abono fue registrado correctamente.','success','Abono registrado');
             }
         }
 
 
         // ==========================================
-	// RECARGAR HISTORIAL REAL DESDE SUPABASE
-	// ==========================================
+        // RECARGAR HISTORIAL REAL DESDE SUPABASE
+        // ==========================================
 
-	await cargarHistorialDB();
+        await cargarHistorialDB();
 
-	console.log(
-    	"HISTORIAL ACTUALIZADO DESDE SUPABASE"
-	);
+        console.log(
+        "HISTORIAL ACTUALIZADO DESDE SUPABASE"
+        );
 
 
         console.log(
@@ -2785,7 +2786,7 @@ async function guardarNuevoAbono() {
                 "❌ Ocurrió un error al registrar el abono.";
 
         }
-		mostrarToast(error?.message || 'No fue posible registrar el abono. Intenta nuevamente.','error','Error al registrar abono',6000);
+                mostrarToast(error?.message || 'No fue posible registrar el abono. Intenta nuevamente.','error','Error al registrar abono',6000);
     }
 }
 
@@ -3331,7 +3332,7 @@ function collect(){
         },
 
         pago: $("pago").value,
-        
+
         tipoAbono: $("pago").value === "Abono"
         ? $("tipoAbono").value
         : null,
@@ -3528,50 +3529,11 @@ function sheet(f) {
                 <div class="client-card">
 
                     <span class="client-label">
-                        Identificación
-                    </span>
-
-                    <span class="client-value">
-                        ${esc(f.cliente.ident || "-")}
-                    </span>
-
-                </div>
-
-
-                <div class="client-card">
-
-                    <span class="client-label">
                         Teléfono
                     </span>
 
                     <span class="client-value">
                         ${esc(f.cliente.tel || "-")}
-                    </span>
-
-                </div>
-
-
-                <div class="client-card">
-
-                    <span class="client-label">
-                        Correo
-                    </span>
-
-                    <span class="client-value">
-                        ${esc(f.cliente.correo || "-")}
-                    </span>
-
-                </div>
-
-
-                <div class="client-card">
-
-                    <span class="client-label">
-                        Dirección
-                    </span>
-
-                    <span class="client-value">
-                        ${esc(f.cliente.direccion || "-")}
                     </span>
 
                 </div>
@@ -3719,7 +3681,7 @@ function sheet(f) {
                         </div>
 
                     </div>
-                 
+
                     ${
                       f.pago === "Abono"
                       ? `
@@ -4117,7 +4079,7 @@ async function guardarDB(f){
             cliente_id: cliente.id,
 
             forma_pago: f.pago,
-     
+
             tipo_abono: f.tipoAbono,
 
             estado: estadoFactura,
@@ -5214,21 +5176,21 @@ function renderHistorial(){
                         : ""
                         }
 
-			${
-    			f.estado !== "Anulada" &&
-  			f.estado !== "Pagada"
-    			? `
-    			<button
-        		type="button"
-        		class="history-btn abono"
-        		title="Registrar abono"
-        		data-action="abono"
-        		data-id="${f.id}">
-        		<img src="img/abono.png" alt="PDF" class="grilla-icon">
-    			</button>
-    			`
-   			: ""
-			}
+                        ${
+                        f.estado !== "Anulada" &&
+                        f.estado !== "Pagada"
+                        ? `
+                        <button
+                        type="button"
+                        class="history-btn abono"
+                        title="Registrar abono"
+                        data-action="abono"
+                        data-id="${f.id}">
+                        <img src="img/abono.png" alt="PDF" class="grilla-icon">
+                        </button>
+                        `
+                        : ""
+                        }
 
                         <button
                             type="button"
@@ -5247,8 +5209,8 @@ function renderHistorial(){
                             data-id="${f.id}">
                             <img src="img/imprimir.png" alt="PDF" class="grilla-icon">
                         </button>
-			
-			<button
+
+                        <button
                             type="button"
                             class="history-btn whatsapp"
                             title="Enviar Factura via Whatsapp"
@@ -5256,7 +5218,7 @@ function renderHistorial(){
                             data-id="${f.id}">
                             <img src="img/whatsapp.png" alt="PDF" class="grilla-icon">
                         </button>
-               
+
                         ${
                             f.estado !== "Anulada"
                             ? `
@@ -6650,7 +6612,7 @@ async function anularFacturaDB(id){
 
         if(error) throw error;
 
-        	mostrarToast('La factura ' + data.numero + ' fue anulada correctamente.','success','Factura anulada');
+                mostrarToast('La factura ' + data.numero + ' fue anulada correctamente.','success','Factura anulada');
 
         await cargarHistorialDB();
 
@@ -6774,39 +6736,39 @@ async function editarFacturaDB(id){
 
 
         // ==========================================
-      	 // CARGAR ABONO ACUMULADO REAL
-      	// DESDE factura_pagos
-	// ==========================================
+         // CARGAR ABONO ACUMULADO REAL
+        // DESDE factura_pagos
+        // ==========================================
 
-		const {
-    		data: pagosFactura,
-   		error: errorPagosFactura
-		} = await db
-    		.from("factura_pagos")
-    		.select("valor")
-    		.eq("factura_id", id);
+                const {
+                data: pagosFactura,
+                error: errorPagosFactura
+                } = await db
+                .from("factura_pagos")
+                .select("valor")
+                .eq("factura_id", id);
 
-		if(errorPagosFactura){
+                if(errorPagosFactura){
 
-    		console.error(
-        	"ERROR CARGANDO ABONOS DE LA FACTURA:",
-        	errorPagosFactura
-    		);
+                console.error(
+                "ERROR CARGANDO ABONOS DE LA FACTURA:",
+                errorPagosFactura
+                );
 
-    		throw errorPagosFactura;
-		}
+                throw errorPagosFactura;
+                }
 
-		abonoAcumuladoActual =
-    		(pagosFactura || []).reduce(
-        	(suma, pago) =>
-            	suma + Number(pago.valor || 0),
-        	0
-   		);
+                abonoAcumuladoActual =
+                (pagosFactura || []).reduce(
+                (suma, pago) =>
+                suma + Number(pago.valor || 0),
+                0
+                );
 
-		console.log(
-    		"ABONO ACUMULADO REAL:",
-    		abonoAcumuladoActual
-		);
+                console.log(
+                "ABONO ACUMULADO REAL:",
+                abonoAcumuladoActual
+                );
 
 
         // ==========================================
@@ -7068,10 +7030,10 @@ async function guardarFacturaDB(e){
 
         }catch(err){
 
-    		console.error("ERROR REAL AL GUARDAR:", err);
+                console.error("ERROR REAL AL GUARDAR:", err);
 
-    		mostrarToast(err?.message || 'No fue posible guardar la factura. Intenta nuevamente.','error','Error al guardar',6000);
-	}
+                mostrarToast(err?.message || 'No fue posible guardar la factura. Intenta nuevamente.','error','Error al guardar',6000);
+        }
     }
 
 function showDBLogin(msg=""){const s=$("loginScreen");if(s)s.style.display="flex";document.body.classList.add("locked");const e=$("loginError");if(e)e.textContent=msg}
@@ -7636,35 +7598,35 @@ $("history").addEventListener("click", async e => {
 
     if (action === "view") {
         await verFacturaDB(id);
-	return;
+        return;
     }
 
     if (action === "edit") {
         await editarFacturaDB(id);
-	return;
+        return;
     }
     if (action === "pdf") {
         await pdfFacturaDB(id);
-	return;
+        return;
     }
 
     if (action === "print") {
         await imprimirFacturaDB(id);
-	return;
+        return;
     }
 
     if (action === "whatsapp") {
-    	await enviarFacturaWhatsAppDB(id);
-	return;
+        await enviarFacturaWhatsAppDB(id);
+        return;
     }
 
     if (action === "cancel") {
         await anularFacturaDB(id);
-	return;
+        return;
     }
     if (action === "delete") {
         await eliminarFacturaDB(id);
-	return;
+        return;
 }
 
 });
@@ -7914,7 +7876,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <select id="nuevoTipoAbono">
             <option value="" selected>
                 Seleccione
-            </option>            
+            </option>           
 
             <option value="Efectivo">
                 Efectivo
@@ -8001,3 +7963,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </body>
 </html>
+
+===== FIN DEL ARCHIVO =====
