@@ -193,11 +193,18 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
 
 /* Iconos SVG de las categorías */
 .cat-icono{
-  width:16px;
-  height:16px;
+  width:17px;
+  height:17px;
   stroke:currentColor;
-  vertical-align:-2px;
-  margin-right:4px;
+  vertical-align:-3px;
+  margin-right:5px;
+  transition:transform .3s ease;
+}
+.categoria:hover .cat-icono{
+  transform:scale(1.2) rotate(-6deg);
+}
+.categoria.activa .cat-icono{
+  transform:scale(1.1);
 }
 
 /* ===== Productos ===== */
