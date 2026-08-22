@@ -226,6 +226,22 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   line-height:1.5;
 }
 
+/* Contador de visitas */
+.visitas-caja{background:#fff;text-align:center;padding:16px 20px;line-height:1.4}
+.visitas-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 18px;
+  border-radius:999px;
+  background:#fff;
+  border:1.5px solid var(--borde);
+  box-shadow:var(--sombra-suave);
+  font-weight:bold;
+  font-size:.9rem;
+  color:var(--muted);
+}
+
 /* ===== Botón comprar (imagen WhatsApp) ===== */
 .btn-whatsapp{display:flex;justify-content:center;margin-top:15px}
 .btn-whatsapp img{
