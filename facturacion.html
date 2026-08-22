@@ -159,19 +159,25 @@ footer{text-align:center;color:var(--mut);padding:20px}
   position:fixed;inset:0;z-index:1000;
   display:flex;align-items:center;justify-content:center;
   padding:20px;
-  background:linear-gradient(135deg,#fff3f7 0%,#fdf0f5 45%,#f7ecfa 100%);
+  background:
+    radial-gradient(rgba(244,125,163,.07) 1.2px,transparent 1.6px) 0 0/26px 26px,
+    linear-gradient(135deg,#fff3f7 0%,#fdf0f5 45%,#f7ecfa 100%);
   overflow:auto;
 }
 .login-screen::before{
   content:"";position:absolute;top:-130px;right:-90px;width:360px;height:360px;
   background:radial-gradient(circle,#ffd9e6,transparent 70%);
   pointer-events:none;
+  animation:blobA 18s ease-in-out infinite;
 }
 .login-screen::after{
   content:"";position:absolute;bottom:-150px;left:-110px;width:400px;height:400px;
   background:radial-gradient(circle,#e9dcf7,transparent 70%);
   pointer-events:none;
+  animation:blobB 22s ease-in-out infinite;
 }
+@keyframes blobA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,30px) scale(1.15)}}
+@keyframes blobB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-40px) scale(1.1)}}
 
 /* ===== Emojis flotantes de fondo ===== */
 .login-flotante{
@@ -230,29 +236,48 @@ footer{text-align:center;color:var(--mut);padding:20px}
 .login-panel-sub{font-size:14px;margin:0;opacity:.95}
 .login-panel-frase{font-size:14px;font-style:italic;max-width:280px;line-height:1.6;margin:12px 0 0;opacity:.94}
 .login-panel-emojis{font-size:28px;letter-spacing:12px;margin-top:16px;opacity:.95}
+.login-panel-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.login-chip{padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);font-size:11px;font-weight:bold;letter-spacing:.3px;backdrop-filter:blur(4px)}
 
 /* ===== Tarjeta de acceso (derecha) ===== */
+@property --angulo{syntax:"<angle>";initial-value:0deg;inherits:false}
 .login-card{
   position:relative;
   width:min(440px,52%);max-width:440px;
-  background:#fff;
   padding:40px 34px 26px;
+  border:2px solid transparent;
   border-radius:0 28px 28px 0;
+  background:linear-gradient(#fff,#fff) padding-box,
+             conic-gradient(from var(--angulo),#f47da3,#c96bd8,#f5aec7,#f47da3) border-box;
   box-shadow:12px 18px 45px rgba(64,55,59,.13);
   text-align:center;
-  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both;
+  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both, girarAngulo 8s linear infinite;
 }
+@keyframes girarAngulo{to{--angulo:360deg}}
 @keyframes loginEntrar{
   from{opacity:0;transform:translateY(18px) scale(.98)}
   to{opacity:1;transform:translateY(0) scale(1)}
 }
 .login-card h1{margin:0 0 4px;color:var(--pd);font-size:26px;letter-spacing:-.01em}
 .login-subtitle{color:var(--mut);margin:0 0 20px;font-size:14px}
+/* Entrada escalonada: cada elemento aparece uno tras otro */
+.login-card h1,.login-subtitle,.login-card label,.campo,.login-button,.forgot-password,.login-volver,.login-footer{
+  opacity:0;
+  animation:loginEntrar .5s ease forwards;
+}
+.login-subtitle{animation-delay:.1s}
+.login-card label{animation-delay:.18s}
+.campo{animation-delay:.26s}
+.login-button{animation-delay:.34s}
+.forgot-password{animation-delay:.4s}
+.login-volver{animation-delay:.46s}
+.login-footer{animation-delay:.52s}
 .login-card label{
   display:flex;align-items:center;gap:7px;
   text-align:left;font-size:12px;font-weight:800;color:#51464c;
   margin:14px 0 7px;letter-spacing:.15px;
 }
+.login-card label .grilla-icon{width:15px;height:15px}
 .login-card input[type=email],
 .login-card input[type=password]{
   width:100%;padding:13px 15px 13px 44px;
@@ -336,8 +361,11 @@ footer{text-align:center;color:var(--mut);padding:20px}
   .login-panel{animation:none}
   .login-panel .login-logo{animation:none}
   .login-flotante{animation:none}
+  .login-screen::before,.login-screen::after{animation:none}
+  .login-card h1,.login-subtitle,.login-card label,.campo,.login-button,.forgot-password,.login-volver,.login-footer{
+    opacity:1 !important;animation:none !important;
+  }
 }
-
 
 .history-actions{display:flex;gap:5px;flex-wrap:wrap}
 .history-btn{border:0;border-radius:7px;padding:6px 8px;font-size:14px;cursor:pointer;background:#f7f2f4;transition:transform .16s ease,filter .16s ease}
@@ -1288,6 +1316,11 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 <p class="login-panel-sub">Amigurumis artesanales · Hecho con amor</p>
 <p class="login-panel-frase">"Cada amigurumi cuenta una historia tejida a mano, punto a punto."</p>
 <div class="login-panel-emojis" aria-hidden="true">🧶🧸💗</div>
+<div class="login-panel-chips">
+<span class="login-chip">🧶 Tejido a mano</span>
+<span class="login-chip">💗 Con amor</span>
+<span class="login-chip">📦 Envíos</span>
+</div>
 </div>
 <div class="login-card">
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
