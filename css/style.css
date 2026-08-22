@@ -191,18 +191,6 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
   outline-offset:2px;
 }
 
-/* Contadores dentro de cada botón (si el JS los genera como <span>) */
-.categoria span{
-  background:rgba(0,0,0,.08);
-  border-radius:999px;
-  padding:2px 10px;
-  font-size:.8rem;
-  min-width:26px;
-  text-align:center;
-}
-.categoria:hover span{background:rgba(64,173,85,.15)}
-.categoria.activa span{background:rgba(255,255,255,.25);color:#fff}
-
 /* ===== Productos ===== */
 #productos{
   display:grid;
@@ -300,6 +288,9 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
 
 /* Móviles pequeños */
 @media (max-width:600px){
+  section{padding:44px 16px}
+  #productos{grid-template-columns:1fr;gap:16px}
+  .card{width:100%}
   .categorias{grid-template-columns:1fr;justify-items:center}
   .categoria{max-width:400px;padding:13px 20px}
   .hero-cta{max-width:100%}

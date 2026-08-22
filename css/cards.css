@@ -13,11 +13,9 @@
   transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
   cursor:pointer;
   border:2px solid transparent;
-  min-width:0;
+  min-width:0;              /* evita desbordes del grid */
 }
-
 .card img{max-width:100%;height:auto}
-
 .card:hover{
   transform:translateY(-10px);
   box-shadow:var(--sombra-media);
@@ -62,4 +60,3 @@
   box-shadow:0 10px 22px rgba(64,173,85,.40);
   filter:brightness(1.05);
 }
-
