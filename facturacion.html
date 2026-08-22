@@ -640,12 +640,12 @@ animation:tsResumenEntrada .4s ease both}
 content:"";
 position:absolute;
 top:0;
-left:14px;
-right:14px;
-height:3px;
-border-radius:0 0 8px 8px;
+left:0;
+right:0;
+height:4px;
+border-radius:0;
 background:linear-gradient(90deg,var(--p),#f5aec7);
-opacity:.72;
+opacity:.85;
 pointer-events:none}
 .resumen-card:hover{transform:translateY(-3px);border-color:rgba(244,125,163,.22);box-shadow:var(--ts-shadow-hover)}
 .resumen-card:nth-child(1){animation-delay:.02s}
@@ -655,6 +655,26 @@ pointer-events:none}
 .resumen-card:nth-child(5){animation-delay:.18s}
 .resumen-card:nth-child(6){animation-delay:.22s}
 .resumen-card:nth-child(7){animation-delay:.26s}
+
+/* ===== Tarjetas premium: color propio por tarjeta ===== */
+.resumen-card:nth-child(1)::before{background:linear-gradient(90deg,#f47da3,#ffb3c8)}
+.resumen-card:nth-child(2)::before{background:linear-gradient(90deg,#a98be8,#cdbcf5)}
+.resumen-card:nth-child(3)::before{background:linear-gradient(90deg,#7aa7f0,#b3ccf7)}
+.resumen-card:nth-child(4)::before{background:linear-gradient(90deg,#5fc79a,#a3e3c5)}
+.resumen-card:nth-child(5)::before{background:linear-gradient(90deg,#f0a05a,#f6c794)}
+.resumen-card:nth-child(6)::before{background:linear-gradient(90deg,#e86c9a,#f5a3bf)}
+.resumen-card:nth-child(7)::before{background:linear-gradient(90deg,#9c7ce0,#c3adf0)}
+
+.resumen-card:nth-child(1):hover{box-shadow:0 14px 30px rgba(244,125,163,.28)}
+.resumen-card:nth-child(2):hover{box-shadow:0 14px 30px rgba(169,139,232,.30)}
+.resumen-card:nth-child(3):hover{box-shadow:0 14px 30px rgba(122,167,240,.30)}
+.resumen-card:nth-child(4):hover{box-shadow:0 14px 30px rgba(95,199,154,.30)}
+.resumen-card:nth-child(5):hover{box-shadow:0 14px 30px rgba(240,160,90,.30)}
+.resumen-card:nth-child(6):hover{box-shadow:0 14px 30px rgba(232,108,154,.30)}
+.resumen-card:nth-child(7):hover{box-shadow:0 14px 30px rgba(156,124,224,.32)}
+
+.resumen-card:nth-child(7) .resumen-icono{animation:tsPulso 2.6s ease-in-out infinite}
+@keyframes tsPulso{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 @keyframes tsResumenEntrada{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .resumen-contenido{display:flex;align-items:center;gap:13px;height:100%}
 .resumen-icono{
