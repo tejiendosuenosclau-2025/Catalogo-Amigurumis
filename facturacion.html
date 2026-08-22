@@ -289,10 +289,8 @@ footer{text-align:center;color:var(--mut);padding:20px}
   gap:10px;text-align:center;
   width:min(400px,42%);
   min-height:min(580px,92vh);
-  background:
-    radial-gradient(rgba(255,255,255,.16) 1px,transparent 1.4px) 0 0/22px 22px,
-    linear-gradient(160deg,#f47da3,#e85c8b,#c96bd8,#e85c8b);
-  background-size:22px 22px,300% 300%;
+  background:linear-gradient(160deg,#f47da3,#e85c8b,#c96bd8,#e85c8b);
+  background-size:300% 300%;
   animation:panelGrad 16s ease infinite;
   border-radius:28px 0 0 28px;
   padding:40px 30px;
@@ -300,9 +298,9 @@ footer{text-align:center;color:var(--mut);padding:20px}
   box-shadow:-12px 18px 45px rgba(232,92,139,.25);
 }
 @keyframes panelGrad{
-  0%{background-position:0 0,0% 50%}
-  50%{background-position:0 0,100% 50%}
-  100%{background-position:0 0,0% 50%}
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 .login-panel::before{
   content:"";position:absolute;top:-70px;right:-70px;width:220px;height:220px;
@@ -338,18 +336,8 @@ footer{text-align:center;color:var(--mut);padding:20px}
 .login-panel-frase{font-size:14px;font-style:italic;max-width:280px;line-height:1.6;margin:12px 0 0;opacity:.94}
 .login-panel-ornamento{display:flex;gap:14px;justify-content:center;margin-top:16px}
 .ornamento-icono{width:26px;height:26px;stroke:#fff;opacity:.9}
-.chip-icono{width:13px;height:13px;stroke:#fff;flex:none}
 .btn-icono{width:17px;height:17px;stroke:currentColor;vertical-align:-3px;margin-right:6px}
-.login-panel-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
-.login-chip{
-padding:6px 13px;
-border-radius:999px;
-background:rgba(255,255,255,.16);
-border:1px solid rgba(255,255,255,.3);
-font-size:11px;
-font-weight:bold;
-letter-spacing:.3px;
-backdrop-filter:blur(4px)}
+
 
 /* ===== Tarjeta de acceso (derecha) ===== */
 @property --angulo{syntax:"<angle>";initial-value:0deg;inherits:false}
@@ -1979,11 +1967,6 @@ animation:tsToastProgress 4s linear forwards}
 <svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12M18 6L6 18"/></svg>
 <svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4.5 16 3 11C2 7.5 4 5 6.8 5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3C20 5 22 7.5 21 11c-1.5 5-9 9.5-9 9.5z"/></svg>
 <svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></svg>
-</div>
-<div class="login-panel-chips">
-<span class="login-chip"><svg class="chip-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12M18 6L6 18"/></svg> Tejido a mano</span>
-<span class="login-chip"><svg class="chip-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4.5 16 3 11C2 7.5 4 5 6.8 5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3C20 5 22 7.5 21 11c-1.5 5-9 9.5-9 9.5z"/></svg> Con amor</span>
-<span class="login-chip"><svg class="chip-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> Envíos</span>
 </div>
 </div>
 <div class="login-card">
