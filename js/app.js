@@ -39,7 +39,7 @@ function mostrarProductos(categoria = "Todos") {
 
         contenedor.innerHTML += `<div class="card">
 
-                <img src="${producto.imagen}" class="producto-img" alt="${producto.nombre}">
+                <img src="${producto.imagen}" class="producto-img" alt="${producto.nombre}" loading="lazy" decoding="async">
 
                 <div class="card-body">
 
@@ -156,7 +156,7 @@ if (buscador) {
             contenedor.innerHTML += `
             <div class="card">
 
-                <img src="${producto.imagen}" class="producto-img">
+                <img src="${producto.imagen}" class="producto-img" loading="lazy" decoding="async">
 
                 <div class="card-body">
 
