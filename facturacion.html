@@ -179,21 +179,6 @@ footer{text-align:center;color:var(--mut);padding:20px}
 @keyframes blobA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,30px) scale(1.15)}}
 @keyframes blobB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-40px) scale(1.1)}}
 
-/* ===== Emojis flotantes de fondo ===== */
-.login-flotante{
-  position:absolute;opacity:.14;pointer-events:none;z-index:0;
-  animation:flotar 9s ease-in-out infinite;
-  user-select:none;
-}
-.login-flotante.f1{top:12%;left:6%;font-size:64px}
-.login-flotante.f2{bottom:14%;left:14%;font-size:48px;animation-delay:1.4s}
-.login-flotante.f3{top:20%;right:8%;font-size:56px;animation-delay:2.2s}
-.login-flotante.f4{bottom:18%;right:16%;font-size:44px;animation-delay:3s}
-@keyframes flotar{
-  0%,100%{transform:translateY(0) rotate(-4deg)}
-  50%{transform:translateY(-22px) rotate(5deg)}
-}
-
 /* ===== Panel de marca (izquierda) ===== */
 .login-panel{
   position:relative;overflow:hidden;
@@ -232,7 +217,18 @@ footer{text-align:center;color:var(--mut);padding:20px}
   0%,100%{box-shadow:0 12px 30px rgba(0,0,0,.18),0 0 0 0 rgba(255,255,255,.5)}
   50%{box-shadow:0 12px 30px rgba(0,0,0,.18),0 0 0 14px rgba(255,255,255,0)}
 }
-.login-panel-titulo{font-size:26px;font-weight:800;margin:0;text-shadow:0 2px 10px rgba(0,0,0,.15)}
+.login-panel-titulo{
+  font-size:26px;font-weight:800;margin:0;
+  background:linear-gradient(90deg,#fff 0%,#ffe3ee 25%,#fff 50%,#ffe3ee 75%,#fff 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:#fff;
+  text-shadow:none;
+  animation:tituloBrillo 4s linear infinite;
+}
+@keyframes tituloBrillo{to{background-position:200% center}}
 .login-panel-sub{font-size:14px;margin:0;opacity:.95}
 .login-panel-frase{font-size:14px;font-style:italic;max-width:280px;line-height:1.6;margin:12px 0 0;opacity:.94}
 .login-panel-emojis{font-size:28px;letter-spacing:12px;margin-top:16px;opacity:.95}
@@ -251,19 +247,8 @@ footer{text-align:center;color:var(--mut);padding:20px}
              conic-gradient(from var(--angulo),#f47da3,#c96bd8,#f5aec7,#f47da3) border-box;
   box-shadow:12px 18px 45px rgba(64,55,59,.13);
   text-align:center;
-  transform-style:preserve-3d;
-  will-change:transform;
-  transition:transform .15s ease-out, box-shadow .3s ease;
-  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) backwards, girarAngulo 8s linear infinite;
+  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both, girarAngulo 8s linear infinite;
 }
-/* Resplandor que sigue al cursor */
-.login-card::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(244,125,163,.15),transparent 70%);
-  opacity:0;transition:opacity .3s ease;
-}
-.login-card:hover::after{opacity:1}
-
 @keyframes girarAngulo{to{--angulo:360deg}}
 @keyframes loginEntrar{
   from{opacity:0;transform:translateY(18px) scale(.98)}
@@ -361,6 +346,21 @@ footer{text-align:center;color:var(--mut);padding:20px}
 /* Logo para móvil (el panel de marca se oculta) */
 .login-logo-movil{display:none;width:96px;height:96px;object-fit:contain;background:#fff;border-radius:50%;padding:8px;box-shadow:0 8px 20px rgba(244,125,163,.2);margin:0 auto 12px}
 
+/* Emojis flotantes de fondo */
+.login-flotante{
+  position:absolute;opacity:.14;pointer-events:none;z-index:0;
+  animation:flotar 9s ease-in-out infinite;
+  user-select:none;
+}
+.login-flotante.f1{top:12%;left:6%;font-size:64px}
+.login-flotante.f2{bottom:14%;left:14%;font-size:48px;animation-delay:1.4s}
+.login-flotante.f3{top:20%;right:8%;font-size:56px;animation-delay:2.2s}
+.login-flotante.f4{bottom:18%;right:16%;font-size:44px;animation-delay:3s}
+@keyframes flotar{
+  0%,100%{transform:translateY(0) rotate(-4deg)}
+  50%{transform:translateY(-22px) rotate(5deg)}
+}
+
 /* Responsive del login */
 @media (max-width:850px){
   .login-panel{display:none}   /* en pantallas chicas solo queda la tarjeta */
@@ -376,24 +376,7 @@ footer{text-align:center;color:var(--mut);padding:20px}
   .login-card h1,.login-subtitle,.login-card label,.campo,.login-button,.forgot-password,.login-volver,.login-footer{
     opacity:1 !important;animation:none !important;
   }
-}
-
-/* Ovillo de lana orbitando alrededor del logo */
-.logo-orbita{position:relative;width:152px;height:152px;margin:0 auto 10px}
-.logo-orbita .login-logo{
-  position:absolute;inset:16px;width:auto;height:auto;margin:0;
-  background:#fff;border-radius:50%;padding:10px;object-fit:contain;
-  box-shadow:0 12px 30px rgba(0,0,0,.18);
-  animation:logoPulso 3.2s ease-in-out infinite;
-}
-.orbita-punto{
-  position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px 0 0 -15px;
-  font-size:24px;line-height:1;display:flex;align-items:center;justify-content:center;
-  animation:orbitar 5.5s linear infinite;
-}
-@keyframes orbitar{
-  from{transform:rotate(0deg) translateX(76px) rotate(0deg)}
-  to{transform:rotate(360deg) translateX(76px) rotate(-360deg)}
+  .login-panel-titulo{animation:none;-webkit-text-fill-color:#fff;color:#fff}
 }
 
 .history-actions{display:flex;gap:5px;flex-wrap:wrap}
@@ -1352,10 +1335,7 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 </div>
 </div>
 <div class="login-card">
-<div class="logo-orbita">
-<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
-<span class="orbita-punto" aria-hidden="true">🧶</span>
-</div>
+<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
 <h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
 <form id="loginForm" autocomplete="off">
 <label for="loginUser">Correo electrónico</label>
