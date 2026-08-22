@@ -624,7 +624,7 @@ font-size:14px;
 cursor:pointer}
 .forgot-password:hover{text-decoration:underline}
 
-.resumen-dashboard{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;width:100%;margin:0 0 24px 0}
+.resumen-dashboard{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:14px;width:100%;margin:0 0 24px 0}
 .resumen-card{
 position:relative;
 border:1px solid var(--ts-border-soft);
@@ -654,6 +654,7 @@ pointer-events:none}
 .resumen-card:nth-child(4){animation-delay:.14s}
 .resumen-card:nth-child(5){animation-delay:.18s}
 .resumen-card:nth-child(6){animation-delay:.22s}
+.resumen-card:nth-child(7){animation-delay:.26s}
 @keyframes tsResumenEntrada{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .resumen-contenido{display:flex;align-items:center;gap:13px;height:100%}
 .resumen-icono{
@@ -674,48 +675,7 @@ transition:transform .2s ease,box-shadow .2s ease}
 .icon-recibido{background:#ddf8e9}
 .icon-cobrar{background:#fff0d2}
 .icon-clientes{background:#ffe3ed}
-/* Banner de visitas al catálogo */
-.visitas-banner{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    width:100%;
-    margin:0 0 24px 0;
-    padding:18px 24px;
-    border-radius:16px;
-    background:linear-gradient(135deg,#f47da3,#c96bd8);
-    color:#fff;
-    box-shadow:0 10px 24px rgba(201,107,216,.30);
-}
-.visitas-banner-icono{
-    width:52px;
-    height:52px;
-    border-radius:14px;
-    background:rgba(255,255,255,.2);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.6rem;
-    flex:none;
-    animation:ojoPulsoB 2.2s ease-in-out infinite;
-}
-.visitas-banner-info{
-    display:flex;
-    align-items:baseline;
-    gap:14px;
-    flex-wrap:wrap;
-}
-.visitas-banner-titulo{font-weight:700;font-size:14px;opacity:.95}
-.visitas-banner-num{font-size:1.9rem;font-weight:800;line-height:1}
-.visitas-banner-hoy{
-    font-size:13px;
-    font-weight:600;
-    opacity:.95;
-    background:rgba(255,255,255,.18);
-    padding:5px 12px;
-    border-radius:999px;
-}
-@keyframes ojoPulsoB{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.icon-visitas{background:#e6dcf7}
 .resumen-info{min-width:0;flex:1}
 .resumen-titulo{font-size:11px;font-weight:700;color:var(--mut);margin-bottom:4px;line-height:1.35;letter-spacing:.025em}
 .resumen-valor{
@@ -2255,17 +2215,31 @@ animation:tsToastProgress 4s linear forwards}
             </div>
         </div>
     </article>
-</section>
-</div>
 
-<!-- Banner de visitas al catálogo -->
-<div class="visitas-banner">
-    <span class="visitas-banner-icono">👁️</span>
-    <div class="visitas-banner-info">
-        <span class="visitas-banner-titulo">Visitas al catálogo</span>
-        <span class="visitas-banner-num" id="dashboardVisitas">0</span>
-        <span class="visitas-banner-hoy" id="dashboardVisitasHoy">👁️ 0 hoy</span>
-    </div>
+
+    <!-- Visitas al catálogo -->
+    <article class="resumen-card">
+        <div class="resumen-contenido">
+            <div class="resumen-icono icon-visitas">
+                👁️
+            </div>
+
+            <div class="resumen-info">
+                <div class="resumen-titulo">
+                    Visitas al catálogo
+                </div>
+
+                <div class="resumen-valor" id="dashboardVisitas">
+                    0
+                </div>
+
+                <div class="resumen-cambio positivo" id="dashboardVisitasHoy">
+                    👁️ 0 hoy
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
 </div>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
 <form id="form">
