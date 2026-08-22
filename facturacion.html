@@ -251,8 +251,19 @@ footer{text-align:center;color:var(--mut);padding:20px}
              conic-gradient(from var(--angulo),#f47da3,#c96bd8,#f5aec7,#f47da3) border-box;
   box-shadow:12px 18px 45px rgba(64,55,59,.13);
   text-align:center;
-  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both, girarAngulo 8s linear infinite;
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .15s ease-out, box-shadow .3s ease;
+  animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) backwards, girarAngulo 8s linear infinite;
 }
+/* Resplandor que sigue al cursor */
+.login-card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(244,125,163,.15),transparent 70%);
+  opacity:0;transition:opacity .3s ease;
+}
+.login-card:hover::after{opacity:1}
+
 @keyframes girarAngulo{to{--angulo:360deg}}
 @keyframes loginEntrar{
   from{opacity:0;transform:translateY(18px) scale(.98)}
@@ -365,6 +376,24 @@ footer{text-align:center;color:var(--mut);padding:20px}
   .login-card h1,.login-subtitle,.login-card label,.campo,.login-button,.forgot-password,.login-volver,.login-footer{
     opacity:1 !important;animation:none !important;
   }
+}
+
+/* Ovillo de lana orbitando alrededor del logo */
+.logo-orbita{position:relative;width:152px;height:152px;margin:0 auto 10px}
+.logo-orbita .login-logo{
+  position:absolute;inset:16px;width:auto;height:auto;margin:0;
+  background:#fff;border-radius:50%;padding:10px;object-fit:contain;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+  animation:logoPulso 3.2s ease-in-out infinite;
+}
+.orbita-punto{
+  position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px 0 0 -15px;
+  font-size:24px;line-height:1;display:flex;align-items:center;justify-content:center;
+  animation:orbitar 5.5s linear infinite;
+}
+@keyframes orbitar{
+  from{transform:rotate(0deg) translateX(76px) rotate(0deg)}
+  to{transform:rotate(360deg) translateX(76px) rotate(-360deg)}
 }
 
 .history-actions{display:flex;gap:5px;flex-wrap:wrap}
@@ -1323,7 +1352,10 @@ html,body,button,input,select,textarea,table,th,td,label,option{font-family:"Cen
 </div>
 </div>
 <div class="login-card">
-<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
+<div class="logo-orbita">
+<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
+<span class="orbita-punto" aria-hidden="true">🧶</span>
+</div>
 <h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
 <form id="loginForm" autocomplete="off">
 <label for="loginUser">Correo electrónico</label>
