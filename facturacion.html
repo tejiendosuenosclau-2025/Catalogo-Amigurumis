@@ -446,6 +446,12 @@ backdrop-filter:blur(4px)}
   transition:background .18s ease;
 }
 .password-box button:hover{background:#fbe3ec}
+/* Ojo SVG elegante (abierto/cerrado) */
+.ojo-boton{display:flex;align-items:center;justify-content:center}
+.ojo-icono{width:20px;height:20px;stroke:var(--pd);position:absolute;inset:0;margin:auto;transition:opacity .2s ease}
+.ojo-ocultar{opacity:0}
+.ojo-boton.visible .ojo-mostrar{opacity:0}
+.ojo-boton.visible .ojo-ocultar{opacity:1}
 .login-button{
   position:relative;overflow:hidden;
   width:100%;margin-top:20px;padding:14px;
@@ -1992,7 +1998,7 @@ animation:tsToastProgress 4s linear forwards}
 <label for="loginPass">Contraseña</label>
 <div class="campo password-box">
 <svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-<input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword">👁️</button>
+<input type="password" id="loginPass" placeholder="Contraseña" required autocomplete="current-password"><button type="button" id="togglePassword" class="ojo-boton" aria-label="Mostrar contraseña"><svg class="ojo-icono ojo-mostrar" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="ojo-icono ojo-ocultar" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 6.1A9.6 9.6 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-2.9 3.7M6.2 6.2A17 17 0 0 0 2 12s3.5 6 10 6a9.6 9.6 0 0 0 4.6-1.1"/></svg></button>
 </div>
 <button type="submit" class="login-button"><svg class="btn-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Ingresar</button><button type="button" id="forgotPassword" class="forgot-password"> ¿Olvidaste tu contraseña?</button>
 <p id="loginError" class="login-error"></p>
@@ -8288,7 +8294,7 @@ document.addEventListener("click", function(e) {
 
 $("togglePassword").onclick=()=>{const pass=$("loginPass"),visible=pass.type==="text";
 pass.type=visible?"password":"text";
-$("togglePassword").textContent=visible?"👁️":"🙈"};
+$("togglePassword").classList.toggle("visible",!visible)};
 $("form").onsubmit=guardarFacturaDB;
 
 $("history").addEventListener("click", async e => {
