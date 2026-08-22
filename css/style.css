@@ -218,16 +218,19 @@ section{padding:clamp(50px, 7vw, 90px) clamp(20px, 5vw, 64px)}
 }
 .footer-banner{display:block;width:100%;height:auto}
 .creditos{
-  background:#3f3129;
+  background:linear-gradient(90deg,#4a3830,#3f3129);
   color:#e8d9cf;
   text-align:center;
-  padding:18px 20px;
+  padding:20px;
   font-size:.9rem;
-  line-height:1.5;
+  letter-spacing:.4px;
+  line-height:1.6;
 }
-
-/* Acceso oculto a Facturación (clic en el copyright) */
-.acceso-admin{color:inherit;text-decoration:none}
+.creditos .marca{
+  font-weight:bold;
+  color:#f5d7b8;
+  letter-spacing:.6px;
+}
 
 /* Contador de visitas */
 .visitas-caja{background:#fff;text-align:center;padding:16px 20px;line-height:1.4}
