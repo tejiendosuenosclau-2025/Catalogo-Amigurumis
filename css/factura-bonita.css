@@ -35,6 +35,8 @@
 
     overflow: hidden;
 
+    position: relative;   /* para el sello diagonal */
+
     box-shadow: 0 15px 45px rgba(150, 70, 110, 0.12);
 
     color: var(--texto);
@@ -44,6 +46,40 @@
     /* los fondos rosas sí se imprimen */
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+}
+
+/* ===== MEJORAS: sello, iconos unificados y cebra ===== */
+
+/* Sello diagonal automático: PAGADA / ABONADA / PENDIENTE */
+.sheet::after{
+    content: attr(data-sello);
+    position: absolute;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-28deg);
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: 10px;
+    color: rgba(239, 79, 131, .10);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* Iconos en rosa (SVG, coherentes con la marca) */
+.icono-factura{
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
+    stroke: var(--rosa);
+    margin-right: 2px;
+}
+
+/* Filas alternadas (cebra) para leer mejor con varios productos */
+.invoice-table tbody tr:nth-child(even) td{
+    background: #fff4f8;
 }
 
 /* TODA LA FACTURA USA CENTURY GOTHIC */
