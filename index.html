@@ -559,10 +559,14 @@
     <section class="presentacion-seo" style="max-width:1100px;margin:0 auto;padding:26px 16px 6px;text-align:center;">
         <h1 style="margin:0 0 10px;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25;color:inherit;">Amigurumis en Popayán · Tejiendo Sueños Clau</h1>
         <p style="margin:0 auto;max-width:760px;line-height:1.6;color:inherit;opacity:.85;">Amigurumis tejidos a mano en Popayán, Cauca. Muñecos de crochet, personajes, llaveros y regalos personalizados, hechos con amor para regalos y ocasiones especiales. Encarga el tuyo por WhatsApp o Instagram. 🧶</p>
+        <div class="acciones-inicio" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+            <button type="button" id="btnVerCatalogo" style="background:#F47DA3;color:#fff;border:none;border-radius:999px;padding:14px 30px;font-size:1.05rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(244,125,163,.4);">Ver Catálogo</button>
+            <a href="https://wa.me/573011810933?text=Hola,%20quiero%20cotizar%20un%20amigurumi%20personalizado" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:#F47DA3;border:2px solid #F47DA3;border-radius:999px;padding:12px 28px;font-size:1.05rem;font-weight:700;text-decoration:none;">Cotizar mi Personalizado</a>
+        </div>
     </section>
 
     <!-- ===== CATEGORÍAS ===== -->
-    <section id="categorias" aria-labelledby="categorias-titulo">
+    <section id="categorias" aria-labelledby="categorias-titulo" style="display:none;">
 
         <h2 id="categorias-titulo">Nuestros Amigurumis</h2>
 
@@ -592,7 +596,7 @@
     </section>
 
     <!-- ===== CATÁLOGO ===== -->
-    <section id="catalogo" aria-labelledby="catalogo-titulo">
+    <section id="catalogo" aria-labelledby="catalogo-titulo" style="display:none;">
         <h2 id="catalogo-titulo">Nuestro catálogo</h2>
         <div id="productos">
         <!-- Aquí se cargan los productos desde productos.json -->
@@ -672,5 +676,24 @@
 <script type="module" src="js/whatsapp.js"></script>
 <script src="js/contacto.js"></script>
 <script type="module" src="js/theme.js"></script>
+<script>
+/* Mostrar el catálogo al hacer clic en "Ver Catálogo" */
+(function(){
+  var btn = document.getElementById("btnVerCatalogo");
+  if(!btn) return;
+  btn.addEventListener("click", function(){
+    var cats = document.getElementById("categorias");
+    var cat  = document.getElementById("catalogo");
+    if(cats) cats.style.display = "";
+    if(cat)  cat.style.display = "";
+    var destino = cats || cat;
+    if(destino){
+      setTimeout(function(){
+        destino.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 60);
+    }
+  });
+})();
+</script>
 </body>
 </html>
