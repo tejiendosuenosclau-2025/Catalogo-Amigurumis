@@ -113,6 +113,12 @@ document.querySelectorAll(".categoria").forEach(categoria => {
 
         categoria.classList.add("activa");
 
+        // Scroll automático al catálogo al hacer clic en una categoría
+        const destinoCatalogo = document.getElementById("catalogo");
+        if (destinoCatalogo) {
+            destinoCatalogo.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
         contenedor.classList.add("oculto");
 
         setTimeout(() => {
