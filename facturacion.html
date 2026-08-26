@@ -2657,7 +2657,7 @@ animation:tsToastProgress 4s linear forwards}
 
 </section>
 
-<section class="card"><div class="title">🧶 Productos</div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
+<section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 </section>
@@ -3733,6 +3733,14 @@ function calc(){
     // ==========================================
 
     let sub = 0;
+function rowCustom(nombre="",q=1,price=null,d=0){
+ const tr=document.createElement("tr");
+ tr.dataset.custom="1";
+ tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-custom" placeholder="Nombre del producto personalizado…" autocomplete="off" value="'+esc(nombre)+'"></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??0)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
+ $("items").appendChild(tr);
+ tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
+}
+
 
     document.querySelectorAll("#items tr").forEach(tr => {
 
@@ -4141,6 +4149,11 @@ function collect(){
                     x => String(x.id) == id
                 );
 
+            let nomCustom =
+                t.dataset.custom
+                ? (t.querySelector(".ps-custom").value||"").trim() || "Producto personalizado"
+                : "";
+
             let q =
                 +t.querySelector(".qty").value || 0;
 
@@ -4154,7 +4167,7 @@ function collect(){
 
                 id,
 
-                nombre: name(p),
+                nombre: t.dataset.custom ? nomCustom : name(p),
 
                 q,
 
@@ -7673,12 +7686,21 @@ async function editarFacturaDB(id){
 
         f.items.forEach(item => {
 
-            row(
-                item.id,
-                item.q,
-                item.pr,
-                item.d
-            );
+            if(item.id){
+                row(
+                    item.id,
+                    item.q,
+                    item.pr,
+                    item.d
+                );
+            } else {
+                rowCustom(
+                    item.nombre,
+                    item.q,
+                    item.pr,
+                    item.d
+                );
+            }
 
         });
 
@@ -8172,6 +8194,7 @@ function escapeHtml(valor){
 }
 
 $("add").onclick = () => row();
+$("addCustom").onclick = () => rowCustom();
 
 $("dg").oninput = () => {
     calc();
