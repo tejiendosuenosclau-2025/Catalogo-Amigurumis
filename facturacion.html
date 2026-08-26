@@ -1954,15 +1954,29 @@ animation:tsToastProgress 4s linear forwards}
     }
 }
 
-/* ── Toggle animado Iniciar sesión / Registrarse (estilo del video) ── */
-.login-tabs{display:flex;background:#f7e3ec;border-radius:999px;padding:4px;margin:0 0 18px;gap:2px;}
-.login-tab{flex:1;border:0;background:transparent;border-radius:999px;padding:9px 12px;font-size:14px;font-weight:700;color:#a87b8a;cursor:pointer;transition:color .25s ease,background .25s ease,box-shadow .25s ease;font-family:inherit;}
-.login-tab.activa{background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;box-shadow:0 4px 12px rgba(244,125,163,.35);}
-.login-slider{overflow:hidden;}
-.login-slider-inner{display:flex;width:200%;transition:transform .5s cubic-bezier(.65,0,.35,1);}
-.login-slider.mostrar-registro .login-slider-inner{transform:translateX(-50%);}
-.login-half{width:50%;flex:0 0 50%;box-sizing:border-box;padding:0 3px;}
-.reg-nota{margin:14px 0 0;font-size:12px;color:#a87b8a;text-align:center;line-height:1.5;}
+/* ── Diseño del video: tarjeta dividida login/registro ── */
+.login-card{width:min(900px,94vw);max-width:900px;padding:0;border-radius:26px;overflow:hidden;display:flex;background:#fff;border:0;animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both;}
+.auth-toggle{position:absolute;opacity:0;pointer-events:none;}
+.auth-side{flex:0 0 44%;background:linear-gradient(150deg,#f47da3,#e35f92 60%,#c94f86);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px 26px;position:relative;z-index:2;transition:transform .55s cubic-bezier(.65,0,.35,1);}
+.auth-side h2{margin:0 0 8px;font-size:clamp(1.35rem,3vw,1.85rem);font-weight:800;}
+.auth-side p{margin:0 0 22px;font-size:.95rem;opacity:.93;line-height:1.5;}
+.auth-switch{background:transparent;border:2px solid #fff;color:#fff;border-radius:999px;padding:11px 28px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .25s ease,color .25s ease;font-family:inherit;}
+.auth-switch:hover{background:#fff;color:#e35f92;}
+.auth-side .t-log,.auth-side .t-log-msg{display:none;}
+.auth-toggle:checked ~ .auth-side .t-log,.auth-toggle:checked ~ .auth-side .t-log-msg{display:inline;}
+.auth-toggle:checked ~ .auth-side .t-reg,.auth-toggle:checked ~ .auth-side .t-reg-msg{display:none;}
+.auth-toggle:checked ~ .auth-side{transform:translateX(100%);}
+.auth-forms{flex:1;min-width:0;position:relative;overflow:hidden;}
+.auth-slide{display:flex;width:200%;height:100%;transition:transform .55s cubic-bezier(.65,0,.35,1);}
+.auth-half{width:50%;flex:0 0 50%;box-sizing:border-box;padding:32px 30px 24px;overflow-y:auto;}
+.auth-titulo{margin:0 0 16px;font-size:1.5rem;color:#3d2f35;font-weight:800;}
+.auth-nota{margin:14px 0 0;font-size:12px;color:#a87b8a;text-align:center;line-height:1.5;}
+.auth-toggle:checked ~ .auth-forms .auth-slide{transform:translateX(-50%);}
+@media (max-width:850px){
+  .login-card{flex-direction:column;width:100%;max-width:430px;border-radius:24px;}
+  .auth-side{flex:0 0 auto;width:100%;transform:none !important;padding:26px 18px;}
+  .auth-half{padding:26px 20px 20px;}
+}
 </style>
 </head>
 <body>
@@ -1980,16 +1994,16 @@ animation:tsToastProgress 4s linear forwards}
 </div>
 </div>
 <div class="login-card">
-<img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
-<h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
-
-<div class="login-tabs" role="tablist" aria-label="Acceso">
-<button type="button" class="login-tab activa" id="tabLogin" role="tab" aria-selected="true">Iniciar sesión</button>
-<button type="button" class="login-tab" id="tabRegistro" role="tab" aria-selected="false">Registrarse</button>
+<input type="checkbox" id="authToggle" class="auth-toggle">
+<div class="auth-side">
+<h2><span class="t-log-msg">¡Hola, bienvenida!</span><span class="t-reg-msg">¡Bienvenida de nuevo!</span></h2>
+<p><span class="t-log-msg">¿No tienes cuenta?</span><span class="t-reg-msg">¿Ya tienes cuenta?</span></p>
+<label for="authToggle" class="auth-switch"><span class="t-reg">Registrarse</span><span class="t-log">Iniciar sesión</span></label>
 </div>
-<div class="login-slider" id="loginSlider">
-<div class="login-slider-inner">
-<div class="login-half">
+<div class="auth-forms">
+<div class="auth-slide">
+<div class="auth-half">
+<h1 class="auth-titulo">Iniciar sesión</h1>
 <form id="loginForm" autocomplete="off">
 <label for="loginUser">Correo electrónico</label>
 <div class="campo">
@@ -2005,9 +2019,15 @@ animation:tsToastProgress 4s linear forwards}
 <p id="loginError" class="login-error"></p>
 </form>
 </div>
+<div class="auth-half">
 
-<div class="login-half">
+<h1 class="auth-titulo">Registrarse</h1>
 <form id="registerForm" autocomplete="off">
+<label for="regNombre">Nombre</label>
+<div class="campo">
+<svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+<input type="text" id="regNombre" placeholder="Tu nombre" autocomplete="off">
+</div>
 <label for="regUser">Correo electrónico</label>
 <div class="campo">
 <svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 6 10-6"/></svg>
@@ -2025,10 +2045,10 @@ animation:tsToastProgress 4s linear forwards}
 </div>
 <button type="submit" class="login-button"><svg class="btn-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Crear cuenta</button>
 <p id="regError" class="login-error"></p>
-<p class="reg-nota">🔒 El registro está deshabilitado por seguridad.<br>Si necesitas acceso, escríbenos por WhatsApp.</p>
+<p class="auth-nota">🔒 El registro está deshabilitado por seguridad.<br>Si necesitas acceso, escríbenos por WhatsApp.</p>
 </form>
-</div>
 
+</div>
 </div>
 </div>
 <p class="login-footer">Tejiendo Sueños Clau ♥</p>
@@ -2072,21 +2092,7 @@ animation:tsToastProgress 4s linear forwards}
 
 
 <script>
-/* Toggle animado Iniciar sesión / Registrarse (estilo del video) */
 (function(){
-  var slider=document.getElementById('loginSlider');
-  var tabL=document.getElementById('tabLogin');
-  var tabR=document.getElementById('tabRegistro');
-  if(!slider||!tabL||!tabR)return;
-  function ir(reg){
-    slider.classList.toggle('mostrar-registro',reg);
-    tabL.classList.toggle('activa',!reg);
-    tabR.classList.toggle('activa',reg);
-    tabL.setAttribute('aria-selected',reg?'false':'true');
-    tabR.setAttribute('aria-selected',reg?'true':'false');
-  }
-  tabL.addEventListener('click',function(){ir(false)});
-  tabR.addEventListener('click',function(){ir(true)});
   var regForm=document.getElementById('registerForm');
   if(regForm){
     regForm.addEventListener('submit',function(e){
