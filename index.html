@@ -607,6 +607,229 @@
         </div>
     </section>
 
+    <!-- ===== DISEÑA TU AMIGURUMI (configurador) ===== -->
+    <style>
+        .disenador-seccion{max-width:1100px;margin:0 auto;padding:34px 16px 10px;}
+        .disenador-titulo{margin:0;font-size:clamp(1.4rem,3.6vw,2rem);color:#8B5A2B;display:flex;align-items:center;justify-content:center;gap:10px;}
+        .disenador-sub{text-align:center;margin:6px 0 22px;font-size:.95rem;color:#666;}
+        .dis-grid{display:flex;gap:18px;flex-wrap:wrap;align-items:stretch;}
+        .dis-preview{flex:1 1 240px;min-width:220px;display:flex;align-items:center;justify-content:center;background:#FDE7EF;border:2px dashed #F47DA3;border-radius:20px;padding:16px;}
+        .dis-form{flex:1 1 420px;min-width:300px;display:flex;flex-direction:column;gap:14px;}
+        .dis-label{font-size:.78rem;font-weight:700;color:#8B5A2B;letter-spacing:.5px;text-transform:uppercase;margin:0 0 6px;display:block;}
+        .dis-opts{display:flex;gap:8px;flex-wrap:wrap;}
+        .dis-opt{border:1px solid #f0c9d8;background:#fff;color:#7a4a52;border-radius:999px;padding:8px 14px;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+        .dis-opt svg{width:16px;height:16px;color:#F47DA3;flex:0 0 auto;}
+        .dis-opt.sel{background:#F47DA3;border-color:#F47DA3;color:#fff;}
+        .dis-opt.sel svg{color:#fff;}
+        .dis-tipo-opt{font-size:.82rem;padding:9px 13px;}
+        .dis-swatch{width:32px;height:32px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #f0c9d8;cursor:pointer;padding:0;}
+        .dis-swatch.sel{box-shadow:0 0 0 2.5px #F47DA3;}
+        .dis-input{width:100%;border:1.5px solid #f0c9d8;border-radius:12px;padding:10px 14px;font-size:.9rem;color:#444;background:#fff;box-sizing:border-box;}
+        .dis-input:focus{outline:none;border-color:#F47DA3;}
+        .dis-out{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;border:1.5px solid #f3d5e0;border-radius:16px;padding:12px 16px;margin-top:18px;}
+        .dis-out b{font-size:.95rem;color:#8B5A2B;}
+        .dis-out span{font-size:.8rem;color:#777;display:block;}
+        .dis-cta{background:#25D366;color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:.95rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+        .dis-cta svg{width:18px;height:18px;}
+        @media (max-width:640px){ .dis-preview{order:-1;} }
+    </style>
+    <section class="disenador-seccion" id="disenador" aria-label="Diseña tu amigurumi">
+        <h2 class="disenador-titulo"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#F47DA3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg> Diseña tu amigurumi</h2>
+        <p class="disenador-sub">Elige el tipo, personaliza los detalles y llega a nuestro WhatsApp con tu pedido listo 🧶</p>
+        <div class="dis-grid">
+            <div class="dis-preview">
+                <svg id="disSvg" viewBox="0 0 220 220" width="190" height="190" role="img" aria-label="Vista previa de tu amigurumi"><title>Vista previa</title></svg>
+            </div>
+            <div class="dis-form">
+                <div><label class="dis-label" for="disTipo">Tipo</label><div class="dis-opts" id="disTipo"></div></div>
+                <div id="disModeloWrap"><label class="dis-label" id="disModeloLabel">Modelo</label><div class="dis-opts" id="disModelo"></div></div>
+                <div id="disColorWrap"><label class="dis-label">Color</label><div class="dis-opts" id="disColor"></div></div>
+                <div><label class="dis-label">Tamaño</label><div class="dis-opts" id="disTam"></div></div>
+                <div><label class="dis-label" for="disNombre">Nombre a bordar (opcional)</label><input class="dis-input" id="disNombre" type="text" placeholder="Ej. Valentina, para un baby shower 🍼" maxlength="30"></div>
+            </div>
+        </div>
+        <div class="dis-out">
+            <div><b id="disResumen">Animales · Conejo · rosa · 12 cm</b><span>Tu pedido listo para WhatsApp</span></div>
+            <a class="dis-cta" id="disCta" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-2.2-.7-4.4-2.5-5.8-4.4-.4-.6-1.1-1.6-1.1-2.9 0-1.2.6-1.7.9-2 .2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.6 1 1.6 2 2.5 2.6.3.2.5.2.7 0l.7-.8c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.4.1.1.1.6-.2 1.1z"/></svg> Cotizar por WhatsApp</a>
+        </div>
+    </section>
+    <script>
+    (function(){
+        var TIPOS = {
+            animales:{label:'Animales', color:true, modelos:['Conejo','Perro','Oso','Dinosaurio','Vaca','Gallina','Pollito']},
+            personajes:{label:'Personajes de TV', color:false, modelos:['Chavo del 8','Rapunzel','Winny Puu','Pitufinas','Minecraft','Mike Wazowsky','Migli y Bigli','Chicas Super Poderosas']},
+            superheroes:{label:'Superhéroes', color:false, libre:'¿Cuál superhéroe? (ej. Spider-Man, Batman...)', ph:'ej. Spider-Man'},
+            futbolistas:{label:'Futbolistas', color:false, libre:'¿Cuál futbolista? (ej. Messi, James...)', ph:'ej. Messi'},
+            llaveros:{label:'Llaveros', color:true, modelos:['Perro','Dinosaurio','Vaca','Estrella','Corazón','Conejo']},
+            flores:{label:'Flores', color:true, modelos:['Rosa','Tulipán','Girasol','Margarita']},
+            policias:{label:'Policías', color:false, modelos:['Policía clásico','Policía en moto']},
+            soldados:{label:'Soldados', color:false, modelos:['Soldado clásico','Soldado con uniforme']},
+            personalizado:{label:'A tu gusto', color:true, libre:'Cuéntanos tu idea (ej. un conejo con gorro de chef)', ph:'ej. un conejo con gorro de chef'}
+        };
+        var ICONOS = {
+            animales:'<circle cx="8" cy="15" r="2.2"/><circle cx="16" cy="15" r="2.2"/><circle cx="12" cy="10.5" r="2.2"/><path d="M12 15.5c2.6 0 4.4-2 4.4-4.3 0-1.7-1-2.6-2-2.6"/>',
+            personajes:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M8 21h8M12 18v3"/>',
+            superheroes:'<path d="m12 3 2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/>',
+            futbolistas:'<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/>',
+            llaveros:'<circle cx="8" cy="15" r="4"/><path d="M11 12 20 3M16 7l2 2M14 9l2 2"/>',
+            flores:'<circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="6.5" r="2.2"/><circle cx="17.5" cy="12" r="2.2"/><circle cx="12" cy="17.5" r="2.2"/><circle cx="6.5" cy="12" r="2.2"/>',
+            policias:'<path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/>',
+            soldados:'<path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M12 7v4"/>',
+            personalizado:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>'
+        };
+        var COLORES = [['#F47DA3','rosa'],['#8FB3E0','azul cielo'],['#8FBF8F','verde menta'],['#B39DDB','lavanda'],['#F2D8A8','crema'],['#F7C948','amarillo']];
+        var TAMANOS = [8,10,12,15,20,30];
+        var st = {tipo:'animales', modelo:'Conejo', color:'#F47DA3', colorName:'rosa', tam:'12', nombre:''};
+        var svg = document.getElementById('disSvg');
+
+        function darker(hex,f){var n=parseInt(hex.slice(1),16);return 'rgb('+Math.round((n>>16)*f)+','+Math.round(((n>>8)&255)*f)+','+Math.round((n&255)*f)+')';}
+
+        function earsOf(m){
+            m = (m||'').toLowerCase();
+            if(m.indexOf('conejo')>=0) return 'conejo';
+            if(m.indexOf('perro')>=0) return 'perro';
+            if(m.indexOf('oso')>=0) return 'oso';
+            if(m.indexOf('vaca')>=0) return 'vaca';
+            if(m.indexOf('dino')>=0) return 'dino';
+            if(m.indexOf('gallina')>=0||m.indexOf('pollito')>=0) return 'gallina';
+            return 'redondo';
+        }
+        function earsSvg(tipo, c, dc){
+            var r='';
+            if(tipo==='conejo'){r='<ellipse cx="76" cy="42" rx="15" ry="36" fill="'+c+'" stroke="'+dc+'" stroke-width="3" transform="rotate(-14 76 42)"/><ellipse cx="76" cy="42" rx="7" ry="22" fill="#F8C9D8" transform="rotate(-14 76 42)"/><ellipse cx="144" cy="42" rx="15" ry="36" fill="'+c+'" stroke="'+dc+'" stroke-width="3" transform="rotate(14 144 42)"/><ellipse cx="144" cy="42" rx="7" ry="22" fill="#F8C9D8" transform="rotate(14 144 42)"/>';}
+            else if(tipo==='perro'){r='<ellipse cx="68" cy="56" rx="15" ry="30" fill="'+c+'" stroke="'+dc+'" stroke-width="3" transform="rotate(26 68 56)"/><ellipse cx="152" cy="56" rx="15" ry="30" fill="'+c+'" stroke="'+dc+'" stroke-width="3" transform="rotate(-26 152 56)"/><ellipse cx="66" cy="62" rx="6" ry="20" fill="#F8C9D8" transform="rotate(26 66 62)"/><ellipse cx="154" cy="62" rx="6" ry="20" fill="#F8C9D8" transform="rotate(-26 154 62)"/>';}
+            else if(tipo==='oso'){r='<circle cx="74" cy="50" r="17" fill="'+c+'" stroke="'+dc+'" stroke-width="3"/><circle cx="146" cy="50" r="17" fill="'+c+'" stroke="'+dc+'" stroke-width="3"/><circle cx="74" cy="50" r="7" fill="#F8C9D8"/><circle cx="146" cy="50" r="7" fill="#F8C9D8"/>';}
+            else if(tipo==='vaca'){r='<path d="M66 52 L72 24 L88 44 Z" fill="'+dc+'" stroke="'+dc+'" stroke-width="3" stroke-linejoin="round"/><path d="M154 52 L148 24 L132 44 Z" fill="'+dc+'" stroke="'+dc+'" stroke-width="3" stroke-linejoin="round"/><circle cx="74" cy="52" r="14" fill="'+c+'" stroke="'+dc+'" stroke-width="3"/><circle cx="146" cy="52" r="14" fill="'+c+'" stroke="'+dc+'" stroke-width="3"/><circle cx="74" cy="52" r="6" fill="#F8C9D8"/><circle cx="146" cy="52" r="6" fill="#F8C9D8"/>';}
+            else if(tipo==='dino'){r='<path d="M96 62 L100 30 L110 56 Z" fill="'+c+'" stroke="'+dc+'" stroke-width="3" stroke-linejoin="round"/><path d="M124 62 L120 30 L110 56 Z" fill="'+c+'" stroke="'+dc+'" stroke-width="3" stroke-linejoin="round"/><path d="M86 64 L76 36 L72 60 Z" fill="'+c+'" stroke="'+dc+'" stroke-width="3" stroke-linejoin="round"/><path d="M134 64 L144 36 L148 60 Z" fill="'+c+'" stroke="'+dc+'" stroke-width="3" stroke-linejoin="round"/>';}
+            else if(tipo==='gallina'){r='<circle cx="90" cy="42" r="7" fill="'+c+'"/><circle cx="130" cy="42" r="7" fill="'+c+'"/><path d="M100 44 q10 -10 20 0" fill="none" stroke="'+c+'" stroke-width="4" stroke-linecap="round"/>';}
+            else{r='<circle cx="76" cy="52" r="15" fill="'+c+'" stroke="'+dc+'" stroke-width="3"/><circle cx="144" cy="52" r="15" fill="'+c+'" stroke="'+dc+'" stroke-width="3"/>';}
+            return r;
+        }
+        function draw(){
+            var c = st.color, dc = darker(c,.72), df = darker(c,.85), cap='', petalos='', interno='';
+            if(st.tipo==='flores'){
+                var pc = darker(c,.9);
+                petalos='<circle cx="110" cy="70" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="110" cy="150" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="70" cy="110" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="150" cy="110" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="76" cy="76" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="144" cy="76" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="76" cy="144" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/><circle cx="144" cy="144" r="22" fill="'+pc+'" stroke="'+dc+'" stroke-width="3"/>';
+                interno='<circle cx="110" cy="110" r="16" fill="#F7C948" stroke="#D9A62E" stroke-width="3"/>';
+            } else if(st.tipo==='personajes'||st.tipo==='superheroes'||st.tipo==='futbolistas'||st.tipo==='policias'||st.tipo==='soldados'){
+                cap='<path d="M72 66 Q72 30 110 30 Q148 30 148 66 Z" fill="'+dc+'" stroke="'+darker(c,.55)+'" stroke-width="3"/><circle cx="110" cy="34" r="7" fill="#fff" opacity=".85"/>';
+            }
+            var body=petalos+interno+
+                '<ellipse cx="110" cy="116" rx="56" ry="60" fill="'+c+'" stroke="'+dc+'" stroke-width="4"/>'+
+                '<ellipse cx="88" cy="106" rx="6" ry="7" fill="#4A3640"/><ellipse cx="132" cy="106" rx="6" ry="7" fill="#4A3640"/>'+
+                '<path d="M98 130 Q110 142 122 130" fill="none" stroke="#4A3640" stroke-width="3.5" stroke-linecap="round"/>'+
+                '<ellipse cx="76" cy="122" rx="8" ry="6" fill="#F8A5C2" opacity=".5"/><ellipse cx="144" cy="122" rx="8" ry="6" fill="#F8A5C2" opacity=".5"/>'+
+                '<ellipse cx="92" cy="172" rx="16" ry="10" fill="'+df+'"/><ellipse cx="128" cy="172" rx="16" ry="10" fill="'+df+'"/>';
+            if(st.tipo!=='flores'){
+                body = earsSvg(earsOf(st.modelo), c, dc) + body + cap;
+            }
+            svg.innerHTML='<g transform="translate(110,112) scale(1) translate(-110,-112)">'+body+'</g>';
+        }
+        function update(){
+            draw();
+            var T = TIPOS[st.tipo];
+            var res = T.label + ' · ' + st.modelo + (T.color ? ' · ' + st.colorName : '') + ' · ' + st.tam + ' cm';
+            document.getElementById('disResumen').textContent = res;
+            document.getElementById('disColorWrap').style.display = T.color ? '' : 'none';
+        }
+        function setOpts(container, list, selVal, cb){
+            container.innerHTML='';
+            list.forEach(function(item){
+                var b=document.createElement('button');
+                b.type='button';
+                b.className='dis-opt'+(item===selVal?' sel':'');
+                b.textContent=item;
+                b.addEventListener('click',function(){
+                    Array.prototype.forEach.call(container.children,function(x){x.classList.remove('sel')});
+                    b.classList.add('sel');
+                    cb(item);
+                });
+                container.appendChild(b);
+            });
+        }
+        function pintarTipos(){
+            var c=document.getElementById('disTipo');
+            c.innerHTML='';
+            Object.keys(TIPOS).forEach(function(k){
+                var b=document.createElement('button');
+                b.type='button';
+                b.className='dis-opt dis-tipo-opt'+(k===st.tipo?' sel':'');
+                b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+ICONOS[k]+'</svg>'+TIPOS[k].label;
+                b.addEventListener('click',function(){
+                    Array.prototype.forEach.call(c.children,function(x){x.classList.remove('sel')});
+                    b.classList.add('sel');
+                    st.tipo=k;
+                    var T=TIPOS[k];
+                    st.color='#F47DA3'; st.colorName='rosa';
+                    pintarModelos();
+                    update();
+                });
+                c.appendChild(b);
+            });
+        }
+        function pintarModelos(){
+            var w=document.getElementById('disModeloWrap');
+            var T=TIPOS[st.tipo];
+            if(T.libre){
+                w.innerHTML='<label class="dis-label" for="disModeloInput">Detalle</label><input class="dis-input" id="disModeloInput" type="text" placeholder="'+T.libre+'" maxlength="60">';
+                var inp=document.getElementById('disModeloInput');
+                inp.addEventListener('input',function(){ st.modelo=inp.value.trim() || '(por definir)'; update(); });
+            } else {
+                w.innerHTML='<label class="dis-label">Modelo</label><div class="dis-opts" id="disModelo"></div>';
+                if(st.modelo && T.modelos.indexOf(st.modelo)<0){ st.modelo=T.modelos[0]; }
+                setOpts(document.getElementById('disModelo'), T.modelos, st.modelo, function(m){ st.modelo=m; update(); });
+            }
+            update();
+        }
+        // colores
+        (function(){
+            var c=document.getElementById('disColor');
+            COLORES.forEach(function(par){
+                var b=document.createElement('button');
+                b.type='button';
+                b.className='dis-swatch'+(par[0]===st.color?' sel':'');
+                b.title=par[1];
+                b.style.background=par[0];
+                b.setAttribute('aria-label',par[1]);
+                b.addEventListener('click',function(){
+                    Array.prototype.forEach.call(c.children,function(x){x.classList.remove('sel')});
+                    b.classList.add('sel');
+                    st.color=par[0]; st.colorName=par[1];
+                    update();
+                });
+                c.appendChild(b);
+            });
+        })();
+        // tamaños
+        (function(){
+            var c=document.getElementById('disTam');
+            TAMANOS.forEach(function(t){
+                var b=document.createElement('button');
+                b.type='button';
+                b.className='dis-opt'+(String(t)===st.tam?' sel':'');
+                b.textContent=t+' cm';
+                b.addEventListener('click',function(){
+                    Array.prototype.forEach.call(c.children,function(x){x.classList.remove('sel')});
+                    b.classList.add('sel');
+                    st.tam=String(t);
+                    update();
+                });
+                c.appendChild(b);
+            });
+        })();
+        document.getElementById('disNombre').addEventListener('input',function(){ st.nombre=this.value.trim(); });
+        document.getElementById('disCta').addEventListener('click',function(e){
+            var T=TIPOS[st.tipo];
+            if((T.libre) && (!st.modelo || st.modelo==='(por definir)')){ e.preventDefault(); alert('Cuéntanos cuál quieres para poder cotizarlo 😊'); return; }
+            var msg='Hola 🧶 quiero cotizar este amigurumi:\n• Tipo: '+T.label+'\n• '+((T.libre)?'Idea: ':'Modelo: ')+st.modelo+'\n'+(T.color?('• Color: '+st.colorName+'\n'):'')+'• Tamaño: '+st.tam+' cm'+(st.nombre?('\n• Nombre bordado: "'+st.nombre+'"'):'')+'\n¿Cuánto costaría?';
+            this.href='https://wa.me/573011810933?text='+encodeURIComponent(msg);
+        });
+        pintarTipos();
+        pintarModelos();
+        update();
+    })();
+    </script>
+
     <!-- ===== CATEGORÍAS ===== -->
     <section id="categorias" aria-labelledby="categorias-titulo" style="display:none;">
 
@@ -726,6 +949,8 @@
   btn.addEventListener("click", function(){
     var facil = document.querySelector(".seccion-facil");
     if(facil) facil.style.display = "none";
+    var disenador = document.getElementById("disenador");
+    if(disenador) disenador.style.display = "none";
     var cats = document.getElementById("categorias");
     var cat  = document.getElementById("catalogo");
     if(cats) cats.style.display = "";
