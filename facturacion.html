@@ -1955,35 +1955,32 @@ animation:tsToastProgress 4s linear forwards}
 }
 
 /* ── Diseño del video: tarjeta dividida login/registro ── */
-.login-card{width:min(620px,52%);max-width:620px;padding:0;border-radius:0 28px 28px 0;overflow:hidden;display:flex;background:#fff;border:0;animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both;}
+.login-card{width:min(460px,52%);max-width:460px;padding:34px 30px 26px;border-radius:0 28px 28px 0;overflow:hidden;display:block;background:#fff;border:0;animation:loginEntrar .45s cubic-bezier(.2,.8,.2,1) both;}
 .auth-toggle{position:absolute;opacity:0;pointer-events:none;}
-.auth-side{flex:0 0 42%;background:linear-gradient(150deg,#f47da3,#e35f92 60%,#c94f86);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px 26px;position:relative;z-index:2;transition:transform .55s cubic-bezier(.65,0,.35,1);}
-.auth-side h2{margin:0 0 8px;font-size:clamp(1.35rem,3vw,1.85rem);font-weight:800;}
-.auth-side p{margin:0 0 22px;font-size:.95rem;opacity:.93;line-height:1.5;}
 .auth-switch{background:transparent;border:2px solid #fff;color:#fff;border-radius:999px;padding:11px 28px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .25s ease,color .25s ease;font-family:inherit;}
 .auth-switch:hover{background:#fff;color:#e35f92;}
-.auth-iconos{display:flex;gap:14px;margin-bottom:28px;color:#fff;}
-.auth-iconos svg{width:26px;height:26px;}
-.auth-side .t-log{display:none;}
-.auth-toggle:checked ~ .auth-side .t-log{display:inline;}
-.auth-toggle:checked ~ .auth-side .t-reg{display:none;}
-.auth-toggle:checked ~ .auth-side{transform:translateX(100%);}
+.auth-switch-panel{display:inline-block;margin-top:18px;}
+.auth-switch-movil{display:none;}
+.auth-switch .t-log{display:none;}
+#authToggle:checked ~ .login-panel .auth-switch .t-log{display:inline;}
+#authToggle:checked ~ .login-panel .auth-switch .t-reg{display:none;}
 .auth-forms{flex:1;min-width:0;position:relative;overflow:hidden;}
 .auth-slide{display:flex;width:200%;height:100%;transition:transform .55s cubic-bezier(.65,0,.35,1);}
 .auth-half{width:50%;flex:0 0 50%;box-sizing:border-box;padding:32px 30px 24px;overflow-y:auto;text-align:center;}
 .auth-titulo{margin:0 0 16px;font-size:1.5rem;color:#3d2f35;font-weight:800;}
 .auth-nota{margin:14px 0 0;font-size:12px;color:#a87b8a;text-align:center;line-height:1.5;}
-.auth-toggle:checked ~ .auth-forms .auth-slide{transform:translateX(-50%);}
+#authToggle:checked ~ .login-card .auth-forms .auth-slide{transform:translateX(-50%);}
 @media (max-width:850px){
-  .login-card{flex-direction:column;width:100%;max-width:430px;border-radius:24px;}
-  .auth-side{flex:0 0 auto;width:100%;transform:none !important;padding:26px 18px;}
+  .login-card{width:100%;max-width:430px;border-radius:24px;}
   .auth-half{padding:26px 20px 20px;}
+  .auth-switch-movil{display:inline-block;color:#f47da3;border-color:#f47da3;background:#fff;margin-bottom:16px;}
 }
 </style>
 </head>
 <body>
 
 <div id="loginScreen" class="login-screen">
+<input type="checkbox" id="authToggle" class="auth-toggle">
 <div class="login-panel">
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo">
 <h2 class="login-panel-titulo">Tejiendo Sueños Clau</h2>
@@ -1994,17 +1991,10 @@ animation:tsToastProgress 4s linear forwards}
 <svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4.5 16 3 11C2 7.5 4 5 6.8 5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3C20 5 22 7.5 21 11c-1.5 5-9 9.5-9 9.5z"/></svg>
 <svg class="ornamento-icono" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></svg>
 </div>
+<label for="authToggle" class="auth-switch auth-switch-panel"><span class="t-reg">Registrarse</span><span class="t-log">Iniciar sesión</span></label>
 </div>
 <div class="login-card">
-<input type="checkbox" id="authToggle" class="auth-toggle">
-<div class="auth-side">
-<div class="auth-iconos">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.6-7-10a3.8 3.8 0 0 1 7-2 3.8 3.8 0 0 1 7 2c0 5.4-7 10-7 10z"/></svg>
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>
-</div>
-<label for="authToggle" class="auth-switch"><span class="t-reg">Registrarse</span><span class="t-log">Iniciar sesión</span></label>
-</div>
+<label for="authToggle" class="auth-switch auth-switch-movil"><span class="t-reg">Registrarse</span><span class="t-log">Iniciar sesión</span></label>
 <div class="auth-forms">
 <div class="auth-slide">
 <div class="auth-half">
