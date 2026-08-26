@@ -1973,6 +1973,14 @@ animation:tsToastProgress 4s linear forwards}
   .login-card{width:100%;max-width:430px;border-radius:24px;}
   .auth-half{padding:26px 20px 20px;}
 }
+
+/* Buscador de producto en facturación */
+.ps-caja{position:relative;min-width:190px;}
+.ps-buscar{width:100%;box-sizing:border-box;border:1.5px solid #f0c9d8;border-radius:10px;padding:8px 12px;font-size:13px;color:#444;background:#fff;}
+.ps-buscar:focus{outline:none;border-color:#f47da3;box-shadow:0 0 0 3px rgba(244,125,163,.08);}
+.ps-lista{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid #f0c9d8;border-radius:10px;max-height:200px;overflow-y:auto;display:none;z-index:99;list-style:none;margin:0;padding:4px;box-shadow:0 8px 20px rgba(244,125,163,.18);}
+.ps-lista li{padding:9px 12px;cursor:pointer;font-size:13px;color:#444;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ps-lista li:hover{background:#fde7ef;color:#e35f92;}
 </style>
 </head>
 <body>
@@ -3689,11 +3697,33 @@ async function nextInvoiceNumber(){
 function options(sel=""){return '<option value="">Seleccionar producto</option>'+products.map(p=>'<option value="'+p.id+'" '+(String(p.id)==String(sel)?"selected":"")+'>'+esc(name(p))+'</option>').join("")}
 function row(id="",q=1,price=null,d=0){
  const tr=document.createElement("tr"),p=products.find(x=>String(x.id)==String(id));
- tr.innerHTML='<td><select class="ps">'+options(id)+'</select></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??p?.precio??0)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
+ tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-buscar" placeholder="Buscar producto…" autocomplete="off"><ul class="ps-lista"></ul></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??p?.precio??0)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
  $("items").appendChild(tr);
- tr.querySelector(".ps").onchange=()=>{let x=products.find(p=>String(p.id)==tr.querySelector(".ps").value);
- tr.querySelector(".price").value=x?.precio||0;
- calc()};
+ const busc=tr.querySelector(".ps-buscar"),lista=tr.querySelector(".ps-lista");
+ if(p){busc.value=name(p);tr.dataset.pid=String(p.id);}
+ busc.addEventListener("input",()=>{
+   const t=busc.value.trim().toLowerCase();
+   lista.innerHTML="";
+   if(!t){lista.style.display="none";return;}
+   const res=products.filter(x=>name(x).toLowerCase().includes(t)).slice(0,15);
+   if(!res.length){lista.style.display="none";return;}
+   res.forEach(x=>{
+     const li=document.createElement("li");
+     li.textContent=name(x)+"  ·  $"+money(x.precio||0);
+     li.addEventListener("mousedown",e=>e.preventDefault());
+     li.addEventListener("click",()=>{
+       tr.dataset.pid=String(x.id);
+       busc.value=name(x);
+       lista.style.display="none";
+       tr.querySelector(".price").value=x.precio||0;
+       calc();
+     });
+     lista.appendChild(li);
+   });
+   lista.style.display="block";
+ });
+ busc.addEventListener("blur",()=>setTimeout(()=>{lista.style.display="none"},180));
+ busc.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const primero=lista.querySelector("li");if(primero)primero.click();}});
  tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
 }
 function calc(){
@@ -4104,7 +4134,7 @@ function collect(){
         .map(t => {
 
             let id =
-                t.querySelector(".ps").value;
+                (t.dataset.pid||"");
 
             let p =
                 products.find(
@@ -8272,6 +8302,8 @@ $("new").onclick = async () => {
         $("saveBtn").innerHTML = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
 
         row();
+
+        $("form").scrollIntoView({ behavior: "smooth", block: "start" });
 
     } catch (err) {
 
