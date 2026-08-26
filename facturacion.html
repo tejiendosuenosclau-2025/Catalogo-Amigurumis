@@ -1962,9 +1962,9 @@ animation:tsToastProgress 4s linear forwards}
 .auth-side p{margin:0 0 22px;font-size:.95rem;opacity:.93;line-height:1.5;}
 .auth-switch{background:transparent;border:2px solid #fff;color:#fff;border-radius:999px;padding:11px 28px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .25s ease,color .25s ease;font-family:inherit;}
 .auth-switch:hover{background:#fff;color:#e35f92;}
-.auth-side .t-log,.auth-side .t-log-msg{display:none;}
-.auth-toggle:checked ~ .auth-side .t-log,.auth-toggle:checked ~ .auth-side .t-log-msg{display:inline;}
-.auth-toggle:checked ~ .auth-side .t-reg,.auth-toggle:checked ~ .auth-side .t-reg-msg{display:none;}
+.auth-side .t-reg-msg,.auth-side .t-log{display:none;}
+.auth-toggle:checked ~ .auth-side .t-reg-msg,.auth-toggle:checked ~ .auth-side .t-log{display:inline;}
+.auth-toggle:checked ~ .auth-side .t-log-msg,.auth-toggle:checked ~ .auth-side .t-reg{display:none;}
 .auth-toggle:checked ~ .auth-side{transform:translateX(100%);}
 .auth-forms{flex:1;min-width:0;position:relative;overflow:hidden;}
 .auth-slide{display:flex;width:200%;height:100%;transition:transform .55s cubic-bezier(.65,0,.35,1);}
