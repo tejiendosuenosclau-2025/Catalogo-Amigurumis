@@ -1953,6 +1953,16 @@ animation:tsToastProgress 4s linear forwards}
         padding-right: 38px !important;
     }
 }
+
+/* ── Toggle animado Iniciar sesión / Registrarse (estilo del video) ── */
+.login-tabs{display:flex;background:#f7e3ec;border-radius:999px;padding:4px;margin:0 0 18px;gap:2px;}
+.login-tab{flex:1;border:0;background:transparent;border-radius:999px;padding:9px 12px;font-size:14px;font-weight:700;color:#a87b8a;cursor:pointer;transition:color .25s ease,background .25s ease,box-shadow .25s ease;font-family:inherit;}
+.login-tab.activa{background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;box-shadow:0 4px 12px rgba(244,125,163,.35);}
+.login-slider{overflow:hidden;}
+.login-slider-inner{display:flex;width:200%;transition:transform .5s cubic-bezier(.65,0,.35,1);}
+.login-slider.mostrar-registro .login-slider-inner{transform:translateX(-50%);}
+.login-half{width:50%;flex:0 0 50%;box-sizing:border-box;padding:0 3px;}
+.reg-nota{margin:14px 0 0;font-size:12px;color:#a87b8a;text-align:center;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -1972,6 +1982,14 @@ animation:tsToastProgress 4s linear forwards}
 <div class="login-card">
 <img src="img/logo.png" alt="Tejiendo Sueños Clau" class="login-logo-movil">
 <h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p class="login-subtitle">Acceso exclusivo para administración</p>
+
+<div class="login-tabs" role="tablist" aria-label="Acceso">
+<button type="button" class="login-tab activa" id="tabLogin" role="tab" aria-selected="true">Iniciar sesión</button>
+<button type="button" class="login-tab" id="tabRegistro" role="tab" aria-selected="false">Registrarse</button>
+</div>
+<div class="login-slider" id="loginSlider">
+<div class="login-slider-inner">
+<div class="login-half">
 <form id="loginForm" autocomplete="off">
 <label for="loginUser">Correo electrónico</label>
 <div class="campo">
@@ -1986,6 +2004,33 @@ animation:tsToastProgress 4s linear forwards}
 <button type="submit" class="login-button"><svg class="btn-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Ingresar</button><button type="button" id="forgotPassword" class="forgot-password"> ¿Olvidaste tu contraseña?</button>
 <p id="loginError" class="login-error"></p>
 </form>
+</div>
+
+<div class="login-half">
+<form id="registerForm" autocomplete="off">
+<label for="regUser">Correo electrónico</label>
+<div class="campo">
+<svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 6 10-6"/></svg>
+<input type="email" id="regUser" placeholder="correo@ejemplo.com" autocomplete="off">
+</div>
+<label for="regPass">Contraseña</label>
+<div class="campo password-box">
+<svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+<input type="password" id="regPass" placeholder="Crea una contraseña" autocomplete="new-password">
+</div>
+<label for="regPass2">Confirmar contraseña</label>
+<div class="campo password-box">
+<svg class="campo-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+<input type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password">
+</div>
+<button type="submit" class="login-button"><svg class="btn-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Crear cuenta</button>
+<p id="regError" class="login-error"></p>
+<p class="reg-nota">🔒 El registro está deshabilitado por seguridad.<br>Si necesitas acceso, escríbenos por WhatsApp.</p>
+</form>
+</div>
+
+</div>
+</div>
 <p class="login-footer">Tejiendo Sueños Clau ♥</p>
 </div>
 </div>
@@ -2021,6 +2066,34 @@ animation:tsToastProgress 4s linear forwards}
         setTimeout(function(){p.remove()},6000);
       })();
     }
+  }
+})();
+</script>
+
+
+<script>
+/* Toggle animado Iniciar sesión / Registrarse (estilo del video) */
+(function(){
+  var slider=document.getElementById('loginSlider');
+  var tabL=document.getElementById('tabLogin');
+  var tabR=document.getElementById('tabRegistro');
+  if(!slider||!tabL||!tabR)return;
+  function ir(reg){
+    slider.classList.toggle('mostrar-registro',reg);
+    tabL.classList.toggle('activa',!reg);
+    tabR.classList.toggle('activa',reg);
+    tabL.setAttribute('aria-selected',reg?'false':'true');
+    tabR.setAttribute('aria-selected',reg?'true':'false');
+  }
+  tabL.addEventListener('click',function(){ir(false)});
+  tabR.addEventListener('click',function(){ir(true)});
+  var regForm=document.getElementById('registerForm');
+  if(regForm){
+    regForm.addEventListener('submit',function(e){
+      e.preventDefault();
+      var er=document.getElementById('regError');
+      if(er){ er.textContent='El registro está deshabilitado por seguridad. Si necesitas acceso, escríbenos por WhatsApp.'; }
+    });
   }
 })();
 </script>
