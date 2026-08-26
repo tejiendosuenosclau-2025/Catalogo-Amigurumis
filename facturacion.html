@@ -1962,9 +1962,11 @@ animation:tsToastProgress 4s linear forwards}
 .auth-side p{margin:0 0 22px;font-size:.95rem;opacity:.93;line-height:1.5;}
 .auth-switch{background:transparent;border:2px solid #fff;color:#fff;border-radius:999px;padding:11px 28px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .25s ease,color .25s ease;font-family:inherit;}
 .auth-switch:hover{background:#fff;color:#e35f92;}
-.auth-side .t-reg-msg,.auth-side .t-log{display:none;}
-.auth-toggle:checked ~ .auth-side .t-reg-msg,.auth-toggle:checked ~ .auth-side .t-log{display:inline;}
-.auth-toggle:checked ~ .auth-side .t-log-msg,.auth-toggle:checked ~ .auth-side .t-reg{display:none;}
+.auth-iconos{display:flex;gap:14px;margin-bottom:28px;color:#fff;}
+.auth-iconos svg{width:26px;height:26px;}
+.auth-side .t-log{display:none;}
+.auth-toggle:checked ~ .auth-side .t-log{display:inline;}
+.auth-toggle:checked ~ .auth-side .t-reg{display:none;}
 .auth-toggle:checked ~ .auth-side{transform:translateX(100%);}
 .auth-forms{flex:1;min-width:0;position:relative;overflow:hidden;}
 .auth-slide{display:flex;width:200%;height:100%;transition:transform .55s cubic-bezier(.65,0,.35,1);}
@@ -1996,8 +1998,11 @@ animation:tsToastProgress 4s linear forwards}
 <div class="login-card">
 <input type="checkbox" id="authToggle" class="auth-toggle">
 <div class="auth-side">
-<h2><span class="t-log-msg">¡Hola, bienvenida!</span><span class="t-reg-msg">¡Bienvenida de nuevo!</span></h2>
-<p><span class="t-log-msg">¿No tienes cuenta?</span><span class="t-reg-msg">¿Ya tienes cuenta?</span></p>
+<div class="auth-iconos">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.6-7-10a3.8 3.8 0 0 1 7-2 3.8 3.8 0 0 1 7 2c0 5.4-7 10-7 10z"/></svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>
+</div>
 <label for="authToggle" class="auth-switch"><span class="t-reg">Registrarse</span><span class="t-log">Iniciar sesión</span></label>
 </div>
 <div class="auth-forms">
