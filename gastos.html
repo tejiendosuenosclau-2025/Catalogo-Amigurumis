@@ -148,12 +148,20 @@ body{min-width:0;}
 }
 
 
+
+.gasto-item{display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid #f7e3ec;font-size:14px;color:#444;flex-wrap:wrap;align-items:center;}
+.gasto-item:last-child{border-bottom:0;}
+.gasto-item .g-nombre{font-weight:600;color:#8B5A2B;flex:1 1 38%;}
+.gasto-item .g-fecha{color:#999;flex:0 0 90px;}
+.gasto-item .g-pago{color:#777;flex:1 1 90px;}
+.gasto-item .g-valor{font-weight:700;color:#c94f86;flex:0 0 110px;text-align:right;}
 </style>
 </head>
 <body>
 <main class="page">
 <header class="header"><h1 class="title">💰 Gastos</h1><p class="sub">Registra los gastos para utilizarlos en tus estadísticas.</p></header>
-<section class="summary"><div class="card"><span>Gastos del mes</span><strong id="totalGastosMes">$0</strong></div><div class="card"><span>Registros</span><strong id="cantidadGastos">0</strong></div></section>
+<section class="summary"><div class="card"><span>Gastos del mes</span><strong id="totalGastosMes">$0</strong></div><div class="card"><span>Registros</span><strong id="cantidadGastos">0</strong></div><div class="card"><span>Ver mes</span><input id="mesGastos" type="month" style="width:100%;margin-top:6px;padding:8px;border:1.5px solid #f0c9d8;border-radius:10px;font-size:14px;box-sizing:border-box;"></div></section>
+<section id="listaGastosCard" style="display:none;padding:0 18px 8px;max-width:880px;margin:0 auto;"><div style="background:#fff;border:1.5px solid #f3d5e0;border-radius:14px;padding:14px 16px;"><b style="color:#8B5A2B;">Gastos del mes</b><div id="listaGastos" style="margin-top:10px;font-size:14px;"></div></div></section>
 <section class="form"><h2>Registrar gasto</h2>
 <form id="formGasto"><div class="grid">
 <div class="field"><label for="concepto">Concepto</label><input id="concepto" type="text" placeholder="Ej: Hilo rosado" required></div>
@@ -168,12 +176,16 @@ body{min-width:0;}
 <script>
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(v||0));
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const mesLocal=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
 const today=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
 const db=()=>window.supabaseClient||window.supabaseDB||window.supabase;
 async function user(){const s=db();if(!s||!s.auth)throw new Error('No se encontró la conexión de Supabase. Revisa js/supabase-config.js.');const r=await s.auth.getUser();if(r.error)throw r.error;if(!r.data.user)throw new Error('No hay una sesión de Supabase activa.');return r.data.user}
-async function resumen(){try{const s=db();if(!s)return;const u=await user();const d=new Date(),desde=new Date(d.getFullYear(),d.getMonth(),1).toISOString().slice(0,10),hasta=new Date(d.getFullYear(),d.getMonth()+1,0).toISOString().slice(0,10);const r=await s.from('gastos').select('valor').eq('user_id',u.id).gte('fecha',desde).lte('fecha',hasta);if(r.error)throw r.error;const rows=r.data||[];$('totalGastosMes').textContent=money(rows.reduce((a,x)=>a+Number(x.valor||0),0));$('cantidadGastos').textContent=rows.length}catch(e){console.error('Error cargando gastos:',e)}}
+async function resumen(){try{const s=db();if(!s)return;const u=await user();const sel=$('mesGastos').value||mesLocal();const [yy,mm]=sel.split('-').map(Number);const desde=String(yy)+'-'+String(mm).padStart(2,'0')+'-01';const hasta=String(yy)+'-'+String(mm).padStart(2,'0')+'-'+String(new Date(yy,mm,0).getDate());const r=await s.from('gastos').select('id,concepto,valor,fecha,forma_pago').eq('user_id',u.id).gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false});if(r.error)throw r.error;const rows=r.data||[];$('totalGastosMes').textContent=money(rows.reduce((a,x)=>a+Number(x.valor||0),0));$('cantidadGastos').textContent=rows.length;const card=$('listaGastosCard'),caja=$('listaGastos');if(rows.length){card.style.display='';caja.innerHTML=rows.map(x=>'<div class="gasto-item"><span class="g-nombre">'+esc(x.concepto||'Sin concepto')+'</span><span class="g-fecha">'+String(x.fecha||'').slice(0,10)+'</span><span class="g-pago">'+esc(x.forma_pago||'')+'</span><span class="g-valor">'+money(x.valor)+'</span></div>').join('')}else{card.style.display='none'}}catch(e){console.error('Error cargando gastos:',e)}}
 $('fecha').value=today();
-$('formGasto').addEventListener('submit',async function(e){e.preventDefault();const m=$('mensajeGasto');m.className='message';m.textContent='Guardando...';try{const s=db(),u=await user();const gasto={concepto:$('concepto').value.trim(),categoria:$('categoria').value,valor:Number($('valor').value),fecha:$('fecha').value,forma_pago:$('formaPago').value,observacion:$('observacion').value.trim()||null,user_id:u.id};if(!gasto.concepto)throw new Error('Escribe el concepto del gasto.');if(!gasto.categoria)throw new Error('Selecciona una categoría.');if(!gasto.valor||gasto.valor<=0)throw new Error('El valor debe ser mayor que cero.');if(!gasto.fecha)throw new Error('Selecciona la fecha.');if(!gasto.forma_pago)throw new Error('Selecciona la forma de pago.');const r=await s.from('gastos').insert(gasto);if(r.error)throw r.error;m.className='message ok';m.textContent='✅ Gasto registrado correctamente.';this.reset();$('fecha').value=today();await resumen()}catch(e){console.error('Error registrando gasto:',e);m.className='message error';m.textContent='❌ '+(e.message||'No fue posible registrar el gasto.')}});
+$('mesGastos').value=mesLocal();
+$('mesGastos').addEventListener('change',()=>resumen());
+$('formGasto').addEventListener('submit',async function(e){e.preventDefault();const m=$('mensajeGasto');m.className='message';m.textContent='Guardando...';try{const s=db(),u=await user();const gasto={concepto:$('concepto').value.trim(),categoria:$('categoria').value,valor:Number($('valor').value),fecha:$('fecha').value,forma_pago:$('formaPago').value,observacion:$('observacion').value.trim()||null,user_id:u.id};if(!gasto.concepto)throw new Error('Escribe el concepto del gasto.');if(!gasto.categoria)throw new Error('Selecciona una categoría.');if(!gasto.valor||gasto.valor<=0)throw new Error('El valor debe ser mayor que cero.');if(!gasto.fecha)throw new Error('Selecciona la fecha.');if(!gasto.forma_pago)throw new Error('Selecciona la forma de pago.');const r=await s.from('gastos').insert(gasto);if(r.error)throw r.error;m.className='message ok';m.textContent='✅ Gasto registrado correctamente.';this.reset();$('fecha').value=today();$('mesGastos').value=(gasto.fecha||'').slice(0,7);await resumen()}catch(e){console.error('Error registrando gasto:',e);m.className='message error';m.textContent='❌ '+(e.message||'No fue posible registrar el gasto.')}});
 resumen();
 </script>
 </body>
