@@ -7812,8 +7812,6 @@ async function guardarFacturaDB(e){
             $("fecha").value = today();
 
             $("items").innerHTML = "";
-
-            row();
         }
 
         try{
@@ -8323,8 +8321,6 @@ $("new").onclick = async () => {
 
         $("saveBtn").innerHTML = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
 
-        row();
-
         $("form").scrollIntoView({ behavior: "smooth", block: "start" });
 
     } catch (err) {
@@ -8511,8 +8507,7 @@ document.addEventListener("click", function (e) {
         );
     }
 
-    row();
- if(db){const {data:{session}}=await db.auth.getSession();
+    if(db){const {data:{session}}=await db.auth.getSession();
  if(session){currentUser=session.user;
  hideDBLogin();
  await cargarHistorialDB();
