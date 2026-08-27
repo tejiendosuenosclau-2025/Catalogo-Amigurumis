@@ -3726,13 +3726,6 @@ function row(id="",q=1,price=null,d=0){
  busc.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const primero=lista.querySelector("li");if(primero)primero.click();}});
  tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
 }
-function calc(){
-
-    // ==========================================
-    // SUBTOTAL
-    // ==========================================
-
-    let sub = 0;
 function rowCustom(nombre="",q=1,price=null,d=0){
  const tr=document.createElement("tr");
  tr.dataset.custom="1";
@@ -3740,7 +3733,13 @@ function rowCustom(nombre="",q=1,price=null,d=0){
  $("items").appendChild(tr);
  tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
 }
+function calc(){
 
+    // ==========================================
+    // SUBTOTAL
+    // ==========================================
+
+    let sub = 0;
 
     document.querySelectorAll("#items tr").forEach(tr => {
 
