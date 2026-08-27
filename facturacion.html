@@ -102,6 +102,7 @@ td{border-bottom:1px solid #eee;padding:8px;font-size:13px}
 table tbody tr{transition:background .16s ease}
 table tbody tr:hover{background:#fff9fb}
 .qty{width:70px}.price{width:125px}.tam{width:85px}.disc{width:75px}
+.aviso-bloqueo{display:none;background:#fde7ef;border:1.5px dashed #f47da3;color:#b0476e;border-radius:12px;padding:12px 16px;font-size:13px;text-align:center;margin-bottom:14px;font-weight:600;}
 button{cursor:pointer}
 .add{margin-top:12px;padding:10px 14px;border:1px solid var(--p);color:var(--pd);background:#fff;border-radius:8px;font-weight:bold}
 .del{border:0;background:transparent;font-size:18px}
@@ -2307,6 +2308,7 @@ animation:tsToastProgress 4s linear forwards}
 </div>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
 <form id="form">
+<div class="aviso-bloqueo" id="avisoBloqueo">🔒 Pulsa "+ Nueva factura" para comenzar a registrar</div>
 <section class="grid datos-superiores">
 
     <!-- ============================= -->
@@ -4975,6 +4977,8 @@ if (nuevoAbono > 0) {
 
         producto_nombre: x.nombre,
 
+        tamano: x.tam || "",
+
         cantidad: x.q,
 
         precio_unitario: x.pr,
@@ -5355,6 +5359,9 @@ async function actualizarFacturaDB(f){
 
             producto_nombre:
                 x.nombre,
+
+            tamano:
+                x.tam || "",
 
             cantidad:
                 x.q,
@@ -6206,6 +6213,8 @@ async function obtenerFacturaDB(id){
             id: x.producto_id || "",
 
             nombre: x.producto_nombre || "Producto",
+
+            tam: x.tamano || "",
 
             q: Number(x.cantidad) || 0,
 
@@ -7698,6 +7707,8 @@ async function editarFacturaDB(id){
 
         $("items").innerHTML = "";
 
+        bloquearForm(false);
+
         f.items.forEach(item => {
 
             if(item.id){
@@ -7829,6 +7840,8 @@ async function guardarFacturaDB(e){
             $("fecha").value = today();
 
             $("items").innerHTML = "";
+
+            bloquearForm(true);
         }
 
         try{
@@ -8325,6 +8338,8 @@ $("new").onclick = async () => {
 
     try {
 
+        bloquearForm(false);
+
         editingInvoiceId = null;
         abonoAcumuladoActual = 0;
         abonoAcumuladoAnterior = 0;
@@ -8506,11 +8521,21 @@ document.addEventListener("click", function (e) {
 });
 
 
+function bloquearForm(bloqueado){
+    $("form").querySelectorAll("input, select, textarea, button").forEach(x=>{
+        if(x.id !== "new") x.disabled = bloqueado;
+    });
+    const aviso = document.getElementById("avisoBloqueo");
+    if(aviso) aviso.style.display = bloqueado ? "block" : "none";
+}
+
 (async()=>{
     initDB();
     await load();
 
     $("fecha").value = today();
+
+    bloquearForm(true);
 
     const fechaPerfil = document.getElementById("fechaPerfil");
 
