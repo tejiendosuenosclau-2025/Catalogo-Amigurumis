@@ -101,7 +101,7 @@ th{background:var(--soft);color:var(--pd);padding:11px;text-align:left;font-size
 td{border-bottom:1px solid #eee;padding:8px;font-size:13px}
 table tbody tr{transition:background .16s ease}
 table tbody tr:hover{background:#fff9fb}
-.qty{width:70px}.price{width:125px}.disc{width:75px}
+.qty{width:70px}.price{width:125px}.tam{width:85px}.disc{width:75px}
 button{cursor:pointer}
 .add{margin-top:12px;padding:10px 14px;border:1px solid var(--p);color:var(--pd);background:#fff;border-radius:8px;font-weight:bold}
 .del{border:0;background:transparent;font-size:18px}
@@ -2657,7 +2657,7 @@ animation:tsToastProgress 4s linear forwards}
 
 </section>
 
-<section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
+<section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Tamaño</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 </section>
@@ -3695,12 +3695,13 @@ async function nextInvoiceNumber(){
 }
 
 function options(sel=""){return '<option value="">Seleccionar producto</option>'+products.map(p=>'<option value="'+p.id+'" '+(String(p.id)==String(sel)?"selected":"")+'>'+esc(name(p))+'</option>').join("")}
-function row(id="",q=1,price=null,d=0){
+function row(id="",q=1,price=null,d=0,tam=""){
  const tr=document.createElement("tr"),p=products.find(x=>String(x.id)==String(id));
- tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-buscar" placeholder="Buscar producto…" autocomplete="off"><ul class="ps-lista"></ul></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??p?.precio??0)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
+ tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-buscar" placeholder="Buscar producto…" autocomplete="off"><ul class="ps-lista"></ul></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??p?.precio??0)+'"></td><td><input class="tam" type="text" placeholder="ej. 12 cm" value="'+esc(tam)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
  $("items").appendChild(tr);
  const busc=tr.querySelector(".ps-buscar"),lista=tr.querySelector(".ps-lista");
  if(p){busc.value=name(p);tr.dataset.pid=String(p.id);}
+ if(tam){tr.querySelector(".tam").value=tam;}
  busc.addEventListener("input",()=>{
    const t=busc.value.trim().toLowerCase();
    lista.innerHTML="";
@@ -3726,11 +3727,12 @@ function row(id="",q=1,price=null,d=0){
  busc.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const primero=lista.querySelector("li");if(primero)primero.click();}});
  tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
 }
-function rowCustom(nombre="",q=1,price=null,d=0){
+function rowCustom(nombre="",q=1,price=null,d=0,tam=""){
  const tr=document.createElement("tr");
  tr.dataset.custom="1";
- tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-custom" placeholder="Nombre del producto personalizado…" autocomplete="off" value="'+esc(nombre)+'"></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??0)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
+ tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-custom" placeholder="Nombre del producto personalizado…" autocomplete="off" value="'+esc(nombre)+'"></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??0)+'"></td><td><input class="tam" type="text" placeholder="ej. 12 cm" value="'+esc(tam)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
  $("items").appendChild(tr);
+ if(tam){tr.querySelector(".tam").value=tam;}
  tr.querySelectorAll("input").forEach(x=>x.oninput=calc);tr.querySelector(".del").onclick=()=>{tr.remove();calc()};calc();
 }
 function calc(){
@@ -4162,6 +4164,9 @@ function collect(){
             let d =
                 +t.querySelector(".disc").value || 0;
 
+            let tam =
+                (t.querySelector(".tam").value || "").trim();
+
             return {
 
                 id,
@@ -4175,7 +4180,9 @@ function collect(){
                 d,
 
                 total:
-                    q * pr * (1 - d / 100)
+                    q * pr * (1 - d / 100),
+
+                tam: tam
 
             };
 
@@ -4357,6 +4364,8 @@ function sheet(f) {
 
                         <th>Precio</th>
 
+                        <th>Tamaño</th>
+
                         <th>Desc.</th>
 
                         <th>Total</th>
@@ -4392,6 +4401,11 @@ function sheet(f) {
 
                             <td>
                                 ${money(x.pr)}
+                            </td>
+
+
+                            <td>
+                                ${esc(x.tam || "")}
                             </td>
 
 
@@ -7690,14 +7704,16 @@ async function editarFacturaDB(id){
                     item.id,
                     item.q,
                     item.pr,
-                    item.d
+                    item.d,
+                    item.tam || ""
                 );
             } else {
                 rowCustom(
                     item.nombre,
                     item.q,
                     item.pr,
-                    item.d
+                    item.d,
+                    item.tam || ""
                 );
             }
 
@@ -8266,6 +8282,7 @@ $("wa").onclick = () => {
                 x =>
                 "• " +
                 x.nombre +
+                (x.tam ? " (" + x.tam + ")" : "") +
                 " x" +
                 x.q +
                 ": " +
