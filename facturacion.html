@@ -3710,13 +3710,14 @@ function row(id="",q=1,price=null,d=0,tam=""){
    if(!res.length){lista.style.display="none";return;}
    res.forEach(x=>{
      const li=document.createElement("li");
-     li.textContent=name(x)+"  ·  $"+money(x.precio||0);
+     li.textContent=name(x)+(x.tamano?("  ·  "+x.tamano):"")+"  ·  $"+money(x.precio||0);
      li.addEventListener("mousedown",e=>e.preventDefault());
      li.addEventListener("click",()=>{
        tr.dataset.pid=String(x.id);
        busc.value=name(x);
        lista.style.display="none";
        tr.querySelector(".price").value=x.precio||0;
+       if(x.tamano){ tr.querySelector(".tam").value=x.tamano; }
        calc();
      });
      lista.appendChild(li);
