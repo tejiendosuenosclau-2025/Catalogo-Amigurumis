@@ -7835,13 +7835,16 @@ async function guardarFacturaDB(e){
 
             $("form").reset();
 
-            $("numero").value = await nextInvoiceNumber();
+            $("numero").value = f.numero;
 
             $("fecha").value = today();
 
             $("items").innerHTML = "";
 
             bloquearForm(true);
+
+            const aviso = document.getElementById("avisoBloqueo");
+            if(aviso){ aviso.textContent = "✅ Factura " + f.numero + " guardada — pulsa '+ Nueva factura' para crear otra"; }
         }
 
         try{
