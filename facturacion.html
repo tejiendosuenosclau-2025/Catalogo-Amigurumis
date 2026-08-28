@@ -2425,6 +2425,13 @@ select.sel-nativo{display:none !important}
 .sel-custom.deshabilitado .sel-flecha{background:#e9e3e6;color:#a99fa5}
 .campo-icono .sel-caja{padding-left:44px}
 .campo-estado .sel-caja{padding-left:54px}
+/* 🔧 Corrección de apilamiento: la lista abierta SIEMPRE queda por encima
+   (la tarjeta con transform en hover atrapaba el dropdown y los botones
+   posteriores se pintaban encima) */
+.sel-lista{z-index:999}
+.sel-custom.abierto{z-index:999}
+.card:has(.sel-custom.abierto){z-index:120}
+.sel-custom.sel-arriba .sel-lista{top:auto;bottom:calc(100% + 6px)}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9253,6 +9260,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             function abrir(){
                 if(sel.disabled) return;
+                // Si no hay espacio abajo, la lista se abre hacia arriba
+                var rect = caja.getBoundingClientRect();
+                var alto = Math.min(sel.options.length * 40 + 20, 240);
+                custom.classList.toggle('sel-arriba', (rect.bottom + alto + 12) > window.innerHeight);
                 custom.classList.add('abierto');
                 caja.setAttribute('aria-expanded','true');
                 pintar();
@@ -9285,6 +9296,9 @@ document.addEventListener("DOMContentLoaded", function () {
             document.addEventListener('click', function(e){
                 if(!custom.contains(e.target)) cerrar();
             });
+            window.addEventListener('scroll', function(){
+                if(custom.classList.contains('abierto')) cerrar();
+            }, true);
             function sync(){
                 if(sel.value !== valorAnterior || sel.disabled !== estabaDeshabilitado){
                     valorAnterior = sel.value;
