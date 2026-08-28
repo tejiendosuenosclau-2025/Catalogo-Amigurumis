@@ -2009,6 +2009,58 @@ animation:tsToastProgress 4s linear forwards}
 .factura-pago-compacto .factura-campo{margin:0}
 .factura-pago-compacto #abonoBox{margin:0}
 @media (max-width:850px){ .factura-pago-compacto{grid-template-columns:1fr} }
+
+/* ============================================================
+   🎀 FORMULARIOS MEJORADOS — CLIENTE, FACTURA Y PRODUCTOS
+   ============================================================ */
+.cliente-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}
+.cliente-campo{min-width:0}
+.cliente-campo.ancho-completo{grid-column:1/-1}
+.cliente-grid label{margin:9px 0 5px}
+.prod-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:26px;height:26px;padding:0 9px;border-radius:999px;
+    background:linear-gradient(135deg,#ffe9f1,#ffe0eb);color:#e85c8b;
+    font-size:12.5px;font-weight:800;border:1.5px solid #f7cfdd}
+.prod-badge.vacio{background:#f3eff1;color:#9b9197;border-color:#e7e0e3}
+.btn-pastilla{
+    background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;border:none;
+    padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;
+    box-shadow:0 4px 12px rgba(244,125,163,.25);
+    transition:transform .18s ease,box-shadow .18s ease}
+.btn-pastilla:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(244,125,163,.35)}
+.add{
+    margin-top:14px;padding:11px 20px;border:1.5px solid #f47da3;
+    color:#e85c8b;background:linear-gradient(135deg,#fff,#fff8fb);
+    border-radius:999px;font-weight:800;font-size:13.5px;
+    box-shadow:0 4px 12px rgba(244,125,163,.12);
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.add:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(244,125,163,.22);background:#fff3f7}
+.totals{
+    max-width:440px;margin:18px 0 0 auto;background:#fff8fb;
+    border:1px solid #f7dfe9;border-radius:14px;padding:12px 18px;
+    box-shadow:0 4px 14px rgba(244,125,163,.07)}
+.totals div{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:7px 0;font-size:13.5px;color:#51464c;font-weight:600}
+.totals div b{color:var(--ink);font-weight:800}
+.totals input{width:70px !important;text-align:center;border:1.5px solid #f0c9d8;border-radius:8px;padding:6px;background:#fff;color:#51464c;font-weight:700}
+.totals .total{
+    background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;
+    padding:13px 16px!important;border-radius:12px;font-size:18px;
+    font-weight:800;margin-top:6px;box-shadow:0 6px 16px rgba(244,125,163,.25)}
+.totals .total b{color:#fff}
+#tablaItems th{
+    background:linear-gradient(135deg,#ffe9f1,#fff0f6);
+    font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;
+    padding:12px 10px;border-bottom:2px solid #f7d3df}
+#tablaItems td{padding:9px 8px}
+#tablaItems tbody tr:nth-child(even){background:#fffafc}
+#tablaItems tbody tr:hover{background:#fff3f8}
+#tablaItems .del{opacity:.55;transition:opacity .15s ease,transform .15s ease}
+#tablaItems .del:hover{opacity:1;transform:scale(1.15)}
+@media (max-width:850px){
+    .cliente-grid{grid-template-columns:1fr}
+    .totals{max-width:100%;padding:10px 14px}
+}
 </style>
 </head>
 <body>
@@ -2346,67 +2398,49 @@ animation:tsToastProgress 4s linear forwards}
 
         <div class="title">👤 Datos del cliente</div>
 
+        <div class="cliente-grid">
+    <div class="cliente-campo">
+        <label>Nombre / Razón social *</label>
         <div class="cliente-autocomplete">
-
-            <label>Nombre / Razón social *</label>
-
-            <input
-                id="nombre"
-                required
-                autocomplete="off"
-            >
-
-            <div
-                id="sugerenciasClientes"
-                class="sugerencias-clientes"
-            ></div>
-
+            <div class="campo-icono">
+                <span>👤</span>
+                <input id="nombre" required autocomplete="off">
+            </div>
+            <div id="sugerenciasClientes" class="sugerencias-clientes"></div>
         </div>
-
-
+    </div>
+    <div class="cliente-campo">
+        <label>Cédula / NIT</label>
         <div class="cliente-autocomplete">
-
-            <label>Cédula / NIT</label>
-
-            <input
-                id="ident"              
-                autocomplete="off"
-            >
-
-            <div
-                id="sugerenciasIdent"
-                class="sugerencias-clientes"
-            ></div>
-
+            <div class="campo-icono">
+                <span>🪪</span>
+                <input id="ident" autocomplete="off">
+            </div>
+            <div id="sugerenciasIdent" class="sugerencias-clientes"></div>
         </div>
-
-
+    </div>
+    <div class="cliente-campo">
         <label>Teléfono</label>
-
-        <input
-            id="tel"
-            name="customer_phone"
-            type="tel"
-            inputmode="tel"
-            autocomplete="off"
-         >
-
-
+        <div class="campo-icono">
+            <span>📱</span>
+            <input id="tel" name="customer_phone" type="tel" inputmode="tel" autocomplete="off">
+        </div>
+    </div>
+    <div class="cliente-campo">
         <label>Correo</label>
-
-        <input
-            id="correo"
-            type="email"
-            autocomplete="off"
-        >
-
-
+        <div class="campo-icono">
+            <span>✉️</span>
+            <input id="correo" type="email" autocomplete="off">
+        </div>
+    </div>
+    <div class="cliente-campo ancho-completo">
         <label>Dirección</label>
-
-        <input
-            id="direccion"
-            autocomplete="off"
-        >
+        <div class="campo-icono">
+            <span>📍</span>
+            <input id="direccion" autocomplete="off">
+        </div>
+    </div>
+</div>
 
     </article>
 
@@ -2464,6 +2498,18 @@ animation:tsToastProgress 4s linear forwards}
         		</div>
 
     		</div>
+        <div class="factura-campo">
+            <label>Estado</label>
+            <div class="campo-icono campo-estado">
+                <span class="icono-campo"><img src="img/ok.png" class="grilla-icon"></span>
+                <select id="estado">
+                    <option value="Pagada">Pagada</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Enviada">Enviada</option>
+                    <option value="Anulada">Anulada</option>
+                </select>
+            </div>
+        </div>
 
 
     		<!-- FORMA DE PAGO -->
@@ -2555,35 +2601,7 @@ animation:tsToastProgress 4s linear forwards}
 </div>
 
 
-       <label>Estado</label>
-
-<div class="campo-icono campo-estado">
-
-    <span class="icono-campo">
-        <img src="img/ok.png" class="grilla-icon">
-    </span>
-
-    <select id="estado">
-
-        <option value="Pagada">
-            Pagada
-        </option>
-
-        <option value="Pendiente">
-            Pendiente
-        </option>
-
-        <option value="Enviada">
-            Enviada
-        </option>
-
-        <option value="Anulada">
-            Anulada
-        </option>
-
-    </select>
-
-</div>
+       
 
 
 <label>Observaciones</label>
@@ -2606,7 +2624,7 @@ animation:tsToastProgress 4s linear forwards}
 
 </section>
 
-<section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Tamaño</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
+<section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <span class="prod-badge" id="prodCount">0</span><button type="button" id="addCustom" class="btn btn-pastilla" style="margin-left:auto;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Tamaño</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 <div class="factura-pago-compacto">
@@ -8748,6 +8766,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+</script>
+<script>
+/* Contador de productos en la factura */
+(function(){
+    var tb = document.getElementById('items');
+    var badge = document.getElementById('prodCount');
+    if(!tb || !badge) return;
+    function contar(){
+        var n = 0;
+        tb.querySelectorAll('tr').forEach(function(tr){
+            if((+tr.querySelector('.qty').value || 0) > 0) n++;
+        });
+        badge.textContent = n;
+        badge.classList.toggle('vacio', n === 0);
+    }
+    new MutationObserver(contar).observe(tb,{childList:true,subtree:true});
+    tb.addEventListener('input',contar);
+    contar();
+})();
 </script>
 
 <!-- ==========================================
