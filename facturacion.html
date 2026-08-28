@@ -2009,6 +2009,29 @@ animation:tsToastProgress 4s linear forwards}
 .factura-pago-compacto .factura-campo{margin:0}
 .factura-pago-compacto #abonoBox{margin:0}
 @media (max-width:850px){ .factura-pago-compacto{grid-template-columns:1fr} }
+
+/* ===== ASISTENTE (WIZARD) ===== */
+.wizard{max-width:1200px;margin:0 auto}
+.wizard-progreso{display:flex;gap:8px;margin:0 0 22px}
+.wpaso{flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#fff;border:1.5px solid #eadfe4;color:#777078;font-weight:700;font-size:12px;cursor:pointer;transition:.3s}
+.wp-num{width:24px;height:24px;border-radius:50%;background:#f1e2ea;color:#b56b45;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none}
+.wpaso.activo{border-color:#f47da3;background:#fff5f9;color:#e85c8b}
+.wpaso.activo .wp-num{background:#f47da3;color:#fff}
+.wpaso.completado{border-color:#40AD55;background:#f0fbf2;color:#359247}
+.wpaso.completado .wp-num{background:#40AD55;color:#fff}
+.paso{display:none}
+.paso.activo{display:block;animation:pasoEntrar .35s ease}
+@keyframes pasoEntrar{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+.paso .datos-superiores{grid-template-columns:1fr}
+.wizard-nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+.wizard-nav button{min-width:140px;padding:12px 22px;border:none;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;font-family:inherit;transition:.25s}
+#wizardAnterior{background:#f1e2ea;color:#b56b45}
+#wizardAnterior:hover:not(:disabled){background:#e7d3dd}
+#wizardAnterior:disabled{opacity:.45;cursor:not-allowed}
+#wizardSiguiente{background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;box-shadow:0 8px 18px rgba(244,125,163,.35)}
+#wizardSiguiente:hover{transform:translateY(-2px)}
+@media(max-width:613px){.wp-txt{display:none}.wpaso{justify-content:center}}
+
 </style>
 </head>
 <body>
@@ -2336,13 +2359,20 @@ animation:tsToastProgress 4s linear forwards}
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
 <form id="form">
 <div class="aviso-bloqueo" id="avisoBloqueo">🔒 Pulsa "+ Nueva factura" para comenzar a registrar</div>
-<section class="grid datos-superiores">
 
-    <!-- ============================= -->
-    <!-- DATOS DEL CLIENTE              -->
-    <!-- ============================= -->
+<!-- ===== ASISTENTE PASO A PASO ===== -->
+<div class="wizard">
 
-    <article class="card">
+    <div class="wizard-progreso">
+        <div class="wpaso activo" data-wpaso="1"><span class="wp-num">1</span><span class="wp-txt">Cliente</span></div>
+        <div class="wpaso" data-wpaso="2"><span class="wp-num">2</span><span class="wp-txt">Productos</span></div>
+        <div class="wpaso" data-wpaso="3"><span class="wp-num">3</span><span class="wp-txt">Pago</span></div>
+        <div class="wpaso" data-wpaso="4"><span class="wp-num">4</span><span class="wp-txt">Guardar</span></div>
+    </div>
+
+    <div class="paso activo" data-paso="1">
+        <section class="grid datos-superiores paso-grid">
+        <article class="card">
 
         <div class="title">👤 Datos del cliente</div>
 
@@ -2409,13 +2439,20 @@ animation:tsToastProgress 4s linear forwards}
         >
 
     </article>
+        </section>
+    </div>
 
+    <div class="paso" data-paso="2">
+    <section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Tamaño</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
+<button type="button" class="add" id="add">＋ Agregar producto</button>
+<div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 
-    <!-- ============================= -->
-    <!-- DATOS DE LA FACTURA            -->
-    <!-- ============================= -->
+    </section>
+    </div>
 
-    <article class="card">
+    <div class="paso" data-paso="3">
+        <section class="grid datos-superiores paso-grid">
+        <article class="card">
 
         <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
 
@@ -2603,13 +2640,9 @@ animation:tsToastProgress 4s linear forwards}
 </div>
 
     </article>
-
-</section>
-
-<section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Tamaño</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
-<button type="button" class="add" id="add">＋ Agregar producto</button>
-<div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
-<div class="factura-pago-compacto">
+        </section>
+        <section class="card">
+        <div class="factura-pago-compacto">
     <div class="title">💳 Forma de pago</div>
 <div class="factura-campo">
 
@@ -2693,10 +2726,22 @@ animation:tsToastProgress 4s linear forwards}
 
 </div>
 </div>
-</section>
 
-<div class="actions"><button type="button" class="btn green" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn pink" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn purple" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn green" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
+        </section>
+    </div>
+
+    <div class="paso" data-paso="4">
+    <div class="actions"><button type="button" class="btn green" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn pink" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn purple" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn green" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
 <button type="submit" class="btn white" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button><button type="button" class="btn gray" id="new">＋ Nueva factura</button></div>
+
+    </div>
+
+    <div class="wizard-nav">
+        <button type="button" id="wizardAnterior" disabled>← Anterior</button>
+        <button type="button" id="wizardSiguiente">Siguiente →</button>
+    </div>
+
+</div>
 </form>
 <section id="historial" class="card history">
     <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Historial de facturas</div>
@@ -8906,6 +8951,65 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
     </div>
+
+
+<script>
+/* ===== ASISTENTE (WIZARD) PASO A PASO ===== */
+(function(){
+  var pasos = document.querySelectorAll('.paso');
+  var wpasos = document.querySelectorAll('.wpaso');
+  var anterior = document.getElementById('wizardAnterior');
+  var siguiente = document.getElementById('wizardSiguiente');
+  if(!pasos.length || !siguiente) return;
+  var actual = 1, total = pasos.length;
+  function toastL(m){ if(window.mostrarToast) mostrarToast(m,'warning'); }
+  function validar(p){
+    if(p===1){
+      var n=document.getElementById('nombre');
+      if(!n || !n.value.trim()){ toastL('Escribe el nombre del cliente para continuar'); if(n)n.focus(); return false; }
+    }
+    if(p===2){
+      var items=document.getElementById('items');
+      if(!items || !items.children.length){ toastL('Agrega al menos un producto'); return false; }
+    }
+    if(p===3){
+      var pg=document.getElementById('pago');
+      if(!pg || !pg.value){ toastL('Selecciona la forma de pago'); if(pg)pg.focus(); return false; }
+      var ta=document.getElementById('tipoAbono');
+      if(pg.value==='Abono' && ta && !ta.value){ toastL('Selecciona el tipo de abono'); return false; }
+    }
+    return true;
+  }
+  function irPaso(p){
+    if(p<1 || p>total) return;
+    actual=p;
+    pasos.forEach(function(s,i){ s.classList.toggle('activo', i+1===p); });
+    wpasos.forEach(function(w,i){
+      w.classList.toggle('activo', i+1===p);
+      w.classList.toggle('completado', i+1<p);
+    });
+    if(anterior) anterior.disabled = (p===1);
+    if(siguiente){
+      if(p===total){ siguiente.style.display='none'; }
+      else { siguiente.style.display=''; siguiente.textContent='Siguiente →'; }
+    }
+    var s = document.querySelector('.paso.activo');
+    if(s && s.scrollIntoView) s.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  siguiente.addEventListener('click', function(){
+    if(validar(actual)) irPaso(actual+1);
+  });
+  if(anterior) anterior.addEventListener('click', function(){ irPaso(actual-1); });
+  wpasos.forEach(function(w,i){
+    w.addEventListener('click', function(){
+      if(i+1 <= actual) irPaso(i+1);
+    });
+  });
+  var nuevo = document.getElementById('new');
+  if(nuevo) nuevo.addEventListener('click', function(){ setTimeout(function(){ irPaso(1); }, 80); });
+  irPaso(1);
+})();
+</script>
 
 </body>
 </html>
