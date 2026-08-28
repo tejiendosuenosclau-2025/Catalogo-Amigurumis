@@ -2196,7 +2196,153 @@ animation:tsToastProgress 4s linear forwards}
     .actions .btn{transition:none}
     .actions .btn .grilla-icon{transition:none}
 }
+
+/* ============================================================
+   ✨✨ EXTRA ELEGANCIA — onda, neón y degradado vivo
+   ============================================================ */
+.actions .btn .onda,.add .onda,.btn-pastilla .onda{
+    position:absolute;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(255,255,255,.7),rgba(255,255,255,0) 70%);
+    transform:scale(0);
+    animation:ondaRipple .6s ease-out forwards}
+@keyframes ondaRipple{to{transform:scale(1);opacity:0}}
+/* degradado vivo + neón respirable (se detiene en hover) */
+.actions .btn.green{
+    background:linear-gradient(135deg,#3fd584,#23a95b 55%,#1d9c50);
+    background-size:180% 180%;
+    animation:btnGradV 6s ease-in-out infinite,btnNeonGreen 2.8s ease-in-out infinite}
+.actions .btn.green:hover{animation:none}
+.actions .btn.pink{
+    background:linear-gradient(135deg,#f791b2,#e85c8b 50%,#d94f7f);
+    background-size:180% 180%;
+    animation:btnGradV 6s ease-in-out infinite,btnNeonPink 2.6s ease-in-out infinite}
+.actions .btn.pink:hover{animation:none}
+.actions .btn.purple{
+    background:linear-gradient(135deg,#a488e0,#7a5ab6 50%,#6a4aa8);
+    background-size:180% 180%;
+    animation:btnGradV 6s ease-in-out infinite,btnNeonPurple 3s ease-in-out infinite}
+.actions .btn.purple:hover{animation:none}
+.actions .btn.white{animation:btnNeonWhite 3s ease-in-out infinite}
+@keyframes btnGradV{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes btnNeonGreen{
+    0%,100%{box-shadow:0 6px 16px rgba(35,169,91,.28),inset 0 1px 0 rgba(255,255,255,.28),inset 0 -3px 6px rgba(0,0,0,.08)}
+    50%{box-shadow:0 9px 26px rgba(35,169,91,.50),inset 0 1px 0 rgba(255,255,255,.32),inset 0 -3px 6px rgba(0,0,0,.08)}}
+@keyframes btnNeonPink{
+    0%,100%{box-shadow:0 6px 16px rgba(232,92,139,.32),inset 0 1px 0 rgba(255,255,255,.32),inset 0 -3px 6px rgba(0,0,0,.08)}
+    50%{box-shadow:0 9px 28px rgba(232,92,139,.55),inset 0 1px 0 rgba(255,255,255,.36),inset 0 -3px 6px rgba(0,0,0,.08)}}
+@keyframes btnNeonPurple{
+    0%,100%{box-shadow:0 6px 16px rgba(122,90,182,.30),inset 0 1px 0 rgba(255,255,255,.28),inset 0 -3px 6px rgba(0,0,0,.08)}
+    50%{box-shadow:0 9px 26px rgba(122,90,182,.52),inset 0 1px 0 rgba(255,255,255,.32),inset 0 -3px 6px rgba(0,0,0,.08)}}
+@keyframes btnNeonWhite{
+    0%,100%{box-shadow:0 6px 18px rgba(232,92,139,.20),inset 0 1px 0 #fff}
+    50%{box-shadow:0 9px 28px rgba(232,92,139,.42),inset 0 1px 0 #fff}}
+/* hover: más elevación, letras que se separan e icono con rebote */
+.actions .btn:hover{letter-spacing:.045em}
+.actions .btn.green:hover,.actions .btn.pink:hover,.actions .btn.purple:hover,.actions .btn.white:hover{transform:translateY(-3px) scale(1.02)}
+.actions .btn.gray:hover{transform:translateY(-2px) scale(1.01)}
+.actions .btn:hover .grilla-icon{animation:btnIconoBounce .55s ease}
+@keyframes btnIconoBounce{
+    0%{transform:scale(1) rotate(0deg)}
+    30%{transform:scale(1.28) rotate(-9deg)}
+    60%{transform:scale(1.12) rotate(5deg)}
+    100%{transform:scale(1.22) rotate(-4deg)}}
+@media (prefers-reduced-motion:reduce){
+    .actions .btn{animation:none !important}
+    .actions .btn:hover .grilla-icon{animation:none}
+    .actions .btn .onda,.add .onda,.btn-pastilla .onda{animation:none;display:none}
+}
+
+/* ============================================================
+   👑 REDISEÑO SUPER PREMIUM — TODO FACTURACIÓN
+   ============================================================ */
+body,button,input,select,textarea,label,option,th,td{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-serif}
+/* Fondo animado con orbes de luz */
+body::before,body::after{content:"";position:fixed;z-index:0;border-radius:50%;filter:blur(95px);pointer-events:none}
+body::before{width:540px;height:540px;top:-160px;left:-140px;background:radial-gradient(circle,#ffd9e6,transparent 70%);opacity:.55;animation:orbFlotar 18s ease-in-out infinite}
+body::after{width:640px;height:640px;bottom:-200px;right:-160px;background:radial-gradient(circle,#e9dcf7,transparent 70%);opacity:.5;animation:orbFlotar 24s ease-in-out infinite reverse}
+@keyframes orbFlotar{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(34px,-34px) scale(1.12)}}
+main{position:relative;z-index:1}
+
+/* Barra lateral premium */
+aside{background:linear-gradient(180deg,#fff 0%,#fff5f9 100%)}
+.brand img{filter:drop-shadow(0 8px 16px rgba(244,125,163,.35));animation:logoFlotar 5s ease-in-out infinite}
+@keyframes logoFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+nav a{position:relative;overflow:hidden;border-radius:12px;transition:all .22s ease}
+nav a img{transition:transform .22s ease}
+nav a:hover img,nav a.active img{transform:scale(1.2)}
+nav a.active{background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;box-shadow:0 6px 16px rgba(232,92,139,.35)}
+nav a:not(.active):hover{background:linear-gradient(135deg,#ffe9f1,#fff0f6);transform:translateX(5px)}
+#close{background:var(--soft)!important;border-radius:50%!important;color:#e85c8b!important;width:34px;height:34px;line-height:34px;padding:0!important}
+.wa{background:linear-gradient(135deg,#3fd584,#1f9a52);box-shadow:0 6px 18px rgba(49,184,102,.4);animation:waPulso 2.6s ease-in-out infinite}
+@keyframes waPulso{0%,100%{box-shadow:0 6px 18px rgba(49,184,102,.4)}50%{box-shadow:0 10px 28px rgba(49,184,102,.62)}}
+
+/* Tarjetas: línea superior animada + borde degradado al hover */
+.card::before{content:"";position:absolute;top:0;left:18px;right:18px;height:3px;border-radius:0 0 8px 8px;background:linear-gradient(90deg,#f5aec7,#e85c8b,#c96bd8,#f5aec7);background-size:200% auto;animation:cardLinea 5s linear infinite;opacity:.9;pointer-events:none}
+@keyframes cardLinea{to{background-position:200% center}}
+.card:hover{border-color:transparent;background:linear-gradient(#ffffff,#fffafb) padding-box,linear-gradient(135deg,#ffd9e6,#f5aec7,#d9c4f0,#ffd9e6) border-box}
+.title{position:relative}
+.title::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:3px;border-radius:99px;background:linear-gradient(90deg,#f47da3,#c96bd8);transition:width .3s ease}
+.card:hover .title::after{width:115px}
+.factura-pago-compacto .title::after{display:none}
+
+/* Dashboard: brillo que barre + icono con giro */
+.resumen-card::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);transition:left .6s ease;pointer-events:none}
+.resumen-card:hover::after{left:135%}
+.resumen-card:hover .resumen-icono{transform:scale(1.14) rotate(-8deg)}
+
+/* Encabezado con texto degradado */
+.top h1{background:linear-gradient(90deg,#e85c8b,#c96bd8,#f47da3);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:tituloBrillo 6s linear infinite}
+
+/* Estados premium */
+.status.Pagada{background:linear-gradient(135deg,#e5f8ed,#d2f3e0);box-shadow:0 2px 8px rgba(25,139,75,.18)}
+.status.Pendiente{background:linear-gradient(135deg,#fff4dc,#ffe8c2);box-shadow:0 2px 8px rgba(166,107,0,.15)}
+.status.Enviada{background:linear-gradient(135deg,#e9f1ff,#dbe8ff);box-shadow:0 2px 8px rgba(50,104,178,.15)}
+.status.Anulada{background:linear-gradient(135deg,#ffecec,#ffdcdc);box-shadow:0 2px 8px rgba(198,40,40,.15)}
+
+/* Historial */
+#historial th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em}
+#historial tbody tr{transition:transform .18s ease,box-shadow .18s ease}
+#historial tbody tr:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(244,125,163,.10)}
+
+/* Paginador premium */
+.pag-btn{border-radius:12px;transition:all .22s ease}
+.pag-btn:hover:not(:disabled){transform:translateY(-2px);border-color:#f47da3;background:#fff3f7;color:#e85c8b;box-shadow:0 6px 14px rgba(244,125,163,.18)}
+.pag-btn.activa{background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(232,92,139,.3)}
+.pag-btn.activa:hover{color:#fff;background:linear-gradient(135deg,#f47da3,#e85c8b)}
+.pag-ellipsis{color:var(--mut);font-weight:800;padding:0 4px}
+
+/* Login: título degradado, switch premium, emojis flotantes */
+.login-panel,.login-card{position:relative;z-index:2}
+.auth-titulo{background:linear-gradient(90deg,#e85c8b,#c96bd8,#f47da3,#e85c8b);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:tituloBrillo 5s linear infinite}
+.auth-switch{background:linear-gradient(135deg,#f47da3,#e85c8b);border:0;box-shadow:0 6px 16px rgba(232,92,139,.35);transition:transform .25s ease,box-shadow .25s ease}
+.auth-switch:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(232,92,139,.5)}
+.login-button:hover .btn-icono{animation:btnIconoBounce .5s ease}
+.login-panel-titulo{filter:drop-shadow(0 4px 14px rgba(255,255,255,.35))}
+.emoji-flotante{position:absolute;bottom:-60px;z-index:0;opacity:0;pointer-events:none;animation:emojiSubir linear infinite}
+@keyframes emojiSubir{
+    0%{transform:translateY(0) rotate(0deg);opacity:0}
+    12%{opacity:.55}
+    88%{opacity:.55}
+    100%{transform:translateY(-112vh) rotate(360deg);opacity:0}}
+
+/* Footer con resplandor */
+footer{color:#d94f7f;font-weight:800;letter-spacing:.02em;animation:footerGlow 3s ease-in-out infinite}
+@keyframes footerGlow{0%,100%{text-shadow:0 2px 12px rgba(244,125,163,.25)}50%{text-shadow:0 3px 22px rgba(232,92,139,.55)}}
+
+/* Detalles finales */
+.aviso-bloqueo{background:linear-gradient(135deg,#fff3f7,#ffeef4);box-shadow:0 4px 14px rgba(244,125,163,.12)}
+.modal{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#f5aec7,#e85c8b)}
+::selection{background:#f7cfdd;color:#8a3a55}
+.mobile{background:linear-gradient(135deg,#fff,#fff5f9);box-shadow:0 4px 14px rgba(244,125,163,.10)}
+@media (prefers-reduced-motion:reduce){
+    body::before,body::after,.brand img,.wa,.card::before,.resumen-card::after,.login-button:hover .btn-icono,.emoji-flotante{animation:none !important}
+    .card:hover,.resumen-card:hover .resumen-icono,.pag-btn,.auth-switch,nav a{transition:none !important}
+}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -2315,6 +2461,27 @@ animation:tsToastProgress 4s linear forwards}
       if(er){ er.textContent='El registro está deshabilitado por seguridad. Si necesitas acceso, escríbenos por WhatsApp.'; }
     });
   }
+})();
+</script>
+<script>
+/* 🧶 Emojis flotantes en la pantalla de login */
+(function(){
+    var pantalla = document.getElementById('loginScreen');
+    if(!pantalla) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var emojis = ['🧶','🌸','💗','✨','🧵','🪡','🦋','💖'];
+    for(var i = 0; i < 14; i++){
+        (function(){
+            var s = document.createElement('span');
+            s.className = 'emoji-flotante';
+            s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            s.style.left = (Math.random() * 94 + 3) + '%';
+            s.style.fontSize = (16 + Math.random() * 20) + 'px';
+            s.style.animationDuration = (9 + Math.random() * 9) + 's';
+            s.style.animationDelay = (Math.random() * 8) + 's';
+            pantalla.appendChild(s);
+        })();
+    }
 })();
 </script>
 
@@ -8919,6 +9086,23 @@ document.addEventListener("DOMContentLoaded", function () {
     new MutationObserver(contar).observe(tb,{childList:true,subtree:true});
     tb.addEventListener('input',contar);
     contar();
+})();
+/* Efecto de onda (ripple) al hacer clic en botones */
+(function(){
+    document.querySelectorAll('.actions .btn, .add, .btn-pastilla').forEach(function(b){
+        b.addEventListener('click', function(e){
+            var rect = b.getBoundingClientRect();
+            var d = Math.max(rect.width, rect.height) * 2;
+            var onda = document.createElement('span');
+            onda.className = 'onda';
+            onda.style.width = d + 'px';
+            onda.style.height = d + 'px';
+            onda.style.left = (e.clientX - rect.left - d / 2) + 'px';
+            onda.style.top = (e.clientY - rect.top - d / 2) + 'px';
+            b.appendChild(onda);
+            setTimeout(function(){ onda.remove(); }, 700);
+        });
+    });
 })();
 </script>
 
