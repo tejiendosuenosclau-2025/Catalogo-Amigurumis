@@ -2061,6 +2061,141 @@ animation:tsToastProgress 4s linear forwards}
     .cliente-grid{grid-template-columns:1fr}
     .totals{max-width:100%;padding:10px 14px}
 }
+
+/* ============================================================
+   ✨ BOTONES DE ACCIÓN PREMIUM — super elegantes con efectos
+   ============================================================ */
+.actions .btn{
+    position:relative;
+    overflow:hidden;
+    border-radius:14px;
+    padding:14px 12px;
+    font-weight:800;
+    letter-spacing:.02em;
+    border:1.5px solid transparent;
+    transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,filter .22s ease,border-color .22s ease}
+/* brillo que barre el botón al pasar el mouse */
+.actions .btn::after{
+    content:"";
+    position:absolute;
+    top:0;left:-85%;width:55%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-20deg);
+    transition:left .55s ease;
+    pointer-events:none}
+.actions .btn:hover::after{left:135%}
+/* destello automático cada cierto tiempo (escalonado) */
+.actions .btn::before{
+    content:"";
+    position:absolute;
+    top:0;left:-120%;width:60%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.32),transparent);
+    transform:skewX(-20deg);
+    animation:btnShimmer 5.5s ease-in-out infinite;
+    pointer-events:none}
+.actions .btn:nth-child(2){animation-delay:1.2s}
+.actions .btn:nth-child(3){animation-delay:1.7s}
+.actions .btn:nth-child(4){animation-delay:2.2s}
+.actions .btn:nth-child(5){animation-delay:2.7s}
+.actions .btn:nth-child(6){animation-delay:3.2s}
+.actions .btn:nth-child(2)::before{animation-delay:1.2s}
+.actions .btn:nth-child(3)::before{animation-delay:1.7s}
+.actions .btn:nth-child(4)::before{animation-delay:2.2s}
+.actions .btn:nth-child(5)::before{animation-delay:2.7s}
+.actions .btn:nth-child(6)::before{animation-delay:3.2s}
+@keyframes btnShimmer{
+    0%{left:-120%}
+    16%{left:135%}
+    100%{left:135%}}
+.actions .btn:active{transform:translateY(1px) scale(.985)!important}
+.actions .btn .grilla-icon{transition:transform .25s ease,filter .25s ease}
+.actions .btn:hover .grilla-icon{transform:scale(1.2) rotate(-4deg)}
+.actions .btn:focus-visible{outline:3px solid rgba(244,125,163,.45);outline-offset:2px}
+/* verde (Vista previa / WhatsApp) */
+.actions .btn.green{
+    background:linear-gradient(135deg,#3fd584,#23a95b);
+    border-color:rgba(255,255,255,.25);
+    box-shadow:0 6px 16px rgba(35,169,91,.28),inset 0 1px 0 rgba(255,255,255,.28);
+    color:#fff}
+.actions .btn.green:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 26px rgba(35,169,91,.42),inset 0 1px 0 rgba(255,255,255,.28);
+    filter:brightness(1.06)}
+.actions .btn.green:active{box-shadow:0 4px 10px rgba(35,169,91,.30)}
+/* rosa (Generar PDF) */
+.actions .btn.pink{
+    background:linear-gradient(135deg,#f791b2,#e85c8b 55%,#d94f7f);
+    border-color:rgba(255,255,255,.25);
+    box-shadow:0 6px 16px rgba(232,92,139,.32),inset 0 1px 0 rgba(255,255,255,.32);
+    color:#fff}
+.actions .btn.pink:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(232,92,139,.48),inset 0 1px 0 rgba(255,255,255,.32);
+    filter:brightness(1.06)}
+.actions .btn.pink:active{box-shadow:0 4px 10px rgba(232,92,139,.34)}
+/* púrpura (Imprimir) */
+.actions .btn.purple{
+    background:linear-gradient(135deg,#a488e0,#7a5ab6 55%,#6a4aa8);
+    border-color:rgba(255,255,255,.25);
+    box-shadow:0 6px 16px rgba(122,90,182,.30),inset 0 1px 0 rgba(255,255,255,.28);
+    color:#fff}
+.actions .btn.purple:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 26px rgba(122,90,182,.44),inset 0 1px 0 rgba(255,255,255,.28);
+    filter:brightness(1.06)}
+.actions .btn.purple:active{box-shadow:0 4px 10px rgba(122,90,182,.32)}
+/* blanco (Guardar factura) — borde degradado animado */
+.actions .btn.white{
+    background:linear-gradient(#ffffff,#ffffff) padding-box,
+               linear-gradient(120deg,#f5aec7,#e85c8b,#c96bd8,#f5aec7) border-box;
+    background-size:100% 100%,300% 300%;
+    border:2px solid transparent;
+    color:var(--pd);
+    box-shadow:0 6px 18px rgba(232,92,139,.20),inset 0 1px 0 #fff}
+.actions .btn.white::after{
+    background:linear-gradient(100deg,transparent,rgba(244,125,163,.18),transparent)}
+.actions .btn.white::before{
+    background:linear-gradient(100deg,transparent,rgba(244,125,163,.12),transparent)}
+.actions .btn.white:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(232,92,139,.34);
+    color:#d94f7f;
+    border-color:transparent;
+    animation:btnBordeGira 3s linear infinite}
+@keyframes btnBordeGira{to{background-position:100% 100%,300% center}}
+/* gris (Nueva factura) */
+.actions .btn.gray{
+    background:linear-gradient(135deg,#fbf7f9,#f1eaee);
+    border:1.5px solid #e6dde2;
+    color:#6d6268;
+    box-shadow:0 5px 14px rgba(64,55,59,.10)}
+.actions .btn.gray::before{animation:none}
+.actions .btn.gray::after{
+    background:linear-gradient(100deg,transparent,rgba(232,92,139,.12),transparent)}
+.actions .btn.gray:hover{
+    transform:translateY(-2px);
+    color:var(--pd);
+    border-color:#f0b9cb;
+    box-shadow:0 9px 20px rgba(64,55,59,.16)}
+/* brillo al pasar el mouse en píldoras y botón agregar */
+.add,.btn-pastilla{position:relative;overflow:hidden}
+.add::after,.btn-pastilla::after{
+    content:"";
+    position:absolute;
+    top:0;left:-85%;width:55%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-20deg);
+    transition:left .55s ease;
+    pointer-events:none}
+.add:hover::after,.btn-pastilla:hover::after{left:135%}
+@media (max-width:850px){
+    .actions .btn{padding:12px 8px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+    .actions .btn::before{animation:none}
+    .actions .btn{transition:none}
+    .actions .btn .grilla-icon{transition:none}
+}
 </style>
 </head>
 <body>
