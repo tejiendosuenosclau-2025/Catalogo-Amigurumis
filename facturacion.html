@@ -2382,6 +2382,49 @@ footer{color:#d94f7f;font-weight:800;letter-spacing:.02em;animation:footerGlow 3
     .history-btn,.history-btn img{transition:none !important}
     .history-btn.whatsapp{animation:none}
 }
+
+/* ============================================================
+   🎛️ SELECTS PREMIUM — estilo referencia (dropdown personalizado)
+   ============================================================ */
+select.sel-nativo{display:none !important}
+.sel-custom{position:relative;flex:1;min-width:0;font-family:inherit}
+.sel-caja{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    width:100%;min-height:44px;box-sizing:border-box;
+    padding:10px 40px 10px 14px;
+    background:#fff;border:1.5px solid #f0c9d8;border-radius:11px;
+    cursor:pointer;user-select:none;
+    box-shadow:0 3px 10px rgba(244,125,163,.08);
+    transition:border-color .2s ease,box-shadow .2s ease,transform .15s ease}
+.sel-caja:hover{border-color:#f47da3;box-shadow:0 5px 16px rgba(244,125,163,.16)}
+.sel-caja:focus-visible{outline:3px solid rgba(244,125,163,.35);outline-offset:1px}
+.sel-custom.abierto .sel-caja{border-color:#f47da3;box-shadow:0 0 0 3px rgba(244,125,163,.14)}
+.sel-valor{flex:1;min-width:0;font-size:14px;font-weight:600;color:#40373b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sel-valor.placeholder{color:#aaa0a5;font-weight:500}
+.sel-flecha{
+    width:22px;height:22px;flex:0 0 22px;border-radius:7px;
+    background:linear-gradient(135deg,#ffe9f1,#ffe0eb);
+    display:flex;align-items:center;justify-content:center;
+    color:#e85c8b;
+    transition:transform .25s ease,background .25s ease,color .25s ease}
+.sel-custom.abierto .sel-flecha{transform:rotate(180deg);background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff}
+.sel-lista{
+    position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:60;
+    margin:0;padding:6px;list-style:none;
+    background:#fff;border:1.5px solid #f0c9d8;border-radius:12px;
+    box-shadow:0 14px 34px rgba(64,55,59,.16);
+    max-height:240px;overflow-y:auto;
+    display:none;opacity:0;transform:translateY(-6px);
+    transition:opacity .18s ease,transform .18s ease}
+.sel-custom.abierto .sel-lista{display:block;opacity:1;transform:translateY(0)}
+.sel-opcion{padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13.5px;font-weight:600;color:#51464c;transition:background .15s ease,color .15s ease,transform .15s ease}
+.sel-opcion:hover{background:#ffeef5;color:#e85c8b;transform:translateX(3px)}
+.sel-opcion.activa{background:linear-gradient(135deg,#5b8ff0,#3f6fd8);color:#fff;box-shadow:0 4px 12px rgba(63,111,216,.35);transform:none}
+.sel-custom.deshabilitado .sel-caja{background:#f3eff1;border-color:#e6dfe3;color:#9b9197;cursor:not-allowed;box-shadow:none}
+.sel-custom.deshabilitado .sel-valor{color:#9b9197}
+.sel-custom.deshabilitado .sel-flecha{background:#e9e3e6;color:#a99fa5}
+.campo-icono .sel-caja{padding-left:44px}
+.campo-estado .sel-caja{padding-left:54px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9144,6 +9187,115 @@ document.addEventListener("DOMContentLoaded", function () {
             onda.style.top = (e.clientY - rect.top - d / 2) + 'px';
             b.appendChild(onda);
             setTimeout(function(){ onda.remove(); }, 700);
+        });
+    });
+})();
+</script>
+<script>
+/* 🎛️ SELECTS PREMIUM — dropdown personalizado sobre el select nativo */
+(function(){
+    function listo(fn){
+        if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+        else fn();
+    }
+    listo(function(){
+        ['estado','pago','tipoAbono'].forEach(function(id){
+            var sel = document.getElementById(id);
+            if(!sel || sel.dataset.selMejorado) return;
+            sel.dataset.selMejorado = '1';
+            var wrapper = sel.parentElement;
+            var custom = document.createElement('div');
+            custom.className = 'sel-custom';
+            var caja = document.createElement('div');
+            caja.className = 'sel-caja';
+            caja.setAttribute('tabindex','0');
+            caja.setAttribute('role','button');
+            caja.setAttribute('aria-expanded','false');
+            var valor = document.createElement('span');
+            valor.className = 'sel-valor';
+            var flecha = document.createElement('span');
+            flecha.className = 'sel-flecha';
+            flecha.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="m6 9 6 6 6-6"/></svg>';
+            caja.appendChild(valor);
+            caja.appendChild(flecha);
+            var lista = document.createElement('ul');
+            lista.className = 'sel-lista';
+            Array.prototype.forEach.call(sel.options, function(op, idx){
+                var li = document.createElement('li');
+                li.className = 'sel-opcion';
+                li.textContent = op.text;
+                li.dataset.idx = idx;
+                li.addEventListener('click', function(e){
+                    e.stopPropagation();
+                    sel.value = op.value;
+                    sel.dispatchEvent(new Event('change', {bubbles:true}));
+                    sel.dispatchEvent(new Event('input', {bubbles:true}));
+                    pintar();
+                    cerrar();
+                });
+                lista.appendChild(li);
+            });
+            custom.appendChild(caja);
+            custom.appendChild(lista);
+            sel.classList.add('sel-nativo');
+            wrapper.insertBefore(custom, sel.nextSibling);
+            var valorAnterior = sel.value;
+            var estabaDeshabilitado = sel.disabled;
+            function pintar(){
+                var opcion = sel.options[sel.selectedIndex];
+                if(opcion){
+                    valor.textContent = opcion.text;
+                    valor.classList.toggle('placeholder', opcion.value === '');
+                }
+                Array.prototype.forEach.call(lista.children, function(li){
+                    li.classList.toggle('activa', +li.dataset.idx === sel.selectedIndex);
+                });
+            }
+            function abrir(){
+                if(sel.disabled) return;
+                custom.classList.add('abierto');
+                caja.setAttribute('aria-expanded','true');
+                pintar();
+            }
+            function cerrar(){
+                custom.classList.remove('abierto');
+                caja.setAttribute('aria-expanded','false');
+            }
+            caja.addEventListener('click', function(){
+                custom.classList.contains('abierto') ? cerrar() : abrir();
+            });
+            caja.addEventListener('keydown', function(e){
+                if(e.key === 'Enter' || e.key === ' '){
+                    e.preventDefault();
+                    custom.classList.contains('abierto') ? cerrar() : abrir();
+                } else if(e.key === 'Escape'){
+                    cerrar();
+                } else if(e.key === 'ArrowDown' && custom.classList.contains('abierto')){
+                    e.preventDefault();
+                    sel.selectedIndex = Math.min(sel.selectedIndex + 1, sel.options.length - 1);
+                    sel.dispatchEvent(new Event('change', {bubbles:true}));
+                    pintar();
+                } else if(e.key === 'ArrowUp' && custom.classList.contains('abierto')){
+                    e.preventDefault();
+                    sel.selectedIndex = Math.max(sel.selectedIndex - 1, 0);
+                    sel.dispatchEvent(new Event('change', {bubbles:true}));
+                    pintar();
+                }
+            });
+            document.addEventListener('click', function(e){
+                if(!custom.contains(e.target)) cerrar();
+            });
+            function sync(){
+                if(sel.value !== valorAnterior || sel.disabled !== estabaDeshabilitado){
+                    valorAnterior = sel.value;
+                    estabaDeshabilitado = sel.disabled;
+                    custom.classList.toggle('deshabilitado', sel.disabled);
+                    pintar();
+                }
+            }
+            setInterval(sync, 350);
+            custom.classList.toggle('deshabilitado', sel.disabled);
+            pintar();
         });
     });
 })();
