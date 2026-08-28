@@ -2339,6 +2339,49 @@ footer{color:#d94f7f;font-weight:800;letter-spacing:.02em;animation:footerGlow 3
     body::before,body::after,.brand img,.wa,.card::before,.resumen-card::after,.login-button:hover .btn-icono,.emoji-flotante{animation:none !important}
     .card:hover,.resumen-card:hover .resumen-icono,.pag-btn,.auth-switch,nav a{transition:none !important}
 }
+
+/* ============================================================
+   🎯 ACCIONES DEL HISTORIAL — chips premium estilo referencia
+   ============================================================ */
+.history-btn{
+    position:relative;overflow:hidden;padding:0;
+    width:38px;height:38px;border-radius:11px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#f6f2f4,#efe8ec);
+    border:1.5px solid #ece2e7;
+    box-shadow:0 2px 6px rgba(64,55,59,.06);
+    transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,background .22s ease,border-color .22s ease}
+.history-btn img{transition:transform .22s ease,filter .22s ease}
+.history-btn::after{content:"";position:absolute;top:0;left:-85%;width:55%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
+.history-btn:hover::after{left:135%}
+.history-btn:hover{transform:translateY(-3px)}
+.history-btn:hover img{filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,.25));transform:scale(1.2) rotate(-7deg)}
+/* chips tintados por acción */
+.history-btn.view{background:linear-gradient(135deg,#eaf1ff,#dce9ff);border-color:#cddcf7}
+.history-btn.view:hover{background:linear-gradient(135deg,#5b8ff0,#3f6fd8);box-shadow:0 7px 18px rgba(91,143,240,.38)}
+.history-btn.edit{background:linear-gradient(135deg,#fff3e0,#ffe9cc);border-color:#f7ddb0}
+.history-btn.edit:hover{background:linear-gradient(135deg,#f7b24a,#f08f1e);box-shadow:0 7px 18px rgba(240,143,30,.38)}
+.history-btn.abono{background:linear-gradient(135deg,#e4f8ec,#d3f2e0);border-color:#c2e8d0}
+.history-btn.abono:hover{background:linear-gradient(135deg,#34c97c,#1ea35f);box-shadow:0 7px 18px rgba(30,163,95,.38)}
+.history-btn.pdf{background:linear-gradient(135deg,#fdeaea,#fbdcdc);border-color:#f5c9c9}
+.history-btn.pdf:hover{background:linear-gradient(135deg,#f06a73,#dc4a55);box-shadow:0 7px 18px rgba(220,74,85,.38)}
+.history-btn.print{background:linear-gradient(135deg,#f0eafc,#e6dcf9);border-color:#dccdf2}
+.history-btn.print:hover{background:linear-gradient(135deg,#9a72e0,#7a54c4);box-shadow:0 7px 18px rgba(122,84,196,.38)}
+.history-btn.whatsapp{background:linear-gradient(135deg,#e3f8ec,#d2f2e0);border-color:#c0e8d0;animation:waChip 3s ease-in-out infinite}
+.history-btn.whatsapp:hover{background:linear-gradient(135deg,#35d97e,#1eb55f);box-shadow:0 7px 18px rgba(30,181,95,.42);animation:none}
+@keyframes waChip{0%,100%{box-shadow:0 2px 6px rgba(64,55,59,.06)}50%{box-shadow:0 4px 14px rgba(30,181,95,.28)}}
+.history-btn.cancel{background:linear-gradient(135deg,#ffece6,#ffdfd6);border-color:#f8cbbf}
+.history-btn.cancel:hover{background:linear-gradient(135deg,#f0765a,#e85a3d);box-shadow:0 7px 18px rgba(232,90,61,.38)}
+.history-btn.delete{background:linear-gradient(135deg,#ffe9ee,#ffdbe3);border-color:#f6c6d2}
+.history-btn.delete:hover{background:linear-gradient(135deg,#e8506a,#d63a55);box-shadow:0 7px 18px rgba(214,58,85,.42)}
+/* banda rosa del encabezado ACCIONES */
+#historial th:last-child{background:linear-gradient(135deg,#ffe9f1,#ffe0eb);color:#c96d92;letter-spacing:.12em}
+#historial th:last-child::after{content:"✦";margin-left:6px;color:#e85c8b}
+.history-actions{gap:6px}
+@media (prefers-reduced-motion:reduce){
+    .history-btn,.history-btn img{transition:none !important}
+    .history-btn.whatsapp{animation:none}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
