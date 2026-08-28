@@ -2002,6 +2002,13 @@ animation:tsToastProgress 4s linear forwards}
 .pag-btn.activa{background:linear-gradient(135deg,#f47da3,#e85c8b);border-color:#f47da3;color:#fff;box-shadow:0 4px 12px rgba(244,125,163,.35)}
 .pag-btn:disabled{opacity:.4;cursor:default}
 .pag-ellipsis{color:#b98a99;padding:0 3px;font-size:15px}
+
+/* Forma de pago compacta (junto a productos) */
+.factura-pago-compacto{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:14px;align-items:start;margin:14px 0 4px;padding:14px 16px;background:#fff8fb;border:1.5px solid #f3d5e0;border-radius:14px}
+.factura-pago-compacto .title{grid-column:1/-1;margin:0 0 2px;font-size:13px;font-weight:700;color:#8B5A2B}
+.factura-pago-compacto .factura-campo{margin:0}
+.factura-pago-compacto #abonoBox{margin:0}
+@media (max-width:850px){ .factura-pago-compacto{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -2461,35 +2468,7 @@ animation:tsToastProgress 4s linear forwards}
 
     		<!-- FORMA DE PAGO -->
 
-    		<div class="factura-campo">
-
-        		<label>
-            			Forma de pago
-        		</label>
-
-        		<div class="campo-icono">
-
-            			<span><img src="img/dinero.png" class="grilla-icon"></span>
-
-            			<select id="pago">
-
-                			<option value="" selected>
-                    				Seleccione
-                			</option>
-
-                			<option value="Contado">
-                    				Contado
-                			</option>
-
-                			<option value="Abono">
-                    				Abono
-                			</option>
-
-            			</select>
-
-        		</div>
-
-    		</div>
+    		
 
 	</div>
 
@@ -2502,59 +2481,7 @@ animation:tsToastProgress 4s linear forwards}
      ABONO + TIPO DE ABONO
      ========================================== -->
 
-<div id="abonoBox" class="factura-abono-grid">
 
-    <!-- ABONO -->
-
-    <div class="factura-campo">
-
-        <label>
-            Abono
-        </label>
-
-        <div class="campo-icono campo-abono">
-
-            <span><img src="img/abono1.png" class="grilla-icon"></span>
-
-            <input id="abono" type="number">
-
-        </div>
-
-    </div>
-
-
-    <!-- TIPO DE ABONO -->
-
-    <div id="tipoAbonoBox" class="factura-campo">
-
-        <label>
-            Tipo de abono
-        </label>
-
-        <div class="campo-icono campo-tipo-abono">
-
-            <span><img src="img/tipo-abono.png" class="grilla-icon"></span>
-
-            <select id="tipoAbono">
-		<option value="" selected>
-                    Seleccione
-                </option>
-
-                <option value="Efectivo">
-                    Efectivo
-                </option>
-
-                <option value="Transferencia">
-                    Transferencia
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-</div>
 
 
     <div class="factura-resumen">
@@ -2682,6 +2609,90 @@ animation:tsToastProgress 4s linear forwards}
 <section class="card"><div class="title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">🧶 Productos <button type="button" id="addCustom" class="btn" style="margin-left:auto;background:#f47da3;color:#fff;border:none;padding:7px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;">＋ Producto personalizado</button></div><div class="wrap"><table id="tablaItems"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Tamaño</th><th>Desc. %</th><th>Total</th><th></th></tr></thead><tbody id="items"></tbody></table></div>
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
+<div class="factura-pago-compacto">
+    <div class="title">💳 Forma de pago</div>
+<div class="factura-campo">
+
+        		<label>
+            			Forma de pago
+        		</label>
+
+        		<div class="campo-icono">
+
+            			<span><img src="img/dinero.png" class="grilla-icon"></span>
+
+            			<select id="pago">
+
+                			<option value="" selected>
+                    				Seleccione
+                			</option>
+
+                			<option value="Contado">
+                    				Contado
+                			</option>
+
+                			<option value="Abono">
+                    				Abono
+                			</option>
+
+            			</select>
+
+        		</div>
+
+    		</div><div id="abonoBox" class="factura-abono-grid">
+
+    <!-- ABONO -->
+
+    <div class="factura-campo">
+
+        <label>
+            Abono
+        </label>
+
+        <div class="campo-icono campo-abono">
+
+            <span><img src="img/abono1.png" class="grilla-icon"></span>
+
+            <input id="abono" type="number">
+
+        </div>
+
+    </div>
+
+
+    <!-- TIPO DE ABONO -->
+
+    <div id="tipoAbonoBox" class="factura-campo">
+
+        <label>
+            Tipo de abono
+        </label>
+
+        <div class="campo-icono campo-tipo-abono">
+
+            <span><img src="img/tipo-abono.png" class="grilla-icon"></span>
+
+            <select id="tipoAbono">
+		<option value="" selected>
+                    Seleccione
+                </option>
+
+                <option value="Efectivo">
+                    Efectivo
+                </option>
+
+                <option value="Transferencia">
+                    Transferencia
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
 </section>
 
 <div class="actions"><button type="button" class="btn green" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn pink" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn purple" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn green" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
