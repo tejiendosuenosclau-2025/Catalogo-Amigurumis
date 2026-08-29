@@ -779,8 +779,8 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
 /* Botón volver arriba */
 #volverArriba{
-    position:fixed;left:20px;bottom:20px;z-index:900;
-    width:50px;height:50px;border-radius:50%;
+    position:fixed;left:50%;bottom:20px;z-index:900;
+    width:50px;height:50px;margin-left:-25px;border-radius:50%;
     border:0;cursor:pointer;
     background:linear-gradient(135deg,#F47DA3,#e85c8b);
     color:#fff;
@@ -792,7 +792,7 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 #volverArriba:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(232,92,139,.6)}
 #volverArriba:active{transform:scale(.94)}
 @media (max-width:700px){
-    #volverArriba{width:44px;height:44px;left:14px;bottom:14px}
+    #volverArriba{width:44px;height:44px;margin-left:-22px;bottom:14px}
     #volverArriba svg{width:18px;height:18px}
 }
 @media (prefers-reduced-motion:reduce){
