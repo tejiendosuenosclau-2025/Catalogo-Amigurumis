@@ -777,8 +777,27 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria[data-categoria="Llaveros"]:hover{background:linear-gradient(135deg,#9A74D4,#8A63C9);border-color:#8A63C9;box-shadow:0 8px 20px rgba(138,99,201,.40)}
 .categoria[data-categoria="Personalizados"]{background:linear-gradient(135deg,#E9F2FD,#DBEBFC);border-color:#C9DDF7}
 .categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
+/* Botón volver arriba */
+#volverArriba{
+    position:fixed;left:20px;bottom:20px;z-index:900;
+    width:50px;height:50px;border-radius:50%;
+    border:0;cursor:pointer;
+    background:linear-gradient(135deg,#F47DA3,#e85c8b);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px rgba(232,92,139,.45);
+    opacity:0;visibility:hidden;transform:translateY(16px);
+    transition:opacity .3s ease,transform .3s ease,visibility .3s,box-shadow .25s ease}
+#volverArriba.visible{opacity:1;visibility:visible;transform:translateY(0)}
+#volverArriba:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(232,92,139,.6)}
+#volverArriba:active{transform:scale(.94)}
+@media (max-width:700px){
+    #volverArriba{width:44px;height:44px;left:14px;bottom:14px}
+    #volverArriba svg{width:18px;height:18px}
+}
 @media (prefers-reduced-motion:reduce){
     .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.redes-flotantes a,.creditos .marca,.categoria,#categorias h2{animation:none !important}
+    #volverArriba{transition:none !important}
     .seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{opacity:1 !important;transform:none !important;transition:none !important}
 }
 </style>
@@ -906,6 +925,9 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
     <img src="img/tiktok.png" alt="TikTok">
 </a>
 </div>
+<button type="button" id="volverArriba" aria-label="Volver arriba" title="Volver arriba">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5.5 11.5 6.5-6.5 6.5 6.5"/></svg>
+</button>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script>
@@ -1017,6 +1039,22 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
         b.addEventListener('click', function(){ marcar(b); });
     });
     marcar(cats[0]); /* Inicio activo por defecto */
+})();
+</script>
+<script>
+/* Botón volver arriba */
+(function(){
+    var btn = document.getElementById('volverArriba');
+    if(!btn) return;
+    function alScroll(){
+        var y = window.scrollY || document.documentElement.scrollTop || 0;
+        btn.classList.toggle('visible', y > 320);
+    }
+    window.addEventListener('scroll', alScroll, {passive:true});
+    btn.addEventListener('click', function(){
+        window.scrollTo({top:0, behavior:'smooth'});
+    });
+    alScroll();
 })();
 </script>
 </body>
