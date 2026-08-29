@@ -676,7 +676,7 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria{
     position:relative;overflow:hidden;
     transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,color .22s ease !important;
-    animation:tsCatIn .45s cubic-bezier(.2,.8,.2,1) both}
+    animation:tsCatIn .45s cubic-bezier(.2,.8,.2,1) backwards}
 .categoria:nth-child(1){animation-delay:.05s}
 .categoria:nth-child(2){animation-delay:.12s}
 .categoria:nth-child(3){animation-delay:.19s}
@@ -684,7 +684,20 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria:nth-child(5){animation-delay:.33s}
 .categoria:nth-child(6){animation-delay:.40s}
 @keyframes tsCatIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.categoria .cat-icono{transition:transform .22s ease,filter .22s ease}
+/* iconos en chip blanco con su color de categoría */
+.categoria .cat-icono{
+    width:34px;height:34px;border-radius:9px;flex:0 0 auto;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 8px rgba(64,55,59,.14);
+    transition:transform .22s ease,box-shadow .22s ease,color .22s ease}
+.cat-icono svg{width:19px;height:19px;stroke-width:2;display:block}
+.categoria[data-categoria="Todos"] .cat-icono{color:#EF8F3C}
+.categoria[data-categoria="Disponibles"] .cat-icono{color:#3CB371}
+.categoria[data-categoria="Animales"] .cat-icono{color:#E85C8B}
+.categoria[data-categoria="Personajes"] .cat-icono{color:#E8B73D}
+.categoria[data-categoria="Llaveros"] .cat-icono{color:#8A63C9}
+.categoria[data-categoria="Personalizados"] .cat-icono{color:#4E8FD6}
 .categoria::after{
     content:"";position:absolute;top:0;left:-85%;width:55%;height:100%;
     background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
@@ -692,7 +705,28 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria:hover{transform:translateY(-3px) !important;color:#fff !important}
 .categoria:hover::after{left:135%}
 .categoria:hover .cat-texto{color:#fff !important}
-.categoria:hover .cat-icono{transform:scale(1.2) rotate(-8deg);filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+.categoria:hover .cat-icono{transform:scale(1.12) rotate(-6deg);box-shadow:0 5px 12px rgba(64,55,59,.22)}
+.categoria[data-categoria="Todos"]:hover .cat-icono{color:#D97A28}
+.categoria[data-categoria="Disponibles"]:hover .cat-icono{color:#2E9E63}
+.categoria[data-categoria="Animales"]:hover .cat-icono{color:#D94F7F}
+.categoria[data-categoria="Personajes"]:hover .cat-icono{color:#C99A24}
+.categoria[data-categoria="Llaveros"]:hover .cat-icono{color:#7350AC}
+.categoria[data-categoria="Personalizados"]:hover .cat-icono{color:#3D7BC0}
+/* estado activo: el botón elegido se enciende en su color */
+.categoria:is(.activo,.active,.seleccionada){color:#fff!important;transform:translateY(-2px)}
+.categoria:is(.activo,.active,.seleccionada) .cat-texto{color:#fff!important}
+.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#F7B267,#EF8F3C)!important;border-color:#EF8F3C!important;box-shadow:0 8px 20px rgba(239,143,60,.40)!important}
+.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#58C77B,#3CB371)!important;border-color:#3CB371!important;box-shadow:0 8px 20px rgba(60,179,113,.40)!important}
+.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#F06A93,#E85C8B)!important;border-color:#E85C8B!important;box-shadow:0 8px 20px rgba(232,92,139,.40)!important}
+.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#EDC24F,#E8B73D)!important;border-color:#E8B73D!important;box-shadow:0 8px 20px rgba(232,183,61,.40)!important}
+.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#9A74D4,#8A63C9)!important;border-color:#8A63C9!important;box-shadow:0 8px 20px rgba(138,99,201,.40)!important}
+.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#62A2E8,#4E8FD6)!important;border-color:#4E8FD6!important;box-shadow:0 8px 20px rgba(78,143,214,.40)!important}
+.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada) .cat-icono{color:#D97A28!important}
+.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada) .cat-icono{color:#2E9E63!important}
+.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada) .cat-icono{color:#D94F7F!important}
+.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada) .cat-icono{color:#C99A24!important}
+.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada) .cat-icono{color:#7350AC!important}
+.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada) .cat-icono{color:#3D7BC0!important}
 /* pasteles por categoría */
 .categoria[data-categoria="Todos"]{background:linear-gradient(135deg,#FFF1E6,#FFE4CD);border-color:#F5D9C0}
 .categoria[data-categoria="Todos"]:hover{background:linear-gradient(135deg,#F7B267,#EF8F3C);border-color:#EF8F3C;box-shadow:0 8px 20px rgba(239,143,60,.40)}
@@ -784,18 +818,23 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
                 <span class="cat-texto">Inicio (<span id="totalProductos">0</span>)</span>
             </button>
             <button type="button" class="categoria" data-categoria="Disponibles">
+                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="m8.8 12.3 2.1 2.1 4.3-4.6"/></svg>
                 Disponibles
             </button>
             <button type="button" class="categoria" data-categoria="Animales">
+                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="6"/><circle cx="8.2" cy="9.2" r="2.7"/><circle cx="15.8" cy="9.2" r="2.7"/><path d="M10.3 15c.9.9 2.5.9 3.4 0"/></svg>
                 Animales
             </button>
             <button type="button" class="categoria" data-categoria="Personajes">
+                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.2 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.5 1-5.8-4.3-4.1 5.9-.9z"/></svg>
                 Personajes
             </button>
             <button type="button" class="categoria" data-categoria="Llaveros">
+                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="14" r="4.5"/><path d="m11.4 10.6 8.1-8.1"/><path d="m15.2 6.8 2.8 2.8"/><path d="m17.5 4.5 1.9 1.9"/></svg>
                 Llaveros
             </button>
             <button type="button" class="categoria" data-categoria="Personalizados">
+                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.8l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M18.8 14.6l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9z"/></svg>
                 Personalizados
             </button>
         </div>
@@ -926,6 +965,21 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
         el.style.transitionDelay = (i % 4) * 90 + 'ms';
         io.observe(el);
     });
+})();
+</script>
+<script>
+/* Estado activo de las categorías (solo visual — el filtrado lo hace app.js) */
+(function(){
+    var cats = document.querySelectorAll('.categoria');
+    if(!cats.length) return;
+    function marcar(b){
+        cats.forEach(function(c){ c.classList.remove('activo'); });
+        if(b) b.classList.add('activo');
+    }
+    cats.forEach(function(b){
+        b.addEventListener('click', function(){ marcar(b); });
+    });
+    marcar(cats[0]); /* Inicio activo por defecto */
 })();
 </script>
 </body>
