@@ -654,11 +654,48 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
     -webkit-background-clip:text;background-clip:text;
     -webkit-text-fill-color:transparent;
     animation:tsBrillo 5s linear infinite}
-.redes-flotantes a{transition:transform .25s ease,box-shadow .25s ease !important}
-.redes-flotantes a:hover{transform:translateY(-4px) scale(1.07) !important}
-.redes-flotantes .whatsapp-float{animation:tsFlotar 3s ease-in-out infinite}
-.redes-flotantes .whatsapp-float:hover{animation:none}
+/* Redes flotantes premium */
+.redes-flotantes a{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 16px rgba(64,55,59,.20);
+    transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease !important;
+    animation:tsEntraRedes .5s ease both,tsFlotar 3.5s ease-in-out infinite}
+.redes-flotantes a:nth-child(1){animation-delay:.1s,0s}
+.redes-flotantes a:nth-child(2){animation-delay:.25s,.5s}
+.redes-flotantes a:nth-child(3){animation-delay:.4s,1s}
+.redes-flotantes a img{transition:transform .25s ease;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+.redes-flotantes a:hover{animation:none;transform:translateY(-4px) scale(1.08) !important}
+.redes-flotantes a:hover img{transform:scale(1.15) rotate(-8deg)}
+@keyframes tsEntraRedes{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:blur(0)}}
 @keyframes tsFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+/* tooltip con el nombre de la red */
+.redes-flotantes a::before{
+    content:attr(aria-label);
+    position:absolute;right:calc(100% + 14px);top:50%;
+    transform:translateY(-50%) translateX(8px);
+    background:linear-gradient(135deg,#4a3a42,#2e2329);color:#fff;
+    font-family:"Quicksand","Century Gothic",sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:.3px;
+    padding:7px 13px;border-radius:999px;white-space:nowrap;
+    opacity:0;pointer-events:none;z-index:999;
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
+    transition:opacity .22s ease,transform .22s ease}
+.redes-flotantes a:hover::before{opacity:1;transform:translateY(-50%) translateX(0)}
+/* colores por red */
+.redes-flotantes .whatsapp-float{
+    background:linear-gradient(135deg,#3fd584,#1f9a52);
+    animation:tsEntraRedes .5s ease both,tsFlotar 3.5s ease-in-out infinite,tsFloatPulso 2.8s ease-in-out infinite}
+.redes-flotantes .instagram-float{background:linear-gradient(135deg,#f9ce34,#ee2a7b 45%,#6228d7)}
+.redes-flotantes .tiktok-float{
+    background:linear-gradient(135deg,#1c1c26,#000);
+    box-shadow:0 6px 16px rgba(0,0,0,.35),3px 3px 0 rgba(37,244,238,.22),-3px -3px 0 rgba(254,44,85,.22)}
+@keyframes tsFloatPulso{
+    0%,100%{box-shadow:0 6px 16px rgba(49,184,102,.35)}
+    50%{box-shadow:0 10px 26px rgba(49,184,102,.6)}}
+.redes-flotantes .whatsapp-float:hover{box-shadow:0 10px 26px rgba(49,184,102,.6)}
+.redes-flotantes .instagram-float:hover{box-shadow:0 10px 26px rgba(238,42,123,.55)}
+.redes-flotantes .tiktok-float:hover{box-shadow:0 10px 26px rgba(0,0,0,.5),3px 3px 0 rgba(37,244,238,.3),-3px -3px 0 rgba(254,44,85,.3)}
 /* Categorías premium */
 #categorias h2{
     position:relative;padding-bottom:12px;
@@ -741,7 +778,7 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria[data-categoria="Personalizados"]{background:linear-gradient(135deg,#E9F2FD,#DBEBFC);border-color:#C9DDF7}
 .categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
 @media (prefers-reduced-motion:reduce){
-    .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.whatsapp-float,.creditos .marca,.categoria,#categorias h2{animation:none !important}
+    .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.redes-flotantes a,.creditos .marca,.categoria,#categorias h2{animation:none !important}
     .seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{opacity:1 !important;transform:none !important;transition:none !important}
 }
 </style>
