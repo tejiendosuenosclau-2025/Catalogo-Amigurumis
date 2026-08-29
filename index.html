@@ -546,6 +546,124 @@
 <link rel="stylesheet" href="css/contacto.css">
 <link rel="stylesheet" href="css/dark.css">
 <link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ✨ REDISEÑO PREMIUM — Tejiendo Sueños Clau (index)
+   ============================================================ */
+html{scroll-behavior:smooth}
+body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-serif;-webkit-font-smoothing:antialiased}
+::selection{background:#f7cfdd;color:#8a3a55}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:#fff8fa}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#f5aec7,#e85c8b);border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:#d94f7f}
+
+/* Hero: entrada animada + título degradado */
+.presentacion-seo{animation:tsSubir .65s cubic-bezier(.2,.8,.2,1) both}
+.presentacion-seo h1{
+    background:linear-gradient(90deg,#F47DA3,#c96bd8,#F47DA3);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:transparent !important;
+    animation:tsBrillo 5s linear infinite;
+    filter:drop-shadow(0 2px 10px rgba(244,125,163,.28))}
+@keyframes tsBrillo{to{background-position:200% center}}
+@keyframes tsSubir{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Botones del hero */
+#btnVerCatalogo{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#F47DA3,#e85c8b) !important;
+    box-shadow:0 6px 18px rgba(244,125,163,.45) !important;
+    transition:transform .22s ease,box-shadow .22s ease !important;
+    animation:tsPulsoBoton 2.6s ease-in-out infinite}
+#btnVerCatalogo::after{
+    content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
+#btnVerCatalogo:hover{animation:none;transform:translateY(-3px) scale(1.03) !important;box-shadow:0 12px 28px rgba(244,125,163,.58) !important}
+#btnVerCatalogo:hover::after{left:130%}
+@keyframes tsPulsoBoton{
+    0%,100%{box-shadow:0 6px 18px rgba(244,125,163,.45)}
+    50%{box-shadow:0 9px 30px rgba(244,125,163,.68)}}
+.presentacion-seo a[href*="wa.me"]{
+    position:relative;overflow:hidden;
+    border:2px solid transparent !important;
+    background:linear-gradient(#ffffff,#ffffff) padding-box,linear-gradient(120deg,#F47DA3,#c96bd8,#F47DA3) border-box;
+    color:#e85c8b !important;
+    box-shadow:0 4px 14px rgba(244,125,163,.18);
+    transition:transform .22s ease,box-shadow .22s ease,color .22s ease !important}
+.presentacion-seo a[href*="wa.me"]::after{
+    content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(244,125,163,.16),transparent);
+    transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
+.presentacion-seo a[href*="wa.me"]:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(244,125,163,.35);color:#c94f7d !important}
+.presentacion-seo a[href*="wa.me"]:hover::after{left:130%}
+
+/* Cómo comprar: título degradado, pasos con brillo y tarjetas con acento */
+.seccion-facil h2{
+    background:linear-gradient(90deg,#e85c8b,#c96bd8,#F47DA3,#e85c8b);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:transparent !important;
+    animation:tsBrillo 6s linear infinite}
+.paso-icono{
+    background:linear-gradient(135deg,#FDE7EF,#ffd6e4) !important;
+    box-shadow:0 6px 14px rgba(244,125,163,.22);
+    transition:transform .25s ease,box-shadow .25s ease !important}
+.paso:hover .paso-icono{transform:scale(1.1) rotate(-6deg);box-shadow:0 10px 24px rgba(244,125,163,.38)}
+.paso h3{color:#e85c8b !important;letter-spacing:1.2px}
+.paso-flecha{animation:tsFlecha 1.6s ease-in-out infinite}
+@keyframes tsFlecha{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(7px);opacity:1}}
+.caja-facil{
+    position:relative;
+    transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease !important}
+.caja-facil::before{
+    content:"";position:absolute;top:0;left:16px;right:16px;height:3px;
+    border-radius:0 0 8px 8px;
+    background:linear-gradient(90deg,#f5aec7,#e85c8b,#c96bd8,#f5aec7);
+    background-size:200% auto;
+    animation:tsBrillo 5s linear infinite;
+    opacity:.9;pointer-events:none}
+.caja-facil:hover{transform:translateY(-4px);border-color:#f0b9cb;box-shadow:0 14px 30px rgba(244,125,163,.22) !important}
+.caja-facil h3 svg{transition:transform .25s ease}
+.caja-facil:hover h3 svg{transform:scale(1.18) rotate(-8deg)}
+
+/* Aparición escalonada al hacer scroll (activada por JS) */
+.seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{
+    opacity:0;transform:translateY(20px);
+    transition:opacity .55s ease,transform .55s ease}
+.seccion-facil.ts-animar .ts-visible{opacity:1;transform:translateY(0)}
+
+/* Categorías */
+.categoria{transition:transform .22s ease,box-shadow .22s ease !important}
+.categoria:hover{transform:translateY(-3px) !important}
+.categoria .cat-icono{transition:transform .22s ease}
+.categoria:hover .cat-icono{transform:scale(1.15) rotate(-6deg)}
+
+/* Footer y redes flotantes */
+.visitas-chip{box-shadow:0 4px 14px rgba(244,125,163,.25) !important}
+.creditos .marca{
+    background:linear-gradient(90deg,#F47DA3,#c96bd8,#F47DA3);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:tsBrillo 5s linear infinite}
+.redes-flotantes a{transition:transform .25s ease,box-shadow .25s ease !important}
+.redes-flotantes a:hover{transform:translateY(-4px) scale(1.07) !important}
+.redes-flotantes .whatsapp-float{animation:tsFlotar 3s ease-in-out infinite}
+.redes-flotantes .whatsapp-float:hover{animation:none}
+@keyframes tsFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media (prefers-reduced-motion:reduce){
+    .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.whatsapp-float,.creditos .marca{animation:none !important}
+    .seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{opacity:1 !important;transform:none !important;transition:none !important}
+}
+</style>
 </head>
 <body>
 <header class="header-banner" id="inicio">
@@ -737,6 +855,30 @@
       }, 60);
     }
   });
+})();
+</script>
+<script>
+/* Aparición escalonada de pasos y tarjetas al hacer scroll */
+(function(){
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(!('IntersectionObserver' in window)) return;
+    var seccion = document.querySelector('.seccion-facil');
+    if(!seccion) return;
+    var items = seccion.querySelectorAll('.paso, .caja-facil');
+    if(!items.length) return;
+    seccion.classList.add('ts-animar');
+    var io = new IntersectionObserver(function(entradas){
+        entradas.forEach(function(e){
+            if(e.isIntersecting){
+                e.target.classList.add('ts-visible');
+                io.unobserve(e.target);
+            }
+        });
+    }, {threshold: .15});
+    items.forEach(function(el, i){
+        el.style.transitionDelay = (i % 4) * 90 + 'ms';
+        io.observe(el);
+    });
 })();
 </script>
 </body>
