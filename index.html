@@ -659,8 +659,55 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .redes-flotantes .whatsapp-float{animation:tsFlotar 3s ease-in-out infinite}
 .redes-flotantes .whatsapp-float:hover{animation:none}
 @keyframes tsFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+/* Categorías premium */
+#categorias h2{
+    position:relative;padding-bottom:12px;
+    background:linear-gradient(90deg,#C77B4F,#E85C8B,#C77B4F);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:transparent !important;
+    animation:tsBrillo 6s linear infinite;
+    letter-spacing:.6px}
+#categorias h2::after{
+    content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+    width:74px;height:3.5px;border-radius:99px;
+    background:linear-gradient(90deg,#F47DA3,#C77B4F)}
+.categoria{
+    position:relative;overflow:hidden;
+    transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,color .22s ease !important;
+    animation:tsCatIn .45s cubic-bezier(.2,.8,.2,1) both}
+.categoria:nth-child(1){animation-delay:.05s}
+.categoria:nth-child(2){animation-delay:.12s}
+.categoria:nth-child(3){animation-delay:.19s}
+.categoria:nth-child(4){animation-delay:.26s}
+.categoria:nth-child(5){animation-delay:.33s}
+.categoria:nth-child(6){animation-delay:.40s}
+@keyframes tsCatIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.categoria .cat-icono{transition:transform .22s ease,filter .22s ease}
+.categoria::after{
+    content:"";position:absolute;top:0;left:-85%;width:55%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
+.categoria:hover{transform:translateY(-3px) !important;color:#fff !important}
+.categoria:hover::after{left:135%}
+.categoria:hover .cat-texto{color:#fff !important}
+.categoria:hover .cat-icono{transform:scale(1.2) rotate(-8deg);filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+/* pasteles por categoría */
+.categoria[data-categoria="Todos"]{background:linear-gradient(135deg,#FFF1E6,#FFE4CD);border-color:#F5D9C0}
+.categoria[data-categoria="Todos"]:hover{background:linear-gradient(135deg,#F7B267,#EF8F3C);border-color:#EF8F3C;box-shadow:0 8px 20px rgba(239,143,60,.40)}
+.categoria[data-categoria="Disponibles"]{background:linear-gradient(135deg,#EAF8EC,#D8F1DC);border-color:#C9EACD}
+.categoria[data-categoria="Disponibles"]:hover{background:linear-gradient(135deg,#58C77B,#3CB371);border-color:#3CB371;box-shadow:0 8px 20px rgba(60,179,113,.40)}
+.categoria[data-categoria="Animales"]{background:linear-gradient(135deg,#FDE9F0,#FBD6E4);border-color:#F5C9D8}
+.categoria[data-categoria="Animales"]:hover{background:linear-gradient(135deg,#F06A93,#E85C8B);border-color:#E85C8B;box-shadow:0 8px 20px rgba(232,92,139,.40)}
+.categoria[data-categoria="Personajes"]{background:linear-gradient(135deg,#FFF8E0,#FFEFC2);border-color:#F3E3A8}
+.categoria[data-categoria="Personajes"]:hover{background:linear-gradient(135deg,#EDC24F,#E8B73D);border-color:#E8B73D;box-shadow:0 8px 20px rgba(232,183,61,.40)}
+.categoria[data-categoria="Llaveros"]{background:linear-gradient(135deg,#F1EBFB,#E7DBF8);border-color:#DAC9F2}
+.categoria[data-categoria="Llaveros"]:hover{background:linear-gradient(135deg,#9A74D4,#8A63C9);border-color:#8A63C9;box-shadow:0 8px 20px rgba(138,99,201,.40)}
+.categoria[data-categoria="Personalizados"]{background:linear-gradient(135deg,#E9F2FD,#DBEBFC);border-color:#C9DDF7}
+.categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
 @media (prefers-reduced-motion:reduce){
-    .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.whatsapp-float,.creditos .marca{animation:none !important}
+    .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.whatsapp-float,.creditos .marca,.categoria,#categorias h2{animation:none !important}
     .seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{opacity:1 !important;transform:none !important;transition:none !important}
 }
 </style>
