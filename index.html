@@ -995,6 +995,8 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
     function mapear(p){
         var cats = String(p.categoria||"").split(",").map(function(s){ return s.trim(); }).filter(Boolean);
         if(p.disponible !== false && cats.indexOf("Disponibles") === -1) cats.push("Disponibles");
+        var img = p.imagen_url || "";
+        if(img && img.indexOf("/object/public/") === -1) img = img.replace(/\/object\//, "/object/public/");
         return {
             id: p.id,
             nombre: p.nombre,
@@ -1002,7 +1004,7 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
             precio: Number(p.precio) || 0,
             tamano: p.tamano || "",
             unidad: p.unidad || "",
-            imagen: p.imagen_url || ""
+            imagen: img
         };
     }
 

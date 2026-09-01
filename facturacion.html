@@ -2494,6 +2494,23 @@ select.sel-nativo{display:none !important}
 .productos-foto-preview img{
     width:86px;height:86px;object-fit:cover;border-radius:12px;
     border:2px solid #f3d5e2;box-shadow:0 4px 12px rgba(244,125,163,.2)}
+/* Clientes recientes (contenedor #clients) */
+.clientes-recientes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.cliente-chip{
+    display:flex;flex-direction:column;gap:2px;
+    background:#fff8fb;border:1.5px solid #f3d5e2;padding:8px 12px;border-radius:12px;
+    box-shadow:0 3px 8px rgba(244,125,163,.08);
+    transition:transform .15s ease,box-shadow .15s ease}
+.cliente-chip:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(244,125,163,.16)}
+.cliente-chip b{color:#40373b;font-size:12.5px}
+.cliente-chip span{color:#9b9197;font-size:11px;font-weight:600}
+.cliente-chip button{
+    border:0;background:linear-gradient(135deg,#f47da3,#e85c8b);color:#fff;
+    border-radius:999px;padding:5px 12px;margin-top:4px;
+    font-size:11px;font-weight:700;cursor:pointer;
+    transition:filter .15s ease}
+.cliente-chip button:hover{filter:brightness(1.12)}
+.cliente-chip.vacio{color:#9b9197;font-size:13px;flex-direction:row;font-weight:600}
 .prod-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:800;margin-left:6px;vertical-align:1px}
 .prod-badge.si{background:#d9f4e4;color:#1c8a54}
 .prod-badge.no{background:#fbe3e3;color:#c0392b}
@@ -2851,6 +2868,7 @@ select.sel-nativo{display:none !important}
 </section>
 </div>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
+<div id="clients" class="clientes-recientes"></div>
 <form id="form">
 <div class="aviso-bloqueo" id="avisoBloqueo">🔒 Pulsa "+ Nueva factura" para comenzar a registrar</div>
 <section class="grid datos-superiores">
@@ -8348,7 +8366,8 @@ async function cargarClientesDB(){
  if(error){console.error(error);
  return}
  clients=data||[];
- $("clients").innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div style="display:inline-block;border:1px solid var(--line);padding:10px;margin:4px;border-radius:8px"><b>'+esc(c.nombre)+'</b><br>'+esc(c.telefono||"")+'<br><button type="button" onclick="useClient('+i+')">Usar cliente</button></div>').join(""):"Aún no hay clientes.";
+ const cl=$("clients");
+ if(cl) cl.innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div class="cliente-chip"><b>'+esc(c.nombre)+'</b><span>'+esc(c.telefono||"")+'</span><button type="button" onclick="useClient('+i+')">Usar</button></div>').join(""):'<div class="cliente-chip vacio">Aún no hay clientes.</div>';
 }
 function useClient(i){let c=clients[i];
 if(!c)return;
@@ -9405,6 +9424,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
     function escUrl(u){ return esc(u).replace(/"/g,"%22"); }
     function dinero(n){ return "$" + Number(n||0).toLocaleString("es-CO"); }
+    /* Normaliza URLs de Storage: asegura el segmento "public" para que las fotos carguen */
+    function urlPublica(u){
+        if(!u) return u;
+        return u.indexOf("/object/public/") === -1 ? u.replace(/\/object\//, "/object/public/") : u;
+    }
 
     var editandoId = null;
     var fotoArchivo = null;
@@ -9450,7 +9474,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var cats = (p.categoria||"").split(",").map(function(s){return s.trim();}).filter(Boolean).join(" · ") || "—";
             var bad = p.disponible ? '<span class="prod-badge si">DISPONIBLE</span>' : '<span class="prod-badge no">OCULTO</span>';
             var foto = p.imagen_url
-                ? '<img class="prod-foto" src="' + escUrl(p.imagen_url) + '" alt="">'
+                ? '<img class="prod-foto" src="' + escUrl(urlPublica(p.imagen_url)) + '" alt="">'
                 : '<div class="prod-foto-vacio">🧶</div>';
             fila.innerHTML =
                 foto +
@@ -9535,7 +9559,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 var ruta = "productos/" + Date.now() + "-" + Math.random().toString(36).slice(2,7) + "." + ext;
                 var sub = await window.supabaseClient.storage.from("productos").upload(ruta, fotoArchivo, {contentType: fotoArchivo.type || "image/jpeg"});
                 if(sub.error) throw sub.error;
-                payload.imagen_url = window.supabaseClient.storage.from("productos").getPublicUrl(ruta).data.publicUrl;
+                payload.imagen_url = urlPublica(window.supabaseClient.storage.from("productos").getPublicUrl(ruta).data.publicUrl);
             } else if(editandoId){
                 var act = await window.supabaseClient.from("products").select("imagen_url").eq("id", editandoId).maybeSingle();
                 if(act && !act.error && act.data) payload.imagen_url = act.data.imagen_url;
