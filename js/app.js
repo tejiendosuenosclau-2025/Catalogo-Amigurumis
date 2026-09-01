@@ -66,6 +66,7 @@ function mostrarProductos(categoria = "Todos") {
 }
 
 const iconos = {
+    "Todos": '<svg class="cat-icono c-Todos" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M10 20v-5.5h4V20"/><path d="M14.4 7.4V4.9h2v2.8"/><rect x="7.5" y="10" width="9" height="4" rx="1"/></svg>',
     "Disponibles": '<svg class="cat-icono c-Disponibles" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.6"/><path d="m8.9 12 2.1 2.1 4-4.2"/></svg>',
     "Animales": '<svg class="cat-icono c-Animales" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.8" cy="9.8" r="1.7"/><circle cx="16.2" cy="9.8" r="1.7"/><circle cx="10.2" cy="7.2" r="1.7"/><circle cx="13.8" cy="7.2" r="1.7"/><path d="M12 14.6c-2.8 0-4.9 1.9-4.9 3.7 0 1.1.8 1.9 1.9 1.9h6c1.1 0 1.9-.8 1.9-1.9 0-1.8-2.1-3.7-4.9-3.7z"/></svg>',
     "Personajes": '<svg class="cat-icono c-Personajes" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.4 5.1 5.6.6-4.1 3.8 1.1 5.5L12 15.9l-5 2.6 1.1-5.5L4 9.2l5.6-.6z"/><path d="M19.6 4.4l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/><path d="M5.2 2.6l.5 1.2 1.2.5-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.5z"/></svg>',
@@ -85,12 +86,20 @@ function actualizarContadores() {
     }
 
 
-    // Contadores de categorías
+    // Contadores de categorías (Inicio también lleva su icono)
     document.querySelectorAll(".categoria").forEach(categoria => {
 
         const nombre = categoria.dataset.categoria;
 
-        if (nombre !== "Todos") {
+        if (nombre === "Todos") {
+
+            const total = todosLosProductos.length;
+            const contadorTotal = document.getElementById("totalProductos");
+            if (contadorTotal) contadorTotal.textContent = total;
+
+            categoria.innerHTML = `${iconos["Todos"] || ""} <span class="cat-texto">Inicio (<span id="totalProductos">${total}</span>)</span>`;
+
+        } else {
 
             const cantidad = todosLosProductos.filter(producto =>
             producto.categoria.includes(nombre)).length;
