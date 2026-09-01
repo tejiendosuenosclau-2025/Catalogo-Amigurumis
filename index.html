@@ -795,6 +795,16 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
     #volverArriba{width:44px;height:44px;margin-left:-22px;bottom:14px}
     #volverArriba svg{width:18px;height:18px}
 }
+/* 📷 Fotos completas en las tarjetas del catálogo (sin recortes) */
+.producto-img{
+    width:100% !important;
+    height:auto !important;
+    object-fit:contain !important;
+    aspect-ratio:4/3;
+    background:linear-gradient(135deg,#fff8fb,#fdeef4);
+    padding:8px;
+    box-sizing:border-box;
+    display:block}
 @media (prefers-reduced-motion:reduce){
     .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.redes-flotantes a,.creditos .marca,.categoria,#categorias h2{animation:none !important}
     #volverArriba{transition:none !important}
