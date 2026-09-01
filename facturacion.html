@@ -9382,6 +9382,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 /* 🧶 PANEL DE PRODUCTOS (ADMIN) — CRUD en Supabase */
 (function(){
+    function listo(fn){ if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn); else fn(); }
+    listo(function(){
     function el(id){ return document.getElementById(id); }
     function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
     function escUrl(u){ return esc(u).replace(/"/g,"%22"); }
@@ -9567,6 +9569,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     var modalProd = el("modalProductos");
     if(modalProd) modalProd.addEventListener("click", function(e){ if(e.target === this) cerrarModal(); });
+    });
 })();
 </script>
 
