@@ -2432,6 +2432,59 @@ select.sel-nativo{display:none !important}
 .sel-custom.abierto{z-index:999}
 .card:has(.sel-custom.abierto){z-index:120}
 .sel-custom.sel-arriba .sel-lista{top:auto;bottom:calc(100% + 6px)}
+
+/* ============================================================
+   🧶 MODAL PRODUCTOS (ADMIN)
+   ============================================================ */
+.modal-productos-contenido{width:min(680px,100%)}
+.productos-bar{display:flex;gap:10px;margin:14px 0 12px}
+.productos-bar input{
+    flex:1;padding:11px 14px;border:1.5px solid #f0c9d8;border-radius:11px;
+    font-family:inherit;font-size:14px;min-width:0}
+.productos-bar input:focus{outline:3px solid rgba(244,125,163,.15);border-color:#f47da3}
+.productos-lista{display:grid;gap:8px;max-height:46vh;overflow-y:auto;padding:2px}
+.prod-fila{
+    display:flex;align-items:center;gap:12px;
+    background:#fff8fb;border:1px solid #f3d5e2;border-radius:12px;
+    padding:8px 10px;
+    transition:transform .18s ease,box-shadow .18s ease}
+.prod-fila:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(244,125,163,.14)}
+.prod-fila img.prod-foto{width:46px;height:46px;border-radius:10px;object-fit:cover;background:#fde9f0;flex:0 0 46px}
+.prod-foto-vacio{
+    width:46px;height:46px;border-radius:10px;background:#fde9f0;flex:0 0 46px;
+    display:flex;align-items:center;justify-content:center;font-size:20px}
+.prod-fila .prod-info{flex:1;min-width:0}
+.prod-fila .prod-nombre{font-weight:800;color:#40373b;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-fila .prod-meta{font-size:11.5px;color:#9b9197;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-fila .prod-acciones{display:flex;gap:6px;flex:0 0 auto}
+.prod-fila .prod-acciones button{
+    width:32px;height:32px;border-radius:9px;border:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+    transition:transform .15s ease,box-shadow .15s ease}
+.prod-fila .prod-acciones button:hover{transform:scale(1.14)}
+.btn-editar-prod{background:linear-gradient(135deg,#fff3e0,#ffe9cc);box-shadow:0 3px 8px rgba(240,143,30,.18)}
+.btn-eliminar-prod{background:linear-gradient(135deg,#ffe9ee,#ffdbe3);box-shadow:0 3px 8px rgba(214,58,85,.18)}
+.productos-grid-dos{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.productos-categorias{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.cat-check{
+    display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#51464c;
+    background:#fff8fb;border:1.5px solid #f3d5e2;border-radius:10px;padding:9px 12px;
+    cursor:pointer;transition:all .18s ease}
+.cat-check:has(input:checked){background:linear-gradient(135deg,#ffe9f1,#ffe0eb);border-color:#f47da3;color:#e85c8b}
+.cat-check input{accent-color:#e85c8b;width:16px;height:16px;cursor:pointer}
+.cat-check.disponible{grid-column:1/-1}
+.productos-foto-preview{margin-top:8px}
+.productos-foto-preview img{
+    width:86px;height:86px;object-fit:cover;border-radius:12px;
+    border:2px solid #f3d5e2;box-shadow:0 4px 12px rgba(244,125,163,.2)}
+.prod-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:800;margin-left:6px;vertical-align:1px}
+.prod-badge.si{background:#d9f4e4;color:#1c8a54}
+.prod-badge.no{background:#fbe3e3;color:#c0392b}
+@media (max-width:520px){
+    .productos-categorias,.productos-grid-dos{grid-template-columns:1fr}
+    .productos-bar{flex-direction:column}
+    .productos-bar .btn{width:100%}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2584,7 +2637,7 @@ select.sel-nativo{display:none !important}
 <nav>
 <a class="active" href="facturacion.html"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</a><a href="#historial"><img src="img/historial.png" alt="PDF" class="grilla-icon"> Historial</a><a href="#" id="abrirEstadisticas"><img src="img/estadistica.png" alt="PDF" class="grilla-icon"> Estadísticas</a><a href="#" id="abrirGastos"><img src="img/gastos.png" alt="Gastos" class="grilla-icon">
     Gastos
-</a>
+</a><a href="#" id="abrirProductos"><span style="font-size:15px;margin-right:7px;display:inline-block">🧶</span> Productos</a>
 </nav>
 </aside>
 <main>
@@ -4122,7 +4175,19 @@ function today(){
     return `${año}-${mes}-${dia}`;
 }
 
-async function load(){try{products=await (await fetch("data/productos.json")).json()}catch(e){console.error(e);products=[]}}
+async function load(){
+    try{
+        // Primero intenta cargar desde Supabase (tabla products); si falla o está vacía, usa el JSON local
+        if(window.supabaseClient){
+            const r = await window.supabaseClient.from("products").select("*").order("nombre");
+            if(!r.error && Array.isArray(r.data) && r.data.length){
+                products = r.data;
+                return;
+            }
+        }
+        products = await (await fetch("data/productos.json")).json();
+    }catch(e){console.error(e);products=[]}
+}
 
 
 
@@ -9314,6 +9379,196 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 })();
 </script>
+<script>
+/* 🧶 PANEL DE PRODUCTOS (ADMIN) — CRUD en Supabase */
+(function(){
+    function el(id){ return document.getElementById(id); }
+    function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
+    function escUrl(u){ return esc(u).replace(/"/g,"%22"); }
+    function dinero(n){ return "$" + Number(n||0).toLocaleString("es-CO"); }
+
+    var editandoId = null;
+    var fotoArchivo = null;
+
+    function abrirModal(){
+        el("modalProductos").classList.add("show");
+        el("productosVistaLista").style.display = "";
+        el("productosVistaForm").style.display = "none";
+        cargarLista();
+    }
+    function cerrarModal(){ el("modalProductos").classList.remove("show"); }
+
+    async function cargarLista(){
+        var lista = el("productosLista");
+        lista.innerHTML = '<div class="mensaje-abono">Cargando…</div>';
+        var r;
+        try{
+            r = await window.supabaseClient.from("products").select("*").order("nombre");
+        }catch(e){
+            lista.innerHTML = '<div class="mensaje-abono">No se pudo cargar. ¿Ya corriste el SQL de la tabla products?</div>';
+            return;
+        }
+        pintarLista(r && !r.error ? (r.data||[]) : []);
+    }
+
+    function pintarLista(datos){
+        var lista = el("productosLista");
+        var q = (el("productosBuscar").value || "").toLowerCase();
+        var filtrados = datos.filter(function(p){
+            if(!q) return true;
+            return String(p.nombre||"").toLowerCase().indexOf(q) !== -1 ||
+                   String(p.categoria||"").toLowerCase().indexOf(q) !== -1;
+        });
+        if(!filtrados.length){
+            lista.innerHTML = '<div class="mensaje-abono">Sin amigurumis todavía. ¡Crea el primero!</div>';
+            return;
+        }
+        lista.innerHTML = "";
+        filtrados.forEach(function(p){
+            var fila = document.createElement("div");
+            fila.className = "prod-fila";
+            var cats = (p.categoria||"").split(",").map(function(s){return s.trim();}).filter(Boolean).join(" · ") || "—";
+            var bad = p.disponible ? '<span class="prod-badge si">DISPONIBLE</span>' : '<span class="prod-badge no">OCULTO</span>';
+            var foto = p.imagen_url
+                ? '<img class="prod-foto" src="' + escUrl(p.imagen_url) + '" alt="">'
+                : '<div class="prod-foto-vacio">🧶</div>';
+            fila.innerHTML =
+                foto +
+                '<div class="prod-info"><div class="prod-nombre">' + esc(String(p.nombre||"")) + bad + '</div>' +
+                '<div class="prod-meta">' + esc(cats) + ' · ' + dinero(p.precio) + (p.tamano ? " · " + esc(p.tamano) : "") + '</div></div>' +
+                '<div class="prod-acciones">' +
+                    '<button type="button" class="btn-editar-prod" title="Editar">✏️</button>' +
+                    '<button type="button" class="btn-eliminar-prod" title="Eliminar">🗑️</button>' +
+                '</div>';
+            fila.querySelector(".btn-editar-prod").addEventListener("click", function(){ editarProducto(p); });
+            fila.querySelector(".btn-eliminar-prod").addEventListener("click", function(){ eliminarProducto(p); });
+            lista.appendChild(fila);
+        });
+    }
+
+    function limpiarForm(){
+        editandoId = null;
+        fotoArchivo = null;
+        el("productoNombre").value = "";
+        el("productoPrecio").value = "";
+        el("productoTamano").value = "";
+        el("productoUnidad").value = "";
+        el("productoDescripcion").value = "";
+        el("productoDisponible").checked = true;
+        el("productoFoto").value = "";
+        el("productoFotoPreview").innerHTML = "";
+        el("mensajeProducto").textContent = "";
+        el("productoFormTitulo").textContent = "Nuevo amigurumi";
+        document.querySelectorAll(".productos-categorias input[type=checkbox]").forEach(function(c){ c.checked = false; });
+    }
+
+    function editarProducto(p){
+        limpiarForm();
+        editandoId = p.id;
+        el("productoFormTitulo").textContent = "Editar: " + String(p.nombre||"");
+        el("productoNombre").value = p.nombre || "";
+        el("productoPrecio").value = p.precio || "";
+        el("productoTamano").value = p.tamano || "";
+        el("productoUnidad").value = p.unidad || "";
+        el("productoDescripcion").value = p.descripcion || "";
+        el("productoDisponible").checked = p.disponible !== false;
+        (p.categoria||"").split(",").map(function(s){return s.trim();}).forEach(function(c){
+            var chk = document.querySelector('.productos-categorias input[value="' + c + '"]');
+            if(chk) chk.checked = true;
+        });
+        if(p.imagen_url) el("productoFotoPreview").innerHTML = '<img src="' + escUrl(p.imagen_url) + '" alt="">';
+        el("productosVistaLista").style.display = "none";
+        el("productosVistaForm").style.display = "";
+        el("productoNombre").focus();
+    }
+
+    function nuevoProducto(){
+        limpiarForm();
+        el("productosVistaLista").style.display = "none";
+        el("productosVistaForm").style.display = "";
+        el("productoNombre").focus();
+    }
+
+    async function guardarProducto(){
+        var nombre = el("productoNombre").value.trim();
+        var precio = Number(el("productoPrecio").value) || 0;
+        if(!nombre){ mostrarToast("Escribe el nombre del amigurumi.","warning","Nombre requerido"); el("productoNombre").focus(); return; }
+        if(precio <= 0){ mostrarToast("Escribe un precio mayor a 0.","warning","Precio requerido"); el("productoPrecio").focus(); return; }
+        var cats = [];
+        document.querySelectorAll(".productos-categorias input[type=checkbox]:checked").forEach(function(c){ cats.push(c.value); });
+        var payload = {
+            nombre: nombre,
+            precio: precio,
+            tamano: el("productoTamano").value.trim() || null,
+            unidad: el("productoUnidad").value.trim() || null,
+            descripcion: el("productoDescripcion").value.trim() || null,
+            categoria: cats.join(","),
+            disponible: el("productoDisponible").checked
+        };
+        var btn = el("guardarProducto");
+        btn.disabled = true; btn.style.opacity = .6;
+        try{
+            if(fotoArchivo){
+                var ext = (fotoArchivo.name.split(".").pop() || "jpg").toLowerCase();
+                var ruta = "productos/" + Date.now() + "-" + Math.random().toString(36).slice(2,7) + "." + ext;
+                var sub = await window.supabaseClient.storage.from("productos").upload(ruta, fotoArchivo, {contentType: fotoArchivo.type || "image/jpeg"});
+                if(sub.error) throw sub.error;
+                payload.imagen_url = window.supabaseClient.storage.from("productos").getPublicUrl(ruta).data.publicUrl;
+            } else if(editandoId){
+                var act = await window.supabaseClient.from("products").select("imagen_url").eq("id", editandoId).maybeSingle();
+                if(act && !act.error && act.data) payload.imagen_url = act.data.imagen_url;
+            }
+            var res = editandoId
+                ? await window.supabaseClient.from("products").update(payload).eq("id", editandoId)
+                : await window.supabaseClient.from("products").insert(payload);
+            if(res.error) throw res.error;
+            mostrarToast(editandoId ? "Amigurumi actualizado 🎉" : "¡Amigurumi subido al catálogo! 🎉","success","Producto guardado");
+            cerrarModal();
+            cargarLista();
+            if(window.supabaseClient){ try{ load(); }catch(e){} }
+        }catch(err){
+            mostrarToast("Error: " + (err && err.message ? err.message : "desconocido"),"danger","No se pudo guardar");
+        }finally{
+            btn.disabled = false; btn.style.opacity = "";
+        }
+    }
+
+    async function eliminarProducto(p){
+        if(!confirm('¿Eliminar "' + String(p.nombre||"") + '" del catálogo?')) return;
+        var r = await window.supabaseClient.from("products").delete().eq("id", p.id);
+        if(r.error){ mostrarToast("Error al eliminar: " + r.error.message,"danger","Error"); return; }
+        mostrarToast("Amigurumi eliminado.","info","Eliminado");
+        cargarLista();
+        if(window.supabaseClient){ try{ load(); }catch(e){} }
+    }
+
+    /* Eventos */
+    var enlace = el("abrirProductos");
+    if(enlace) enlace.addEventListener("click", function(e){ e.preventDefault(); abrirModal(); });
+    var cerrarBtn = el("cerrarModalProductos");
+    if(cerrarBtn) cerrarBtn.addEventListener("click", cerrarModal);
+    var cancelar = el("cancelarProducto");
+    if(cancelar) cancelar.addEventListener("click", cerrarModal);
+    var nuevo = el("btnNuevoProducto");
+    if(nuevo) nuevo.addEventListener("click", nuevoProducto);
+    var guardar = el("guardarProducto");
+    if(guardar) guardar.addEventListener("click", guardarProducto);
+    var buscar = el("productosBuscar");
+    if(buscar) buscar.addEventListener("input", cargarLista);
+    var foto = el("productoFoto");
+    if(foto) foto.addEventListener("change", function(e){
+        fotoArchivo = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+        el("productoFotoPreview").innerHTML = "";
+        if(fotoArchivo){
+            var img = document.createElement("img");
+            img.src = URL.createObjectURL(fotoArchivo);
+            el("productoFotoPreview").appendChild(img);
+        }
+    });
+    var modalProd = el("modalProductos");
+    if(modalProd) modalProd.addEventListener("click", function(e){ if(e.target === this) cerrarModal(); });
+})();
+</script>
 
 <!-- ==========================================
      MODAL REGISTRAR ABONO
@@ -9421,6 +9676,91 @@ document.addEventListener("DOMContentLoaded", function () {
             >
                 <img src="img/abono.png" alt="PDF" class="grilla-icon"> Registrar abono
             </button>
+
+        </div>
+
+    </div>
+</div>
+<!-- MODAL PRODUCTOS (ADMIN) -->
+<div id="modalProductos" class="modal-abono">
+
+    <div class="modal-abono-contenido modal-productos-contenido">
+
+        <button
+            type="button"
+            id="cerrarModalProductos"
+            class="modal-abono-cerrar"
+        >
+            ×
+        </button>
+
+        <div class="modal-abono-titulo">
+            🧶 Productos del catálogo
+        </div>
+
+        <!-- VISTA LISTA -->
+        <div id="productosVistaLista">
+
+            <div class="productos-bar">
+                <input id="productosBuscar" type="search" placeholder="Buscar amigurumi…">
+                <button type="button" id="btnNuevoProducto" class="btn pink">＋ Nuevo</button>
+            </div>
+
+            <div id="productosLista" class="productos-lista"></div>
+
+        </div>
+
+        <!-- VISTA FORMULARIO -->
+        <div id="productosVistaForm" style="display:none">
+
+            <div class="modal-abono-datos">
+                <div>
+                    <span>Producto</span>
+                    <strong id="productoFormTitulo">Nuevo amigurumi</strong>
+                </div>
+            </div>
+
+            <label for="productoNombre">Nombre *</label>
+            <input id="productoNombre" type="text" placeholder="Ej: Llavero Conejito">
+
+            <label for="productoPrecio">Precio ($) *</label>
+            <input id="productoPrecio" type="number" min="0" step="500" placeholder="Ej: 35000">
+
+            <div class="productos-grid-dos">
+                <div>
+                    <label for="productoTamano">Tamaño</label>
+                    <input id="productoTamano" type="text" placeholder="Ej: 10 cm">
+                </div>
+                <div>
+                    <label for="productoUnidad">Unidad (opcional)</label>
+                    <input id="productoUnidad" type="text" placeholder="Ej: c/u">
+                </div>
+            </div>
+
+            <label>Categorías</label>
+            <div class="productos-categorias">
+                <label class="cat-check"><input type="checkbox" value="Animales"> 🐻 Animales</label>
+                <label class="cat-check"><input type="checkbox" value="Personajes"> ⭐ Personajes</label>
+                <label class="cat-check"><input type="checkbox" value="Llaveros"> 🔑 Llaveros</label>
+                <label class="cat-check"><input type="checkbox" value="Personalizados"> ✨ Personalizados</label>
+            </div>
+
+            <label for="productoDescripcion">Descripción</label>
+            <textarea id="productoDescripcion" rows="2" placeholder="Detalles del amigurumi"></textarea>
+
+            <label class="cat-check disponible"><input type="checkbox" id="productoDisponible" checked> ✅ Disponible en el catálogo</label>
+
+            <label for="productoFoto">Foto</label>
+            <input id="productoFoto" type="file" accept="image/*">
+
+            <div id="productoFotoPreview" class="productos-foto-preview"></div>
+
+            <div id="mensajeProducto" class="mensaje-abono"></div>
+
+            <div class="modal-abono-botones">
+                <button type="button" id="cancelarProducto" class="btn gray">Cancelar</button>
+                <button type="button" id="guardarProducto" class="btn green"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar producto</button>
+            </div>
 
         </div>
 

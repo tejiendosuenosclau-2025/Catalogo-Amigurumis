@@ -750,20 +750,20 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria[data-categoria="Llaveros"]:hover .cat-icono{color:#7350AC}
 .categoria[data-categoria="Personalizados"]:hover .cat-icono{color:#3D7BC0}
 /* estado activo: el botón elegido se enciende en su color */
-.categoria:is(.activo,.active,.seleccionada){color:#fff!important;transform:translateY(-2px)}
-.categoria:is(.activo,.active,.seleccionada) .cat-texto{color:#fff!important}
-.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#F7B267,#EF8F3C)!important;border-color:#EF8F3C!important;box-shadow:0 8px 20px rgba(239,143,60,.40)!important}
-.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#58C77B,#3CB371)!important;border-color:#3CB371!important;box-shadow:0 8px 20px rgba(60,179,113,.40)!important}
-.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#F06A93,#E85C8B)!important;border-color:#E85C8B!important;box-shadow:0 8px 20px rgba(232,92,139,.40)!important}
-.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#EDC24F,#E8B73D)!important;border-color:#E8B73D!important;box-shadow:0 8px 20px rgba(232,183,61,.40)!important}
-.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#9A74D4,#8A63C9)!important;border-color:#8A63C9!important;box-shadow:0 8px 20px rgba(138,99,201,.40)!important}
-.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada){background:linear-gradient(135deg,#62A2E8,#4E8FD6)!important;border-color:#4E8FD6!important;box-shadow:0 8px 20px rgba(78,143,214,.40)!important}
-.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada) .cat-icono{color:#D97A28!important}
-.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada) .cat-icono{color:#2E9E63!important}
-.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada) .cat-icono{color:#D94F7F!important}
-.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada) .cat-icono{color:#C99A24!important}
-.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada) .cat-icono{color:#7350AC!important}
-.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada) .cat-icono{color:#3D7BC0!important}
+.categoria:is(.activo,.active,.seleccionada,.activa){color:#fff!important;transform:translateY(-2px)}
+.categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#fff!important}
+.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#F7B267,#EF8F3C)!important;border-color:#EF8F3C!important;box-shadow:0 8px 20px rgba(239,143,60,.40)!important}
+.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#58C77B,#3CB371)!important;border-color:#3CB371!important;box-shadow:0 8px 20px rgba(60,179,113,.40)!important}
+.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#F06A93,#E85C8B)!important;border-color:#E85C8B!important;box-shadow:0 8px 20px rgba(232,92,139,.40)!important}
+.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#EDC24F,#E8B73D)!important;border-color:#E8B73D!important;box-shadow:0 8px 20px rgba(232,183,61,.40)!important}
+.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#9A74D4,#8A63C9)!important;border-color:#8A63C9!important;box-shadow:0 8px 20px rgba(138,99,201,.40)!important}
+.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#62A2E8,#4E8FD6)!important;border-color:#4E8FD6!important;box-shadow:0 8px 20px rgba(78,143,214,.40)!important}
+.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#D97A28!important}
+.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#2E9E63!important}
+.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#D94F7F!important}
+.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#C99A24!important}
+.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#7350AC!important}
+.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#3D7BC0!important}
 /* pasteles por categoría */
 .categoria[data-categoria="Todos"]{background:linear-gradient(135deg,#FFF1E6,#FFE4CD);border-color:#F5D9C0}
 .categoria[data-categoria="Todos"]:hover{background:linear-gradient(135deg,#F7B267,#EF8F3C);border-color:#EF8F3C;box-shadow:0 8px 20px rgba(239,143,60,.40)}
@@ -977,6 +977,62 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 </script>
 <script type="module" src="js/modal.js"></script>
 <script src="js/menu.js"></script>
+<script>
+/* 🧶 Catálogo conectado a Supabase (tabla products) — sin tocar app.js */
+(function(){
+    if(!window.supabaseClient) return;
+    var fetchOriginal = window.fetch;
+
+    var CAT_ICONOS = {
+        'Todos': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>',
+        'Disponibles': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="m8.8 12.3 2.1 2.1 4.3-4.6"/></svg>',
+        'Animales': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="6"/><circle cx="8.2" cy="9.2" r="2.7"/><circle cx="15.8" cy="9.2" r="2.7"/><path d="M10.3 15c.9.9 2.5.9 3.4 0"/></svg>',
+        'Personajes': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.2 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.5 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
+        'Llaveros': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="14" r="4.5"/><path d="m11.4 10.6 8.1-8.1"/><path d="m15.2 6.8 2.8 2.8"/><path d="m17.5 4.5 1.9 1.9"/></svg>',
+        'Personalizados': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.8l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M18.8 14.6l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9z"/></svg>'
+    };
+
+    function mapear(p){
+        var cats = String(p.categoria||"").split(",").map(function(s){ return s.trim(); }).filter(Boolean);
+        if(p.disponible !== false && cats.indexOf("Disponibles") === -1) cats.push("Disponibles");
+        return {
+            id: p.id,
+            nombre: p.nombre,
+            categoria: cats,
+            precio: Number(p.precio) || 0,
+            tamano: p.tamano || "",
+            unidad: p.unidad || "",
+            imagen: p.imagen_url || ""
+        };
+    }
+
+    window.fetch = function(url, opts){
+        if(typeof url === "string" && url.indexOf("productos.json") !== -1){
+            return window.supabaseClient.from("products").select("*").order("nombre").then(function(r){
+                if(r && !r.error && Array.isArray(r.data) && r.data.length){
+                    return new Response(JSON.stringify(r.data.map(mapear)), {status:200, headers:{"Content-Type":"application/json"}});
+                }
+                return fetchOriginal.apply(this, arguments);
+            }).catch(function(){ return fetchOriginal.apply(this, arguments); });
+        }
+        return fetchOriginal.apply(this, arguments);
+    };
+
+    /* app.js borra los iconos al actualizar contadores → los reconstruimos */
+    window.addEventListener("productosCargados", function(){
+        var total = (window.todosLosProductos || []).length;
+        document.querySelectorAll(".categoria").forEach(function(btn){
+            var cat = btn.dataset.categoria;
+            if(cat === "Todos"){
+                btn.innerHTML = CAT_ICONOS["Todos"] + ' <span class="cat-texto">Inicio (<span id="totalProductos">' + total + '</span>)</span>';
+                return;
+            }
+            var n = (window.todosLosProductos || []).filter(function(p){ return p.categoria && p.categoria.indexOf(cat) !== -1; }).length;
+            btn.innerHTML = (CAT_ICONOS[cat] || "") + " " + cat + " (" + n + ")";
+        });
+    });
+})();
+</script>
 <script src="js/app.js"></script>
 <script type="module" src="js/whatsapp.js"></script>
 <script src="js/contacto.js"></script>
