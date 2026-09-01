@@ -2494,8 +2494,20 @@ select.sel-nativo{display:none !important}
 .productos-foto-preview img{
     width:86px;height:86px;object-fit:cover;border-radius:12px;
     border:2px solid #f3d5e2;box-shadow:0 4px 12px rgba(244,125,163,.2)}
-/* Clientes recientes (contenedor #clients) */
-.clientes-recientes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+/* Clientes recientes (barra plegable) */
+.clientes-recientes-box{
+    margin:0 0 16px;border:1.5px solid #f3d5e2;border-radius:14px;
+    background:linear-gradient(135deg,#fff8fb,#fffdfe);
+    padding:10px 14px;box-shadow:0 4px 12px rgba(244,125,163,.08)}
+.clientes-recientes-box summary{
+    cursor:pointer;font-weight:800;color:#e85c8b;font-size:13px;
+    list-style:none;user-select:none;
+    display:flex;align-items:center;justify-content:space-between}
+.clientes-recientes-box summary::-webkit-details-marker{display:none}
+.clientes-recientes-box summary::after{content:"▾";transition:transform .2s ease;color:#f47da3;font-size:12px}
+.clientes-recientes-box[open] summary::after{transform:rotate(180deg)}
+.clientes-recientes-box[open] #clients{margin-top:10px}
+.clientes-recientes{display:flex;flex-wrap:wrap;gap:8px;margin:0}
 .cliente-chip{
     display:flex;flex-direction:column;gap:2px;
     background:#fff8fb;border:1.5px solid #f3d5e2;padding:8px 12px;border-radius:12px;
@@ -2868,7 +2880,6 @@ select.sel-nativo{display:none !important}
 </section>
 </div>
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
-<div id="clients" class="clientes-recientes"></div>
 <form id="form">
 <div class="aviso-bloqueo" id="avisoBloqueo">🔒 Pulsa "+ Nueva factura" para comenzar a registrar</div>
 <section class="grid datos-superiores">
@@ -8367,7 +8378,11 @@ async function cargarClientesDB(){
  return}
  clients=data||[];
  const cl=$("clients");
- if(cl) cl.innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div class="cliente-chip"><b>'+esc(c.nombre)+'</b><span>'+esc(c.telefono||"")+'</span><button type="button" onclick="useClient('+i+')">Usar</button></div>').join(""):'<div class="cliente-chip vacio">Aún no hay clientes.</div>';
+ if(cl){
+     cl.innerHTML=clients.length?clients.slice(0,30).map((c,i)=>'<div class="cliente-chip"><b>'+esc(c.nombre)+'</b><span>'+esc(c.telefono||"")+'</span><button type="button" onclick="useClient('+i+')">Usar</button></div>').join(""):'<div class="cliente-chip vacio">Aún no hay clientes.</div>';
+     const sum=$("clientesToggle");
+     if(sum) sum.textContent="👥 Clientes recientes ("+clients.length+")";
+ }
 }
 function useClient(i){let c=clients[i];
 if(!c)return;
