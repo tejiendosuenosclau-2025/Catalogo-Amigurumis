@@ -780,44 +780,101 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria[data-categoria="Personalizados"]{background:linear-gradient(135deg,#E9F2FD,#DBEBFC);border-color:#C9DDF7}
 .categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
 /* ============================================================
-   🎡 MENÚ CIRCULAR PREMIUM — medallones con anillo giratorio
+   💎 MENÚ CRISTAL ELEVADO — vidrio flotante estilo iOS de lujo
    ============================================================ */
-@property --tsAng{syntax:"<angle>";initial-value:0deg;inherits:false}
-.categoria .cat-icono{
-    width:38px;height:38px;border-radius:50%;flex:0 0 auto;
-    padding:7px;box-sizing:border-box;display:block;
-    background:
-        radial-gradient(circle at 32% 28%, #ffffff, #fff5f9 75%) padding-box,
-        conic-gradient(from var(--tsAng), #ff9ec0, #e85c8b, #c96bd8, #6fb5ff, #ff9ec0) border-box;
-    border:2.5px solid transparent;
-    box-shadow:0 4px 14px rgba(244,125,163,.30);
-    animation:tsAnilloGira 5s linear infinite;
-    transition:transform .22s ease,box-shadow .22s ease}
-@keyframes tsAnilloGira{to{--tsAng:360deg}}
-/* botones en forma de píldora premium */
-.categoria{border-radius:999px}
-/* medallón al pasar el mouse: crece, gira y se detiene el anillo */
-.categoria:hover .cat-icono{
-    transform:scale(1.16) rotate(-8deg);
-    box-shadow:0 8px 20px rgba(244,125,163,.50);
-    animation-play-state:paused}
-/* medallón en estado activo: anillo blanco + resplandor */
-.categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    animation-play-state:paused;
-    box-shadow:0 0 0 3px rgba(255,255,255,.92),0 8px 22px rgba(232,92,139,.55);
-    transform:scale(1.05)}
-/* entrada: pop circular con rebote */
-.categoria{animation:tsPopCat .5s cubic-bezier(.34,1.56,.64,1) backwards}
-.categoria:nth-child(1){animation-delay:.05s}
-.categoria:nth-child(2){animation-delay:.12s}
-.categoria:nth-child(3){animation-delay:.19s}
+.categoria{
+    border-radius:999px;
+    background:rgba(255,255,255,.45) !important;
+    -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
+    border:1px solid rgba(255,255,255,.75) !important;
+    box-shadow:
+        0 8px 24px rgba(120,80,95,.10),
+        0 22px 50px rgba(120,80,95,.08),
+        inset 0 1px 0 rgba(255,255,255,.95),
+        inset 0 -1px 0 rgba(183,110,138,.08) !important;
+    transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease,background .4s ease,color .4s ease !important;
+    animation:tsFlotarEntrada .7s ease backwards}
+.categoria:nth-child(1){animation-delay:.08s}
+.categoria:nth-child(2){animation-delay:.14s}
+.categoria:nth-child(3){animation-delay:.20s}
 .categoria:nth-child(4){animation-delay:.26s}
-.categoria:nth-child(5){animation-delay:.33s}
-.categoria:nth-child(6){animation-delay:.40s}
-@keyframes tsPopCat{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.categoria:nth-child(5){animation-delay:.32s}
+.categoria:nth-child(6){animation-delay:.38s}
+@keyframes tsFlotarEntrada{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* borde superior luminoso (la luz entra por arriba del vidrio) */
+.categoria::before{
+    content:"";position:absolute;top:3px;left:10%;right:10%;height:1.5px;
+    border-radius:999px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);
+    pointer-events:none}
+.categoria::after{background:linear-gradient(100deg,transparent,rgba(255,255,255,.30),transparent)}
+.categoria:hover{
+    transform:translateY(-5px) !important;
+    background:rgba(255,255,255,.62) !important;
+    border-color:rgba(255,255,255,.9) !important;
+    box-shadow:
+        0 14px 34px rgba(120,80,95,.14),
+        0 30px 64px rgba(120,80,95,.10),
+        inset 0 1px 0 rgba(255,255,255,1),
+        inset 0 -1px 0 rgba(183,110,138,.10) !important;
+    color:#b76e8a !important}
+.categoria:hover .cat-texto{color:#b76e8a !important}
+/* medallón de cristal con luz interior */
+.categoria .cat-icono{
+    width:34px;height:34px;border-radius:50%;
+    padding:7px;box-sizing:border-box;display:block;flex:0 0 auto;
+    background:rgba(255,255,255,.60);
+    border:1px solid rgba(255,255,255,.85);
+    box-shadow:inset 0 1px 0 #fff,0 4px 12px rgba(120,80,95,.10);
+    transition:transform .35s ease,box-shadow .35s ease,color .35s ease}
+.categoria:hover .cat-icono{transform:scale(1.1) translateY(-1px);box-shadow:inset 0 1px 0 #fff,0 6px 16px rgba(120,80,95,.14)}
+/* estado activo: vidrio rosado translúcido con luz */
+.categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(135deg,rgba(201,138,158,.88),rgba(183,110,138,.88)) !important;
+    border-color:rgba(255,255,255,.85) !important;
+    color:#fff !important;
+    box-shadow:
+        0 12px 30px rgba(183,110,138,.30),
+        0 26px 60px rgba(183,110,138,.18),
+        inset 0 1px 0 rgba(255,255,255,.5),
+        inset 0 -1px 0 rgba(255,255,255,.15) !important}
+.categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#fff !important}
+.categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    background:rgba(255,255,255,.28);
+    border-color:rgba(255,255,255,.6);
+    box-shadow:0 0 0 4px rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.6);
+    transform:scale(1.02)}
+/* iconos en tonos sobrios por categoría */
+.categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
+.categoria[data-categoria="Disponibles"] .cat-icono{color:#7fa98a}
+.categoria[data-categoria="Animales"] .cat-icono{color:#b76e8a}
+.categoria[data-categoria="Personajes"] .cat-icono{color:#c2a15a}
+.categoria[data-categoria="Llaveros"] .cat-icono{color:#9a84b8}
+.categoria[data-categoria="Personalizados"] .cat-icono{color:#7f9cb8}
+.categoria[data-categoria="Todos"]:hover .cat-icono,
+.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#b9805c !important}
+.categoria[data-categoria="Disponibles"]:hover .cat-icono,
+.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#7fa98a !important}
+.categoria[data-categoria="Animales"]:hover .cat-icono,
+.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#b76e8a !important}
+.categoria[data-categoria="Personajes"]:hover .cat-icono,
+.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#c2a15a !important}
+.categoria[data-categoria="Llaveros"]:hover .cat-icono,
+.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#9a84b8 !important}
+.categoria[data-categoria="Personalizados"]:hover .cat-icono,
+.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#7f9cb8 !important}
+/* título del menú en tono sobrio */
+#categorias h2{
+    background:linear-gradient(90deg,#b76e8a,#9a84b8,#b76e8a);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:tsBrillo 8s linear infinite;
+    letter-spacing:1.5px}
+#categorias h2::after{background:linear-gradient(90deg,#d9b8a8,#b76e8a)}
 @media (prefers-reduced-motion:reduce){
-    .categoria .cat-icono{animation:none}
-    .categoria{animation:none}
+    .categoria,.categoria .cat-icono{animation:none !important}
+    .categoria,.categoria .cat-icono{transition:none !important}
 }
 
 /* Botón volver arriba */
