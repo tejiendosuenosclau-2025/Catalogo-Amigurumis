@@ -2436,7 +2436,24 @@ select.sel-nativo{display:none !important}
 /* ============================================================
    🧶 MODAL PRODUCTOS (ADMIN)
    ============================================================ */
-.modal-productos-contenido{width:min(680px,100%)}
+.modal-productos-contenido{
+    width:min(680px,100%);
+    max-height:92vh;
+    display:flex;
+    flex-direction:column}
+#productosVistaLista{overflow-y:auto}
+#productosVistaForm{
+    overflow-y:auto;
+    flex:1;
+    min-height:0;
+    padding-right:6px}
+.modal-productos-contenido .modal-abono-botones{
+    flex:0 0 auto;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1.5px solid #f3d5e2;
+    background:#fff;
+    z-index:5}
 .productos-bar{display:flex;gap:10px;margin:14px 0 12px}
 .productos-bar input{
     flex:1;padding:11px 14px;border:1.5px solid #f0c9d8;border-radius:11px;
@@ -9396,6 +9413,7 @@ document.addEventListener("DOMContentLoaded", function () {
         el("modalProductos").classList.add("show");
         el("productosVistaLista").style.display = "";
         el("productosVistaForm").style.display = "none";
+        el("productosBotones").style.display = "none";
         cargarLista();
     }
     function cerrarModal(){ el("modalProductos").classList.remove("show"); }
@@ -9481,6 +9499,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if(p.imagen_url) el("productoFotoPreview").innerHTML = '<img src="' + escUrl(p.imagen_url) + '" alt="">';
         el("productosVistaLista").style.display = "none";
         el("productosVistaForm").style.display = "";
+        el("productosBotones").style.display = "flex";
         el("productoNombre").focus();
     }
 
@@ -9488,6 +9507,7 @@ document.addEventListener("DOMContentLoaded", function () {
         limpiarForm();
         el("productosVistaLista").style.display = "none";
         el("productosVistaForm").style.display = "";
+        el("productosBotones").style.display = "flex";
         el("productoNombre").focus();
     }
 
@@ -9760,11 +9780,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <div id="mensajeProducto" class="mensaje-abono"></div>
 
-            <div class="modal-abono-botones">
-                <button type="button" id="cancelarProducto" class="btn gray">Cancelar</button>
-                <button type="button" id="guardarProducto" class="btn green"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar producto</button>
-            </div>
+        </div>
 
+        <div id="productosBotones" class="modal-abono-botones" style="display:none">
+            <button type="button" id="cancelarProducto" class="btn gray">Cancelar</button>
+            <button type="button" id="guardarProducto" class="btn green"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar producto</button>
         </div>
 
     </div>
