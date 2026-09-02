@@ -780,70 +780,82 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
 .categoria[data-categoria="Personalizados"]{background:linear-gradient(135deg,#E9F2FD,#DBEBFC);border-color:#C9DDF7}
 .categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
 /* ============================================================
-   💎 MENÚ CRISTAL ELEVADO — vidrio flotante estilo iOS de lujo
+   🧶 MENÚ ANILLOS DE TEJIDO — aros de crochet premium
    ============================================================ */
-.categoria{
-    border-radius:999px;
-    background:rgba(255,255,255,.45) !important;
-    -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
-    border:1px solid rgba(255,255,255,.75) !important;
-    box-shadow:
-        0 8px 24px rgba(120,80,95,.10),
-        0 22px 50px rgba(120,80,95,.08),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(183,110,138,.08) !important;
-    transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease,background .4s ease,color .4s ease !important;
-    animation:tsFlotarEntrada .7s ease backwards}
-.categoria:nth-child(1){animation-delay:.08s}
-.categoria:nth-child(2){animation-delay:.14s}
-.categoria:nth-child(3){animation-delay:.20s}
-.categoria:nth-child(4){animation-delay:.26s}
-.categoria:nth-child(5){animation-delay:.32s}
-.categoria:nth-child(6){animation-delay:.38s}
-@keyframes tsFlotarEntrada{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-/* borde superior luminoso (la luz entra por arriba del vidrio) */
-.categoria::before{
-    content:"";position:absolute;top:3px;left:10%;right:10%;height:1.5px;
-    border-radius:999px;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);
-    pointer-events:none}
-.categoria::after{background:linear-gradient(100deg,transparent,rgba(255,255,255,.30),transparent)}
-.categoria:hover{
-    transform:translateY(-5px) !important;
-    background:rgba(255,255,255,.62) !important;
-    border-color:rgba(255,255,255,.9) !important;
-    box-shadow:
-        0 14px 34px rgba(120,80,95,.14),
-        0 30px 64px rgba(120,80,95,.10),
-        inset 0 1px 0 rgba(255,255,255,1),
-        inset 0 -1px 0 rgba(183,110,138,.10) !important;
-    color:#b76e8a !important}
-.categoria:hover .cat-texto{color:#b76e8a !important}
-/* medallón de cristal con luz interior */
-.categoria .cat-icono{
-    width:34px;height:34px;border-radius:50%;
+.categorias{
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+    gap:10px 16px;max-width:100%;
+    background:transparent !important;
+    border:0 !important;box-shadow:none !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    padding:0 !important;border-radius:0 !important;
+    animation:tsAnilloEntrada .6s ease both}
+@keyframes tsAnilloEntrada{from{opacity:0}to{opacity:1}}
+#catIndicador{display:none !important}
+#categorias .categoria{
+    position:relative;z-index:2;
+    display:inline-flex;align-items:center;gap:9px;
+    padding:7px 14px 7px 7px;
+    background:transparent !important;
+    border:0 !important;border-radius:999px;
+    box-shadow:none !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    color:#4a3f43 !important;
+    transition:transform .3s ease,background .3s ease,color .3s ease !important;
+    animation:tsAnilloPop .5s ease backwards}
+#categorias .categoria:nth-child(2){animation-delay:.06s}
+#categorias .categoria:nth-child(3){animation-delay:.12s}
+#categorias .categoria:nth-child(4){animation-delay:.18s}
+#categorias .categoria:nth-child(5){animation-delay:.24s}
+#categorias .categoria:nth-child(6){animation-delay:.30s}
+#categorias .categoria:nth-child(7){animation-delay:.36s}
+@keyframes tsAnilloPop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+#categorias .categoria::before,#categorias .categoria::after{display:none !important}
+/* anillo de crochet: borde punteado como puntadas de hilo */
+#categorias .categoria .cat-icono{
+    width:38px;height:38px;border-radius:50%;
     padding:7px;box-sizing:border-box;display:block;flex:0 0 auto;
-    background:rgba(255,255,255,.60);
-    border:1px solid rgba(255,255,255,.85);
-    box-shadow:inset 0 1px 0 #fff,0 4px 12px rgba(120,80,95,.10);
-    transition:transform .35s ease,box-shadow .35s ease,color .35s ease}
-.categoria:hover .cat-icono{transform:scale(1.1) translateY(-1px);box-shadow:inset 0 1px 0 #fff,0 6px 16px rgba(120,80,95,.14)}
-/* estado activo: vidrio rosado translúcido con luz */
-.categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(135deg,rgba(201,138,158,.88),rgba(183,110,138,.88)) !important;
-    border-color:rgba(255,255,255,.85) !important;
+    background:#fffdf9;
+    border:3px dashed var(--hilo,#d9a9b8);
+    box-shadow:0 3px 10px rgba(120,80,95,.10);
+    transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease,background .3s ease,color .3s ease}
+#categorias .categoria:hover{
+    background:rgba(217,169,184,.10) !important;
+    transform:translateY(-2px)}
+#categorias .categoria:hover .cat-icono{
+    transform:scale(1.08);
+    border-color:var(--hilo);
+    box-shadow:0 6px 16px rgba(120,80,95,.16)}
+#categorias .categoria:hover,#categorias .categoria:hover .cat-texto{color:#a05f78 !important}
+/* color del hilo por categoría */
+#categorias .categoria[data-categoria="Todos"]{--hilo:#d8a884}
+#categorias .categoria[data-categoria="Disponibles"]{--hilo:#a9c3ad}
+#categorias .categoria[data-categoria="Animales"]{--hilo:#d9a9b8}
+#categorias .categoria[data-categoria="Personajes"]{--hilo:#d8c391}
+#categorias .categoria[data-categoria="Llaveros"]{--hilo:#bfa9d4}
+#categorias .categoria[data-categoria="Personalizados"]{--hilo:#a9c3d4}
+/* iconos en el tono de su hilo */
+#categorias .categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
+#categorias .categoria[data-categoria="Disponibles"] .cat-icono{color:#7fa98a}
+#categorias .categoria[data-categoria="Animales"] .cat-icono{color:#b76e8a}
+#categorias .categoria[data-categoria="Personajes"] .cat-icono{color:#c2a15a}
+#categorias .categoria[data-categoria="Llaveros"] .cat-icono{color:#9a84b8}
+#categorias .categoria[data-categoria="Personalizados"] .cat-icono{color:#7f9cb8}
+/* activo: el anillo se rellena como un aro tejido sólido */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:rgba(217,169,184,.12) !important;
+    color:#a05f78 !important;
+    transform:translateY(-1px)}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#a05f78 !important;font-weight:800}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    background:linear-gradient(135deg,var(--hilo,#d9a9b8),#b76e8a);
+    border:0;
+    box-shadow:0 5px 14px rgba(120,80,95,.22);
     color:#fff !important;
-    box-shadow:
-        0 12px 30px rgba(183,110,138,.30),
-        0 26px 60px rgba(183,110,138,.18),
-        inset 0 1px 0 rgba(255,255,255,.5),
-        inset 0 -1px 0 rgba(255,255,255,.15) !important}
-.categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#fff !important}
-.categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    background:rgba(255,255,255,.28);
-    border-color:rgba(255,255,255,.6);
-    box-shadow:0 0 0 4px rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.6);
-    transform:scale(1.02)}
+    transform:scale(1.05)}
+@media (prefers-reduced-motion:reduce){
+    #categorias .categoria,#categorias .categoria .cat-icono,.categorias{animation:none !important;transition:none !important}
+}
 /* iconos en tonos sobrios por categoría */
 .categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
 .categoria[data-categoria="Disponibles"] .cat-icono{color:#7fa98a}
@@ -978,6 +990,8 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
         <h2 id="categorias-titulo">Nuestros Amigurumis</h2>
 
         <div class="categorias">
+
+            <div id="catIndicador" class="cat-indicador"></div>
 
             <button type="button" class="categoria" data-categoria="Todos">
                 <svg class="cat-icono c-Inicio" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M10 20v-5.5h4V20"/><path d="M14.4 7.4V4.9h2v2.8"/><rect x="7" y="12.4" width="2.7" height="2.7" rx=".6"/></svg>
@@ -1145,12 +1159,29 @@ body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-ser
     }
     window.addEventListener("productosCargados", renderCategorias);
     document.addEventListener("DOMContentLoaded", renderCategorias);
-    /* Vigilante: si cualquier script (app.js) reescribe los botones sin icono, los restauramos */
+    /* Indicador deslizante del menú segmentado */
+    function moverIndicador(){
+        var ind = document.getElementById("catIndicador");
+        if(!ind) return;
+        var caja = document.querySelector(".categorias");
+        var act = document.querySelector(".categoria.activa, .categoria.activo, .categoria.active, .categoria.seleccionada");
+        if(!caja || !act){ ind.style.opacity = "0"; return; }
+        var rc = caja.getBoundingClientRect();
+        var rb = act.getBoundingClientRect();
+        ind.style.opacity = "1";
+        ind.style.left = (rb.left - rc.left) + "px";
+        ind.style.width = rb.width + "px";
+    }
+    /* Vigilante: restaura iconos y mueve el indicador cuando cambian las categorías */
     var contCats = document.querySelector(".categorias");
     if(contCats && "MutationObserver" in window){
-        new MutationObserver(function(){ setTimeout(renderCategorias, 0); })
-            .observe(contCats, {childList:true, subtree:true});
+        new MutationObserver(function(){
+            setTimeout(function(){ renderCategorias(); moverIndicador(); }, 0);
+        }).observe(contCats, {childList:true, subtree:true, attributes:true, attributeFilter:["class"]});
     }
+    window.addEventListener("resize", function(){ setTimeout(moverIndicador, 60); });
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(moverIndicador, 60); });
+    setTimeout(moverIndicador, 300);
 })();
 </script>
 <script src="js/app.js"></script>
