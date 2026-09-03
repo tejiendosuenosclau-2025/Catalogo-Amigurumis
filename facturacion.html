@@ -1994,6 +1994,14 @@ animation:tsToastProgress 4s linear forwards}
 .ps-lista{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid #f0c9d8;border-radius:10px;max-height:200px;overflow-y:auto;display:none;z-index:99;list-style:none;margin:0;padding:4px;box-shadow:0 8px 20px rgba(244,125,163,.18);}
 .ps-lista li{padding:9px 12px;cursor:pointer;font-size:13px;color:#444;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ps-lista li:hover{background:#fde7ef;color:#e35f92;}
+/* Sugerencias con foto del producto */
+.ps-lista li{display:flex;align-items:center;gap:10px;white-space:nowrap;overflow:hidden}
+.ps-foto{width:34px;height:34px;border-radius:9px;object-fit:cover;flex:0 0 34px;background:#fde9f0;border:1px solid #f7d3df}
+.ps-foto-vacio{display:flex;align-items:center;justify-content:center;font-size:15px}
+.ps-texto{display:flex;flex-direction:column;min-width:0}
+.ps-texto b{font-size:13px;color:#40373b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ps-texto small{font-size:11px;color:#9b9197;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ps-lista li:hover b{color:#e35f92}
 
 /* Paginador del historial */
 .historial-paginador{display:none;justify-content:center;align-items:center;gap:6px;margin-top:16px;flex-wrap:wrap}
@@ -4250,6 +4258,7 @@ async function nextInvoiceNumber(){
 }
 
 function options(sel=""){return '<option value="">Seleccionar producto</option>'+products.map(p=>'<option value="'+p.id+'" '+(String(p.id)==String(sel)?"selected":"")+'>'+esc(name(p))+'</option>').join("")}
+function imgPub(u){return u&&u.indexOf("/object/public/")===-1?u.replace(/\/object\//,"/object/public/"):u}
 function row(id="",q=1,price=null,d=0,tam=""){
  const tr=document.createElement("tr"),p=products.find(x=>String(x.id)==String(id));
  tr.innerHTML='<td><div class="ps-caja"><input type="text" class="ps-buscar" placeholder="Buscar producto…" autocomplete="off"><ul class="ps-lista"></ul></div></td><td><input class="qty" type="number" min="1" value="'+q+'"></td><td><input class="price" type="number" min="0" value="'+(price??p?.precio??0)+'"></td><td><input class="tam" type="text" placeholder="ej. 12 cm" value="'+esc(tam)+'"></td><td><input class="disc" type="number" min="0" max="100" value="'+d+'"></td><td class="lt">$0</td><td><button type="button" class="del"><img src="img/eliminar.png" alt="PDF" class="grilla-icon"></button></td>';
@@ -4263,10 +4272,11 @@ function row(id="",q=1,price=null,d=0,tam=""){
    if(!t){lista.style.display="none";return;}
    const res=products.filter(x=>name(x).toLowerCase().includes(t)).slice(0,15);
    if(!res.length){lista.style.display="none";return;}
-   res.forEach(x=>{
-     const li=document.createElement("li");
-     li.textContent=name(x)+(x.tamano?("  ·  "+x.tamano):"")+"  ·  $"+money(x.precio||0);
-     li.addEventListener("mousedown",e=>e.preventDefault());
+    res.forEach(x=>{
+      const li=document.createElement("li");
+      const img=x.imagen_url?'<img class="ps-foto" src="'+esc(imgPub(x.imagen_url))+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="ps-foto ps-foto-vacio">🧶</span>';
+      li.innerHTML=img+'<span class="ps-texto"><b>'+esc(name(x))+'</b><small>'+(x.tamano?(" · "+esc(x.tamano)):"")+' · $'+money(x.precio||0)+'</small></span>';
+      li.addEventListener("mousedown",e=>e.preventDefault());
      li.addEventListener("click",()=>{
        tr.dataset.pid=String(x.id);
        busc.value=name(x);
