@@ -2499,6 +2499,29 @@ select.sel-nativo{display:none !important}
 .cat-check input{accent-color:#e85c8b;width:16px;height:16px;cursor:pointer}
 .cat-check.disponible{grid-column:1/-1}
 .productos-foto-preview{margin-top:8px}
+/* Indicador de progreso de la subida de foto */
+.producto-subida{
+    margin-top:10px;padding:10px 14px;
+    border:1.5px solid #f3d5e2;border-radius:12px;
+    background:#fff8fb;
+    animation:subidaAparece .3s ease}
+@keyframes subidaAparece{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.producto-subida.fracaso{border-color:#f3b7bd;background:#fff4f5}
+.subida-cab{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    font-size:12.5px;font-weight:700;color:#a05f78;margin-bottom:8px}
+.subida-cab b{color:#e85c8b;font-size:13px}
+.subida-pista{height:10px;border-radius:999px;background:#f6e9ef;overflow:hidden}
+.subida-barra{
+    height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,#f5aec7,#f47da3,#e85c8b,#f5aec7);
+    background-size:220% auto;
+    animation:subidaShine .9s linear infinite;
+    transition:width .25s ease}
+.subida-barra.lista{
+    background:linear-gradient(90deg,#3fd584,#1f9a52,#3fd584);
+    background-size:220% auto}
+@keyframes subidaShine{to{background-position:220% center}}
 .productos-foto-preview img{
     width:86px;height:86px;object-fit:cover;border-radius:12px;
     border:2px solid #f3d5e2;box-shadow:0 4px 12px rgba(244,125,163,.2)}
@@ -9518,6 +9541,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function limpiarForm(){
         editandoId = null;
         fotoArchivo = null;
+        if(el("productoSubida")){ el("productoSubida").style.display = "none"; el("productoSubida").classList.remove("fracaso"); }
+        if(el("subidaBarra")) setBarra(0, "📤 Subiendo foto…");
         el("productoNombre").value = "";
         el("productoPrecio").value = "";
         el("productoTamano").value = "";
@@ -9578,30 +9603,78 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         var btn = el("guardarProducto");
         btn.disabled = true; btn.style.opacity = .6;
+        var barraOk = false;
         try{
             if(fotoArchivo){
+                mostrarSubida(true); setBarra(4,"📤 Preparando foto…");
                 var ext = (fotoArchivo.name.split(".").pop() || "jpg").toLowerCase();
                 var ruta = "productos/" + Date.now() + "-" + Math.random().toString(36).slice(2,7) + "." + ext;
-                var sub = await window.supabaseClient.storage.from("productos").upload(ruta, fotoArchivo, {contentType: fotoArchivo.type || "image/jpeg"});
-                if(sub.error) throw sub.error;
+                if(window.SUPABASE_URL && window.SUPABASE_ANON_KEY){
+                    await subirFotoXHR(fotoArchivo, ruta, function(p){
+                        setBarra(8 + Math.round(p * 82), null); /* de 8% a 90% con el progreso real */
+                    });
+                } else {
+                    var sub = await window.supabaseClient.storage.from("productos").upload(ruta, fotoArchivo, {contentType: fotoArchivo.type || "image/jpeg"});
+                    if(sub.error) throw sub.error;
+                    setBarra(90, null);
+                }
                 payload.imagen_url = urlPublica(window.supabaseClient.storage.from("productos").getPublicUrl(ruta).data.publicUrl);
+                setBarra(100,"✅ Foto subida");
+                barraOk = true;
+                await pausa(350);
             } else if(editandoId){
                 var act = await window.supabaseClient.from("products").select("imagen_url").eq("id", editandoId).maybeSingle();
                 if(act && !act.error && act.data) payload.imagen_url = act.data.imagen_url;
             }
+            if(fotoArchivo) setBarra(100,"💾 Guardando en el catálogo…");
             var res = editandoId
                 ? await window.supabaseClient.from("products").update(payload).eq("id", editandoId)
                 : await window.supabaseClient.from("products").insert(payload);
             if(res.error) throw res.error;
+            if(fotoArchivo) setBarra(100,"🎉 ¡Guardado!");
             mostrarToast(editandoId ? "Amigurumi actualizado 🎉" : "¡Amigurumi subido al catálogo! 🎉","success","Producto guardado");
+            mostrarSubida(false);
             cerrarModal();
             cargarLista();
             if(window.supabaseClient){ try{ load(); }catch(e){} }
         }catch(err){
+            el("productoSubida").classList.add("fracaso");
+            setBarra(barraOk ? 100 : Math.max(10, parseInt(el("subidaBarra").style.width || "0", 10) || 10), "❌ Ocurrió un error");
             mostrarToast("Error: " + (err && err.message ? err.message : "desconocido"),"danger","No se pudo guardar");
+            setTimeout(function(){ el("productoSubida").classList.remove("fracaso"); mostrarSubida(false); }, 2200);
         }finally{
             btn.disabled = false; btn.style.opacity = "";
         }
+    }
+    function pausa(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+    function mostrarSubida(v){
+        var c = el("productoSubida");
+        if(c) c.style.display = v ? "" : "none";
+    }
+    function setBarra(pct, texto){
+        var b = el("subidaBarra"), p = el("subidaPct"), t = el("subidaTexto");
+        var n = Math.max(0, Math.min(100, pct));
+        if(b){ b.style.width = n + "%"; b.classList.toggle("lista", n >= 100); }
+        if(p) p.textContent = Math.round(n) + "%";
+        if(texto !== null && texto !== undefined && t) t.textContent = texto;
+    }
+    function subirFotoXHR(archivo, ruta, onProgreso){
+        return new Promise(function(res, rej){
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", window.SUPABASE_URL.replace(/\/+$/,"") + "/storage/v1/object/productos/" + encodeURI(ruta));
+            xhr.setRequestHeader("Authorization", "Bearer " + window.SUPABASE_ANON_KEY);
+            xhr.setRequestHeader("apikey", window.SUPABASE_ANON_KEY);
+            xhr.setRequestHeader("Content-Type", archivo.type || "application/octet-stream");
+            xhr.upload.onprogress = function(e){
+                if(e.lengthComputable && onProgreso) onProgreso(e.loaded / e.total);
+            };
+            xhr.onload = function(){
+                if(xhr.status >= 200 && xhr.status < 300) res();
+                else rej(new Error("Error al subir la foto (HTTP " + xhr.status + ")"));
+            };
+            xhr.onerror = function(){ rej(new Error("Error de red al subir la foto")); };
+            xhr.send(archivo);
+        });
     }
 
     async function eliminarProducto(p){
@@ -9630,6 +9703,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if(foto) foto.addEventListener("change", function(e){
         fotoArchivo = e.target.files && e.target.files[0] ? e.target.files[0] : null;
         el("productoFotoPreview").innerHTML = "";
+        if(el("productoSubida")){ el("productoSubida").style.display = "none"; el("productoSubida").classList.remove("fracaso"); }
         if(fotoArchivo){
             var img = document.createElement("img");
             img.src = URL.createObjectURL(fotoArchivo);
@@ -9826,6 +9900,16 @@ document.addEventListener("DOMContentLoaded", function () {
             <input id="productoFoto" type="file" accept="image/*">
 
             <div id="productoFotoPreview" class="productos-foto-preview"></div>
+
+            <div id="productoSubida" class="producto-subida" style="display:none">
+                <div class="subida-cab">
+                    <span id="subidaTexto">📤 Subiendo foto…</span>
+                    <b id="subidaPct">0%</b>
+                </div>
+                <div class="subida-pista">
+                    <div class="subida-barra" id="subidaBarra"></div>
+                </div>
+            </div>
 
             <div id="mensajeProducto" class="mensaje-abono"></div>
 
