@@ -2501,27 +2501,32 @@ select.sel-nativo{display:none !important}
 .productos-foto-preview{margin-top:8px}
 /* Indicador de progreso de la subida de foto */
 .producto-subida{
-    margin-top:10px;padding:10px 14px;
-    border:1.5px solid #f3d5e2;border-radius:12px;
-    background:#fff8fb;
-    animation:subidaAparece .3s ease}
-@keyframes subidaAparece{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.producto-subida.fracaso{border-color:#f3b7bd;background:#fff4f5}
-.subida-cab{
-    display:flex;justify-content:space-between;align-items:center;gap:10px;
-    font-size:12.5px;font-weight:700;color:#a05f78;margin-bottom:8px}
-.subida-cab b{color:#e85c8b;font-size:13px}
-.subida-pista{height:10px;border-radius:999px;background:#f6e9ef;overflow:hidden}
-.subida-barra{
-    height:100%;width:0%;border-radius:999px;
-    background:linear-gradient(90deg,#f5aec7,#f47da3,#e85c8b,#f5aec7);
-    background-size:220% auto;
-    animation:subidaShine .9s linear infinite;
-    transition:width .25s ease}
-.subida-barra.lista{
-    background:linear-gradient(90deg,#3fd584,#1f9a52,#3fd584);
-    background-size:220% auto}
-@keyframes subidaShine{to{background-position:220% center}}
+    margin-top:12px;padding:20px 16px 16px;
+    border:1.5px solid #f3d5e2;border-radius:18px;
+    background:radial-gradient(circle at 50% 42%,#fff2f8,#fffafc 72%);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    animation:subidaAparece .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes subidaAparece{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.producto-subida.fracaso{border-color:#f3b7bd}
+.subida-anillo{position:relative;width:150px;height:150px;margin:4px 0}
+.subida-anillo svg{transform:rotate(-90deg);display:block}
+.subida-anillo svg circle{transition:stroke-dashoffset .2s linear}
+.subida-halo{
+    position:absolute;inset:-12px;border-radius:50%;
+    background:radial-gradient(circle,rgba(244,125,163,.28),transparent 70%);
+    animation:subidaPulso 1.5s ease-in-out infinite;
+    pointer-events:none}
+@keyframes subidaPulso{
+    0%,100%{opacity:.5;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.05)}}
+.subida-centro{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#subidaPct{
+    font-size:31px;font-weight:800;color:#e85c8b;
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 2px 10px rgba(244,125,163,.30)}
+#subidaIcono{font-size:54px;font-weight:800;line-height:1;animation:subidaCheck .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes subidaCheck{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.subida-frase{font-size:13.5px;font-weight:800;color:#a05f78;text-align:center;letter-spacing:.2px}
 .productos-foto-preview img{
     width:86px;height:86px;object-fit:cover;border-radius:12px;
     border:2px solid #f3d5e2;box-shadow:0 4px 12px rgba(244,125,163,.2)}
@@ -9542,7 +9547,7 @@ document.addEventListener("DOMContentLoaded", function () {
         editandoId = null;
         fotoArchivo = null;
         if(el("productoSubida")){ el("productoSubida").style.display = "none"; el("productoSubida").classList.remove("fracaso"); }
-        if(el("subidaBarra")) setBarra(0, "📤 Subiendo foto…");
+        setBarra(0, "📤 Subiendo foto…");
         el("productoNombre").value = "";
         el("productoPrecio").value = "";
         el("productoTamano").value = "";
@@ -9639,7 +9644,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if(window.supabaseClient){ try{ load(); }catch(e){} }
         }catch(err){
             el("productoSubida").classList.add("fracaso");
-            setBarra(barraOk ? 100 : Math.max(10, parseInt(el("subidaBarra").style.width || "0", 10) || 10), "❌ Ocurrió un error");
+            setBarra(barraOk ? 100 : 10, "❌ Ocurrió un error");
             mostrarToast("Error: " + (err && err.message ? err.message : "desconocido"),"danger","No se pudo guardar");
             setTimeout(function(){ el("productoSubida").classList.remove("fracaso"); mostrarSubida(false); }, 2200);
         }finally{
@@ -9651,12 +9656,32 @@ document.addEventListener("DOMContentLoaded", function () {
         var c = el("productoSubida");
         if(c) c.style.display = v ? "" : "none";
     }
+    var CIRC_ANILLO = 364.4; /* 2π × radio 58 */
+    function colorSubida(estado){
+        var a = el("gradStopA"), b = el("gradStopB");
+        var col = estado === "ok" ? ["#3fd584","#1f9a52"]
+                : estado === "error" ? ["#f4737b","#d63a55"]
+                : ["#f5aec7","#e85c8b"];
+        if(a) a.setAttribute("stop-color", col[0]);
+        if(b) b.setAttribute("stop-color", col[1]);
+    }
     function setBarra(pct, texto){
-        var b = el("subidaBarra"), p = el("subidaPct"), t = el("subidaTexto");
         var n = Math.max(0, Math.min(100, pct));
-        if(b){ b.style.width = n + "%"; b.classList.toggle("lista", n >= 100); }
-        if(p) p.textContent = Math.round(n) + "%";
-        if(texto !== null && texto !== undefined && t) t.textContent = texto;
+        var c = el("circuloProgreso"), p = el("subidaPct"), t = el("subidaTexto"), ic = el("subidaIcono");
+        if(c) c.style.strokeDashoffset = (CIRC_ANILLO * (1 - n / 100)).toFixed(1);
+        var txt = texto !== null && texto !== undefined ? String(texto) : "";
+        var esOk = /✅|🎉/.test(txt), esErr = /❌/.test(txt);
+        colorSubida(esOk ? "ok" : (esErr ? "error" : "up"));
+        if(p){
+            p.style.display = (esOk || esErr) ? "none" : "";
+            if(!esOk && !esErr) p.textContent = Math.round(n) + "%";
+        }
+        if(ic){
+            ic.style.display = (esOk || esErr) ? "" : "none";
+            ic.textContent = esErr ? "✗" : "✓";
+            ic.style.color = esErr ? "#d63a55" : "#1f9a52";
+        }
+        if(t && txt) t.textContent = txt;
     }
     function subirFotoXHR(archivo, ruta, onProgreso){
         return new Promise(function(res, rej){
@@ -9902,13 +9927,24 @@ document.addEventListener("DOMContentLoaded", function () {
             <div id="productoFotoPreview" class="productos-foto-preview"></div>
 
             <div id="productoSubida" class="producto-subida" style="display:none">
-                <div class="subida-cab">
-                    <span id="subidaTexto">📤 Subiendo foto…</span>
-                    <b id="subidaPct">0%</b>
+                <div class="subida-anillo" id="anilloSubida">
+                    <div class="subida-halo"></div>
+                    <svg viewBox="0 0 140 140" width="150" height="150">
+                        <defs>
+                            <linearGradient id="gradSubida" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop id="gradStopA" offset="0%" stop-color="#f5aec7"/>
+                                <stop id="gradStopB" offset="100%" stop-color="#e85c8b"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="70" cy="70" r="58" fill="none" stroke="#f6e9ef" stroke-width="11"/>
+                        <circle id="circuloProgreso" cx="70" cy="70" r="58" fill="none" stroke="url(#gradSubida)" stroke-width="11" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+                    </svg>
+                    <div class="subida-centro">
+                        <b id="subidaPct">0%</b>
+                        <span id="subidaIcono" style="display:none">✓</span>
+                    </div>
                 </div>
-                <div class="subida-pista">
-                    <div class="subida-barra" id="subidaBarra"></div>
-                </div>
+                <div class="subida-frase" id="subidaTexto">📤 Subiendo foto…</div>
             </div>
 
             <div id="mensajeProducto" class="mensaje-abono"></div>
