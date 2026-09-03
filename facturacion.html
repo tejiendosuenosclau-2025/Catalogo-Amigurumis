@@ -2501,13 +2501,21 @@ select.sel-nativo{display:none !important}
 .productos-foto-preview{margin-top:8px}
 /* Indicador de progreso de la subida de foto */
 .producto-subida{
-    margin-top:12px;padding:20px 16px 16px;
-    border:1.5px solid #f3d5e2;border-radius:18px;
-    background:radial-gradient(circle at 50% 42%,#fff2f8,#fffafc 72%);
-    display:flex;flex-direction:column;align-items:center;gap:10px;
-    animation:subidaAparece .35s cubic-bezier(.2,.8,.2,1)}
+    position:fixed;inset:0;z-index:3000;
+    display:none;align-items:center;justify-content:center;
+    background:rgba(45,22,32,.55);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    padding:20px}
+.producto-subida.activo{display:flex}
 @keyframes subidaAparece{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-.producto-subida.fracaso{border-color:#f3b7bd}
+.producto-subida.fracaso .subida-overlay-card{border-color:#f3b7bd}
+.subida-overlay-card{
+    background:#fffdfe;border:1.5px solid #f3d5e2;border-radius:26px;
+    box-shadow:0 28px 80px rgba(70,15,40,.4);
+    padding:26px 34px 20px;
+    display:flex;flex-direction:column;align-items:center;
+    animation:subidaAparece .35s cubic-bezier(.2,.8,.2,1);
+    max-width:min(92vw,430px)}
 .subida-anillo{position:relative;width:150px;height:150px;margin:4px 0}
 .subida-anillo svg{transform:rotate(-90deg);display:block}
 .subida-anillo svg circle{transition:stroke-dashoffset .2s linear}
@@ -9546,7 +9554,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function limpiarForm(){
         editandoId = null;
         fotoArchivo = null;
-        if(el("productoSubida")){ el("productoSubida").style.display = "none"; el("productoSubida").classList.remove("fracaso"); }
+        if(el("productoSubida")){ el("productoSubida").classList.remove("activo"); el("productoSubida").classList.remove("fracaso"); }
         setBarra(0, "📤 Subiendo foto…");
         el("productoNombre").value = "";
         el("productoPrecio").value = "";
@@ -9654,7 +9662,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function pausa(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
     function mostrarSubida(v){
         var c = el("productoSubida");
-        if(c) c.style.display = v ? "" : "none";
+        if(c) c.classList.toggle("activo", !!v);
     }
     var CIRC_ANILLO = 364.4; /* 2π × radio 58 */
     function colorSubida(estado){
@@ -9728,7 +9736,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if(foto) foto.addEventListener("change", function(e){
         fotoArchivo = e.target.files && e.target.files[0] ? e.target.files[0] : null;
         el("productoFotoPreview").innerHTML = "";
-        if(el("productoSubida")){ el("productoSubida").style.display = "none"; el("productoSubida").classList.remove("fracaso"); }
+        if(el("productoSubida")){ el("productoSubida").classList.remove("activo"); el("productoSubida").classList.remove("fracaso"); }
         if(fotoArchivo){
             var img = document.createElement("img");
             img.src = URL.createObjectURL(fotoArchivo);
@@ -9926,27 +9934,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <div id="productoFotoPreview" class="productos-foto-preview"></div>
 
-            <div id="productoSubida" class="producto-subida" style="display:none">
-                <div class="subida-anillo" id="anilloSubida">
-                    <div class="subida-halo"></div>
-                    <svg viewBox="0 0 140 140" width="150" height="150">
-                        <defs>
-                            <linearGradient id="gradSubida" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop id="gradStopA" offset="0%" stop-color="#f5aec7"/>
-                                <stop id="gradStopB" offset="100%" stop-color="#e85c8b"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="70" cy="70" r="58" fill="none" stroke="#f6e9ef" stroke-width="11"/>
-                        <circle id="circuloProgreso" cx="70" cy="70" r="58" fill="none" stroke="url(#gradSubida)" stroke-width="11" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
-                    </svg>
-                    <div class="subida-centro">
-                        <b id="subidaPct">0%</b>
-                        <span id="subidaIcono" style="display:none">✓</span>
-                    </div>
-                </div>
-                <div class="subida-frase" id="subidaTexto">📤 Subiendo foto…</div>
-            </div>
-
             <div id="mensajeProducto" class="mensaje-abono"></div>
 
         </div>
@@ -9956,6 +9943,29 @@ document.addEventListener("DOMContentLoaded", function () {
             <button type="button" id="guardarProducto" class="btn green"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar producto</button>
         </div>
 
+    </div>
+ </div>
+<!-- OVERLAY PROGRESO CIRCULAR — protagonista encima del formulario -->
+<div id="productoSubida" class="producto-subida">
+    <div class="subida-overlay-card">
+        <div class="subida-anillo" id="anilloSubida">
+            <div class="subida-halo"></div>
+            <svg viewBox="0 0 140 140" width="150" height="150">
+                <defs>
+                    <linearGradient id="gradSubida" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop id="gradStopA" offset="0%" stop-color="#f5aec7"/>
+                        <stop id="gradStopB" offset="100%" stop-color="#e85c8b"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="70" cy="70" r="58" fill="none" stroke="#f6e9ef" stroke-width="11"/>
+                <circle id="circuloProgreso" cx="70" cy="70" r="58" fill="none" stroke="url(#gradSubida)" stroke-width="11" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+            </svg>
+            <div class="subida-centro">
+                <b id="subidaPct">0%</b>
+                <span id="subidaIcono" style="display:none">✓</span>
+            </div>
+        </div>
+        <div class="subida-frase" id="subidaTexto">📤 Subiendo foto…</div>
     </div>
 </div>
  <!-- MODAL DE GASTOS -->
