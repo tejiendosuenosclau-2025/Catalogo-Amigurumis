@@ -2448,22 +2448,26 @@ select.sel-nativo{display:none !important}
 }
 
 /* ============================================================
-   🧩 FORMULARIO ÚNICO COMPACTO — todo junto, menos scroll
+   🧩 ZONA SUPERIOR DEL FORMULARIO — reorganizada y equilibrada
+   Orden visual: 1) Datos de la factura (Nº primero · Fecha · Estado)
+                 2) Datos del cliente
+                 3) Resumen de abonos/saldo + Observaciones
    ============================================================ */
-/* Las tarjetas "Cliente" y "Datos de la factura" se funden en un solo panel */
+/* Panel único que integra las 3 zonas en una columna densa */
 .grid.datos-superiores{
     display:grid;
-    grid-template-columns:1.05fr .95fr;
-    gap:16px 22px;
+    grid-template-columns:1fr;
+    gap:0;
     background:linear-gradient(145deg,#ffffff,#fffafb);
     border:1px solid var(--ts-border-soft,#ecdce4);
     border-radius:18px;
-    padding:16px 20px;
+    padding:18px 22px 8px;
     box-shadow:0 5px 18px rgba(64,55,59,.05);
     margin-bottom:16px}
 .grid.datos-superiores > .card{
     background:transparent;border:0;box-shadow:none;
-    border-radius:0;padding:0;margin:0;transform:none !important}
+    border-radius:0;padding:0 0 12px;margin:0;
+    transform:none !important;min-width:0;width:100%}
 .grid.datos-superiores > .card::before,
 .grid.datos-superiores > .card::after{display:none !important}
 .grid.datos-superiores > .card:hover{
@@ -2471,47 +2475,23 @@ select.sel-nativo{display:none !important}
     box-shadow:none;transform:none !important}
 .grid.datos-superiores > .card .title{
     border-bottom:1px solid #f3dfe7;
-    padding-bottom:10px;margin-bottom:12px;
+    padding-bottom:10px;margin-bottom:14px;
     font-size:14px}
 .grid.datos-superiores > .card .title::after{display:none}
-/* resumen abono/saldo a 2 mini tarjetas dentro del panel */
-.datos-superiores .factura-resumen{gap:8px}
-.datos-superiores .factura-resumen .resumen-card{padding:8px 10px}
-@media (max-width:600px){
-    .grid.datos-superiores{grid-template-columns:1fr;padding:12px 12px 14px;gap:6px}
-    .grid.datos-superiores > .card .title{margin-bottom:8px;padding-bottom:7px}
-    .cliente-grid{gap:8px}
-    /* en el celular el resumen abono/saldo no hace falta al registrar */
-    .datos-superiores .factura-resumen{display:none}
-    /* número de factura compacto */
-    .factura-numero-bloque{margin-bottom:8px}
-    /* observaciones con altura mínima */
-    .datos-superiores textarea{min-height:52px;resize:vertical}
-    .factura-pago-compacto{margin-top:8px}
-    .totals{margin-top:12px;padding:10px 14px}
-}
-
-/* ============================================================
-   🧱 COMPACTO ABSOLUTO — un solo formulario denso, sin aire
-   ============================================================ */
-/* escritorio: una sola columna densa con pares inteligentes */
-.grid.datos-superiores{grid-template-columns:1fr !important;gap:0;padding:14px 16px}
-.grid.datos-superiores > .card{width:100%}
-.grid.datos-superiores > .card .title{font-size:12px;padding-bottom:6px;margin-bottom:8px;border-bottom:0}
-/* nombre + teléfono en la misma fila (escritorio) */
-.cliente-grid{grid-template-columns:1fr 1fr;gap:4px 16px}
-.cliente-grid .cliente-campo.ancho-completo{grid-column:auto}
-/* número + fecha/estado en la misma fila (escritorio) */
-.factura-numero-bloque{width:46%;display:inline-block;vertical-align:top;margin:0}
-.factura-datos-grid{width:52%;display:inline-block;vertical-align:top;margin:0}
-.datos-superiores .factura-resumen{margin:10px 0 8px}
-.datos-superiores .factura-resumen > div{min-height:54px;padding:7px 12px;gap:8px}
-#form .card{margin-bottom:14px}
-/* 📱 teléfono: compactación total */
-
+/* Nº de factura: ocupa todo el ancho y va siempre primero */
+.factura-numero-bloque{width:100%;display:block;margin:0 0 12px}
+/* Fecha y Estado repartidos a la mitad, bajo el número */
+.factura-datos-grid{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0}
+/* Resumen abono/saldo + Observaciones */
+.datos-superiores .factura-resumen{margin:2px 0 16px}
+.datos-superiores .factura-resumen > div{min-height:70px;padding:10px 14px;gap:12px}
+.datos-superiores textarea{min-height:88px;resize:vertical}
+/* nombre + teléfono en la misma fila dentro de su tarjeta */
+.cliente-grid{grid-template-columns:1fr 1fr;gap:4px 18px}
+.cliente-grid .cliente-campo.ancho-completo{grid-column:1/-1}
 /* 📱 teléfono: compactación total */
 @media (max-width:600px){
-    .grid.datos-superiores{padding:10px 10px 6px;margin-bottom:6px}
+    .grid.datos-superiores{padding:12px 12px 6px;margin-bottom:10px;gap:2px}
     /* títulos de sección fuera del flujo (los campos se explican solos) */
     .datos-superiores > .card > .title{display:none !important}
     .grid.datos-superiores > .card .title{display:none !important}
@@ -2520,7 +2500,9 @@ select.sel-nativo{display:none !important}
     .factura-numero-bloque .factura-numero-campo{min-height:40px;border-radius:10px !important}
     .factura-numero-bloque .factura-numero-icono{width:36px;min-height:40px}
     .factura-numero-bloque .factura-automatico{display:none !important}
-    /* resumen abono/saldo oculto al registrar */
+    /* fecha y estado apilados en el teléfono */
+    .factura-datos-grid{grid-template-columns:1fr !important;gap:10px}
+    /* resumen abono/saldo oculto al registrar en móvil */
     .factura-resumen{display:none !important}
     /* etiquetas pegadas a sus campos */
     .datos-superiores label,#form label{margin:3px 0 2px !important;font-size:11.5px}
@@ -2537,7 +2519,6 @@ select.sel-nativo{display:none !important}
     .add{margin-top:8px}
     .actions{margin-top:8px}
     .aviso-bloqueo{margin-bottom:8px}
-    .grid.datos-superiores{gap:2px}
     /* en el teléfono los pares se apilan a ancho completo */
     .cliente-grid .cliente-campo.ancho-completo{grid-column:1/-1}
     .factura-numero-bloque{width:auto !important;display:block !important}
@@ -3039,6 +3020,52 @@ select.sel-nativo{display:none !important}
 <section class="grid datos-superiores">
 
     <!-- ============================= -->
+    <!-- DATOS DE LA FACTURA            -->
+    <!-- 1º: Nº de factura · Fecha · Estado -->
+    <!-- ============================= -->
+
+    <article class="card">
+
+        <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
+
+        <!-- NÚMERO DE FACTURA (siempre primero) -->
+	<div class="factura-numero-bloque">
+    		<div class="factura-numero-label">
+        		Número de factura
+    		</div>
+    		<div class="factura-numero-campo">
+        		<span class="factura-numero-icono">🏷️</span>
+        		<input id="numero" readonly>
+        		<span class="factura-automatico">Automático ✨</span>
+    		</div>
+	</div>
+
+	<!-- FECHA + ESTADO -->
+	<div class="factura-datos-grid">
+    		<div class="factura-campo">
+        		<label>Fecha</label>
+        		<div class="campo-icono">
+            			<span><img src="img/fecha.png" class="grilla-icon"></span>
+            			<input id="fecha" type="date">
+        		</div>
+    		</div>
+        <div class="factura-campo">
+            <label>Estado</label>
+            <div class="campo-icono campo-estado">
+                <span class="icono-campo"><img src="img/ok.png" class="grilla-icon"></span>
+                <select id="estado">
+                    <option value="Pagada">Pagada</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Enviada">Enviada</option>
+                    <option value="Anulada">Anulada</option>
+                </select>
+            </div>
+        </div>
+	</div>
+
+    </article>
+
+    <!-- ============================= -->
     <!-- DATOS DEL CLIENTE              -->
     <!-- ============================= -->
 
@@ -3092,181 +3119,60 @@ select.sel-nativo{display:none !important}
 
     </article>
 
-
     <!-- ============================= -->
-    <!-- DATOS DE LA FACTURA            -->
+    <!-- RESUMEN DE ABONOS + OBSERVACIONES -->
     <!-- ============================= -->
 
     <article class="card">
 
-        <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
+        <div class="factura-resumen">
 
-
-        <!-- NÚMERO DE FACTURA -->
-
-	<div class="factura-numero-bloque">
-
-    		<div class="factura-numero-label">
-        		Número de factura
-    		</div>
-
-    		<div class="factura-numero-campo">
-
-        		<span class="factura-numero-icono">
-            			🏷️
-        		</span>
-
-        		<input id="numero" readonly>
-
-        		<span class="factura-automatico">
-            			Automático ✨
-        		</span>
-
-    		</div>
-
-	</div>
-
-
-	<!-- FECHA -->
-
-	<div class="factura-datos-grid">
-
-    		<div class="factura-campo">
-
-        		<label>
-            			Fecha
-        		</label>
-
-        		<div class="campo-icono">
-
-            			<span><img src="img/fecha.png" class="grilla-icon"></span>
-
-            			<input id="fecha" type="date">
-
-        		</div>
-
-    		</div>
-        <div class="factura-campo">
-            <label>Estado</label>
-            <div class="campo-icono campo-estado">
-                <span class="icono-campo"><img src="img/ok.png" class="grilla-icon"></span>
-                <select id="estado">
-                    <option value="Pagada">Pagada</option>
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Enviada">Enviada</option>
-                    <option value="Anulada">Anulada</option>
-                </select>
+            <!-- ABONO ACUMULADO -->
+            <div class="resumen-abono">
+                <div class="resumen-icono">
+                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                        <ellipse cx="32" cy="17" rx="18" ry="8"/>
+                        <path d="M14 17v10c0 4 8 8 18 8s18-4 18-8V17"/>
+                        <path d="M14 27v10c0 4 8 8 18 8s18-4 18-8V27"/>
+                        <path d="M14 37v10c0 4 8 8 18 8s18-4 18-8V37"/>
+                    </svg>
+                </div>
+                <div class="resumen-datos">
+                    <span>Abono acumulado</span>
+                    <strong id="abonoAcumulado">$0</strong>
+                    <small>Total abonado</small>
+                </div>
             </div>
-        </div>
 
-
-    		<!-- FORMA DE PAGO -->
-
-    		
-
-	</div>
-
-
-        <!-- ============================= -->
-        <!-- ABONO                          -->
-        <!-- ============================= -->
-
-        <!-- ==========================================
-     ABONO + TIPO DE ABONO
-     ========================================== -->
-
-
-
-
-    <div class="factura-resumen">
-
-    <!-- ABONO ACUMULADO -->
-    <div class="resumen-abono">
-
-        <div class="resumen-icono">
-
-            <svg viewBox="0 0 64 64"
-                 aria-hidden="true">
-
-                <ellipse cx="32" cy="17"
-                         rx="18" ry="8"/>
-
-                <path d="M14 17v10c0 4 8 8 18 8s18-4 18-8V17"/>
-
-                <path d="M14 27v10c0 4 8 8 18 8s18-4 18-8V27"/>
-
-                <path d="M14 37v10c0 4 8 8 18 8s18-4 18-8V37"/>
-
-            </svg>
+            <!-- SALDO PENDIENTE -->
+            <div class="resumen-saldo">
+                <div class="resumen-icono">
+                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                        <path d="M9 18h38a6 6 0 0 1 6 6v25a6 6 0 0 1-6 6H9a5 5 0 0 1-5-5V23a5 5 0 0 1 5-5Z"/>
+                        <path d="M4 24h43a6 6 0 0 1 6 6v6H38a9 9 0 0 1 0-18h15"/>
+                        <circle cx="39" cy="27" r="3"/>
+                    </svg>
+                </div>
+                <div class="resumen-datos">
+                    <span>Saldo pendiente</span>
+                    <strong id="saldoPendiente">$0</strong>
+                    <small>Por cobrar</small>
+                </div>
+            </div>
 
         </div>
 
-        <div class="resumen-datos">
-
-            <span>Abono acumulado</span>
-
-            <strong id="abonoAcumulado">$0</strong>
-
-            <small>Total abonado</small>
-
+        <label>Observaciones</label>
+        <div class="campo-icono campo-observaciones">
+            <span class="icono-campo">
+                <img src="img/notas.png" class="grilla-icon">
+            </span>
+            <textarea
+                id="obs"
+                rows="4"
+                placeholder="Gracias por tu compra 💗"
+            ></textarea>
         </div>
-
-    </div>
-
-
-    <!-- SALDO PENDIENTE -->
-    <div class="resumen-saldo">
-
-        <div class="resumen-icono">
-
-            <svg viewBox="0 0 64 64"
-                 aria-hidden="true">
-
-                <path d="M9 18h38a6 6 0 0 1 6 6v25a6 6 0 0 1-6 6H9a5 5 0 0 1-5-5V23a5 5 0 0 1 5-5Z"/>
-
-                <path d="M4 24h43a6 6 0 0 1 6 6v6H38a9 9 0 0 1 0-18h15"/>
-
-                <circle cx="39"
-                        cy="27"
-                        r="3"/>
-
-            </svg>
-
-        </div>
-
-        <div class="resumen-datos">
-
-            <span>Saldo pendiente</span>
-
-            <strong id="saldoPendiente">$0</strong>
-
-            <small>Por cobrar</small>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-       
-
-
-<label>Observaciones</label>
-
-<div class="campo-icono campo-observaciones">
-
-    <span class="icono-campo">
-        <img src="img/notas.png" class="grilla-icon">
-    </span>
-
-    <textarea
-        id="obs"
-        rows="4"
-        placeholder="Gracias por tu compra 💗"
-    ></textarea>
-
-</div>
 
     </article>
 
