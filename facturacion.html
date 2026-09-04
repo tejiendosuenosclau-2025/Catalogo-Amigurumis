@@ -2490,6 +2490,47 @@ select.sel-nativo{display:none !important}
     .factura-pago-compacto{margin-top:8px}
     .totals{margin-top:12px;padding:10px 14px}
 }
+
+/* ============================================================
+   🧱 COMPACTO ABSOLUTO — un solo formulario denso, sin aire
+   ============================================================ */
+/* escritorio: panel con menos aire y títulos contenidos */
+.grid.datos-superiores{gap:12px;padding:14px 16px}
+.grid.datos-superiores > .card .title{font-size:13px;padding-bottom:7px;margin-bottom:9px}
+.datos-superiores .factura-resumen{margin:10px 0 12px}
+.datos-superiores .factura-resumen > div{min-height:58px;padding:8px 12px;gap:10px}
+#form .card{margin-bottom:14px}
+
+/* 📱 teléfono: compactación total */
+@media (max-width:600px){
+    .grid.datos-superiores{padding:10px 10px 6px;margin-bottom:6px}
+    /* títulos de sección fuera del flujo (los campos se explican solos) */
+    .datos-superiores > .card > .title{display:none !important}
+    .grid.datos-superiores > .card .title{display:none !important}
+    /* número de factura compacto, sin pill "Automático" */
+    .factura-numero-bloque{margin-bottom:4px !important}
+    .factura-numero-bloque .factura-numero-campo{min-height:40px;border-radius:10px !important}
+    .factura-numero-bloque .factura-numero-icono{width:36px;min-height:40px}
+    .factura-numero-bloque .factura-automatico{display:none !important}
+    /* resumen abono/saldo oculto al registrar */
+    .factura-resumen{display:none !important}
+    /* etiquetas pegadas a sus campos */
+    .datos-superiores label,#form label{margin:3px 0 2px !important;font-size:11.5px}
+    /* observaciones mínimas */
+    .datos-superiores textarea{min-height:42px !important}
+    /* tarjetas sin margen entre sí */
+    #form .card{margin-bottom:6px;padding:10px}
+    .card .title{font-size:13px;padding-bottom:6px;margin-bottom:7px}
+    /* productos: tabla y totales apretados */
+    #form .wrap{margin-bottom:2px}
+    .factura-pago-compacto{padding:9px 10px;margin:6px 0 2px !important}
+    .totals{margin:8px 0 0 !important;padding:9px 12px}
+    .totals div{padding:3px 0}
+    .add{margin-top:8px}
+    .actions{margin-top:8px}
+    .aviso-bloqueo{margin-bottom:8px}
+    .grid.datos-superiores{gap:2px}
+}
 /* 🔧 Corrección de apilamiento: la lista abierta SIEMPRE queda por encima
    (la tarjeta con transform en hover atrapaba el dropdown y los botones
    posteriores se pintaban encima) */
