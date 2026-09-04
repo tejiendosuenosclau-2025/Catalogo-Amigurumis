@@ -2494,12 +2494,20 @@ select.sel-nativo{display:none !important}
 /* ============================================================
    🧱 COMPACTO ABSOLUTO — un solo formulario denso, sin aire
    ============================================================ */
-/* escritorio: panel con menos aire y títulos contenidos */
-.grid.datos-superiores{gap:12px;padding:14px 16px}
-.grid.datos-superiores > .card .title{font-size:13px;padding-bottom:7px;margin-bottom:9px}
-.datos-superiores .factura-resumen{margin:10px 0 12px}
-.datos-superiores .factura-resumen > div{min-height:58px;padding:8px 12px;gap:10px}
+/* escritorio: una sola columna densa con pares inteligentes */
+.grid.datos-superiores{grid-template-columns:1fr !important;gap:0;padding:14px 16px}
+.grid.datos-superiores > .card{width:100%}
+.grid.datos-superiores > .card .title{font-size:12px;padding-bottom:6px;margin-bottom:8px;border-bottom:0}
+/* nombre + teléfono en la misma fila (escritorio) */
+.cliente-grid{grid-template-columns:1fr 1fr;gap:4px 16px}
+.cliente-grid .cliente-campo.ancho-completo{grid-column:auto}
+/* número + fecha/estado en la misma fila (escritorio) */
+.factura-numero-bloque{width:46%;display:inline-block;vertical-align:top;margin:0}
+.factura-datos-grid{width:52%;display:inline-block;vertical-align:top;margin:0}
+.datos-superiores .factura-resumen{margin:10px 0 8px}
+.datos-superiores .factura-resumen > div{min-height:54px;padding:7px 12px;gap:8px}
 #form .card{margin-bottom:14px}
+/* 📱 teléfono: compactación total */
 
 /* 📱 teléfono: compactación total */
 @media (max-width:600px){
@@ -2530,6 +2538,10 @@ select.sel-nativo{display:none !important}
     .actions{margin-top:8px}
     .aviso-bloqueo{margin-bottom:8px}
     .grid.datos-superiores{gap:2px}
+    /* en el teléfono los pares se apilan a ancho completo */
+    .cliente-grid .cliente-campo.ancho-completo{grid-column:1/-1}
+    .factura-numero-bloque{width:auto !important;display:block !important}
+    .factura-datos-grid{width:auto !important;display:block !important}
 }
 /* 🔧 Corrección de apilamiento: la lista abierta SIEMPRE queda por encima
    (la tarjeta con transform en hover atrapaba el dropdown y los botones
