@@ -2478,17 +2478,29 @@ select.sel-nativo{display:none !important}
     padding-bottom:10px;margin-bottom:14px;
     font-size:14px}
 .grid.datos-superiores > .card .title::after{display:none}
-/* Nº de factura: ocupa todo el ancho y va siempre primero */
+/* Nº de factura: ancho completo por defecto (móvil/tablet) */
 .factura-numero-bloque{width:100%;display:block;margin:0 0 12px}
-/* Fecha y Estado repartidos a la mitad, bajo el número */
+/* Fecha y Estado repartidos a la mitad */
 .factura-datos-grid{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0}
+/* Escritorio: Nº de factura + Fecha/Estado en la misma fila (2 columnas) */
+@media (min-width:851px){
+    .grid.datos-superiores > .card:first-child{
+        display:grid;
+        grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+        gap:0 24px;
+        align-items:end}
+    .grid.datos-superiores > .card:first-child .title{grid-column:1/-1;margin-bottom:14px}
+    .grid.datos-superiores > .card:first-child .factura-numero-bloque{width:100%;margin:0}
+    .grid.datos-superiores > .card:first-child .factura-datos-grid{width:100%;margin:0;gap:14px}
+    /* Nombre + Teléfono en la misma fila */
+    .cliente-grid .cliente-campo.ancho-completo{grid-column:auto}
+}
 /* Resumen abono/saldo + Observaciones */
 .datos-superiores .factura-resumen{margin:2px 0 16px}
 .datos-superiores .factura-resumen > div{min-height:70px;padding:10px 14px;gap:12px}
 .datos-superiores textarea{min-height:88px;resize:vertical}
-/* nombre + teléfono en la misma fila dentro de su tarjeta */
+/* nombre + teléfono en la misma fila dentro de su tarjeta (escritorio) */
 .cliente-grid{grid-template-columns:1fr 1fr;gap:4px 18px}
-.cliente-grid .cliente-campo.ancho-completo{grid-column:1/-1}
 /* 📱 teléfono: compactación total */
 @media (max-width:600px){
     .grid.datos-superiores{padding:12px 12px 6px;margin-bottom:10px;gap:2px}
