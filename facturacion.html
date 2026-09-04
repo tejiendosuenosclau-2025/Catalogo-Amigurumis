@@ -2433,6 +2433,63 @@ select.sel-nativo{display:none !important}
 .sel-custom.deshabilitado .sel-flecha{background:#e9e3e6;color:#a99fa5}
 .campo-icono .sel-caja{padding-left:44px}
 .campo-estado .sel-caja{padding-left:54px}
+/* 📱 Teléfono: formulario compacto para evitar tanto scroll */
+@media (max-width:600px){
+    .datos-superiores{gap:12px}
+    .datos-superiores .card{padding:14px 14px 18px}
+    .cliente-grid{gap:10px}
+    .cliente-grid label{margin:6px 0 4px;font-size:11px}
+    .campo-icono input,.campo-icono select{min-height:40px}
+    .factura-numero-bloque{margin-bottom:10px}
+    .factura-datos-grid{grid-template-columns:1fr 1fr !important;gap:10px}
+    .factura-resumen{gap:8px}
+    .factura-pago-compacto{padding:10px 12px}
+    .card .title{padding-bottom:9px}
+}
+
+/* ============================================================
+   🧩 FORMULARIO ÚNICO COMPACTO — todo junto, menos scroll
+   ============================================================ */
+/* Las tarjetas "Cliente" y "Datos de la factura" se funden en un solo panel */
+.grid.datos-superiores{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:16px 22px;
+    background:linear-gradient(145deg,#ffffff,#fffafb);
+    border:1px solid var(--ts-border-soft,#ecdce4);
+    border-radius:18px;
+    padding:16px 20px;
+    box-shadow:0 5px 18px rgba(64,55,59,.05);
+    margin-bottom:16px}
+.grid.datos-superiores > .card{
+    background:transparent;border:0;box-shadow:none;
+    border-radius:0;padding:0;margin:0;transform:none !important}
+.grid.datos-superiores > .card::before,
+.grid.datos-superiores > .card::after{display:none !important}
+.grid.datos-superiores > .card:hover{
+    border-color:transparent;background:transparent;
+    box-shadow:none;transform:none !important}
+.grid.datos-superiores > .card .title{
+    border-bottom:1px solid #f3dfe7;
+    padding-bottom:10px;margin-bottom:12px;
+    font-size:14px}
+.grid.datos-superiores > .card .title::after{display:none}
+/* resumen abono/saldo a 2 mini tarjetas dentro del panel */
+.datos-superiores .factura-resumen{gap:8px}
+.datos-superiores .factura-resumen .resumen-card{padding:8px 10px}
+@media (max-width:600px){
+    .grid.datos-superiores{grid-template-columns:1fr;padding:12px 12px 14px;gap:6px}
+    .grid.datos-superiores > .card .title{margin-bottom:8px;padding-bottom:7px}
+    .cliente-grid{gap:8px}
+    /* en el celular el resumen abono/saldo no hace falta al registrar */
+    .datos-superiores .factura-resumen{display:none}
+    /* número de factura compacto */
+    .factura-numero-bloque{margin-bottom:8px}
+    /* observaciones con altura mínima */
+    .datos-superiores textarea{min-height:52px;resize:vertical}
+    .factura-pago-compacto{margin-top:8px}
+    .totals{margin-top:12px;padding:10px 14px}
+}
 /* 🔧 Corrección de apilamiento: la lista abierta SIEMPRE queda por encima
    (la tarjeta con transform en hover atrapaba el dropdown y los botones
    posteriores se pintaban encima) */
@@ -2937,7 +2994,7 @@ select.sel-nativo{display:none !important}
         <div class="title">👤 Datos del cliente</div>
 
         <div class="cliente-grid">
-    <div class="cliente-campo">
+    <div class="cliente-campo ancho-completo">
         <label>Nombre / Razón social *</label>
         <div class="cliente-autocomplete">
             <div class="campo-icono">
@@ -2947,7 +3004,7 @@ select.sel-nativo{display:none !important}
             <div id="sugerenciasClientes" class="sugerencias-clientes"></div>
         </div>
     </div>
-    <div class="cliente-campo">
+    <div class="cliente-campo" style="display:none">
         <label>Cédula / NIT</label>
         <div class="cliente-autocomplete">
             <div class="campo-icono">
@@ -2957,21 +3014,21 @@ select.sel-nativo{display:none !important}
             <div id="sugerenciasIdent" class="sugerencias-clientes"></div>
         </div>
     </div>
-    <div class="cliente-campo">
+    <div class="cliente-campo ancho-completo">
         <label>Teléfono</label>
         <div class="campo-icono">
             <span>📱</span>
             <input id="tel" name="customer_phone" type="tel" inputmode="tel" autocomplete="off">
         </div>
     </div>
-    <div class="cliente-campo">
+    <div class="cliente-campo" style="display:none">
         <label>Correo</label>
         <div class="campo-icono">
             <span>✉️</span>
             <input id="correo" type="email" autocomplete="off">
         </div>
     </div>
-    <div class="cliente-campo ancho-completo">
+    <div class="cliente-campo ancho-completo" style="display:none">
         <label>Dirección</label>
         <div class="campo-icono">
             <span>📍</span>
