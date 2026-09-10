@@ -2678,95 +2678,44 @@ select.sel-nativo{display:none !important}
     .productos-bar .btn{width:100%}
 }
 
-/* ============================================================
-   ✨ AJUSTES PEDIDOS — más compacto, sin scroll y botón fijo
-   1) Campos de texto un poco más pequeños
-   2) Menos espacios en formulario, panel y dashboard
-   3) Botón fijo "Nueva factura" (arriba-derecha)
-   ============================================================ */
-
-/* ---------- 1) Campos de texto más pequeños ---------- */
-input,select,textarea{padding:9px 12px;border-radius:10px;font-size:14px}
-#form label,.datos-superiores label{margin:2px 0 2px !important;font-size:10.5px}
-.factura-campo label,.factura-campo > label{font-size:10px;height:14px;margin:0 0 4px}
-.factura-numero-label{font-size:10.5px;margin-bottom:4px}
-.campo-icono{height:40px}
-.campo-icono > span{left:10px;font-size:14px}
-.campo-icono input,.datos-superiores .campo-icono input,.factura-datos-grid .campo-icono input,#abonoBox .campo-icono input{padding-left:36px}
-.campo-icono select{min-height:40px;padding-left:34px !important}
-.campo-icono .grilla-icon,.icono-campo .grilla-icon{width:18px;height:18px}
-.factura-numero-campo{min-height:42px;border-radius:10px}
-.factura-numero-campo input{font-size:14.5px;padding:9px 10px}
-.factura-numero-icono{width:38px;min-width:38px;height:42px;font-size:15px}
-.factura-automatico{padding:4px 8px;font-size:8.5px;margin-right:7px}
-.campo-estado .icono-campo,.campo-observaciones .icono-campo{width:38px;font-size:14px}
-.campo-observaciones textarea,.datos-superiores textarea{min-height:64px !important;padding-left:46px !important}
-table th,table td{padding:6px 8px;font-size:12.5px}
-.modal-abono-contenido label{margin-top:9px;margin-bottom:4px;font-size:12px}
-.mensaje-abono{margin-top:6px;font-size:12px}
-
-/* ---------- 2) Menos espacios (mismo orden, todo más junto) ---------- */
-.card{padding:16px;margin-bottom:14px}
-.card .title{font-size:14px;margin-bottom:10px;padding-bottom:7px}
-#form > .card{padding:12px;margin-bottom:8px}
-.grid.datos-superiores{padding:14px 16px 4px}
-.grid.datos-superiores > .card{padding:0 0 10px}
-.grid.datos-superiores > .card .title{font-size:13px;padding-bottom:7px;margin-bottom:10px}
-.factura-numero-bloque{margin:0 0 10px}
-.datos-superiores .factura-resumen{margin:0 0 10px}
-.datos-superiores .factura-resumen > div{min-height:62px;padding:8px 12px;gap:10px}
-.factura-resumen .resumen-icono{width:46px;height:46px;min-width:46px}
-.factura-resumen .resumen-icono svg{width:28px;height:28px}
-.resumen-dashboard{gap:8px;margin-bottom:14px}
-.resumen-card{min-height:70px;padding:8px 10px;border-radius:14px}
-.resumen-icono{width:28px;height:28px;min-width:28px;border-radius:9px;font-size:13px}
-.resumen-valor{font-size:13px}
-.perfil-dashboard{margin-bottom:8px}
-.totals{margin:12px 0 0 auto;padding:9px 14px}
-.totals div{padding:4px 0;font-size:12.5px}
-.factura-pago-compacto{padding:10px 12px;margin:10px 0 2px}
-.add{margin-top:8px;padding:8px 16px;font-size:12.5px}
-.actions{gap:8px;margin-bottom:12px}
-.actions .btn{min-height:38px}
-.historial-buscar{margin-bottom:8px}
-
-/* ---------- 3) Botón fijo "Nueva factura" ---------- */
-.fab-nueva{
-    position:fixed;z-index:40;top:12px;right:16px;
-    display:inline-flex;align-items:center;gap:7px;
-    padding:9px 15px;border:0;cursor:pointer;border-radius:999px;
-    background:linear-gradient(135deg,#f47da3,#e85c8b);
-    color:#fff;font-weight:800;font-size:12.5px;letter-spacing:.2px;
-    box-shadow:0 10px 24px rgba(232,92,139,.34),0 2px 6px rgba(0,0,0,.07);
+/* ---------- Botón "Nueva factura" arriba: bonito y con movimiento ---------- */
+#form .btn-nueva-arriba{
+    position:relative;overflow:hidden;
+    width:100%;min-height:52px;margin:0 0 16px;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    padding:12px 20px;border:0;border-radius:999px;cursor:pointer;
+    font-size:15px;font-weight:800;letter-spacing:.3px;color:#fff;
+    background:linear-gradient(135deg,#f791b2,#e85c8b 50%,#d94f7f);
+    background-size:200% 200%;
+    box-shadow:0 8px 22px rgba(232,92,139,.34),inset 0 1px 0 rgba(255,255,255,.30);
+    animation:btnNuevaGrad 5s ease-in-out infinite, btnNuevaPulso 2.8s ease-in-out infinite;
     transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
 }
-.fab-nueva:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(232,92,139,.44);filter:brightness(1.03)}
-.fab-nueva:active{transform:translateY(0) scale(.97)}
-.fab-nueva .mas{font-size:15px;line-height:1;font-weight:900}
-
-/* Escritorio: libre la esquina superior derecha */
-@media (min-width:851px){
-    .perfil-dashboard{padding-right:152px}
-    .perfil-icon-logo-btn{width:64px;height:64px}
-    .perfil-icon-logo-btn img{width:52px;height:52px}
-    .fecha-perfil{padding:6px 10px;font-size:12px}
-    .dashboard-fijo{padding-top:4px;padding-bottom:8px}
+/* brillo que recorre el botón */
+#form .btn-nueva-arriba::after{
+    content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-20deg);pointer-events:none;
+    animation:btnNuevaBrillo 3.6s ease-in-out infinite;
 }
-/* Móvil/tablet: el botón se alinea con la barra superior y todo aún más compacto */
-@media (max-width:850px){
-    .fab-nueva{top:calc(10px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right))}
-    .datos-superiores textarea,.campo-observaciones textarea{min-height:52px !important}
+#form .btn-nueva-arriba .plus{
+    display:inline-block;font-size:18px;line-height:1;
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-@media (max-width:600px){
-    .fab-nueva{padding:8px 13px;font-size:12px}
-    .card{padding:14px;margin-bottom:12px}
-    #form > .card{padding:10px}
-    .resumen-dashboard{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px}
-    .resumen-card{min-height:62px;padding:7px 9px}
+#form .btn-nueva-arriba:hover{transform:translateY(-2px) scale(1.01);filter:brightness(1.05);box-shadow:0 13px 30px rgba(232,92,139,.46),inset 0 1px 0 rgba(255,255,255,.30)}
+#form .btn-nueva-arriba:hover .plus{transform:rotate(90deg) scale(1.12)}
+#form .btn-nueva-arriba:active{transform:translateY(0) scale(.985)}
+@keyframes btnNuevaGrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes btnNuevaPulso{
+    0%,100%{box-shadow:0 8px 22px rgba(232,92,139,.30),inset 0 1px 0 rgba(255,255,255,.30)}
+    50%{box-shadow:0 10px 32px rgba(232,92,139,.55),inset 0 1px 0 rgba(255,255,255,.30)}
 }
-/* Ocultar el botón mientras el menú lateral está abierto */
-#ov.show ~ .fab-nueva{display:none}
-@media print{.fab-nueva{display:none !important}}
+@keyframes btnNuevaBrillo{0%{left:-70%}55%{left:135%}100%{left:135%}}
+@media (prefers-reduced-motion:reduce){
+    #form .btn-nueva-arriba,#form .btn-nueva-arriba::after{animation:none !important}
+}
+/* la fila de acciones queda pareja: 5 botones en una sola fila (escritorio) */
+@media (min-width:851px){.actions{grid-template-columns:repeat(5,minmax(0,1fr))}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3118,6 +3067,7 @@ table th,table td{padding:6px 8px;font-size:12.5px}
 <div class="top"><div><h1><img src="img/factura.png" alt="PDF" class="grilla-icon"> Facturación</h1><p>Genera facturas para tus clientes</p></div></div>
 <form id="form">
 <div class="aviso-bloqueo" id="avisoBloqueo">🔒 Pulsa "+ Nueva factura" para comenzar a registrar</div>
+<button type="button" class="btn btn-nueva-arriba" id="new"><span class="plus">＋</span> Nueva factura</button>
 <section class="grid datos-superiores">
 
     <!-- ============================= -->
@@ -3369,7 +3319,7 @@ table th,table td{padding:6px 8px;font-size:12.5px}
 </section>
 
 <div class="actions"><button type="button" class="btn green" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn pink" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn purple" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn green" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
-<button type="submit" class="btn white" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button><button type="button" class="btn gray" id="new">＋ Nueva factura</button></div>
+<button type="submit" class="btn white" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button></div>
 </form>
 <section id="historial" class="card history">
     <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Historial de facturas</div>
@@ -3399,22 +3349,6 @@ table th,table td{padding:6px 8px;font-size:12.5px}
 </section>
 <footer>Tejiendo Sueños Clau · Hecho con Amor 💗</footer>
 </main>
-
-<!-- BOTÓN FIJO "NUEVA FACTURA" (arriba-derecha, siempre visible) -->
-<button type="button" id="btnNuevaFlotante" class="fab-nueva" title="Crear una nueva factura">
-    <span class="mas">＋</span> Nueva factura
-</button>
-<script>
-/* Reutiliza el mismo botón "Nueva factura" del formulario, sin duplicar lógica */
-(function(){
-    var fab=document.getElementById('btnNuevaFlotante');
-    if(!fab) return;
-    fab.addEventListener('click',function(){
-        var n=document.getElementById('new');
-        if(n) n.click();
-    });
-})();
-</script>
 
 <div id="modal" class="modal"><div class="sheet"><button class="close" id="x">×</button><div id="previewBox"></div></div></div>
 
