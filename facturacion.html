@@ -2678,16 +2678,17 @@ select.sel-nativo{display:none !important}
     .productos-bar .btn{width:100%}
 }
 
-/* ---------- Botón "Nueva factura" arriba: bonito y con movimiento ---------- */
+/* ---------- Botón "Nueva factura" arriba: compacto, bonito y con movimiento ---------- */
 #form .btn-nueva-arriba{
     position:relative;overflow:hidden;
-    width:100%;min-height:52px;margin:0 0 16px;
-    display:flex;align-items:center;justify-content:center;gap:9px;
-    padding:12px 20px;border:0;border-radius:999px;cursor:pointer;
-    font-size:15px;font-weight:800;letter-spacing:.3px;color:#fff;
+    width:max-content;max-width:100%;margin:0 auto 14px;
+    min-height:38px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    padding:8px 16px;border:0;border-radius:999px;cursor:pointer;
+    font-size:12.5px;font-weight:800;letter-spacing:.3px;color:#fff;
     background:linear-gradient(135deg,#f791b2,#e85c8b 50%,#d94f7f);
     background-size:200% 200%;
-    box-shadow:0 8px 22px rgba(232,92,139,.34),inset 0 1px 0 rgba(255,255,255,.30);
+    box-shadow:0 6px 16px rgba(232,92,139,.32),inset 0 1px 0 rgba(255,255,255,.30);
     animation:btnNuevaGrad 5s ease-in-out infinite, btnNuevaPulso 2.8s ease-in-out infinite;
     transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
 }
@@ -2699,16 +2700,16 @@ select.sel-nativo{display:none !important}
     animation:btnNuevaBrillo 3.6s ease-in-out infinite;
 }
 #form .btn-nueva-arriba .plus{
-    display:inline-block;font-size:18px;line-height:1;
+    display:inline-block;font-size:14px;line-height:1;
     transition:transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-#form .btn-nueva-arriba:hover{transform:translateY(-2px) scale(1.01);filter:brightness(1.05);box-shadow:0 13px 30px rgba(232,92,139,.46),inset 0 1px 0 rgba(255,255,255,.30)}
+#form .btn-nueva-arriba:hover{transform:translateY(-2px) scale(1.02);filter:brightness(1.05);box-shadow:0 10px 22px rgba(232,92,139,.46),inset 0 1px 0 rgba(255,255,255,.30)}
 #form .btn-nueva-arriba:hover .plus{transform:rotate(90deg) scale(1.12)}
 #form .btn-nueva-arriba:active{transform:translateY(0) scale(.985)}
 @keyframes btnNuevaGrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes btnNuevaPulso{
-    0%,100%{box-shadow:0 8px 22px rgba(232,92,139,.30),inset 0 1px 0 rgba(255,255,255,.30)}
-    50%{box-shadow:0 10px 32px rgba(232,92,139,.55),inset 0 1px 0 rgba(255,255,255,.30)}
+    0%,100%{box-shadow:0 5px 14px rgba(232,92,139,.28),inset 0 1px 0 rgba(255,255,255,.30)}
+    50%{box-shadow:0 7px 20px rgba(232,92,139,.48),inset 0 1px 0 rgba(255,255,255,.30)}
 }
 @keyframes btnNuevaBrillo{0%{left:-70%}55%{left:135%}100%{left:135%}}
 @media (prefers-reduced-motion:reduce){
