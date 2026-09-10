@@ -6298,6 +6298,25 @@ if ($("saveBtn")) {
 console.log(
     "FORMULARIO COMPLETAMENTE LIMPIO"
 );
+
+
+// ==========================================
+// DEJAR LOS BLOQUES DE PAGO EN SU ESTADO INICIAL
+// ==========================================
+
+limpiarBloquesPago();
+
+
+// ==========================================
+// 🔒 BLOQUEAR EL FORMULARIO AL TERMINAR DE EDITAR
+// ==========================================
+
+bloquearForm(true);
+
+const avisoEdit = document.getElementById("avisoBloqueo");
+if(avisoEdit){
+    avisoEdit.textContent = "✅ Factura " + f.numero + " actualizada — pulsa '+ Nueva factura' para registrar otra";
+}
 }
 
 // =====================================================
@@ -8661,6 +8680,8 @@ async function guardarFacturaDB(e){
 
             $("items").innerHTML = "";
 
+            limpiarBloquesPago();
+
             bloquearForm(true);
 
             const aviso = document.getElementById("avisoBloqueo");
@@ -9169,6 +9190,8 @@ $("new").onclick = async () => {
 
         $("form").reset();
 
+        limpiarBloquesPago();
+
         $("numero").value = await nextInvoiceNumber();
 
         $("fecha").value = today();
@@ -9350,6 +9373,17 @@ function bloquearForm(bloqueado){
     });
     const aviso = document.getElementById("avisoBloqueo");
     if(aviso) aviso.style.display = bloqueado ? "block" : "none";
+}
+
+/* Deja los bloques de pago (abono / tipo de pago) en su estado inicial */
+function limpiarBloquesPago(){
+    if($("pago")) $("pago").value = "";
+    if($("abono")) $("abono").value = 0;
+    if($("tipoAbono")) $("tipoAbono").value = "";
+    if($("abonoBox")) $("abonoBox").style.display = "none";
+    if($("tipoAbonoBox")) $("tipoAbonoBox").style.display = "none";
+    if($("tipoPago")) $("tipoPago").value = "";
+    if($("tipoPagoBox")) $("tipoPagoBox").style.display = "none";
 }
 
 (async()=>{
