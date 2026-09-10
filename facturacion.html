@@ -2717,6 +2717,11 @@ select.sel-nativo{display:none !important}
 }
 /* la fila de acciones queda pareja: 5 botones en una sola fila (escritorio) */
 @media (min-width:851px){.actions{grid-template-columns:repeat(5,minmax(0,1fr))}}
+
+/* ---------- "Tipo de pago": aparece junto a "Forma de pago" solo si es Contado ---------- */
+@media (min-width:851px){
+    .factura-pago-compacto #tipoPagoBox{max-width:360px}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3316,6 +3321,39 @@ select.sel-nativo{display:none !important}
     </div>
 
 </div>
+
+    <!-- TIPO DE PAGO (solo cuando la forma de pago es Contado) -->
+
+    <div id="tipoPagoBox" class="factura-campo" style="display:none">
+
+        <label>
+            Tipo de pago
+        </label>
+
+        <div class="campo-icono campo-tipo-pago">
+
+            <span><img src="img/tipo-abono.png" class="grilla-icon"></span>
+
+            <select id="tipoPago">
+
+                <option value="" selected>
+                    Seleccione
+                </option>
+
+                <option value="Efectivo">
+                    Efectivo
+                </option>
+
+                <option value="Transferencia">
+                    Transferencia
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
 </div>
 </section>
 
@@ -3527,6 +3565,22 @@ select.sel-nativo{display:none !important}
 })();
 
 const $=id=>document.getElementById(id);
+
+
+/* 🔎 ¿La tabla "facturas" ya tiene la columna tipo_pago?
+   Si existe, el tipo de pago se guarda ahí. Si no, se guarda en tipo_abono
+   para que la app siga funcionando sin romper el guardado. */
+let _colTipoPago = null;
+async function soportaTipoPago(){
+    if(_colTipoPago !== null) return _colTipoPago;
+    try{
+        const { error } = await db.from("facturas").select("tipo_pago").limit(1);
+        _colTipoPago = !error;
+    }catch(e){
+        _colTipoPago = false;
+    }
+    return _colTipoPago;
+}
 
 function actualizarAbono(){
 
@@ -4784,6 +4838,12 @@ function collect(){
         ? $("tipoAbono").value
         : null,
 
+
+        // Tipo de pago (solo cuando la forma de pago es Contado)
+        tipoPago: $("pago").value === "Contado"
+        ? ($("tipoPago") ? $("tipoPago").value : "")
+        : null,
+
         estado: $("estado").value,
 
         obs: $("obs").value,
@@ -5161,9 +5221,27 @@ function sheet(f) {
 
                         </div>
 
+                        </div>
+                       `
+                       : (
+                          f.pago === "Contado" && f.tipoPago
+                          ? `
+                        <div class="info-box">
+
+                          <div class="info-box-label">
+                              Tipo de pago
+                          </div>
+
+                        <div class="info-box-value">
+
+                       <svg class="icono-factura" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> ${esc(f.tipoPago)}
+
+                        </div>
+
                        </div>
                        `
-                       : ""
+                          : ""
+                        )
                      }
 
 
@@ -5546,6 +5624,8 @@ async function guardarDB(f){
     // 6. GUARDAR FACTURA
     // ==========================================
 
+    const usaTipoPago = await soportaTipoPago();
+
     const { data: fac, error: e1 } = await db
         .from("facturas")
         .insert({
@@ -5557,8 +5637,15 @@ async function guardarDB(f){
             cliente_id: cliente.id,
 
             forma_pago: f.pago,
-     
-            tipo_abono: f.tipoAbono,
+
+            tipo_abono:
+                (f.pago === "Contado" && !usaTipoPago)
+                    ? (f.tipoPago || null)
+                    : f.tipoAbono,
+
+            ...(usaTipoPago
+                ? { tipo_pago: (f.pago === "Contado" ? (f.tipoPago || null) : null) }
+                : {}),
 
             estado: estadoFactura,
 
@@ -5919,6 +6006,8 @@ async function actualizarFacturaDB(f){
     // 14. ACTUALIZAR FACTURA
     // ==========================================
 
+    const usaTipoPago = await soportaTipoPago();
+
     const {
         error: e1
     } = await db
@@ -5935,7 +6024,13 @@ async function actualizarFacturaDB(f){
                 f.pago,
 
             tipo_abono:
-                tipoAbono,
+                usaTipoPago
+                    ? tipoAbono
+                    : (f.pago === "Contado" ? (f.tipoPago || null) : tipoAbono),
+
+            ...(usaTipoPago
+                ? { tipo_pago: (f.pago === "Contado" ? (f.tipoPago || null) : null) }
+                : {}),
 
             estado:
                 estadoFactura,
@@ -6893,6 +6988,10 @@ async function obtenerFacturaDB(id){
         pago: data.forma_pago || "Contado",
 
         tipoAbono: data.tipo_abono || "",
+
+        tipoPago: (data.forma_pago === "Contado")
+            ? (data.tipo_pago || data.tipo_abono || "")
+            : "",
 
         estado: data.estado || "Pagada",
 
@@ -8343,6 +8442,18 @@ async function editarFacturaDB(id){
 
 
         // ==========================================
+        // TIPO DE PAGO (cuando es Contado)
+        // ==========================================
+
+        if($("tipoPago")){
+
+            $("tipoPago").value =
+                (f.pago === "Contado") ? (f.tipoPago || f.tipoAbono || "") : "";
+
+        }
+
+
+        // ==========================================
         // OBSERVACIONES
         // ==========================================
 
@@ -9436,7 +9547,7 @@ document.addEventListener("DOMContentLoaded", function () {
         else fn();
     }
     listo(function(){
-        ['estado','pago','tipoAbono'].forEach(function(id){
+        ['estado','pago','tipoAbono','tipoPago'].forEach(function(id){
             var sel = document.getElementById(id);
             if(!sel || sel.dataset.selMejorado) return;
             sel.dataset.selMejorado = '1';
@@ -10082,5 +10193,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     </div>
 
+<script>
+/* 💳 "Tipo de pago": se habilita solo cuando la Forma de pago es "Contado" */
+(function(){
+    function sincronizarTipoPago(){
+        var pago = document.getElementById('pago');
+        var box  = document.getElementById('tipoPagoBox');
+        var sel  = document.getElementById('tipoPago');
+        if(!pago || !box || !sel) return;
+
+        var esContado = pago.value === 'Contado';
+
+        if(esContado){
+            box.style.display = 'block';
+            sel.disabled = !!pago.disabled;
+        }else{
+            box.style.display = 'none';
+            sel.disabled = true;
+            if(sel.value !== '') sel.value = '';
+        }
+    }
+    function listo(fn){
+        if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+        else fn();
+    }
+    listo(function(){
+        var pago = document.getElementById('pago');
+        if(pago){
+            pago.addEventListener('change', sincronizarTipoPago);
+            pago.addEventListener('input', sincronizarTipoPago);
+        }
+        sincronizarTipoPago();
+        setInterval(sincronizarTipoPago, 400);
+    });
+})();
+</script>
 </body>
 </html>
