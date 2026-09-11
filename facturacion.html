@@ -2857,6 +2857,434 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 
 /* ---------- 8) Pantalla de acceso ---------- */
 .login-card{box-shadow:0 26px 70px rgba(120,80,100,.18)}
+
+/* ============================================================
+   💎 ACABADO VISUAL — FORMULARIO DE CLIENTE · FACTURA · PRODUCTOS
+   Capa final, 100% estética (no toca la lógica ni el HTML).
+   Se coloca al final del <style> para ordenar la cascada y que
+   los tres formularios se vean igual de pulidos.
+   ============================================================ */
+
+/* ---- 0) Paleta común de los tres formularios ---- */
+#form,#modalAbono,#modalProductos{
+    --fp-line:#f3e2e9;
+    --fp-line-2:#f6cddb;
+    --fp-line-hover:#eccfdb;
+    --fp-line-focus:#f4a9c0;
+    --fp-soft:#fff8fb;
+    --fp-soft-2:#fdf1f6;
+    --fp-ink:#4a3f45;
+    --fp-label:#9a8790;
+    --fp-accent:#e85c8b;
+    --fp-ring:0 0 0 3.5px rgba(244,125,163,.14);
+    --fp-shadow:0 6px 18px rgba(150,110,130,.08);
+}
+
+/* ---- 1) Etiquetas: mismo tamaño, color y peso en los 3 formularios ---- */
+#form label,
+#modalAbono label,
+#modalProductos label:not(.cat-check){
+    color:var(--fp-label);
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:.45px;
+    text-transform:uppercase;
+}
+
+/* ---- 2) Campos: una sola caja suave para toda la app ---- */
+#form input,#form select,#form textarea,
+#modalAbono input,#modalAbono select,
+#modalProductos input:not([type=checkbox]):not([type=file]),
+#modalProductos select,#modalProductos textarea{
+    border:1.5px solid var(--fp-line);
+    border-radius:12px;
+    background:#fff;
+    color:#443a40;
+    transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+#form input:hover,#form select:hover,#form textarea:hover,
+#modalAbono input:hover,#modalAbono select:hover,
+#modalProductos input:not([type=checkbox]):not([type=file]):hover,
+#modalProductos select:hover,#modalProductos textarea:hover{
+    border-color:var(--fp-line-hover);
+}
+#form input:focus,#form select:focus,#form textarea:focus,
+#modalAbono input:focus,#modalAbono select:focus,
+#modalProductos input:focus,#modalProductos select:focus,#modalProductos textarea:focus{
+    border-color:var(--fp-line-focus);
+    background:#fffdfe;
+    box-shadow:var(--fp-ring);
+    outline:none;
+}
+
+/* ---- 3) Iconos de campo: pastilla rosada (cliente + factura) ---- */
+.grid.datos-superiores .campo-icono > span:not(.icono-campo){
+    left:8px;
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    background:linear-gradient(135deg,#fff2f7,#ffe9f1);
+    box-shadow:inset 0 0 0 1px #f9dbe7;
+}
+.grid.datos-superiores .campo-icono input,
+.grid.datos-superiores .campo-icono select{padding-left:46px !important;}
+.grid.datos-superiores .icono-campo{
+    background:linear-gradient(180deg,#fff5f9,#ffeef5);
+    border-right:1px solid #f8e2ec;
+    border-radius:11px 0 0 11px;
+}
+#abonoBox .campo-icono > span{
+    left:9px;
+    width:28px;
+    height:28px;
+    border-radius:9px;
+    background:linear-gradient(135deg,#fff2f7,#ffe9f1);
+    box-shadow:inset 0 0 0 1px #f9dbe7;
+}
+#abonoBox .campo-icono input,
+#abonoBox .campo-icono select{padding-left:44px !important;}
+
+/* ---- 4) Cliente: campos separados y etiqueta con acento ---- */
+.cliente-grid .cliente-campo > label::before{
+    content:"";
+    display:inline-block;
+    width:6px;
+    height:6px;
+    border-radius:2px;
+    margin-right:7px;
+    vertical-align:1px;
+    background:linear-gradient(135deg,#f795b6,#e85c8b);
+}
+@media (min-width:851px){
+    .cliente-grid{gap:2px 24px;}
+    .cliente-grid .cliente-campo + .cliente-campo{
+        border-left:1px solid #f7e9ef;
+        padding-left:24px;
+    }
+}
+/* Lista de sugerencias del cliente */
+.sugerencias-clientes{
+    margin-top:6px;
+    border:1.5px solid #f6dbe6;
+    border-radius:14px;
+    box-shadow:0 18px 40px rgba(150,110,130,.18);
+    overflow:hidden;
+}
+.sugerencia-cliente{padding:11px 14px;transition:background .15s ease;}
+.sugerencia-cliente strong{color:#4a3f45;}
+.sugerencia-cliente:hover{background:#fff4f9;}
+
+/* ---- 5) Factura: número, fecha/estado y resumen de abonos ---- */
+.datos-superiores .factura-numero-label{
+    color:var(--fp-label);
+    font-size:11.5px;
+    letter-spacing:.45px;
+    text-transform:uppercase;
+}
+.datos-superiores .factura-numero-label::before{
+    content:"";
+    display:inline-block;
+    width:6px;
+    height:6px;
+    border-radius:2px;
+    background:linear-gradient(135deg,#f795b6,#e85c8b);
+}
+.datos-superiores .factura-numero-campo{
+    border:1.5px solid var(--fp-line-2);
+    background:linear-gradient(135deg,#fff9fc,#fff4f8);
+    box-shadow:0 2px 8px rgba(244,125,163,.10);
+}
+.datos-superiores .factura-numero-icono{
+    background:linear-gradient(135deg,#ffe4ee,#ffd9e6);
+    border-right:1px solid #fbd3e1;
+}
+.datos-superiores .factura-automatico{
+    background:linear-gradient(135deg,#ffe4ee,#ffd7e4);
+    color:#d84c78;
+    box-shadow:inset 0 0 0 1px #fbcfe0;
+}
+/* Resumen abono acumulado / saldo pendiente */
+.datos-superiores .factura-resumen{gap:14px;}
+.datos-superiores .factura-resumen > div{
+    border-width:1.5px;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(120,90,105,.07);
+}
+.datos-superiores .resumen-abono{
+    background:linear-gradient(135deg,#f2fdf7,#e8f9f0);
+    border-color:#b9e6cd;
+}
+.datos-superiores .resumen-saldo{
+    background:linear-gradient(135deg,#fff8f0,#fff1e2);
+    border-color:#f2cfa5;
+}
+.factura-resumen .resumen-datos span{
+    font-size:11px;
+    letter-spacing:.45px;
+    text-transform:uppercase;
+}
+.factura-resumen .resumen-datos strong{font-size:22px;letter-spacing:-.5px;}
+
+/* ---- 6) Forma de pago (caja compacta junto a productos) ---- */
+.factura-pago-compacto{
+    background:linear-gradient(135deg,#fff9fc,#fdf3f8);
+    border:1.5px solid #f6dbe6;
+    border-radius:16px;
+    box-shadow:0 5px 16px rgba(244,125,163,.06);
+}
+.factura-pago-compacto > .title{
+    color:#c2477a;
+    font-size:12px;
+    letter-spacing:.7px;
+    text-transform:uppercase;
+}
+
+/* ---- 7) Productos: pastillas, tabla y totales ---- */
+#addCustom.btn-pastilla{
+    background:linear-gradient(135deg,#f47da3,#e15a86);
+    color:#fff;
+    padding:9px 18px;
+    font-size:12.5px;
+    font-weight:800;
+    letter-spacing:.2px;
+    box-shadow:0 6px 14px rgba(232,92,139,.28);
+}
+#addCustom.btn-pastilla:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(232,92,139,.38);
+    filter:brightness(1.03);
+}
+#prodCount{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:28px;
+    height:28px;
+    padding:0 10px;
+    border:0;
+    border-radius:999px;
+    background:linear-gradient(135deg,#f47da3,#e85c8b);
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+    box-shadow:0 4px 10px rgba(232,92,139,.30);
+}
+#prodCount.vacio{background:#f4ecef;color:#a2949a;box-shadow:none;}
+
+@media (min-width:851px){
+    #tablaItems th{
+        background:linear-gradient(135deg,#fdf0f5,#fff6fa);
+        color:#c2477a;
+        font-size:11px;
+        letter-spacing:.7px;
+        border-bottom:1.5px solid #f6d6e3;
+        padding:13px 10px;
+        white-space:nowrap;
+    }
+    #tablaItems th:first-child{border-radius:12px 0 0 0;}
+    #tablaItems th:last-child{border-radius:0 12px 0 0;}
+    #tablaItems td{border-bottom:1px solid #f7edf1;padding:10px 8px;vertical-align:middle;}
+    #tablaItems tbody tr:nth-child(even){background:#fffbfd;}
+    #tablaItems tbody tr:hover{background:#fff3f8;}
+    #tablaItems input,#tablaItems select{border-radius:10px;}
+    #tablaItems td.lt{font-weight:800;color:#4a3f45;}
+}
+#tablaItems .del{
+    width:30px;
+    height:30px;
+    line-height:1;
+    border-radius:9px;
+    background:#fff1f5;
+    color:#d8608a;
+    opacity:.65;
+    transition:opacity .16s ease,transform .16s ease,background .16s ease,color .16s ease;
+}
+#tablaItems .del:hover{
+    opacity:1;
+    transform:scale(1.08);
+    background:#ffe3ee;
+    color:#c3426e;
+}
+/* Botón "Agregar producto": zona punteada amable */
+#form .add{
+    display:block;
+    width:100%;
+    margin-top:14px;
+    padding:13px 20px;
+    border:2px dashed #f6c6d8;
+    border-radius:14px;
+    background:linear-gradient(135deg,#fffafc,#fff4f9);
+    color:#d9527f;
+    font-weight:800;
+    font-size:13.5px;
+    letter-spacing:.3px;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease,color .18s ease;
+}
+#form .add:hover{
+    border-color:#f47da3;
+    background:linear-gradient(135deg,#fff4f9,#ffe9f2);
+    color:#c9426f;
+    transform:translateY(-1px);
+    box-shadow:0 8px 20px rgba(244,125,163,.16);
+}
+/* Totales: panel tipo recibo */
+#form .totals{
+    max-width:460px;
+    margin:18px 0 4px auto;
+    padding:14px 18px;
+    background:linear-gradient(160deg,#ffffff,#fff7fb);
+    border:1.5px solid #f6e0ea;
+    border-radius:16px;
+    box-shadow:0 8px 22px rgba(150,110,130,.08);
+}
+#form .totals > div{
+    border-bottom:1px dashed #f7e6ee;
+    padding:8px 0;
+}
+#form .totals > div:last-child{border-bottom:0;}
+#form .totals > div:not(.total){color:#7d6b73;font-weight:700;font-size:13px;}
+#form .totals > div:not(.total) b{color:#4a3f45;font-weight:800;}
+#form .totals input{
+    width:70px !important;
+    text-align:center;
+    border:1.5px solid #f3d3e1;
+    border-radius:9px;
+    padding:6px 4px;
+    background:#fff;
+    color:#4a3f45;
+    font-weight:800;
+}
+#form .totals input:focus{
+    border-color:var(--fp-line-focus);
+    box-shadow:var(--fp-ring);
+}
+#form .totals .total{
+    background:linear-gradient(135deg,#f47da3,#e15a86);
+    color:#fff;
+    border-bottom:0;
+    border-radius:12px;
+    padding:13px 16px !important;
+    margin-top:8px;
+    font-size:16px;
+    box-shadow:0 8px 20px rgba(232,92,139,.28);
+}
+#form .totals .total b{color:#fff;font-size:19px;letter-spacing:-.3px;}
+
+/* ---- 8) Modal de productos (catálogo) ---- */
+#modalProductos .modal-abono-contenido{
+    border:1px solid #f7e6ee;
+    border-radius:20px;
+    box-shadow:0 28px 70px rgba(90,60,75,.28);
+}
+#modalProductos .modal-abono-titulo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:19px;
+    font-weight:800;
+    color:#4a3f45;
+    letter-spacing:-.01em;
+}
+#modalProductos .modal-abono-datos > div{
+    background:linear-gradient(135deg,#fdf5f9,#fbebf2);
+    border:1px solid #f8e3ec;
+    border-radius:12px;
+}
+#modalProductos .productos-bar input{
+    padding:12px 15px;
+    font-size:14px;
+    border:1.5px solid #f4dbe6;
+    border-radius:12px;
+    background:#fff;
+}
+#modalProductos .productos-bar input:focus{
+    outline:none;
+    border-color:var(--fp-line-focus);
+    box-shadow:var(--fp-ring);
+}
+#modalProductos .prod-fila{
+    background:#fffafc;
+    border:1.5px solid #f6e2eb;
+    border-radius:14px;
+    box-shadow:0 3px 10px rgba(150,110,130,.05);
+}
+#modalProductos .cat-check{
+    padding:10px 12px;
+    border:1.5px solid #f4dbe6;
+    border-radius:12px;
+    background:#fffafc;
+    transition:all .18s ease;
+}
+#modalProductos .cat-check:hover{border-color:#f2bcd2;background:#fff4f9;}
+#modalProductos .cat-check:has(input:checked){
+    background:linear-gradient(135deg,#ffe4ee,#ffd8e6);
+    border-color:#f47da3;
+    color:#d9527f;
+    box-shadow:0 6px 14px rgba(244,125,163,.16);
+}
+#modalProductos input[type=file]{
+    display:block;
+    width:100%;
+    padding:12px 14px;
+    border:2px dashed #f6c6d8;
+    border-radius:14px;
+    background:linear-gradient(135deg,#fffafc,#fff4f9);
+    color:#a2858f;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    transition:border-color .18s ease,background .18s ease;
+}
+#modalProductos input[type=file]:hover{border-color:#f47da3;background:#fff2f8;}
+#modalProductos input[type=file]::file-selector-button{
+    margin-right:12px;
+    padding:8px 14px;
+    border:0;
+    border-radius:999px;
+    background:linear-gradient(135deg,#f47da3,#e85c8b);
+    color:#fff;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+#modalProductos .prod-badge.si,
+#modalProductos .prod-badge.no{border:0;padding:3px 9px;}
+#modalProductos .prod-badge.si{background:linear-gradient(135deg,#dff7e9,#cdf0dd);color:#17804a;}
+#modalProductos .prod-badge.no{background:linear-gradient(135deg,#fde6e6,#fbd8d8);color:#b93b3b;}
+
+/* ---- 9) Detalles generales del formulario ---- */
+#form .aviso-bloqueo{
+    background:linear-gradient(135deg,#fff4f9,#ffeaf3);
+    border:1.5px dashed #f6bcd3;
+    border-radius:14px;
+    color:#b0476e;
+    font-weight:700;
+    letter-spacing:.2px;
+    padding:13px 16px;
+    box-shadow:0 4px 14px rgba(244,125,163,.08);
+}
+.grid.datos-superiores{
+    border:1px solid #f6e5ed;
+    border-radius:20px;
+    box-shadow:0 12px 30px rgba(150,110,130,.07);
+}
+.grid.datos-superiores > .card + .card{
+    border-top:1px dashed #f6e3eb;
+    padding-top:16px;
+}
+
+/* ---- 10) Ajuste fino en teléfono ---- */
+@media (max-width:600px){
+    #form .add{margin-top:10px;padding:11px 16px;}
+    #form .totals > div{padding:5px 0;}
+    .grid.datos-superiores > .card + .card{padding-top:12px;}
+    .cliente-grid .cliente-campo > label::before{width:5px;height:5px;margin-right:6px;}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
