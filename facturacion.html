@@ -20,7 +20,57 @@
 --ts-pale-2:#fff5f8;
 --ts-shadow:0 8px 26px rgba(64,55,59,.07);
 --ts-shadow-hover:0 14px 34px rgba(64,55,59,.11);
---ts-border-soft:rgba(234,223,228,.85)}
+--ts-border-soft:rgba(234,223,228,.85);
+/* --- escala tipográfica del formulario: seis pasos, no once --- */
+--fs-xs:11px;
+--fs-sm:12px;
+--fs-md:13px;
+--fs-lg:15px;
+--fs-xl:18px;
+--fs-2xl:22px;
+/* --- semántica de estado: mismos colores que los chips del historial --- */
+--st-ok:#198b4b;
+--st-warn:#a66b00;
+--st-info:#3268b2;
+--st-danger:#c62828;
+/* --- derivados del formulario: respaldo para navegadores sin color-mix() --- */
+--fp-line-hover:#e9d5dd;
+--fp-line-strong:#f3c8d8;
+--fp-shadow:0 6px 18px rgba(150,110,130,.08);
+--fp-ring-shadow:0 0 0 3px rgba(244,125,163,.13);
+--fp-ok-soft:#eefaf4;
+--fp-ok-line:#c3e8d5;
+--fp-warn-soft:#fff6ed;
+--fp-warn-line:#f2d3ac;
+--fp-info-soft:#eef4fc;
+--fp-p-soft:#fdeef4;
+--fp-v-soft:#f2eefa;
+--fp-v-line:#d8cdea;
+--fp-danger-soft:#fdeeee;
+--fp-numero-bg:linear-gradient(135deg,#fffafd,#fff5f8);
+--fp-icono-bg:linear-gradient(135deg,#ffe7ef,#ffdfe9);
+--fp-numero-shadow:0 2px 8px rgba(244,125,163,.10);
+--fp-total-shadow:0 8px 20px rgba(232,92,139,.28)}
+/* Los derivados se calculan a partir de los tokens base cuando el navegador
+   soporta color-mix(): cambiar --p / --pd / --v repinta todo el formulario. */
+@supports (color:color-mix(in srgb,red 10%,blue)){
+:root{
+    --fp-line-hover:color-mix(in srgb,var(--pd) 18%,var(--line));
+    --fp-line-strong:color-mix(in srgb,var(--pd) 32%,var(--line));
+    --fp-ring-shadow:0 0 0 3px color-mix(in srgb,var(--p) 22%,transparent);
+    --fp-ok-soft:color-mix(in srgb,var(--g) 12%,#fff);
+    --fp-ok-line:color-mix(in srgb,var(--g) 34%,var(--line));
+    --fp-warn-soft:color-mix(in srgb,var(--st-warn) 12%,#fff);
+    --fp-warn-line:color-mix(in srgb,var(--st-warn) 30%,var(--line));
+    --fp-info-soft:color-mix(in srgb,var(--st-info) 12%,#fff);
+    --fp-p-soft:color-mix(in srgb,var(--p) 16%,#fff);
+    --fp-v-soft:color-mix(in srgb,var(--v) 12%,#fff);
+    --fp-v-line:color-mix(in srgb,var(--v) 30%,var(--line));
+    --fp-danger-soft:color-mix(in srgb,var(--st-danger) 12%,#fff);
+    --fp-numero-bg:linear-gradient(135deg,color-mix(in srgb,var(--p) 8%,#fff),color-mix(in srgb,var(--p) 13%,#fff));
+    --fp-icono-bg:linear-gradient(135deg,color-mix(in srgb,var(--p) 28%,#fff),color-mix(in srgb,var(--p) 40%,#fff));
+}
+}
 *{box-sizing:border-box}
 body{
 margin:0;
@@ -2858,48 +2908,50 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 /* ---------- 8) Pantalla de acceso ---------- */
 .login-card{box-shadow:0 26px 70px rgba(120,80,100,.18)}
 
+
 /* ============================================================
-   💎 ACABADO VISUAL — FORMULARIO DE CLIENTE · FACTURA · PRODUCTOS
-   Capa final, 100% estética (no toca la lógica ni el HTML).
-   Se coloca al final del <style> para ordenar la cascada y que
-   los tres formularios se vean igual de pulidos.
+   💎 ACABADO VISUAL v2 — CLIENTE · FACTURA · PRODUCTOS
+   Capa final, 100% presentación. Todo el color sale de los tokens
+   de :root (--p, --pd, --g, --v, --ink, --mut, --line, --soft),
+   así que cambiar la paleta del formulario es editar una línea.
+   El único JavaScript añadido va en su propio bloque al final y es aditivo.
    ============================================================ */
 
-/* ---- 0) Paleta común de los tres formularios ---- */
-#form,#modalAbono,#modalProductos{
-    --fp-line:#f3e2e9;
-    --fp-line-2:#f6cddb;
-    --fp-line-hover:#eccfdb;
-    --fp-line-focus:#f4a9c0;
-    --fp-soft:#fff8fb;
-    --fp-soft-2:#fdf1f6;
-    --fp-ink:#4a3f45;
-    --fp-label:#9a8790;
-    --fp-accent:#e85c8b;
-    --fp-ring:0 0 0 3.5px rgba(244,125,163,.14);
-    --fp-shadow:0 6px 18px rgba(150,110,130,.08);
-}
-
-/* ---- 1) Etiquetas: mismo tamaño, color y peso en los 3 formularios ---- */
+/* ---------- 1) Etiquetas: mismo tamaño, color y peso en los 3 formularios ---------- */
 #form label,
 #modalAbono label,
 #modalProductos label:not(.cat-check){
-    color:var(--fp-label);
-    font-size:11.5px;
+    color:var(--mut);
+    font-size:var(--fs-xs);
     font-weight:800;
     letter-spacing:.45px;
     text-transform:uppercase;
 }
+/* marca de acento a la izquierda de cada etiqueta */
+#form label::before,
+#modalAbono label::before,
+#modalProductos label:not(.cat-check)::before{
+    content:"";
+    display:inline-block;
+    width:6px;
+    height:6px;
+    border-radius:2px;
+    background:var(--mut);
+    margin-right:7px;
+    vertical-align:1px;
+    transition:background .18s ease;
+}
 
-/* ---- 2) Campos: una sola caja suave para toda la app ---- */
+/* ---------- 2) Campos: una sola caja suave para toda la app ---------- */
 #form input,#form select,#form textarea,
 #modalAbono input,#modalAbono select,
 #modalProductos input:not([type=checkbox]):not([type=file]),
 #modalProductos select,#modalProductos textarea{
-    border:1.5px solid var(--fp-line);
+    border:1.5px solid var(--line);
     border-radius:12px;
     background:#fff;
-    color:#443a40;
+    color:var(--ink);
+    font-size:var(--fs-md);
     transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
 }
 #form input:hover,#form select:hover,#form textarea:hover,
@@ -2911,13 +2963,17 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 #form input:focus,#form select:focus,#form textarea:focus,
 #modalAbono input:focus,#modalAbono select:focus,
 #modalProductos input:focus,#modalProductos select:focus,#modalProductos textarea:focus{
-    border-color:var(--fp-line-focus);
+    border-color:var(--pd);
     background:#fffdfe;
-    box-shadow:var(--fp-ring);
+    box-shadow:var(--fp-ring-shadow);
     outline:none;
 }
+/* el nº de factura es la cifra protagonista: no la encogemos con la escala */
+#form .factura-numero-campo input{font-size:var(--fs-xl);}
+/* el buscador de producto mantiene su ancho completo */
+#tablaItems .ps-buscar{font-size:var(--fs-md);}
 
-/* ---- 3) Iconos de campo: pastilla rosada (cliente + factura) ---- */
+/* ---------- 3) Iconos de campo: pastilla suave + SVG ---------- */
 .grid.datos-superiores .campo-icono > span:not(.icono-campo){
     left:8px;
     width:30px;
@@ -2927,14 +2983,15 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     align-items:center;
     justify-content:center;
     font-size:14px;
-    background:linear-gradient(135deg,#fff2f7,#ffe9f1);
-    box-shadow:inset 0 0 0 1px #f9dbe7;
+    color:var(--pd);
+    background:var(--soft);
+    box-shadow:inset 0 0 0 1px var(--line);
 }
 .grid.datos-superiores .campo-icono input,
 .grid.datos-superiores .campo-icono select{padding-left:46px !important;}
 .grid.datos-superiores .icono-campo{
-    background:linear-gradient(180deg,#fff5f9,#ffeef5);
-    border-right:1px solid #f8e2ec;
+    background:var(--soft);
+    border-right:1px solid var(--line);
     border-radius:11px 0 0 11px;
 }
 #abonoBox .campo-icono > span{
@@ -2942,46 +2999,67 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     width:28px;
     height:28px;
     border-radius:9px;
-    background:linear-gradient(135deg,#fff2f7,#ffe9f1);
-    box-shadow:inset 0 0 0 1px #f9dbe7;
+    background:var(--soft);
+    box-shadow:inset 0 0 0 1px var(--line);
 }
 #abonoBox .campo-icono input,
 #abonoBox .campo-icono select{padding-left:44px !important;}
+/* icono SVG de campo (sustituye a los emoji) */
+.fp-ico{
+    width:17px;
+    height:17px;
+    display:block;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
 
-/* ---- 4) Cliente: campos separados y etiqueta con acento ---- */
-.cliente-grid .cliente-campo > label::before{
-    content:"";
-    display:inline-block;
-    width:6px;
-    height:6px;
-    border-radius:2px;
-    margin-right:7px;
-    vertical-align:1px;
-    background:linear-gradient(135deg,#f795b6,#e85c8b);
+/* ---------- 4) Estados del campo: foco, completado e inválido ---------- */
+/* al enfocar, la etiqueta y su marca se encienden */
+#form .cliente-campo:focus-within label,
+#form .factura-campo:focus-within label,
+#modalProductos .productos-grid-dos > div:focus-within label{color:var(--pd);}
+#form .cliente-campo:focus-within label::before,
+#form .factura-campo:focus-within label::before,
+#modalProductos .productos-grid-dos > div:focus-within label::before{background:var(--pd);}
+/* campo con contenido: marca ✓ y acento verde */
+#form .campo-icono.fp-lleno::after{
+    content:"✓";
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:12px;
+    font-weight:800;
+    color:var(--g);
+    pointer-events:none;
+    animation:fpAparece .2s ease both;
 }
-@media (min-width:851px){
-    .cliente-grid{gap:2px 24px;}
-    .cliente-grid .cliente-campo + .cliente-campo{
-        border-left:1px solid #f7e9ef;
-        padding-left:24px;
-    }
+#form .cliente-campo.fp-lleno > label::before,
+#form .factura-campo.fp-lleno > label::before{background:var(--g);}
+#form .campo-observaciones.fp-lleno::after{top:22px;transform:none;}
+@keyframes fpAparece{from{opacity:0;transform:translateY(-50%) scale(.6)}}
+/* campo obligatorio mal dejado: aviso suave, sin depender del navegador */
+#form .cliente-campo:has(#nombre:user-invalid) input{
+    border-color:var(--st-danger);
+    background:var(--fp-danger-soft);
 }
-/* Lista de sugerencias del cliente */
-.sugerencias-clientes{
-    margin-top:6px;
-    border:1.5px solid #f6dbe6;
-    border-radius:14px;
-    box-shadow:0 18px 40px rgba(150,110,130,.18);
-    overflow:hidden;
+#form .cliente-campo:has(#nombre:user-invalid) > label::before{background:var(--st-danger);}
+#form .cliente-campo:has(#nombre:user-invalid)::after{
+    content:"Escribe el nombre del cliente";
+    display:block;
+    margin-top:5px;
+    font-size:var(--fs-sm);
+    font-weight:700;
+    color:var(--st-danger);
 }
-.sugerencia-cliente{padding:11px 14px;transition:background .15s ease;}
-.sugerencia-cliente strong{color:#4a3f45;}
-.sugerencia-cliente:hover{background:#fff4f9;}
 
-/* ---- 5) Factura: número, fecha/estado y resumen de abonos ---- */
+/* ---------- 5) Zona 1 · Datos de la factura ---------- */
 .datos-superiores .factura-numero-label{
-    color:var(--fp-label);
-    font-size:11.5px;
+    color:var(--mut);
+    font-size:var(--fs-xs);
     letter-spacing:.45px;
     text-transform:uppercase;
 }
@@ -2991,73 +3069,169 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     width:6px;
     height:6px;
     border-radius:2px;
-    background:linear-gradient(135deg,#f795b6,#e85c8b);
+    background:var(--pd);
 }
 .datos-superiores .factura-numero-campo{
-    border:1.5px solid var(--fp-line-2);
-    background:linear-gradient(135deg,#fff9fc,#fff4f8);
-    box-shadow:0 2px 8px rgba(244,125,163,.10);
+    border:1.5px solid var(--fp-line-strong);
+    background:var(--fp-numero-bg);
+    box-shadow:var(--fp-numero-shadow);
 }
 .datos-superiores .factura-numero-icono{
-    background:linear-gradient(135deg,#ffe4ee,#ffd9e6);
-    border-right:1px solid #fbd3e1;
+    background:var(--fp-icono-bg);
+    border-right:1px solid var(--fp-line-strong);
+    color:var(--pd);
 }
 .datos-superiores .factura-automatico{
-    background:linear-gradient(135deg,#ffe4ee,#ffd7e4);
-    color:#d84c78;
-    box-shadow:inset 0 0 0 1px #fbcfe0;
+    background:var(--soft);
+    color:var(--pd);
+    box-shadow:inset 0 0 0 1px var(--fp-line-strong);
+    font-size:10px;
 }
-/* Resumen abono acumulado / saldo pendiente */
+/* el estado pinta su propio campo: verde, ámbar, azul o rojo */
+.datos-superiores .campo-estado:has(option[value="Pagada"]:checked) select{
+    border-color:var(--st-ok);
+    background:var(--fp-ok-soft);
+    color:var(--st-ok);
+    font-weight:800;
+}
+.datos-superiores .campo-estado:has(option[value="Pagada"]:checked) .icono-campo{background:var(--fp-ok-soft);}
+.datos-superiores .campo-estado:has(option[value="Pendiente"]:checked) select{
+    border-color:var(--st-warn);
+    background:var(--fp-warn-soft);
+    color:var(--st-warn);
+    font-weight:800;
+}
+.datos-superiores .campo-estado:has(option[value="Pendiente"]:checked) .icono-campo{background:var(--fp-warn-soft);}
+.datos-superiores .campo-estado:has(option[value="Enviada"]:checked) select{
+    border-color:var(--st-info);
+    background:var(--fp-info-soft);
+    color:var(--st-info);
+    font-weight:800;
+}
+.datos-superiores .campo-estado:has(option[value="Enviada"]:checked) .icono-campo{background:var(--fp-info-soft);}
+.datos-superiores .campo-estado:has(option[value="Anulada"]:checked) select{
+    border-color:var(--st-danger);
+    background:var(--fp-danger-soft);
+    color:var(--st-danger);
+    font-weight:800;
+}
+.datos-superiores .campo-estado:has(option[value="Anulada"]:checked) .icono-campo{background:var(--fp-danger-soft);}
+
+/* ---------- 6) Zona 2 · Datos del cliente ---------- */
+.cliente-grid .cliente-campo{position:relative;}
+@media (min-width:851px){
+    .cliente-grid{gap:2px 24px;}
+    .cliente-grid .cliente-campo + .cliente-campo{
+        border-left:1px solid var(--line);
+        padding-left:24px;
+    }
+}
+/* lista de sugerencias del cliente */
+.sugerencias-clientes{
+    margin-top:6px;
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--ts-shadow);
+    overflow:hidden;
+    background:#fff;
+}
+.sugerencia-cliente{padding:11px 14px;transition:background .15s ease;}
+.sugerencia-cliente strong{color:var(--ink);}
+.sugerencia-cliente:hover{background:var(--soft);}
+.sugerencia-cliente b,.sugerencia-cliente span{color:var(--mut);}
+
+/* ---------- 7) Zona 3 · Abonos, saldo y observaciones ---------- */
 .datos-superiores .factura-resumen{gap:14px;}
 .datos-superiores .factura-resumen > div{
     border-width:1.5px;
     border-radius:16px;
-    box-shadow:0 6px 16px rgba(120,90,105,.07);
+    box-shadow:var(--fp-shadow);
 }
 .datos-superiores .resumen-abono{
-    background:linear-gradient(135deg,#f2fdf7,#e8f9f0);
-    border-color:#b9e6cd;
+    background:var(--fp-ok-soft);
+    border-color:var(--fp-ok-line);
 }
 .datos-superiores .resumen-saldo{
-    background:linear-gradient(135deg,#fff8f0,#fff1e2);
-    border-color:#f2cfa5;
+    background:var(--fp-warn-soft);
+    border-color:var(--fp-warn-line);
 }
 .factura-resumen .resumen-datos span{
-    font-size:11px;
+    font-size:var(--fs-xs);
     letter-spacing:.45px;
     text-transform:uppercase;
 }
-.factura-resumen .resumen-datos strong{font-size:22px;letter-spacing:-.5px;}
+.factura-resumen .resumen-datos strong{
+    font-size:var(--fs-2xl);
+    letter-spacing:-.5px;
+    font-variant-numeric:tabular-nums;
+}
+.factura-resumen .resumen-icono{box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);}
 
-/* ---- 6) Forma de pago (caja compacta junto a productos) ---- */
+/* ---------- 8) Pasos numerados y separación de las tres zonas ---------- */
+.grid.datos-superiores{
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--ts-shadow);
+}
+.grid.datos-superiores > .card + .card{
+    border-top:1px dashed var(--line);
+    padding-top:16px;
+}
+#form .datos-superiores > .card > .title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:var(--fs-lg);
+}
+.grid.datos-superiores > .card > .title{border-bottom:1px solid var(--line);}
+.fp-paso{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:22px;
+    height:22px;
+    flex:0 0 22px;
+    border-radius:50%;
+    background:var(--soft);
+    border:1.5px solid var(--line);
+    color:var(--pd);
+    font-size:var(--fs-xs);
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+}
+
+/* ---------- 9) Forma de pago ---------- */
 .factura-pago-compacto{
-    background:linear-gradient(135deg,#fff9fc,#fdf3f8);
-    border:1.5px solid #f6dbe6;
+    background:var(--ts-pale);
+    border:1.5px solid var(--line);
     border-radius:16px;
-    box-shadow:0 5px 16px rgba(244,125,163,.06);
+    box-shadow:var(--fp-shadow);
 }
 .factura-pago-compacto > .title{
-    color:#c2477a;
-    font-size:12px;
+    color:var(--pd);
+    font-size:var(--fs-sm);
     letter-spacing:.7px;
     text-transform:uppercase;
 }
 
-/* ---- 7) Productos: pastillas, tabla y totales ---- */
-#addCustom.btn-pastilla{
-    background:linear-gradient(135deg,#f47da3,#e15a86);
-    color:#fff;
-    padding:9px 18px;
-    font-size:12.5px;
-    font-weight:800;
-    letter-spacing:.2px;
-    box-shadow:0 6px 14px rgba(232,92,139,.28);
+/* ---------- 10) Productos: acento lavanda propio + tabla + estado vacío ---------- */
+#form{
+    --fp-acc:var(--pd);
+    --fp-acc-soft:var(--fp-p-soft);
+    --fp-acc-line:var(--fp-line-strong);
+    --fp-acc-shadow:0 6px 14px rgba(232,92,139,.28);
+    --fp-acc-shadow-hover:0 10px 22px rgba(232,92,139,.38);
 }
-#addCustom.btn-pastilla:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 22px rgba(232,92,139,.38);
-    filter:brightness(1.03);
+/* la zona de productos usa el acento secundario (lavanda) para no competir con la factura */
+#form > section.card:has(#tablaItems){
+    --fp-acc:var(--v);
+    --fp-acc-soft:var(--fp-v-soft);
+    --fp-acc-line:var(--fp-v-line);
+    --fp-acc-shadow:0 6px 14px rgba(134,98,169,.28);
+    --fp-acc-shadow-hover:0 10px 22px rgba(134,98,169,.38);
 }
+#tablaItems .ps-buscar{border:1.5px solid var(--line);border-radius:10px;}
+#tablaItems .ps-buscar:focus{border-color:var(--fp-acc);box-shadow:var(--fp-ring-shadow);outline:none;}
 #prodCount{
     display:inline-flex;
     align-items:center;
@@ -3065,225 +3239,385 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     min-width:28px;
     height:28px;
     padding:0 10px;
+    margin-left:2px;
     border:0;
     border-radius:999px;
-    background:linear-gradient(135deg,#f47da3,#e85c8b);
+    background:var(--fp-acc);
     color:#fff;
-    font-size:13px;
+    font-size:var(--fs-md);
     font-weight:800;
-    box-shadow:0 4px 10px rgba(232,92,139,.30);
+    font-variant-numeric:tabular-nums;
+    box-shadow:var(--fp-acc-shadow);
 }
-#prodCount.vacio{background:#f4ecef;color:#a2949a;box-shadow:none;}
-
+#prodCount.vacio{background:var(--line);color:var(--mut);box-shadow:none;}
+#addCustom.btn-pastilla{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--fp-acc);
+    color:#fff;
+    padding:9px 18px;
+    font-size:var(--fs-sm);
+    font-weight:800;
+    letter-spacing:.2px;
+    box-shadow:var(--fp-acc-shadow);
+}
+#addCustom.btn-pastilla:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--fp-acc-shadow-hover);
+    filter:brightness(1.03);
+}
+/* estado vacío: en lugar de una cabecera huérfana, una invitación */
+#form .wrap:has(#items:empty){
+    border:2px dashed var(--fp-acc-line);
+    border-radius:14px;
+    padding:24px 18px;
+    background:var(--fp-acc-soft);
+    overflow:visible;
+}
+#form .wrap:has(#items:empty) table{display:none;}
+#form .wrap:has(#items:empty)::before{
+    content:"Todavía no hay productos en esta factura";
+    display:block;
+    text-align:center;
+    font-size:var(--fs-md);
+    font-weight:800;
+    color:var(--fp-acc);
+}
+#form .wrap:has(#items:empty)::after{
+    content:"Pulsa ＋ Agregar producto o ＋ Producto personalizado para empezar";
+    display:block;
+    margin-top:6px;
+    text-align:center;
+    font-size:var(--fs-sm);
+    color:var(--mut);
+}
 @media (min-width:851px){
     #tablaItems th{
-        background:linear-gradient(135deg,#fdf0f5,#fff6fa);
-        color:#c2477a;
-        font-size:11px;
+        background:var(--fp-acc-soft);
+        color:var(--fp-acc);
+        font-size:var(--fs-xs);
         letter-spacing:.7px;
-        border-bottom:1.5px solid #f6d6e3;
         padding:13px 10px;
+        border-bottom:1.5px solid var(--fp-acc-line);
         white-space:nowrap;
     }
     #tablaItems th:first-child{border-radius:12px 0 0 0;}
     #tablaItems th:last-child{border-radius:0 12px 0 0;}
-    #tablaItems td{border-bottom:1px solid #f7edf1;padding:10px 8px;vertical-align:middle;}
-    #tablaItems tbody tr:nth-child(even){background:#fffbfd;}
-    #tablaItems tbody tr:hover{background:#fff3f8;}
+    #tablaItems th:nth-child(6){text-align:right;}
+    #tablaItems td{border-bottom:1px solid var(--line);padding:10px 8px;vertical-align:middle;}
+    #tablaItems tbody tr:nth-child(even){background:var(--ts-pale);}
+    #tablaItems tbody tr:hover{background:var(--soft);}
     #tablaItems input,#tablaItems select{border-radius:10px;}
-    #tablaItems td.lt{font-weight:800;color:#4a3f45;}
+    #tablaItems td.lt{
+        text-align:right;
+        font-weight:800;
+        color:var(--ink);
+        font-variant-numeric:tabular-nums;
+    }
 }
 #tablaItems .del{
     width:30px;
     height:30px;
     line-height:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
     border-radius:9px;
-    background:#fff1f5;
-    color:#d8608a;
-    opacity:.65;
-    transition:opacity .16s ease,transform .16s ease,background .16s ease,color .16s ease;
+    background:var(--soft);
+    opacity:.7;
+    transition:opacity .16s ease,background .16s ease,transform .16s ease;
 }
-#tablaItems .del:hover{
-    opacity:1;
-    transform:scale(1.08);
-    background:#ffe3ee;
-    color:#c3426e;
-}
-/* Botón "Agregar producto": zona punteada amable */
+#tablaItems .del:hover{opacity:1;background:var(--fp-danger-soft);transform:scale(1.06);}
+#tablaItems .del .grilla-icon{width:16px;height:16px;}
+/* botón "Agregar producto" */
 #form .add{
     display:block;
     width:100%;
     margin-top:14px;
     padding:13px 20px;
-    border:2px dashed #f6c6d8;
+    border:2px dashed var(--fp-acc-line);
     border-radius:14px;
-    background:linear-gradient(135deg,#fffafc,#fff4f9);
-    color:#d9527f;
+    background:var(--fp-acc-soft);
+    color:var(--fp-acc);
     font-weight:800;
-    font-size:13.5px;
+    font-size:var(--fs-md);
     letter-spacing:.3px;
-    transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease,color .18s ease;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
 }
 #form .add:hover{
-    border-color:#f47da3;
-    background:linear-gradient(135deg,#fff4f9,#ffe9f2);
-    color:#c9426f;
+    border-color:var(--fp-acc);
+    background:var(--soft);
+    color:var(--pd);
     transform:translateY(-1px);
-    box-shadow:0 8px 20px rgba(244,125,163,.16);
+    box-shadow:var(--fp-shadow);
 }
-/* Totales: panel tipo recibo */
+
+/* ---------- 11) Totales: panel tipo recibo ---------- */
 #form .totals{
     max-width:460px;
     margin:18px 0 4px auto;
     padding:14px 18px;
-    background:linear-gradient(160deg,#ffffff,#fff7fb);
-    border:1.5px solid #f6e0ea;
+    background:linear-gradient(160deg,#ffffff,var(--ts-pale));
+    border:1.5px solid var(--line);
     border-radius:16px;
-    box-shadow:0 8px 22px rgba(150,110,130,.08);
+    box-shadow:var(--ts-shadow);
 }
-#form .totals > div{
-    border-bottom:1px dashed #f7e6ee;
-    padding:8px 0;
-}
+#form .totals > div{border-bottom:1px dashed var(--line);padding:8px 0;}
 #form .totals > div:last-child{border-bottom:0;}
-#form .totals > div:not(.total){color:#7d6b73;font-weight:700;font-size:13px;}
-#form .totals > div:not(.total) b{color:#4a3f45;font-weight:800;}
+#form .totals > div:not(.total){color:var(--mut);font-weight:700;font-size:var(--fs-md);}
+#form .totals > div:not(.total) b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums;}
 #form .totals input{
     width:70px !important;
     text-align:center;
-    border:1.5px solid #f3d3e1;
+    border:1.5px solid var(--line);
     border-radius:9px;
     padding:6px 4px;
     background:#fff;
-    color:#4a3f45;
+    color:var(--ink);
     font-weight:800;
+    font-variant-numeric:tabular-nums;
 }
-#form .totals input:focus{
-    border-color:var(--fp-line-focus);
-    box-shadow:var(--fp-ring);
-}
+#form .totals input:focus{border-color:var(--pd);box-shadow:var(--fp-ring-shadow);}
 #form .totals .total{
-    background:linear-gradient(135deg,#f47da3,#e15a86);
+    background:linear-gradient(135deg,var(--p),var(--pd));
     color:#fff;
     border-bottom:0;
     border-radius:12px;
     padding:13px 16px !important;
     margin-top:8px;
-    font-size:16px;
-    box-shadow:0 8px 20px rgba(232,92,139,.28);
+    font-size:var(--fs-lg);
+    box-shadow:var(--fp-total-shadow);
 }
-#form .totals .total b{color:#fff;font-size:19px;letter-spacing:-.3px;}
+#form .totals .total b{color:#fff;font-size:var(--fs-xl);letter-spacing:-.3px;font-variant-numeric:tabular-nums;}
 
-/* ---- 8) Modal de productos (catálogo) ---- */
+/* ---------- 12) Acciones: una sola acción manda ----------
+   Los cinco botones reutilizan los niveles que ya existían
+   (pink = primaria, white = secundaria, gray = terciaria). */
+#form .actions .btn:disabled{cursor:not-allowed;filter:saturate(.2) opacity(.72);box-shadow:none;}
+
+/* ---------- 13) Estado bloqueado: se ve como un estado, no como un error ---------- */
+.bloqueado{
+    background:var(--soft) !important;
+    color:var(--mut) !important;
+    opacity:1;
+    border-radius:10px;
+}
+#form input:disabled,#form select:disabled,#form textarea:disabled{
+    background:var(--soft);
+    border-style:dashed;
+    border-color:var(--line);
+    color:var(--mut);
+    cursor:not-allowed;
+    box-shadow:none;
+}
+#form:has(#nombre:disabled) .grid.datos-superiores{
+    background:var(--ts-pale);
+    border-style:dashed;
+    box-shadow:none;
+}
+#form:has(#nombre:disabled) .aviso-bloqueo{
+    background:var(--soft);
+    border-color:var(--pd);
+    color:var(--pd);
+    box-shadow:none;
+}
+#form .aviso-bloqueo{
+    background:var(--soft);
+    border:1.5px dashed var(--pd);
+    border-radius:14px;
+    color:var(--pd);
+    font-weight:700;
+    letter-spacing:.2px;
+    padding:13px 16px;
+    font-size:var(--fs-md);
+}
+
+/* ---------- 14) Modal de productos: ficha, categorías y foto ---------- */
 #modalProductos .modal-abono-contenido{
-    border:1px solid #f7e6ee;
+    border:1px solid var(--line);
     border-radius:20px;
-    box-shadow:0 28px 70px rgba(90,60,75,.28);
+    box-shadow:0 28px 70px rgba(64,55,59,.28);
 }
 #modalProductos .modal-abono-titulo{
     display:flex;
     align-items:center;
     gap:10px;
-    font-size:19px;
+    font-size:var(--fs-xl);
     font-weight:800;
-    color:#4a3f45;
+    color:var(--ink);
     letter-spacing:-.01em;
 }
 #modalProductos .modal-abono-datos > div{
-    background:linear-gradient(135deg,#fdf5f9,#fbebf2);
-    border:1px solid #f8e3ec;
+    background:var(--ts-pale);
+    border:1px solid var(--line);
     border-radius:12px;
 }
+#modalProductos .modal-abono-datos strong{font-variant-numeric:tabular-nums;}
 #modalProductos .productos-bar input{
     padding:12px 15px;
     font-size:14px;
-    border:1.5px solid #f4dbe6;
+    border:1.5px solid var(--line);
     border-radius:12px;
     background:#fff;
 }
-#modalProductos .productos-bar input:focus{
-    outline:none;
-    border-color:var(--fp-line-focus);
-    box-shadow:var(--fp-ring);
-}
+#modalProductos .productos-bar input:focus{outline:none;border-color:var(--pd);box-shadow:var(--fp-ring-shadow);}
 #modalProductos .prod-fila{
-    background:#fffafc;
-    border:1.5px solid #f6e2eb;
+    background:var(--ts-pale);
+    border:1.5px solid var(--line);
     border-radius:14px;
-    box-shadow:0 3px 10px rgba(150,110,130,.05);
+    box-shadow:var(--fp-shadow);
 }
 #modalProductos .cat-check{
     padding:10px 12px;
-    border:1.5px solid #f4dbe6;
+    border:1.5px solid var(--line);
     border-radius:12px;
-    background:#fffafc;
+    background:#fff;
     transition:all .18s ease;
 }
-#modalProductos .cat-check:hover{border-color:#f2bcd2;background:#fff4f9;}
-#modalProductos .cat-check:has(input:checked){
-    background:linear-gradient(135deg,#ffe4ee,#ffd8e6);
-    border-color:#f47da3;
-    color:#d9527f;
-    box-shadow:0 6px 14px rgba(244,125,163,.16);
-}
+#modalProductos .cat-check:hover{border-color:var(--fp-line-hover);background:var(--ts-pale);}
+/* un color por categoría */
+#modalProductos .cat-check:has(input[value="Animales"]:checked){background:var(--fp-ok-soft);border-color:var(--st-ok);color:var(--st-ok);}
+#modalProductos .cat-check:has(input[value="Personajes"]:checked){background:var(--fp-v-soft);border-color:var(--v);color:var(--v);}
+#modalProductos .cat-check:has(input[value="Llaveros"]:checked){background:var(--fp-p-soft);border-color:var(--pd);color:var(--pd);}
+#modalProductos .cat-check:has(input[value="Personalizados"]:checked){background:var(--fp-info-soft);border-color:var(--st-info);color:var(--st-info);}
+#modalProductos .cat-check:has(input:checked){font-weight:800;}
+#modalProductos .cat-check input{accent-color:var(--pd);}
 #modalProductos input[type=file]{
     display:block;
     width:100%;
     padding:12px 14px;
-    border:2px dashed #f6c6d8;
+    border:2px dashed var(--line);
     border-radius:14px;
-    background:linear-gradient(135deg,#fffafc,#fff4f9);
-    color:#a2858f;
-    font-size:12.5px;
+    background:var(--ts-pale);
+    color:var(--mut);
+    font-size:var(--fs-sm);
     font-weight:700;
     cursor:pointer;
     transition:border-color .18s ease,background .18s ease;
 }
-#modalProductos input[type=file]:hover{border-color:#f47da3;background:#fff2f8;}
+#modalProductos input[type=file]:hover{border-color:var(--pd);background:var(--soft);}
 #modalProductos input[type=file]::file-selector-button{
     margin-right:12px;
     padding:8px 14px;
     border:0;
     border-radius:999px;
-    background:linear-gradient(135deg,#f47da3,#e85c8b);
+    background:linear-gradient(135deg,var(--p),var(--pd));
     color:#fff;
     font-family:inherit;
-    font-size:12px;
+    font-size:var(--fs-sm);
     font-weight:800;
     cursor:pointer;
 }
-#modalProductos .prod-badge.si,
-#modalProductos .prod-badge.no{border:0;padding:3px 9px;}
-#modalProductos .prod-badge.si{background:linear-gradient(135deg,#dff7e9,#cdf0dd);color:#17804a;}
-#modalProductos .prod-badge.no{background:linear-gradient(135deg,#fde6e6,#fbd8d8);color:#b93b3b;}
+#modalProductos .prod-badge.si,#modalProductos .prod-badge.no{border:0;padding:3px 9px;}
+#modalProductos .prod-badge.si{background:var(--fp-ok-soft);color:var(--st-ok);}
+#modalProductos .prod-badge.no{background:var(--fp-danger-soft);color:var(--st-danger);}
+/* ficha de vista previa en vivo */
+.fp-ficha{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:12px 14px;
+    margin:14px 0 4px;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    background:var(--ts-pale);
+    box-shadow:var(--fp-shadow);
+}
+.fp-ficha-foto{
+    width:64px;
+    height:64px;
+    flex:0 0 64px;
+    border-radius:12px;
+    background:var(--soft);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    color:var(--pd);
+}
+.fp-ficha-foto img{width:100%;height:100%;object-fit:cover;display:block;}
+.fp-ficha-datos{min-width:0;display:flex;flex-direction:column;gap:1px;}
+.fp-ficha-etiqueta{font-size:var(--fs-xs);color:var(--mut);letter-spacing:.45px;text-transform:uppercase;font-weight:800;}
+.fp-ficha-datos b{font-size:var(--fs-md);color:var(--ink);}
+.fp-ficha-precio{font-size:var(--fs-xl);font-weight:800;color:var(--pd);font-variant-numeric:tabular-nums;}
+.fp-ficha-datos small{font-size:var(--fs-sm);color:var(--mut);}
 
-/* ---- 9) Detalles generales del formulario ---- */
-#form .aviso-bloqueo{
-    background:linear-gradient(135deg,#fff4f9,#ffeaf3);
-    border:1.5px dashed #f6bcd3;
-    border-radius:14px;
-    color:#b0476e;
-    font-weight:700;
-    letter-spacing:.2px;
-    padding:13px 16px;
-    box-shadow:0 4px 14px rgba(244,125,163,.08);
+/* ---------- 15) Teléfono: barra de acciones siempre a mano ---------- */
+@media (max-width:850px){
+    #form .actions{
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:45;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:6px;
+        margin:0;
+        padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+        background:rgba(255,255,255,.95);
+        -webkit-backdrop-filter:blur(10px);
+        backdrop-filter:blur(10px);
+        border-top:1px solid var(--line);
+        box-shadow:0 -8px 24px rgba(64,55,59,.12);
+    }
+    #form .actions .btn{min-height:40px;padding:7px 4px;font-size:var(--fs-sm);border-radius:11px;}
+    #form .actions .btn .grilla-icon{width:17px;height:17px;}
+    #form #saveBtn{grid-column:1/-1;order:-1;}
+    #form:not(:has(#nombre:disabled)){padding-bottom:118px;}
+    /* mientras no hay factura en curso, la barra no aporta nada */
+    #form:has(#nombre:disabled) .actions{display:none;}
 }
-.grid.datos-superiores{
-    border:1px solid #f6e5ed;
-    border-radius:20px;
-    box-shadow:0 12px 30px rgba(150,110,130,.07);
-}
-.grid.datos-superiores > .card + .card{
-    border-top:1px dashed #f6e3eb;
-    padding-top:16px;
-}
-
-/* ---- 10) Ajuste fino en teléfono ---- */
 @media (max-width:600px){
+    /* los títulos de zona vuelven, compactos y con su número */
+    #form .datos-superiores > .card > .title{
+        display:flex !important;
+        font-size:var(--fs-sm);
+        padding-bottom:6px;
+        margin-bottom:8px;
+    }
+    #form .datos-superiores > .card > .title .fp-paso{width:18px;height:18px;flex:0 0 18px;font-size:9.5px;}
+    #form .datos-superiores > .card > .title img.grilla-icon{width:18px;height:18px;}
     #form .add{margin-top:10px;padding:11px 16px;}
     #form .totals > div{padding:5px 0;}
     .grid.datos-superiores > .card + .card{padding-top:12px;}
-    .cliente-grid .cliente-campo > label::before{width:5px;height:5px;margin-right:6px;}
+    .grid.datos-superiores .campo-icono > span:not(.icono-campo){width:26px;height:26px;border-radius:8px;}
+    .grid.datos-superiores .campo-icono input,
+    .grid.datos-superiores .campo-icono select{padding-left:42px !important;}
+    #form .campo-icono.fp-lleno::after{right:9px;}
+    .fp-ficha{padding:10px 12px;gap:10px;}
+    .fp-ficha-foto{width:52px;height:52px;flex:0 0 52px;font-size:22px;}
+}
+
+/* ---------- 16) Ampliaciones de la v2 ---------- */
+/* pastilla de icono de los títulos de zona: misma medida que las imágenes grilla-icon */
+#form .datos-superiores > .card > .title .fp-tile{
+    width:22px;
+    height:22px;
+    flex:0 0 auto;
+    padding:5px;
+    box-sizing:content-box;
+    border-radius:10px;
+    background:var(--soft);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--pd);
+}
+#form .datos-superiores > .card > .title .fp-tile .fp-ico{width:22px;height:22px;}
+/* la zona de productos tiñe su pastilla con su propio acento */
+#form > section.card:has(#tablaItems) .fp-tile{color:var(--v);background:var(--fp-v-soft);}
+.factura-numero-icono .fp-ico{width:19px;height:19px;}
+.factura-pago-compacto > .title{display:flex;align-items:center;gap:7px;}
+.factura-pago-compacto > .title .fp-ico{color:var(--pd);}
+#modalProductos .modal-abono-titulo .fp-ico{color:var(--pd);}
+/* el resumen "Producto / Nuevo amigurumi" queda redundante con la ficha en vivo */
+#productosVistaForm > .modal-abono-datos{display:none;}
+
+/* ---------- 17) Movimiento reducido: nada de animaciones nuevas ---------- */
+@media (prefers-reduced-motion:reduce){
+    #form .campo-icono.fp-lleno::after{animation:none;}
 }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3291,6 +3625,23 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- ============================================================
+     Iconos SVG del formulario (sustituyen a los emoji de campo)
+     Heredan color y grosor de .fp-ico, así que no llevan atributos
+     de presentación propios.
+     ============================================================ -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+    <defs>
+        <symbol id="fp-i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.9-3.7 3.7-5.6 7-5.6s6.1 1.9 7 5.6"/></symbol>
+        <symbol id="fp-i-id" viewBox="0 0 24 24"><rect x="2.6" y="5" width="18.8" height="14" rx="2.6"/><circle cx="8.6" cy="11" r="2.1"/><path d="M5.3 16.4c.7-1.7 1.8-2.6 3.3-2.6s2.6.9 3.3 2.6"/><path d="M14.6 10.2h4.2M14.6 13.6h4.2"/></symbol>
+        <symbol id="fp-i-phone" viewBox="0 0 24 24"><rect x="6.8" y="2.6" width="10.4" height="18.8" rx="2.6"/><path d="M10.6 5.6h2.8"/></symbol>
+        <symbol id="fp-i-mail" viewBox="0 0 24 24"><rect x="2.6" y="5" width="18.8" height="14" rx="2.6"/><path d="M3.4 7.6 12 13.2l8.6-5.6"/></symbol>
+        <symbol id="fp-i-pin" viewBox="0 0 24 24"><path d="M12 21.2s6.4-6.1 6.4-11a6.4 6.4 0 1 0-12.8 0c0 4.9 6.4 11 6.4 11Z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+        <symbol id="fp-i-tag" viewBox="0 0 24 24"><path d="M12.9 3.2H20a.9.9 0 0 1 .9.9v7.1a2 2 0 0 1-.6 1.4l-7.5 7.5a2 2 0 0 1-2.8 0l-6.1-6.1a2 2 0 0 1 0-2.8l7.5-7.5a2 2 0 0 1 1.5-.5Z"/><circle cx="16.6" cy="7.4" r="1.5"/></symbol>
+        <symbol id="fp-i-card" viewBox="0 0 24 24"><rect x="2.6" y="5" width="18.8" height="14" rx="2.6"/><path d="M2.6 9.8h18.8M6 14.4h3.4"/></symbol>
+        <symbol id="fp-i-coins" viewBox="0 0 24 24"><ellipse cx="12" cy="6.6" rx="7.4" ry="3.2"/><path d="M4.6 6.6v5.2c0 1.8 3.3 3.2 7.4 3.2s7.4-1.4 7.4-3.2V6.6"/><path d="M4.6 11.8V17c0 1.8 3.3 3.2 7.4 3.2s7.4-1.4 7.4-3.2v-5.2"/></symbol>
+    </defs>
+</svg>
 
 <div id="loginScreen" class="login-screen">
 <input type="checkbox" id="authToggle" class="auth-toggle">
@@ -3646,7 +3997,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 
     <article class="card">
 
-        <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
+        <div class="title"><span class="fp-paso">1</span><img src="img/factura.png" alt="PDF" class="grilla-icon"> Datos de la factura</div>
 
         <!-- NÚMERO DE FACTURA (siempre primero) -->
 	<div class="factura-numero-bloque">
@@ -3654,7 +4005,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
         		Número de factura
     		</div>
     		<div class="factura-numero-campo">
-        		<span class="factura-numero-icono">🏷️</span>
+        		<span class="factura-numero-icono"><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-tag"/></svg></span>
         		<input id="numero" readonly>
         		<span class="factura-automatico">Automático ✨</span>
     		</div>
@@ -3691,14 +4042,14 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 
     <article class="card">
 
-        <div class="title">👤 Datos del cliente</div>
+        <div class="title"><span class="fp-paso">2</span><span class="fp-tile"><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-user"/></svg></span> Datos del cliente</div>
 
         <div class="cliente-grid">
     <div class="cliente-campo ancho-completo">
         <label>Nombre / Razón social *</label>
         <div class="cliente-autocomplete">
             <div class="campo-icono">
-                <span>👤</span>
+                <span><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-user"/></svg></span>
                 <input id="nombre" required autocomplete="off">
             </div>
             <div id="sugerenciasClientes" class="sugerencias-clientes"></div>
@@ -3708,7 +4059,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
         <label>Cédula / NIT</label>
         <div class="cliente-autocomplete">
             <div class="campo-icono">
-                <span>🪪</span>
+                <span><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-id"/></svg></span>
                 <input id="ident" autocomplete="off">
             </div>
             <div id="sugerenciasIdent" class="sugerencias-clientes"></div>
@@ -3717,21 +4068,21 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     <div class="cliente-campo ancho-completo">
         <label>Teléfono</label>
         <div class="campo-icono">
-            <span>📱</span>
+            <span><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-phone"/></svg></span>
             <input id="tel" name="customer_phone" type="tel" inputmode="tel" autocomplete="off">
         </div>
     </div>
     <div class="cliente-campo" style="display:none">
         <label>Correo</label>
         <div class="campo-icono">
-            <span>✉️</span>
+            <span><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-mail"/></svg></span>
             <input id="correo" type="email" autocomplete="off">
         </div>
     </div>
     <div class="cliente-campo ancho-completo" style="display:none">
         <label>Dirección</label>
         <div class="campo-icono">
-            <span>📍</span>
+            <span><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-pin"/></svg></span>
             <input id="direccion" autocomplete="off">
         </div>
     </div>
@@ -3744,6 +4095,8 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     <!-- ============================= -->
 
     <article class="card">
+
+        <div class="title"><span class="fp-paso">3</span><span class="fp-tile"><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-coins"/></svg></span> Abonos y observaciones</div>
 
         <div class="factura-resumen">
 
@@ -3802,7 +4155,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 <button type="button" class="add" id="add">＋ Agregar producto</button>
 <div class="totals"><div>Subtotal <b id="sub">$0</b></div><div>Descuento general <input id="dg" type="number" min="0" max="100" value="0" style="width:70px">%</div><div>IVA <input id="iva" type="number" min="0" max="100" value="0" style="width:70px">%</div><div class="total">Total a pagar <b id="tot">$0</b></div></div>
 <div class="factura-pago-compacto">
-    <div class="title">💳 Forma de pago</div>
+    <div class="title"><svg class="fp-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#fp-i-card"/></svg> Forma de pago</div>
 <div class="factura-campo">
 
         		<label>
@@ -3920,8 +4273,8 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 </div>
 </section>
 
-<div class="actions"><button type="button" class="btn green" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn pink" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn purple" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn green" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
-<button type="submit" class="btn white" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button></div>
+<div class="actions"><button type="button" class="btn gray" id="preview"><img src="img/ver.png" alt="PDF" class="grilla-icon"> Vista previa</button><button type="button" class="btn white" id="pdf"><img src="img/pdf.png" alt="PDF" class="grilla-icon"> Generar PDF</button><button type="button" class="btn gray" id="print"><img src="img/imprimir.png" alt="PDF" class="grilla-icon"> Imprimir</button><button type="button" class="btn white" id="wa"><img src="img/whatsapp.png" alt="PDF" class="grilla-icon"> WhatsApp</button>
+<button type="submit" class="btn pink" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button></div>
 </form>
 <section id="historial" class="card history">
     <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Historial de facturas</div>
@@ -10675,6 +11028,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>
 
+            <!-- FICHA DE VISTA PREVIA EN VIVO (la rellena el script del final) -->
+            <div class="fp-ficha" aria-live="polite">
+                <div class="fp-ficha-foto" id="fpFichaFoto">🧶</div>
+                <div class="fp-ficha-datos">
+                    <span class="fp-ficha-etiqueta">Vista previa</span>
+                    <b id="fpFichaNombre">Sin nombre</b>
+                    <span class="fp-ficha-precio" id="fpFichaPrecio">$0</span>
+                    <small id="fpFichaMeta">Sin categorías</small>
+                </div>
+            </div>
+
             <label for="productoNombre">Nombre *</label>
             <input id="productoNombre" type="text" placeholder="Ej: Llavero Conejito">
 
@@ -10823,6 +11187,87 @@ document.addEventListener("DOMContentLoaded", function () {
         sincronizarTipoPago();
         setInterval(sincronizarTipoPago, 400);
     });
+})();
+</script>
+<script>
+/* ============================================================
+   ✨ ACABADO v2 — JavaScript mínimo y aditivo
+   1) Marca .fp-lleno en los campos que ya tienen contenido,
+      que es lo que dibuja el ✓ por CSS.
+   2) Mantiene al día la ficha de vista previa del producto.
+   No redefine ni sobrescribe ninguna función existente: si falta
+   algún nodo, el bloque termina en silencio.
+   ============================================================ */
+(function(){
+    /* ---- 1) Estados de campo ---- */
+    var form = document.getElementById('form');
+    if(form){
+        var pintarCampos = function(){
+            var campos = form.querySelectorAll('.cliente-campo, .factura-campo, .campo-icono');
+            Array.prototype.forEach.call(campos, function(w){
+                var c = w.querySelector('input:not([type=checkbox]):not([type=file]), textarea');
+                if(!c){ w.classList.remove('fp-lleno'); return; }
+                var v = (c.value == null ? '' : String(c.value)).trim();
+                w.classList.toggle('fp-lleno', v !== '');
+            });
+        };
+        form.addEventListener('input', pintarCampos, true);
+        form.addEventListener('change', pintarCampos, true);
+        document.addEventListener('click', function(){ setTimeout(pintarCampos, 80); }, true);
+        var items = document.getElementById('items');
+        if(items && window.MutationObserver){
+            new MutationObserver(pintarCampos).observe(items, {childList:true});
+        }
+        pintarCampos();
+    }
+
+    /* ---- 2) Ficha de vista previa del producto ---- */
+    var formVista = document.getElementById('productosVistaForm');
+    if(!formVista) return;
+    var inpNombre = document.getElementById('productoNombre');
+    var inpPrecio = document.getElementById('productoPrecio');
+    var fNombre = document.getElementById('fpFichaNombre');
+    var fPrecio = document.getElementById('fpFichaPrecio');
+    var fMeta = document.getElementById('fpFichaMeta');
+    var fFoto = document.getElementById('fpFichaFoto');
+    var preview = document.getElementById('productoFotoPreview');
+    if(!inpNombre || !fNombre || !fPrecio || !fMeta) return;
+    var fotoBase = fFoto ? fFoto.innerHTML : '';
+
+    var fmt = function(n){
+        try{
+            return (typeof money === 'function') ? money(n || 0) : '$' + Number(n || 0).toLocaleString('es-CO');
+        }catch(e){ return '$' + (Number(n) || 0); }
+    };
+    var pintarFicha = function(){
+        var n = (inpNombre.value || '').trim();
+        fNombre.textContent = n || 'Sin nombre';
+        fPrecio.textContent = fmt(inpPrecio ? inpPrecio.value : 0);
+        var cats = [];
+        formVista.querySelectorAll('.productos-categorias input[type=checkbox]').forEach(function(c){
+            if(c.checked) cats.push(c.value);
+        });
+        fMeta.textContent = cats.length ? cats.join(' · ') : 'Sin categorías';
+    };
+    formVista.addEventListener('input', pintarFicha, true);
+    formVista.addEventListener('change', pintarFicha, true);
+    document.addEventListener('click', function(e){
+        if(e.target && e.target.closest && e.target.closest('#modalProductos')) setTimeout(pintarFicha, 120);
+    }, true);
+    /* la foto la pinta el flujo de subida que ya existía: aquí solo se refleja */
+    if(preview && fFoto && window.MutationObserver){
+        new MutationObserver(function(){
+            var img = preview.querySelector('img');
+            var actual = fFoto.querySelector('img');
+            if(img){
+                if(!actual){ fFoto.innerHTML = ''; fFoto.appendChild(img.cloneNode(true)); }
+                else if(actual.getAttribute('src') !== img.getAttribute('src')){ actual.setAttribute('src', img.getAttribute('src')); }
+            }else if(actual){
+                fFoto.innerHTML = fotoBase;
+            }
+        }).observe(preview, {childList:true, subtree:true, attributes:true, attributeFilter:['src']});
+    }
+    pintarFicha();
 })();
 </script>
 </body>
