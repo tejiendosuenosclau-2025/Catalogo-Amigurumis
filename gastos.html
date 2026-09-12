@@ -4,175 +4,745 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gastos | Tejiendo Sueños Clau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <style>
-:root{--pink:#f43f7a;--green:#16a765;--muted:#675d70;--border:#eadde5}
-*{box-sizing:border-box}body{margin:0;font-family:"Century Gothic",Arial,sans-serif;color:#202020;background:#fff}
-html,body{width:100%; max-width:100%; margin:0; padding:0; overflow-x:hidden;}
-body{min-width:0;}
-.page{width:100%;max-width:100%;min-width:0;min-height:100vh;padding:28px;background:#fff}
-.header{margin-bottom:20px}.title{margin:0;color:var(--pink);font-size:25px}.sub{margin:5px 0;color:var(--muted);font-size:13px}
-.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}.card,.form{border:1px solid var(--border);border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(42,28,49,.06)}.card{padding:16px}.card span{display:block;color:var(--muted);font-size:11px}.card strong{display:block;margin-top:6px;font-size:22px}
-.form{padding:20px}.form h2{margin:0 0 18px;color:var(--pink);font-size:16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #d9cbd4;border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;outline:none;background:#fff}.field textarea{min-height:80px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,63,122,.08)}
-.buttons{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.btn{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.gray{background:#f1edf0;color:#555}.green{background:var(--green);color:#fff}.message{min-height:20px;margin-top:12px;font-size:12px;font-weight:700}.ok{color:var(--green)}.error{color:#d62828}
+/* ============================================================
+   🧾 GASTOS — acabado visual
+   Mismos tokens y misma tipografía que facturacion.html para que
+   esta página (que se carga dentro del iframe del modal de Gastos)
+   parezca parte de la misma app.
 
-/* ---------- Tablet / móvil grande ---------- */
-@media(max-width:700px){
-  .page{padding:20px 16px calc(20px + env(safe-area-inset-bottom));
-        padding-left:calc(16px + env(safe-area-inset-left));
-        padding-right:calc(16px + env(safe-area-inset-right))}
-  .title{font-size:22px}
-  .form{padding:16px;border-radius:12px}
-  .summary{gap:10px;margin-bottom:16px}
-  .card{padding:14px}
-  .card strong{font-size:19px}
+   Anchos reales del contenedor:
+     · escritorio -> modal de 1100 x 800 px
+     · móvil      -> pantalla completa
+   Por eso el contenido va centrado con tope de 1040 px: antes el
+   .page ocupaba todo el ancho y el formulario se estiraba.
+   ============================================================ */
+
+:root{
+    --p:#f47da3;
+    --pd:#e85c8b;
+    --g:#31b866;
+    --v:#8662a9;
+    --ink:#40373b;
+    --mut:#7d7378;
+    --line:#eadfe4;
+    --soft:#fff3f7;
+
+    /* tintas accesibles (las mismas que usa la app) */
+    --p-ink:#b0305f;
+    --v-ink:#5f4480;
+    --g-ink:#0e7a44;
+    --warn-ink:#a86400;
+    --mut-ink:#6b5f66;
+
+    --p-deep:#c93f70;
+    --p-deep-mid:#b83562;
+    --p-deep-2:#a82c56;
+
+    /* escala tipográfica: seis pasos, no once */
+    --fs-xs:11px;
+    --fs-sm:12px;
+    --fs-md:13px;
+    --fs-lg:15px;
+    --fs-xl:18px;
+    --fs-2xl:22px;
+
+    --g-line:#f1e3ea;
+    --g-line-fuerte:#f7d2e0;
+    --g-sombra:0 8px 26px rgba(64,55,59,.07);
+    --g-sombra-alto:0 14px 34px rgba(64,55,59,.11);
+    --g-radio:16px;
 }
 
-/* 📱 PROTECCIÓN CONTRA DESBORDAMIENTO EN TELÉFONOS */
-@media (max-width: 500px) {
+*,*::before,*::after{box-sizing:border-box;}
 
-    html,
-    body {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        overflow-x: hidden !important;
-    }
-
-    .page {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    .summary,
-    .card,
-    .form,
-    .grid,
-    .field {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-    }
-
-    .buttons {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-    }
-
-    .btn {
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-    }
+html,body{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin:0;
+    padding:0;
+    overflow-x:hidden;
 }
 
-/* ---------- Teléfonos pequeños ---------- */
-@media(max-width:380px){
-  .page{padding-left:calc(12px + env(safe-area-inset-left));
-        padding-right:calc(12px + env(safe-area-inset-right))}
-  .form{padding:14px}
-  .card strong{font-size:18px}
-  .title{font-size:19px}
+body{
+    font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,Arial,sans-serif;
+    font-size:var(--fs-md);
+    color:var(--ink);
+    background:#fdf9fb;
+    -webkit-font-smoothing:antialiased;
+}
+
+/* barra de desplazamiento discreta (la página vive dentro de un iframe) */
+body{scrollbar-width:thin;scrollbar-color:#e7d3dd transparent;}
+body::-webkit-scrollbar{width:10px;height:10px;}
+body::-webkit-scrollbar-track{background:transparent;}
+body::-webkit-scrollbar-thumb{background:#eddfe6;border:3px solid #fdf9fb;border-radius:999px;}
+body::-webkit-scrollbar-thumb:hover{background:#e3cdd8;}
+
+/* ---------- Estructura ---------- */
+.page{
+    width:100%;
+    max-width:1040px;
+    min-width:0;
+    min-height:100vh;
+    margin:0 auto;
+    padding:26px clamp(16px,2.6vw,30px) 40px;
+}
+
+/* ---------- Cabecera ---------- */
+.cabecera{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:22px;
+    padding-right:44px;      /* hueco para la X del modal que va encima */
+}
+.cabecera-icono{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:46px;
+    height:46px;
+    border-radius:15px;
+    font-size:21px;
+    line-height:1;
+    background:linear-gradient(135deg,#ffe7ef,#ffdfe9);
+    box-shadow:0 6px 16px rgba(244,125,163,.20);
+}
+.cabecera-texto{min-width:0;}
+.titulo{
+    margin:0;
+    font-size:var(--fs-2xl);
+    font-weight:700;
+    letter-spacing:-.02em;
+    line-height:1.15;
+    color:var(--p-ink);
+}
+.subtitulo{
+    margin:3px 0 0;
+    font-size:var(--fs-sm);
+    font-weight:500;
+    color:var(--mut-ink);
+}
+
+/* ---------- Resumen: tres indicadores ---------- */
+.resumen{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+    margin-bottom:18px;
+}
+.kpi{
+    position:relative;
+    /* columna con reparto: así la cifra de las dos primeras queda abajo,
+       a la misma altura que el selector de mes de la tercera, y las tres
+       tarjetas se ven equilibradas en lugar de medio vacías. */
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-width:0;
+    padding:16px 18px;
+    border:1px solid var(--g-line);
+    border-radius:var(--g-radio);
+    background:linear-gradient(160deg,#fff 0%,#fffbfd 100%);
+    box-shadow:var(--g-sombra);
+    overflow:hidden;
+    transition:box-shadow .2s ease,transform .2s ease;
+}
+.kpi::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:18px;
+    right:18px;
+    height:3px;
+    border-radius:0 0 6px 6px;
+    background:linear-gradient(90deg,var(--p),var(--v),var(--p));
+    opacity:.85;
+}
+.kpi:hover{box-shadow:var(--g-sombra-alto);transform:translateY(-2px);}
+.kpi-etiqueta{
+    display:block;
+    margin-bottom:7px;
+    font-size:var(--fs-xs);
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--mut-ink);
+}
+.kpi-valor{
+    display:block;
+    font-size:var(--fs-2xl);
+    font-weight:700;
+    letter-spacing:-.02em;
+    line-height:1.15;
+    color:var(--ink);
+    font-variant-numeric:tabular-nums;
+}
+.kpi-total .kpi-valor{color:var(--p-ink);}
+.kpi-total::before{background:linear-gradient(90deg,var(--p),var(--pd),var(--p));}
+.kpi-registros .kpi-valor{color:var(--v-ink);}
+.kpi-registros::before{background:linear-gradient(90deg,var(--v),#b98fd9,var(--v));}
+
+.kpi-mes{display:flex;flex-direction:column;justify-content:space-between;}
+.kpi-mes::before{background:linear-gradient(90deg,var(--pd),var(--p),var(--pd));}
+.kpi-mes input[type="month"]{
+    width:100%;
+    min-width:0;
+    margin-top:2px;
+    padding:10px 12px;
+    border:1.5px solid var(--g-line);
+    border-radius:11px;
+    background:#fff;
+    font:inherit;
+    font-size:var(--fs-md);
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+    box-shadow:inset 0 1px 2px rgba(64,55,59,.04);
+    transition:border-color .18s ease,box-shadow .18s ease;
+}
+.kpi-mes input[type="month"]:hover{border-color:var(--g-line-fuerte);}
+.kpi-mes input[type="month"]:focus{
+    border-color:var(--p);
+    box-shadow:0 0 0 4px rgba(244,125,163,.15);
+}
+
+/* ---------- Lista de gastos ---------- */
+.lista-card{
+    position:relative;
+    margin-bottom:18px;
+    padding:18px 20px 8px;
+    border:1px solid var(--g-line);
+    border-radius:var(--g-radio);
+    background:#fff;
+    box-shadow:var(--g-sombra);
+    overflow:hidden;
+}
+.lista-card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:18px;
+    right:18px;
+    height:3px;
+    border-radius:0 0 6px 6px;
+    background:linear-gradient(90deg,var(--v),var(--p),var(--v));
+    opacity:.85;
+}
+.lista-cabecera{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+    padding-bottom:12px;
+    margin-bottom:4px;
+    border-bottom:1px solid #f6eef2;
+}
+.lista-cabecera h2{
+    margin:0;
+    font-size:var(--fs-lg);
+    font-weight:700;
+    letter-spacing:-.01em;
+    color:var(--ink);
+}
+.lista-contador{
+    margin-left:auto;
+    min-width:30px;
+    height:24px;
+    padding:0 10px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    font-size:var(--fs-sm);
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    color:var(--p-ink);
+    background:var(--soft);
+    border:1px solid var(--g-line-fuerte);
+}
+
+.lista{min-width:0;}
+
+/* Rejilla con áreas: el escudo de fecha y el importe flanquean el bloque de
+   texto. En móvil el nombre pasa a ocupar la línea completa y las etiquetas
+   bajan a la segunda línea junto al importe, que es donde se recortaba. */
+.gasto-item{
+    display:grid;
+    grid-template-columns:48px minmax(0,1fr) auto;
+    grid-template-areas:
+        "dia nombre valor"
+        "dia meta   valor";
+    align-items:center;
+    column-gap:14px;
+    row-gap:7px;
+    min-width:0;
+    padding:13px 4px;
+    border-bottom:1px solid #f7eff3;
+    transition:background-color .18s ease;
+}
+.gasto-item:last-child{border-bottom:0;}
+.gasto-item:hover{background:linear-gradient(90deg,#fff8fb,rgba(255,255,255,0) 70%);}
+
+.g-dia{
+    grid-area:dia;
+    align-self:center;
+    width:48px;
+    padding:7px 0 6px;
+    border-radius:12px;
+    text-align:center;
+    background:linear-gradient(160deg,#fdf0f6,#fbe6ef);
+    border:1px solid #f7d9e6;
+}
+.g-dia b{
+    display:block;
+    font-size:var(--fs-lg);
+    font-weight:700;
+    line-height:1;
+    color:var(--p-ink);
+    font-variant-numeric:tabular-nums;
+}
+.g-dia i{
+    display:block;
+    margin-top:3px;
+    font-size:10px;
+    font-style:normal;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--pd);
+}
+
+.g-nombre{
+    grid-area:nombre;
+    min-width:0;
+    font-size:var(--fs-md);
+    font-weight:700;
+    color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.g-meta{
+    grid-area:meta;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+    min-width:0;
+}
+.g-etiqueta{
+    display:inline-flex;
+    align-items:center;
+    padding:3px 9px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.03em;
+    white-space:nowrap;
+    color:var(--v-ink);
+    background:#f4eff9;
+    border:1px solid #e2d7f1;
+}
+.g-etiqueta-suave{
+    color:var(--mut-ink);
+    background:#fff;
+    border-color:var(--g-line);
+}
+.g-valor{
+    grid-area:valor;
+    align-self:center;
+    text-align:right;
+    font-size:var(--fs-lg);
+    font-weight:700;
+    color:var(--p-ink);
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+}
+
+.lista-vacia{
+    padding:34px 16px 30px;
+    text-align:center;
+}
+/* Icono dibujado en SVG, no un emoji: se ve igual en cualquier equipo. */
+.lista-vacia-icono{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:58px;
+    height:58px;
+    margin-bottom:12px;
+    border-radius:50%;
+    background:linear-gradient(160deg,#fdf0f6,#fbe6ef);
+    box-shadow:inset 0 0 0 1px #f7ddec;
+    color:#dfa6be;
+}
+.lista-vacia-icono svg{width:28px;height:28px;display:block;}
+.lista-vacia b{
+    display:block;
+    font-size:var(--fs-md);
+    font-weight:700;
+    color:var(--ink);
+}
+.lista-vacia i{
+    display:block;
+    margin-top:4px;
+    font-size:var(--fs-sm);
+    font-style:normal;
+    font-weight:500;
+    color:var(--mut-ink);
+}
+
+/* ---------- Formulario ---------- */
+.form{
+    position:relative;
+    padding:22px;
+    border:1px solid var(--g-line);
+    border-radius:var(--g-radio);
+    background:#fff;
+    box-shadow:var(--g-sombra);
+    overflow:hidden;
+}
+.form::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:18px;
+    right:18px;
+    height:3px;
+    border-radius:0 0 6px 6px;
+    background:linear-gradient(90deg,var(--g),#7fd1a2,var(--g));
+    opacity:.8;
+}
+.form h2{
+    margin:0 0 18px;
+    padding-bottom:14px;
+    border-bottom:1px solid #f6eef2;
+    font-size:var(--fs-xl);
+    font-weight:700;
+    letter-spacing:-.015em;
+    color:var(--ink);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.field.full{grid-column:1/-1;}
+
+.field label{
+    font-size:var(--fs-xs);
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--mut-ink);
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    min-height:46px;
+    padding:11px 13px;
+    border:1.5px solid var(--g-line);
+    border-radius:12px;
+    background-color:#fff;
+    font:inherit;
+    font-size:var(--fs-lg);
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+    box-shadow:inset 0 1px 2px rgba(64,55,59,.04);
+    transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+.field textarea{
+    min-height:88px;
+    font-size:var(--fs-md);
+    font-weight:500;
+    line-height:1.5;
+    resize:vertical;
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover{border-color:var(--g-line-fuerte);}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:var(--p);
+    box-shadow:0 0 0 4px rgba(244,125,163,.15),inset 0 1px 2px rgba(64,55,59,.03);
+}
+.field input::placeholder,
+.field textarea::placeholder{color:#b3a6ad;font-weight:500;}
+
+/* prefijo $ dentro del campo Valor (sin tocar el HTML) */
+#valor{
+    padding-left:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b0305f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2v20'/%3E%3Cpath d='M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:left 12px center;
+    background-size:15px 15px;
+}
+#valor::-webkit-outer-spin-button,
+#valor::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+#valor{-moz-appearance:textfield;appearance:textfield;}
+
+/* chevrón propio en los desplegables */
+#categoria,
+#formaPago{
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    padding-right:38px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b0305f' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 13px center;
+    background-size:13px 13px;
+    cursor:pointer;
+}
+
+/* ---------- Aviso ---------- */
+.message{
+    margin-top:16px;
+    font-size:var(--fs-sm);
+    font-weight:700;
+    line-height:1.4;
+}
+.message:empty{display:none;}
+.message:not(:empty){
+    display:block;
+    padding:11px 13px;
+    border:1px solid var(--g-line-fuerte);
+    border-radius:12px;
+    background:linear-gradient(135deg,#fff8fb,#fdeef4);
+    color:var(--p-ink);
+}
+.message.ok{
+    border-color:#c3e8d5;
+    background:linear-gradient(135deg,#f4fdf8,#e9f9f1);
+    color:var(--g-ink);
+    box-shadow:0 3px 10px rgba(25,139,75,.10);
+}
+.message.error{
+    border-color:#f7cdcd;
+    background:linear-gradient(135deg,#fff4f4,#ffe8e8);
+    color:#a3231b;
+    box-shadow:0 3px 10px rgba(198,40,40,.10);
+}
+
+/* ---------- Botones ---------- */
+.buttons{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid #f6eef2;
+}
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:46px;
+    min-width:0;
+    padding:12px 22px;
+    border:0;
+    border-radius:13px;
+    font:inherit;
+    font-size:var(--fs-md);
+    font-weight:700;
+    letter-spacing:.01em;
+    cursor:pointer;
+    transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease,border-color .18s ease,color .18s ease;
+}
+.btn:active{transform:translateY(1px) scale(.99);}
+.btn.gray{
+    border:1.5px solid var(--g-line-fuerte);
+    background:#fff;
+    color:var(--mut-ink);
+    box-shadow:0 1px 3px rgba(64,55,59,.04);
+}
+.btn.gray:hover{
+    border-color:#f0bcd0;
+    background:var(--soft);
+    color:var(--p-ink);
+}
+.btn.green{
+    background:linear-gradient(135deg,#46cf82,#22ab62);
+    color:#fff;
+    box-shadow:0 8px 20px rgba(35,169,91,.28);
+}
+.btn.green:hover{
+    background:linear-gradient(135deg,#4ed78a,#1da05b);
+    box-shadow:0 13px 28px rgba(35,169,91,.34);
+    transform:translateY(-2px);
 }
 
 /* ============================================================
-   📱 AJUSTE FINAL PARA GASTOS DENTRO DE LA MODAL
+   Adaptación
    ============================================================ */
 
-@media (max-width: 700px) {
+/* Tablet */
+@media (max-width:860px){
+    .page{padding:22px 18px 34px;}
+    .titulo{font-size:var(--fs-xl);}
+    .cabecera-icono{width:42px;height:42px;font-size:19px;border-radius:14px;}
+}
 
-    html,
-    body {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        overflow-x: hidden;
+/* Móvil: el modal ocupa la pantalla completa */
+@media (max-width:700px){
+    .page{
+        padding:20px 16px calc(28px + env(safe-area-inset-bottom));
+        padding-left:calc(16px + env(safe-area-inset-left));
+        padding-right:calc(16px + env(safe-area-inset-right));
     }
-
-    .page {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    .summary,
-    .form,
-    .grid,
-    .field {
-        min-width: 0;
-        max-width: 100%;
-    }
-
-    .card,
-    .form {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-    }
-
-    .buttons {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .btn {
-        max-width: 100%;
-        box-sizing: border-box;
+    .resumen{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .kpi-mes{grid-column:1/-1;}
+    .kpi{padding:14px 15px;}
+    .kpi-valor{font-size:var(--fs-xl);}
+    .form{padding:18px 16px;}
+    .grid{grid-template-columns:1fr;gap:14px;}
+    /* El nombre se queda toda la línea y las etiquetas bajan junto al
+       importe: así no se recorta el concepto en pantallas estrechas. */
+    .gasto-item{
+        grid-template-columns:48px minmax(0,1fr) auto;
+        grid-template-areas:
+            "dia nombre nombre"
+            "dia meta   valor";
+        column-gap:11px;
+        row-gap:6px;
+        padding:12px 2px;
     }
 }
 
+@media (max-width:500px){
+    .cabecera{padding-right:38px;}
+    .lista-card{padding:16px 14px 6px;}
+    .form{padding:16px 14px;}
+    .buttons{flex-direction:column-reverse;gap:9px;}
+    .buttons .btn{width:100%;}
+}
 
+@media (max-width:430px){
+    .resumen{grid-template-columns:1fr;}
+    .kpi-mes{grid-column:auto;}
+}
 
-.gasto-item{display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid #f7e3ec;font-size:14px;color:#444;flex-wrap:wrap;align-items:center;}
-.gasto-item:last-child{border-bottom:0;}
-.gasto-item .g-nombre{font-weight:600;color:#8B5A2B;flex:1 1 38%;}
-.gasto-item .g-fecha{color:#999;flex:0 0 90px;}
-.gasto-item .g-pago{color:#777;flex:1 1 90px;}
-.gasto-item .g-valor{font-weight:700;color:#c94f86;flex:0 0 110px;text-align:right;}
+@media (max-width:380px){
+    .page{padding-left:calc(12px + env(safe-area-inset-left));padding-right:calc(12px + env(safe-area-inset-right));}
+    .titulo{font-size:var(--fs-lg);}
+    .subtitulo{font-size:var(--fs-xs);}
+    .g-dia{flex-basis:42px;width:42px;}
+    .g-valor{font-size:var(--fs-md);}
+}
+
+/* Movimiento reducido */
+@media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important;}
+    .kpi:hover,.btn.green:hover{transform:none;}
+}
 </style>
 </head>
 <body>
 <main class="page">
-<header class="header"><h1 class="title">💰 Gastos</h1><p class="sub">Registra los gastos para utilizarlos en tus estadísticas.</p></header>
-<section class="summary"><div class="card"><span>Gastos del mes</span><strong id="totalGastosMes">$0</strong></div><div class="card"><span>Registros</span><strong id="cantidadGastos">0</strong></div><div class="card"><span>Ver mes</span><input id="mesGastos" type="month" style="width:100%;margin-top:6px;padding:8px;border:1.5px solid #f0c9d8;border-radius:10px;font-size:14px;box-sizing:border-box;"></div></section>
-<section id="listaGastosCard" style="display:none;padding:0 18px 8px;max-width:880px;margin:0 auto;"><div style="background:#fff;border:1.5px solid #f3d5e0;border-radius:14px;padding:14px 16px;"><b style="color:#8B5A2B;">Gastos del mes</b><div id="listaGastos" style="margin-top:10px;font-size:14px;"></div></div></section>
-<section class="form"><h2>Registrar gasto</h2>
-<form id="formGasto"><div class="grid">
-<div class="field"><label for="concepto">Concepto</label><input id="concepto" type="text" placeholder="Ej: Hilo rosado" required></div>
-<div class="field"><label for="categoria">Categoría</label><select id="categoria" required><option value="">Selecciona</option><option>Materiales</option><option>Empaques</option><option>Envíos</option><option>Servicios</option><option>Publicidad</option><option>Otros</option></select></div>
-<div class="field"><label for="valor">Valor</label><input id="valor" type="number" min="0" step="1" placeholder="Ej: 15000" required></div>
-<div class="field"><label for="fecha">Fecha</label><input id="fecha" type="date" required></div>
-<div class="field"><label for="formaPago">Forma de pago</label><select id="formaPago" required><option value="">Selecciona</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Nequi</option><option>Otro</option></select></div>
-<div class="field full"><label for="observacion">Observación</label><textarea id="observacion" placeholder="Observación opcional"></textarea></div>
-</div><div id="mensajeGasto" class="message"></div><div class="buttons"><button type="reset" class="btn gray">Limpiar</button><button type="submit" class="btn green">💾 Registrar gasto</button></div></form>
-</section>
+
+    <header class="cabecera">
+        <span class="cabecera-icono" aria-hidden="true">💰</span>
+        <div class="cabecera-texto">
+            <h1 class="titulo">Gastos</h1>
+            <p class="subtitulo">Registra los gastos para utilizarlos en tus estadísticas.</p>
+        </div>
+    </header>
+
+    <section class="resumen">
+        <div class="kpi kpi-total">
+            <span class="kpi-etiqueta">Gastos del mes</span>
+            <strong class="kpi-valor" id="totalGastosMes">$0</strong>
+        </div>
+        <div class="kpi kpi-registros">
+            <span class="kpi-etiqueta">Registros</span>
+            <strong class="kpi-valor" id="cantidadGastos">0</strong>
+        </div>
+        <div class="kpi kpi-mes">
+            <label class="kpi-etiqueta" for="mesGastos">Ver mes</label>
+            <input id="mesGastos" type="month">
+        </div>
+    </section>
+
+    <section id="listaGastosCard" class="lista-card" style="display:none;">
+        <div class="lista-cabecera">
+            <h2 id="listaTitulo">Gastos del mes</h2>
+            <span class="lista-contador" id="listaContador">0</span>
+        </div>
+        <div id="listaGastos" class="lista"></div>
+    </section>
+
+    <section class="form">
+        <h2>Registrar gasto</h2>
+        <form id="formGasto">
+            <div class="grid">
+                <div class="field full">
+                    <label for="concepto">Concepto</label>
+                    <input id="concepto" type="text" placeholder="Ej: Hilo rosado" required>
+                </div>
+                <div class="field">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" required>
+                        <option value="">Selecciona</option>
+                        <option>Materiales</option>
+                        <option>Empaques</option>
+                        <option>Envíos</option>
+                        <option>Servicios</option>
+                        <option>Publicidad</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="valor">Valor</label>
+                    <input id="valor" type="number" min="0" step="1" placeholder="Ej: 15000" required>
+                </div>
+                <div class="field">
+                    <label for="fecha">Fecha</label>
+                    <input id="fecha" type="date" required>
+                </div>
+                <div class="field">
+                    <label for="formaPago">Forma de pago</label>
+                    <select id="formaPago" required>
+                        <option value="">Selecciona</option>
+                        <option>Efectivo</option>
+                        <option>Transferencia</option>
+                        <option>Tarjeta</option>
+                        <option>Nequi</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+                <div class="field full">
+                    <label for="observacion">Observación</label>
+                    <textarea id="observacion" placeholder="Observación opcional"></textarea>
+                </div>
+            </div>
+            <div id="mensajeGasto" class="message"></div>
+            <div class="buttons">
+                <button type="reset" class="btn gray">Limpiar</button>
+                <button type="submit" class="btn green">💾 Registrar gasto</button>
+            </div>
+        </form>
+    </section>
+
 </main>
+
 <script>
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(v||0));
@@ -180,8 +750,19 @@ const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 const mesLocal=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
 const today=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
 const db=()=>window.supabaseClient||window.supabaseDB||window.supabase;
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MESES_CORTOS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 async function user(){const s=db();if(!s||!s.auth)throw new Error('No se encontró la conexión de Supabase. Revisa js/supabase-config.js.');const r=await s.auth.getUser();if(r.error)throw r.error;if(!r.data.user)throw new Error('No hay una sesión de Supabase activa.');return r.data.user}
-async function resumen(){try{const s=db();if(!s)return;const u=await user();const sel=$('mesGastos').value||mesLocal();const [yy,mm]=sel.split('-').map(Number);const desde=String(yy)+'-'+String(mm).padStart(2,'0')+'-01';const hasta=String(yy)+'-'+String(mm).padStart(2,'0')+'-'+String(new Date(yy,mm,0).getDate());const r=await s.from('gastos').select('id,concepto,valor,fecha,forma_pago').eq('user_id',u.id).gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false});if(r.error)throw r.error;const rows=r.data||[];$('totalGastosMes').textContent=money(rows.reduce((a,x)=>a+Number(x.valor||0),0));$('cantidadGastos').textContent=rows.length;const card=$('listaGastosCard'),caja=$('listaGastos');if(rows.length){card.style.display='';caja.innerHTML=rows.map(x=>'<div class="gasto-item"><span class="g-nombre">'+esc(x.concepto||'Sin concepto')+'</span><span class="g-fecha">'+String(x.fecha||'').slice(0,10)+'</span><span class="g-pago">'+esc(x.forma_pago||'')+'</span><span class="g-valor">'+money(x.valor)+'</span></div>').join('')}else{card.style.display='none'}}catch(e){console.error('Error cargando gastos:',e)}}
+async function resumen(){try{const s=db();if(!s)return;const u=await user();const sel=$('mesGastos').value||mesLocal();const [yy,mm]=sel.split('-').map(Number);const desde=String(yy)+'-'+String(mm).padStart(2,'0')+'-01';const hasta=String(yy)+'-'+String(mm).padStart(2,'0')+'-'+String(new Date(yy,mm,0).getDate());const r=await s.from('gastos').select('id,concepto,categoria,valor,fecha,forma_pago').eq('user_id',u.id).gte('fecha',desde).lte('fecha',hasta).order('fecha',{ascending:false});if(r.error)throw r.error;const rows=r.data||[];$('totalGastosMes').textContent=money(rows.reduce((a,x)=>a+Number(x.valor||0),0));$('cantidadGastos').textContent=rows.length;
+const card=$('listaGastosCard'),caja=$('listaGastos');
+$('listaTitulo').textContent='Gastos de '+(MESES[mm-1]||'');
+$('listaContador').textContent=rows.length;
+card.style.display='';
+if(rows.length){
+caja.innerHTML=rows.map(x=>{const f=String(x.fecha||'').slice(0,10);const dia=f.slice(8,10);const mes=MESES_CORTOS[Number(f.slice(5,7))-1]||'';return '<div class="gasto-item"><span class="g-dia" aria-hidden="true"><b>'+esc(dia)+'</b><i>'+mes+'</i></span><span class="g-nombre">'+esc(x.concepto||'Sin concepto')+'</span><span class="g-meta">'+(x.categoria?'<span class="g-etiqueta">'+esc(x.categoria)+'</span>':'')+(x.forma_pago?'<span class="g-etiqueta g-etiqueta-suave">'+esc(x.forma_pago)+'</span>':'')+'</span><span class="g-valor">'+money(x.valor)+'</span></div>';}).join('');
+}else{
+caja.innerHTML='<div class="lista-vacia"><span class="lista-vacia-icono" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M15 2v5h5"/><path d="M8 13h8M8 17h5"/></svg></span><b>Sin gastos este mes</b><i>Registra el primero con el formulario de abajo.</i></div>';
+}}catch(e){console.error('Error cargando gastos:',e)}}
 $('fecha').value=today();
 $('mesGastos').value=mesLocal();
 $('mesGastos').addEventListener('change',()=>resumen());
