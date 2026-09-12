@@ -10871,20 +10871,16 @@ async function guardarFacturaDB(e){
 
             mostrarToast('La Factura ' + f.numero + ' Actualizada Correctamente.','success','Factura actualizada');
 
-            /* Al terminar de editar se limpia igual que en un alta. Antes no se
-               limpiaba nada: los campos se quedaban con los datos de la factura
-               editada y, como editingInvoiceId ya es null, volver a pulsar
-               «Guardar factura» creaba una factura DUPLICADA. */
+            /* El formulario queda COMPLETAMENTE limpio, también el Nº de
+               factura y la Fecha. Antes se dejaban puestos los de la factura
+               recién guardada y parecía que no se había limpiado nada.
+               El número de lo que se acaba de guardar se dice en el aviso. */
             reiniciarFactura();
-
-            $("numero").value = f.numero;
-
-            $("fecha").value = today();
 
             bloquearForm(true);
 
             const avisoEdit = document.getElementById("avisoBloqueo");
-            if(avisoEdit){ avisoEdit.textContent = "✅ Factura " + f.numero + " actualizada — pulsa '+ Nueva factura' para crear otra"; }
+            if(avisoEdit){ avisoEdit.textContent = "✅ Factura " + f.numero + " actualizada — pulsa '+ Nueva factura' para registrar otra"; }
 
         }else{
 
@@ -10892,17 +10888,13 @@ async function guardarFacturaDB(e){
 
             mostrarToast('La Factura ' + f.numero + ' Guardada Correctamente.','success','Factura guardada');
 
-            /* Un solo punto de reseteo para los dos caminos */
+            /* Igual que al editar: se limpia todo, incluidos Nº y Fecha */
             reiniciarFactura();
-
-            $("numero").value = f.numero;
-
-            $("fecha").value = today();
 
             bloquearForm(true);
 
             const aviso = document.getElementById("avisoBloqueo");
-            if(aviso){ aviso.textContent = "✅ Factura " + f.numero + " guardada — pulsa '+ Nueva factura' para crear otra"; }
+            if(aviso){ aviso.textContent = "✅ Factura " + f.numero + " guardada — pulsa '+ Nueva factura' para registrar otra"; }
         }
 
         try{
