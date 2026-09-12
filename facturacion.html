@@ -10551,6 +10551,18 @@ async function editarFacturaDB(id){
 
 
         // ==========================================
+        // LIMPIAR ANTES DE CARGAR
+        // ==========================================
+        //
+        // Se deja el formulario en blanco para no arrastrar valores de la
+        // factura anterior en los campos que esta factura no traiga.
+        // Va antes de asignar editingInvoiceId, porque reiniciarFactura()
+        // lo pone a null.
+
+        reiniciarFactura();
+
+
+        // ==========================================
         // GUARDAR ID DE LA FACTURA
         // ==========================================
 
@@ -10600,6 +10612,21 @@ async function editarFacturaDB(id){
         $("numero").value = f.numero;
 
         $("fecha").value = f.fecha;
+
+
+        // ==========================================
+        // ESTADO
+        // ==========================================
+        //
+        // Antes NO se cargaba: al editar se conservaba el estado del registro
+        // anterior y al actualizar se guardaba ese valor equivocado.
+
+        if($("estado")){
+
+            $("estado").value =
+                f.estado || "Pagada";
+
+        }
 
 
         // ==========================================
@@ -10844,9 +10871,20 @@ async function guardarFacturaDB(e){
 
             mostrarToast('La Factura ' + f.numero + ' Actualizada Correctamente.','success','Factura actualizada');
 
-            editingInvoiceId = null;
+            /* Al terminar de editar se limpia igual que en un alta. Antes no se
+               limpiaba nada: los campos se quedaban con los datos de la factura
+               editada y, como editingInvoiceId ya es null, volver a pulsar
+               «Guardar factura» creaba una factura DUPLICADA. */
+            reiniciarFactura();
 
-            $("saveBtn").innerHTML = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
+            $("numero").value = f.numero;
+
+            $("fecha").value = today();
+
+            bloquearForm(true);
+
+            const avisoEdit = document.getElementById("avisoBloqueo");
+            if(avisoEdit){ avisoEdit.textContent = "✅ Factura " + f.numero + " actualizada — pulsa '+ Nueva factura' para crear otra"; }
 
         }else{
 
@@ -10854,15 +10892,12 @@ async function guardarFacturaDB(e){
 
             mostrarToast('La Factura ' + f.numero + ' Guardada Correctamente.','success','Factura guardada');
 
-            $("form").reset();
+            /* Un solo punto de reseteo para los dos caminos */
+            reiniciarFactura();
 
             $("numero").value = f.numero;
 
             $("fecha").value = today();
-
-            $("items").innerHTML = "";
-
-            limpiarBloquesPago();
 
             bloquearForm(true);
 
@@ -11364,23 +11399,14 @@ $("new").onclick = async () => {
 
     try {
 
+        /* Deja el formulario limpio (campos, productos e importes) */
+        reiniciarFactura();
+
         bloquearForm(false);
-
-        editingInvoiceId = null;
-        abonoAcumuladoActual = 0;
-        abonoAcumuladoAnterior = 0;
-
-        $("form").reset();
-
-        limpiarBloquesPago();
 
         $("numero").value = await nextInvoiceNumber();
 
         $("fecha").value = today();
-
-        $("items").innerHTML = "";
-
-        $("saveBtn").innerHTML = '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
 
         $("form").scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -11566,6 +11592,46 @@ function limpiarBloquesPago(){
     if($("tipoAbonoBox")) $("tipoAbonoBox").style.display = "none";
     if($("tipoPago")) $("tipoPago").value = "";
     if($("tipoPagoBox")) $("tipoPagoBox").style.display = "none";
+}
+
+/* ============================================================
+   Deja el formulario EXACTAMENTE como recién abierto.
+   Se llama en tres momentos:
+     · al pulsar «+ Nueva factura»
+     · al terminar de guardar (tanto si fue alta como edición)
+     · justo antes de cargar una factura para editarla
+   Así no quedan valores de la factura anterior: ni en los campos,
+   ni en las líneas de producto, ni en los importes de abajo.
+   ============================================================ */
+function reiniciarFactura(){
+
+    editingInvoiceId = null;
+    abonoAcumuladoActual = 0;
+    abonoAcumuladoAnterior = 0;
+
+    $("form").reset();
+    limpiarBloquesPago();
+
+    $("items").innerHTML = "";
+
+    /* Importes de abajo: sin esto seguían mostrando la factura anterior,
+       porque calc() no se vuelve a ejecutar al limpiar. */
+    if($("abonoAcumulado")) $("abonoAcumulado").textContent = money(0);
+    if($("saldoPendiente")) $("saldoPendiente").textContent = money(0);
+
+    if($("saveBtn")){
+        $("saveBtn").innerHTML =
+            '<img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura';
+    }
+
+    const aviso = document.getElementById("avisoBloqueo");
+    if(aviso){
+        aviso.textContent =
+            '🔒 Pulsa "+ Nueva factura" para comenzar a registrar';
+    }
+
+    /* recalcula y pinta #sub / #tot / #abonoAcumulado / #saldoPendiente */
+    calc();
 }
 
 (async()=>{
