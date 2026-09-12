@@ -3917,7 +3917,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     position:sticky;
     top:0;
     z-index:2;
-    padding:14px 16px;
+    padding:14px 13px;
     background:linear-gradient(180deg,#fff7fb,#fdeef5);
     color:var(--p-ink);
     font-size:11px;
@@ -3943,7 +3943,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     transition:background-color .18s ease,box-shadow .18s ease;
 }
 #historial tbody td{
-    padding:15px 16px;
+    padding:15px 13px;
     font-size:13.5px;
     line-height:1.35;
     color:var(--ink);
@@ -3956,10 +3956,14 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     transform:none;
     box-shadow:none;
 }
-@media (min-width:851px){
-    /* el ancho mínimo de la tabla solo aplica en escritorio: en móvil la
-       tabla se convierte en tarjetas y debe poder encogerse a 100% */
-    #historial table{min-width:780px;}
+/* La tabla de 6 columnas + rejilla 4x2 de acciones necesita 816 px reales
+   (medidos). Con la barra lateral (235 px), el relleno del main (56 px) y
+   el del card (52 px) se necesitan ~1161 px de ventana; se pone el corte
+   en 1200 px para dejar holgura. Por debajo, el historial pasa a lista de
+   tarjetas. Todo lo de escritorio va aquí dentro para no pisar el bloque
+   de tarjetas. */
+@media (min-width:1201px){
+    #historial table{min-width:760px;}
     #historial tbody td:first-child{
         box-shadow:inset 3px 0 0 0 transparent;
         transition:box-shadow .2s ease;
@@ -3967,8 +3971,9 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     #historial tbody tr:hover td:first-child{
         box-shadow:inset 3px 0 0 0 var(--p);
     }
-    /* el nombre del cliente se recorta antes de empujar las columnas */
-    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:200px;}
+    /* El tope del nombre del cliente fija el ancho mínimo de la tabla, así
+       que se mantiene corto para poder encoger hasta 1200 px. */
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:160px;}
     /* la columna de importe se lee mejor alineada a la derecha */
     #historial thead th:nth-child(4),
     #historial tbody td:nth-child(4){text-align:right;}
@@ -3977,17 +3982,26 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     /* Las acciones se reparten en 4 columnas fijas: así todas las filas miden
        lo mismo y la última línea queda alineada a la derecha. */
     #historial thead th:last-child,
-    #historial tbody td:nth-child(6){width:170px;white-space:nowrap;}
+    #historial tbody td:nth-child(6){width:154px;white-space:nowrap;}
     #historial thead th:last-child{text-align:right;}
     #historial .history-actions{
         display:flex;
         flex-wrap:wrap;
         justify-content:flex-end;
-        gap:6px;
-        max-width:138px;   /* 4 x 30px + 3 huecos de 6px */
+        gap:5px;
+        /* ancho clavado: 4 x 28px + 3 huecos de 5px. Sin el min-width la
+           celda se comprimía y los chips se apilaban en 5 filas. */
+        min-width:127px;
+        max-width:127px;
         margin-left:auto;
     }
-    #historial .history-btn{flex:0 0 30px;}
+    #historial .history-btn{flex:0 0 28px;}
+}
+
+/* En pantallas anchas el tope del nombre se suelta, para no cortar nombres
+   largos cuando la tabla ya tiene espacio de sobra. */
+@media (min-width:1300px){
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:240px;}
 }
 
 /* ---------- 19.5) Número, cliente, fecha y total ---------- */
@@ -4141,13 +4155,13 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 
 /* ---------- 19.7) Chips de acción ---------- */
 #historial .history-btn{
-    width:30px;
-    height:30px;
+    width:28px;
+    height:28px;
     border-radius:9px;
     border-width:1px;
     box-shadow:0 1px 3px rgba(64,55,59,.06);
 }
-#historial .history-btn .grilla-icon{width:15px;height:15px;}
+#historial .history-btn .grilla-icon{width:14px;height:14px;}
 #historial .history-btn:hover{transform:translateY(-2px);}
 #historial .history-btn:hover img{transform:scale(1.14) rotate(-6deg);}
 
@@ -4203,8 +4217,12 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 #historial .pag-btn:disabled{opacity:.35;cursor:default;}
 #historial .pag-ellipsis{color:#c6b0ba;font-weight:800;padding:0 2px;}
 
-/* ---------- 19.10) Móvil: la tabla ya es una lista de tarjetas ---------- */
-@media (max-width:850px){
+/* ---------- 19.10) Hasta 1200 px: la tabla se convierte en tarjetas ----------
+   Por debajo de 1200 px de ventana la tabla de 6 columnas no cabe (la barra
+   lateral se lleva 235 px), así que el historial pasa a lista de tarjetas.
+   Este bloque es autosuficiente: incluye la conversión de tabla a tarjeta,
+   porque el bloque móvil original de la hoja solo actúa hasta 850 px. */
+@media (max-width:1200px){
     #historial{padding:18px 16px 16px;}
     #historial .hist-titulo{margin-bottom:14px;padding-bottom:12px;}
     #historial .hist-titulo-texto{font-size:16px;}
@@ -4221,6 +4239,19 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
         overflow:visible;
     }
 
+    /* la tabla deja de ser tabla */
+    #historial table,
+    #historial thead,
+    #historial tbody,
+    #historial tbody tr,
+    #historial tbody td{
+        display:block;
+        width:100%;
+        box-sizing:border-box;
+    }
+    #historial table{min-width:0;}
+    #historial thead{display:none;}
+
     #historial tbody tr{
         position:relative;
         margin-bottom:14px;
@@ -4230,6 +4261,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
         background:linear-gradient(160deg,#fff 0%,#fffafc 100%);
         box-shadow:0 6px 18px rgba(150,90,120,.07);
         overflow:hidden;
+        transform:none;
     }
     #historial tbody tr::after{
         content:"";
@@ -4244,38 +4276,82 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     #historial tbody tr:hover{background:linear-gradient(160deg,#fff 0%,#fffafc 100%);box-shadow:0 6px 18px rgba(150,90,120,.07);}
     #historial tbody tr:last-child{margin-bottom:0;}
 
-    #historial tbody td{padding:6px 0;font-size:13px;}
+    #historial tbody td{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        padding:6px 0;
+        border:0;
+        min-height:30px;
+        font-size:13px;
+        min-width:0;
+        overflow-wrap:anywhere;
+        word-break:break-word;
+    }
     #historial tbody td::before{
+        flex-shrink:0;
         color:var(--mut-ink);
         font-size:10.5px;
         font-weight:800;
         letter-spacing:.07em;
         text-transform:uppercase;
     }
+    #historial tbody td:nth-child(1)::before{content:"Factura";}
+    #historial tbody td:nth-child(2)::before{content:"Cliente";}
+    #historial tbody td:nth-child(3)::before{content:"Fecha";}
+    #historial tbody td:nth-child(4)::before{content:"Total";}
+    #historial tbody td:nth-child(5)::before{content:"Estado";}
     #historial tbody td:nth-child(1){font-size:13px;color:var(--p-ink);}
+    #historial tbody td:nth-child(2){color:var(--ink);font-weight:600;}
     #historial tbody td:nth-child(3){color:var(--mut-ink);font-size:12.5px;}
+    #historial tbody td:nth-child(4){font-weight:800;color:var(--ink);text-align:left;}
+    #historial tbody td:nth-child(5){white-space:normal;}
     #historial .h-avatar{width:28px;height:28px;flex:0 0 28px;font-size:10.5px;}
-    #historial .h-cliente-nombre{max-width:100%;}
+    #historial .h-cliente{max-width:100%;}
+    #historial .h-cliente-nombre{max-width:none;}
 
     #historial tbody td:nth-child(6){
+        display:block;
+        width:100%;
+        min-width:0;
+        max-width:100%;
         border-top:1px solid var(--h-sep);
         margin-top:8px;
         padding-top:12px;
+        overflow:hidden;
     }
+    #historial tbody td:nth-child(6)::before{content:none;}
     #historial .history-actions{
         display:grid;
         grid-template-columns:repeat(4,minmax(0,1fr));
         gap:8px;
+        width:100%;
+        max-width:100%;
+        min-width:0;
     }
-    #historial .history-btn{border-radius:11px;}
+    #historial .history-btn{
+        width:100%;
+        min-width:0;
+        max-width:100%;
+        height:44px;
+        min-height:44px;
+        padding:0;
+        margin:0;
+        flex:none;
+        border-radius:11px;
+    }
+    #historial .history-btn .grilla-icon{width:17px;height:17px;}
 
     #historial .historial-paginador{margin-top:16px;padding-top:14px;}
 
     #historial tbody td.muted{
+        justify-content:center;
         padding:44px 16px 38px;
         background-position:center 22px;
         background-size:30px 30px;
     }
+    #historial tbody td.muted::before{content:none;}
 }
 
 /* ---------- 19.11) Movimiento reducido ---------- */
