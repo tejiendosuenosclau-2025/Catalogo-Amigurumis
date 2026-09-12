@@ -3619,6 +3619,154 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 @media (prefers-reduced-motion:reduce){
     #form .campo-icono.fp-lleno::after{animation:none;}
 }
+
+/* ============================================================
+   🔎 ACABADO v3 — LEGIBILIDAD DE LOS 3 FORMULARIOS
+   Capa final, 100% presentación: no toca el HTML ni el JavaScript.
+   Supabase, guardado, vista previa, PDF, impresión y WhatsApp
+   siguen funcionando exactamente igual.
+
+   Qué corrige: los textos de los formularios de factura, cliente y
+   productos que quedaban por debajo del contraste mínimo AA
+   (4.5:1) y el único control por debajo de 11px.
+
+   Cómo se ajusta: todo el color sale de los tokens de abajo. Para
+   volver a un rosa más vivo basta con cambiar --p-deep / --p-deep-2.
+   ============================================================ */
+
+/* ---------- 18.1) Tintas accesibles, derivadas de la paleta ---------- */
+:root{
+    /* superficies con texto BLANCO encima (botones y total):
+       rosa rebajado en luminosidad -> blanco legible */
+    --p-deep:#c93f70;       /* blanco encima: 4.72:1 */
+    --p-deep-mid:#b83562;   /* blanco encima: 5.64:1 */
+    --p-deep-2:#a82c56;     /* blanco encima: 6.65:1 */
+    /* texto de ACENTO sobre fondo claro */
+    --p-ink:#b0305f;        /* rosa  -> 6.11:1 sobre blanco */
+    --v-ink:#5f4480;        /* morado-> 9.00:1 sobre blanco */
+    --g-ink:#0e7a44;        /* verde -> 5.40:1 sobre blanco */
+    --warn-ink:#a86400;     /* naranja->4.68:1 sobre blanco */
+    --mut-ink:#6b5f66;      /* gris de etiquetas -> 6.08:1 */
+}
+
+/* ---------- 18.2) Botones principales: blanco sobre rosa legible ---------- */
+#form .btn-nueva-arriba,
+#form .actions .btn.pink{
+    background:linear-gradient(135deg,var(--p-deep),var(--p-deep-mid) 50%,var(--p-deep-2));
+}
+#form .btn-nueva-arriba{background-size:200% 200%;}
+#form .btn-nueva-arriba:hover,
+#form .actions .btn.pink:hover{
+    filter:none;
+    box-shadow:0 12px 26px rgba(168,44,86,.42),inset 0 1px 0 rgba(255,255,255,.24);
+}
+
+/* Los botones .pink / .green de los modales (productos y abonos) son los
+   mismos del formulario: se les da la misma superficie legible. Las reglas
+   más específicas de .actions siguen mandando, así que la barra de acciones
+   no cambia. */
+.btn.pink{background:linear-gradient(135deg,var(--p-deep),var(--p-deep-2));}
+.btn.green{background:linear-gradient(135deg,#1f7f4a,#155e35);}
+.btn.pink:hover{box-shadow:0 9px 21px rgba(168,44,86,.30);}
+.btn.green:hover{box-shadow:0 9px 21px rgba(21,94,53,.26);}
+
+/* ---------- 18.3) Total a pagar ---------- */
+#form .totals .total{
+    background:linear-gradient(135deg,var(--p-deep),var(--p-deep-2));
+    box-shadow:0 8px 20px rgba(168,44,86,.28);
+}
+
+/* ---------- 18.4) Texto de acento: rosa vivo -> rosa legible ---------- */
+#form .actions .btn.white{color:var(--p-ink);}
+#form .actions .btn.white:hover{border-color:var(--p-ink);}
+#form .factura-pago-compacto > .title,
+#form .factura-pago-compacto > .title .fp-ico{color:var(--p-ink);}
+#form .fp-paso{color:var(--p-ink);}
+#form .aviso-bloqueo{color:var(--p-ink);}
+#form .factura-numero-label{color:var(--mut-ink);}
+#form .factura-numero-icono{color:var(--p-ink);}
+#form label,
+#modalProductos label:not(.cat-check),
+#modalAbono label{color:var(--mut-ink);}
+/* la marca ✓ de campo completado también se oscurece */
+#form .campo-icono.fp-lleno::after{color:var(--g-ink);}
+
+/* botón de cerrar de los modales: la × también necesita contraste */
+.modal-abono-cerrar{color:var(--p-ink);}
+.modal-abono-cerrar:hover{color:#8c2549;}
+/* rótulos de las fichas de los modales ("Factura", "Cliente", "Abono"...) */
+.modal-abono-datos > div > span,
+.modal-abono-resumen > div > span{color:var(--mut-ink);}
+
+/* ---------- 18.5) Etiquetas mini: mínimo 11px ---------- */
+#form .factura-automatico{
+    font-size:var(--fs-xs);
+    color:var(--p-ink);
+    background:#fde7ef;
+    padding:4px 9px;
+}
+#form #prodCount.vacio{
+    background:#f4eff1;
+    color:var(--mut-ink);
+    border-color:#e2d9dd;
+}
+
+/* ---------- 18.6) Resumen de abonos: verde y naranja legibles ---------- */
+#form .resumen-abono .resumen-datos span,
+#form .resumen-abono .resumen-datos small{color:var(--g-ink);}
+#form .resumen-saldo .resumen-datos span,
+#form .resumen-saldo .resumen-datos small{color:var(--warn-ink);}
+#form .resumen-abono .resumen-icono svg{stroke:var(--g-ink);}
+#form .resumen-saldo .resumen-icono svg{stroke:#b8560a;}
+
+/* ---------- 18.7) Tabla de productos: controles de la misma altura ---------- */
+#tablaItems .ps-buscar{
+    min-height:42px;
+    padding:11px 13px;
+    font-size:var(--fs-md);
+}
+#tablaItems .qty,
+#tablaItems .price,
+#tablaItems .tam,
+#tablaItems .disc{min-height:42px;}
+
+/* ---------- 18.8) Placeholders: dejan de ser casi invisibles ---------- */
+#form input::placeholder,
+#form textarea::placeholder,
+#tablaItems .ps-buscar::placeholder{color:#7a6f75;}
+
+/* ---------- 18.9) Móvil: la tabla se vuelve fichas y las etiquetas cuadran ---------- */
+/* En móvil la cabecera se oculta y cada casilla se rotula desde CSS, sin
+   tocar el HTML ni el JavaScript. El orden real de columnas es
+   Producto · Cant. · Precio · Tamaño · Desc. % · Total · 🗑
+   y las reglas originales iban desfasadas desde la cuarta: el campo
+   "Tamaño" decía "Desc. %", el descuento decía "Total", el importe total
+   heredaba el aspecto del botón de borrar y el botón quedaba sin fila
+   propia. Aquí se realinean las cuatro. */
+@media (max-width:850px){
+    #tablaItems tbody td::before{color:var(--mut-ink);}
+    #tablaItems tbody td:nth-child(1)::before{content:"Producto";}
+    #tablaItems tbody td:nth-child(2)::before{content:"Cantidad";}
+    #tablaItems tbody td:nth-child(3)::before{content:"Precio";}
+    #tablaItems tbody td:nth-child(4)::before{content:"Tamaño";}
+    #tablaItems tbody td:nth-child(5)::before{content:"Desc. %";}
+    #tablaItems tbody td:nth-child(6)::before{content:"Total";}
+    /* el importe total vuelve a ser una fila normal: etiqueta a la
+       izquierda y cifra a la derecha, como el resto */
+    #tablaItems tbody td.lt{
+        justify-content:space-between;
+        border-top:0;
+        margin-top:0;
+        padding-top:4px;
+    }
+    /* la fila aparte con separador es la del botón de borrar (7ª columna) */
+    #tablaItems tbody td:nth-child(7){
+        justify-content:flex-end;
+        border-top:1px solid #f0e5e9;
+        margin-top:4px;
+        padding-top:8px;
+    }
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
