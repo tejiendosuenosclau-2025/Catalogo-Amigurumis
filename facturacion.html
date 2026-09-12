@@ -3767,6 +3767,530 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
         padding-top:8px;
     }
 }
+
+/* ============================================================
+   🧾 19) HISTORIAL DE FACTURAS — ACABADO v4
+   Capa final, solo presentación. No cambia ids ni atributos
+   (data-action / data-id se conservan tal cual), así que la
+   delegación de eventos sobre #history sigue funcionando.
+   Todo el color sale de los tokens ya definidos: --p, --pd, --v,
+   --p-ink, --ink, --mut-ink, --line, --soft y los --st-*.
+   ============================================================ */
+
+#historial{
+    --h-borde:#f1e3ea;
+    --h-borde-fuerte:#f7d2e0;
+    --h-sep:#f7eef2;
+    --h-sombra:0 10px 30px rgba(150,90,120,.07);
+    --h-radio:14px;
+    padding:24px 26px 20px;
+}
+
+/* ---------- 19.1) Título: pastilla de icono + contador ---------- */
+#historial .hist-titulo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--h-borde);
+}
+#historial .hist-titulo .grilla-icon{
+    width:24px;
+    height:24px;
+    padding:5px;
+    box-sizing:content-box;
+    border-radius:11px;
+    background:linear-gradient(135deg,#ffe7ef,#ffdfe9);
+    box-shadow:0 3px 10px rgba(244,125,163,.16);
+}
+#historial .hist-titulo-texto{
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:-.015em;
+    color:var(--ink);
+}
+#historial .hist-contador{
+    margin-left:auto;
+    min-width:32px;
+    height:26px;
+    padding:0 11px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:var(--p-ink);
+    background:var(--soft);
+    border:1px solid var(--h-borde-fuerte);
+    white-space:nowrap;
+}
+
+/* ---------- 19.2) Buscador en pastilla ---------- */
+#historial .hist-toolbar{
+    display:flex;
+    align-items:flex-end;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+}
+#historial .hist-buscar-caja{
+    flex:1 1 280px;
+    min-width:0;
+}
+#historial .historial-buscar-label{
+    display:block;
+    margin:0 0 6px;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--mut-ink);
+}
+#historial .historial-buscar{
+    width:100%;
+    height:46px;
+    box-sizing:border-box;
+    margin:0;
+    padding:0 42px 0 44px;
+    border:1.5px solid var(--h-borde);
+    border-radius:13px;
+    background-color:#fff;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b0305f' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:left 14px center;
+    background-size:18px 18px;
+    color:var(--ink);
+    font-size:14px;
+    outline:none;
+    box-shadow:inset 0 1px 2px rgba(64,55,59,.045);
+    transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+#historial .historial-buscar:hover{border-color:var(--h-borde-fuerte);}
+#historial .historial-buscar:focus{
+    border-color:var(--p);
+    background-color:#fff;
+    box-shadow:0 0 0 4px rgba(244,125,163,.14),inset 0 1px 2px rgba(64,55,59,.03);
+}
+#historial .historial-buscar::placeholder{color:#a99ea4;}
+#historial .historial-buscar::-webkit-search-cancel-button{
+    -webkit-appearance:none;
+    appearance:none;
+    width:18px;
+    height:18px;
+    margin-right:8px;
+    border-radius:50%;
+    cursor:pointer;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b98fa1' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/15px 15px no-repeat;
+}
+#historial .historial-buscar::-webkit-search-cancel-button:hover{background-color:#fdeef4;}
+#historial .hist-resumen{
+    margin:0 0 14px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--mut-ink);
+    white-space:nowrap;
+}
+#historial .hist-resumen[hidden]{display:none;}
+#historial .hist-resumen b{
+    color:var(--p-ink);
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+}
+
+/* ---------- 19.3) Contenedor y cabecera de la tabla ---------- */
+#historial .wrap{
+    border:1px solid var(--h-borde);
+    border-radius:var(--h-radio);
+    background:#fff;
+    box-shadow:var(--h-sombra);
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+}
+#historial table{
+    border-collapse:separate;
+    border-spacing:0;
+}
+#historial thead th{
+    position:sticky;
+    top:0;
+    z-index:2;
+    padding:14px 16px;
+    background:linear-gradient(180deg,#fff7fb,#fdeef5);
+    color:var(--p-ink);
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.09em;
+    text-align:left;
+    white-space:nowrap;
+    border-bottom:1px solid var(--h-borde-fuerte);
+}
+#historial thead th:last-child{
+    background:linear-gradient(180deg,#ffe9f1,#ffe0eb);
+    letter-spacing:.12em;
+}
+#historial thead th:last-child::after{
+    content:"✦";
+    margin-left:6px;
+    color:var(--pd);
+}
+
+/* ---------- 19.4) Filas ---------- */
+#historial tbody tr{
+    transition:background-color .18s ease,box-shadow .18s ease;
+}
+#historial tbody td{
+    padding:15px 16px;
+    font-size:13.5px;
+    line-height:1.35;
+    color:var(--ink);
+    border-bottom:1px solid var(--h-sep);
+    vertical-align:middle;
+}
+#historial tbody tr:last-child td{border-bottom:0;}
+#historial tbody tr:hover{
+    background:linear-gradient(90deg,#fff6fa,#fffdfe 65%);
+    transform:none;
+    box-shadow:none;
+}
+@media (min-width:851px){
+    /* el ancho mínimo de la tabla solo aplica en escritorio: en móvil la
+       tabla se convierte en tarjetas y debe poder encogerse a 100% */
+    #historial table{min-width:780px;}
+    #historial tbody td:first-child{
+        box-shadow:inset 3px 0 0 0 transparent;
+        transition:box-shadow .2s ease;
+    }
+    #historial tbody tr:hover td:first-child{
+        box-shadow:inset 3px 0 0 0 var(--p);
+    }
+    /* el nombre del cliente se recorta antes de empujar las columnas */
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:200px;}
+    /* la columna de importe se lee mejor alineada a la derecha */
+    #historial thead th:nth-child(4),
+    #historial tbody td:nth-child(4){text-align:right;}
+    /* el estado nunca parte en dos líneas */
+    #historial tbody td:nth-child(5){white-space:nowrap;}
+    /* Las acciones se reparten en 4 columnas fijas: así todas las filas miden
+       lo mismo y la última línea queda alineada a la derecha. */
+    #historial thead th:last-child,
+    #historial tbody td:nth-child(6){width:170px;white-space:nowrap;}
+    #historial thead th:last-child{text-align:right;}
+    #historial .history-actions{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:flex-end;
+        gap:6px;
+        max-width:138px;   /* 4 x 30px + 3 huecos de 6px */
+        margin-left:auto;
+    }
+    #historial .history-btn{flex:0 0 30px;}
+}
+
+/* ---------- 19.5) Número, cliente, fecha y total ---------- */
+#historial .h-numero{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 11px;
+    border-radius:9px;
+    background:linear-gradient(135deg,#fff5f9,#ffebf3);
+    border:1px solid #fbdbe7;
+    color:var(--p-ink);
+    font-size:12.5px;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.01em;
+    white-space:nowrap;
+    transition:border-color .18s ease,box-shadow .18s ease;
+}
+#historial tbody tr:hover .h-numero{
+    border-color:#f7bfd4;
+    box-shadow:0 3px 10px rgba(244,125,163,.18);
+}
+#historial .h-cliente{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+    max-width:100%;
+}
+#historial .h-avatar{
+    flex:0 0 32px;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color:#fff;
+    background:linear-gradient(135deg,var(--pd),var(--v));
+    box-shadow:0 3px 9px rgba(134,98,169,.26);
+}
+#historial .h-cliente-nombre{
+    font-weight:700;
+    color:var(--ink);
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+#historial .h-fecha{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    color:var(--mut-ink);
+    font-size:12.5px;
+    font-weight:600;
+    white-space:nowrap;
+}
+#historial .h-fecha::before{
+    content:"";
+    flex:0 0 6px;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#ead7df;
+}
+#historial .h-total{
+    font-size:14px;
+    font-weight:800;
+    color:var(--ink);
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+    transition:color .18s ease;
+}
+#historial tbody tr:hover .h-total{color:var(--p-ink);}
+
+/* ---------- 19.6) Chips de estado e insignias de entrega ---------- */
+#historial .estado-celda{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+}
+#historial .status{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:5px 11px 5px 9px;
+    border:1px solid transparent;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.03em;
+    white-space:nowrap;
+    box-shadow:none;
+}
+#historial .status::before{
+    content:"";
+    flex:0 0 7px;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:currentColor;
+}
+#historial .status.Pagada{
+    background:linear-gradient(135deg,#e9f9f1,#d7f3e4);
+    border-color:#c4e9d4;
+    color:#0e7a44;
+    box-shadow:0 2px 7px rgba(25,139,75,.14);
+}
+#historial .status.Pendiente{
+    background:linear-gradient(135deg,#fff7e4,#ffeac9);
+    border-color:#f4deb9;
+    color:var(--warn-ink);
+    box-shadow:0 2px 7px rgba(166,107,0,.13);
+}
+#historial .status.Enviada{
+    background:linear-gradient(135deg,#edf4ff,#dee9ff);
+    border-color:#d0dff7;
+    color:#2b5c9e;
+    box-shadow:0 2px 7px rgba(50,104,178,.13);
+}
+#historial .status.Anulada{
+    background:linear-gradient(135deg,#fff0f0,#ffdfdf);
+    border-color:#f7cdcd;
+    color:#b3261e;
+    box-shadow:0 2px 7px rgba(198,40,40,.13);
+}
+/* Las insignias de entrega se distinguen de los chips de estado: van en
+   contorno claro, no rellenas, para que no se confundan entre ellas. */
+#historial .entrega{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:3px 9px;
+    border:1px solid transparent;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.02em;
+    white-space:nowrap;
+    background:#fff;
+}
+#historial .entrega.ok{background:#fbfefc;border-color:#c2e5d2;color:#0e7a44;}
+#historial .entrega.fail{background:#fffbfb;border-color:#f2c8c8;color:#b3261e;}
+#historial .entrega.pend{background:#fffdf7;border-color:#efdcb4;color:var(--warn-ink);}
+
+/* ---------- 19.7) Chips de acción ---------- */
+#historial .history-btn{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    border-width:1px;
+    box-shadow:0 1px 3px rgba(64,55,59,.06);
+}
+#historial .history-btn .grilla-icon{width:15px;height:15px;}
+#historial .history-btn:hover{transform:translateY(-2px);}
+#historial .history-btn:hover img{transform:scale(1.14) rotate(-6deg);}
+
+/* ---------- 19.8) Estado vacío ---------- */
+#historial tbody td.muted{
+    padding:56px 20px 48px;
+    text-align:center;
+    color:var(--mut-ink);
+    font-size:13.5px;
+    font-weight:600;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e6c3d3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z'/%3E%3Cpath d='M15 2v5h5'/%3E%3Cpath d='M8 12h8M8 16h5'/%3E%3C/svg%3E") center 34px/34px 34px no-repeat;
+}
+
+/* ---------- 19.9) Paginador ---------- */
+#historial .historial-paginador{
+    gap:8px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid var(--h-borde);
+}
+#historial .pag-btn{
+    min-width:38px;
+    height:38px;
+    padding:0 12px;
+    border:1.5px solid var(--h-borde-fuerte);
+    border-radius:11px;
+    background:#fff;
+    color:var(--mut-ink);
+    font-size:13.5px;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    box-shadow:0 2px 6px rgba(150,90,120,.06);
+    transition:transform .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+#historial .pag-btn:hover:not(:disabled){
+    transform:translateY(-2px);
+    background:#fff3f8;
+    border-color:var(--p);
+    color:var(--p-ink);
+    box-shadow:0 7px 16px rgba(244,125,163,.20);
+}
+#historial .pag-btn.activa{
+    background:linear-gradient(135deg,var(--pd),var(--v));
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 6px 16px rgba(232,92,139,.32);
+}
+#historial .pag-btn.activa:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(135deg,var(--pd),var(--v));
+    color:#fff;
+}
+#historial .pag-btn:disabled{opacity:.35;cursor:default;}
+#historial .pag-ellipsis{color:#c6b0ba;font-weight:800;padding:0 2px;}
+
+/* ---------- 19.10) Móvil: la tabla ya es una lista de tarjetas ---------- */
+@media (max-width:850px){
+    #historial{padding:18px 16px 16px;}
+    #historial .hist-titulo{margin-bottom:14px;padding-bottom:12px;}
+    #historial .hist-titulo-texto{font-size:16px;}
+    #historial .hist-toolbar{align-items:stretch;gap:10px;margin-bottom:14px;}
+    #historial .hist-buscar-caja{flex:1 1 100%;}
+    #historial .hist-resumen{margin:0;width:100%;white-space:normal;}
+    #historial .historial-buscar{height:44px;font-size:13.5px;}
+
+    #historial .wrap{
+        border:0;
+        border-radius:0;
+        background:transparent;
+        box-shadow:none;
+        overflow:visible;
+    }
+
+    #historial tbody tr{
+        position:relative;
+        margin-bottom:14px;
+        padding:15px 14px 14px 18px;
+        border:1px solid var(--h-borde);
+        border-radius:16px;
+        background:linear-gradient(160deg,#fff 0%,#fffafc 100%);
+        box-shadow:0 6px 18px rgba(150,90,120,.07);
+        overflow:hidden;
+    }
+    #historial tbody tr::after{
+        content:"";
+        position:absolute;
+        left:0;
+        top:0;
+        bottom:0;
+        width:4px;
+        background:linear-gradient(180deg,var(--p),var(--v));
+        opacity:.9;
+    }
+    #historial tbody tr:hover{background:linear-gradient(160deg,#fff 0%,#fffafc 100%);box-shadow:0 6px 18px rgba(150,90,120,.07);}
+    #historial tbody tr:last-child{margin-bottom:0;}
+
+    #historial tbody td{padding:6px 0;font-size:13px;}
+    #historial tbody td::before{
+        color:var(--mut-ink);
+        font-size:10.5px;
+        font-weight:800;
+        letter-spacing:.07em;
+        text-transform:uppercase;
+    }
+    #historial tbody td:nth-child(1){font-size:13px;color:var(--p-ink);}
+    #historial tbody td:nth-child(3){color:var(--mut-ink);font-size:12.5px;}
+    #historial .h-avatar{width:28px;height:28px;flex:0 0 28px;font-size:10.5px;}
+    #historial .h-cliente-nombre{max-width:100%;}
+
+    #historial tbody td:nth-child(6){
+        border-top:1px solid var(--h-sep);
+        margin-top:8px;
+        padding-top:12px;
+    }
+    #historial .history-actions{
+        display:grid;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:8px;
+    }
+    #historial .history-btn{border-radius:11px;}
+
+    #historial .historial-paginador{margin-top:16px;padding-top:14px;}
+
+    #historial tbody td.muted{
+        padding:44px 16px 38px;
+        background-position:center 22px;
+        background-size:30px 30px;
+    }
+}
+
+/* ---------- 19.11) Movimiento reducido ---------- */
+@media (prefers-reduced-motion:reduce){
+    #historial tbody tr,
+    #historial .h-numero,
+    #historial .h-total,
+    #historial .pag-btn,
+    #historial .historial-buscar,
+    #historial .history-btn,
+    #historial tbody td:first-child{transition:none !important;}
+    #historial .history-btn:hover,
+    #historial .pag-btn:hover:not(:disabled),
+    #historial .status:hover{transform:none;}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4425,11 +4949,17 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 <button type="submit" class="btn pink" id="saveBtn"><img src="img/guardar.png" alt="PDF" class="grilla-icon"> Guardar factura</button></div>
 </form>
 <section id="historial" class="card history">
-    <div class="title"><img src="img/factura.png" alt="PDF" class="grilla-icon"> Historial de facturas</div>
+    <div class="title hist-titulo"><img src="img/factura.png" alt="" class="grilla-icon"> <span class="hist-titulo-texto">Historial de facturas</span><span class="hist-contador" id="historialContador" aria-live="polite">0</span></div>
 
-    <label class="historial-buscar-label" for="historialBuscar">Buscar</label>
+    <div class="hist-toolbar">
+        <div class="hist-buscar-caja">
+            <label class="historial-buscar-label" for="historialBuscar">Buscar</label>
 
-    <input type="search" id="historialBuscar" class="historial-buscar" placeholder="Busca por factura, cliente, estado o fecha..." autocomplete="off">
+            <input type="search" id="historialBuscar" class="historial-buscar" placeholder="Busca por factura, cliente, estado o fecha..." autocomplete="off">
+        </div>
+
+        <p class="hist-resumen" id="historialResumen" hidden></p>
+    </div>
 
     <div class="wrap">
         <table>
@@ -7789,16 +8319,63 @@ function renderHistorial(){
     const corte = (historialPagina - 1) * historialPorPagina;
     const visibles = filas.slice(corte, corte + historialPorPagina);
 
+    /* Acabado visual del historial: el contador del título y la línea de
+       resumen son solo presentación. No alteran los datos, el filtro ni
+       la paginación; se recalculan en cada render. */
+    const contador = $("historialContador");
+
+    if (contador) contador.textContent = filas.length;
+
+    const resumen = $("historialResumen");
+
+    if (resumen) {
+
+        if (!filas.length) {
+
+            resumen.hidden = true;
+
+            resumen.textContent = "";
+
+        } else {
+
+            const vigentes = filas.filter(f =>
+                String(f.estado || "").toLowerCase() !== "anulada");
+
+            const suma = vigentes.reduce((a, f) => a + Number(f.total || 0), 0);
+
+            const etiqueta =
+                (q ? "resultado" : "factura") + (filas.length === 1 ? "" : "s");
+
+            resumen.hidden = false;
+
+            resumen.innerHTML =
+                filas.length + " " + etiqueta +
+                " · Total vigente <b>" + money(suma) + "</b>";
+
+        }
+
+    }
+
     $("history").innerHTML = filas.length
-        ? visibles.map(f=>`
+        ? visibles.map(f=>{
+            const nombreCliente = String(f.clientes?.nombre || "").trim();
+            const iniciales = nombreCliente
+                ? nombreCliente.split(/\s+/).slice(0, 2).map(p => p.charAt(0)).join("").toUpperCase()
+                : "·";
+            return `
             <tr>
-                <td>${esc(f.numero)}</td>
+                <td><span class="h-numero">${esc(f.numero)}</span></td>
 
-                <td>${esc(f.clientes?.nombre||"")}</td>
+                <td>
+                    <span class="h-cliente">
+                        <span class="h-avatar" aria-hidden="true">${esc(iniciales)}</span>
+                        <span class="h-cliente-nombre">${esc(nombreCliente)}</span>
+                    </span>
+                </td>
 
-                <td>${esc(fechaLegible(f.fecha))}</td>
+                <td><span class="h-fecha">${esc(fechaLegible(f.fecha))}</span></td>
 
-                <td>${money(f.total)}</td>
+                <td><span class="h-total">${money(f.total)}</span></td>
 
                 <td>
                     <div class="estado-celda">
@@ -7916,7 +8493,8 @@ function renderHistorial(){
                     </div>
                 </td>
             </tr>
-        `).join("")
+        `;
+        }).join("")
         : '<tr><td colspan="6" class="muted">' +
             (q ? "Sin resultados para la búsqueda." : "No hay facturas guardadas.") +
             '</td></tr>';
