@@ -3917,7 +3917,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     position:sticky;
     top:0;
     z-index:2;
-    padding:14px 13px;
+    padding:14px 11px;
     background:linear-gradient(180deg,#fff7fb,#fdeef5);
     color:var(--p-ink);
     font-size:11px;
@@ -3943,7 +3943,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     transition:background-color .18s ease,box-shadow .18s ease;
 }
 #historial tbody td{
-    padding:15px 13px;
+    padding:15px 11px;
     font-size:13.5px;
     line-height:1.35;
     color:var(--ink);
@@ -3956,14 +3956,22 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     transform:none;
     box-shadow:none;
 }
-/* La tabla de 6 columnas + rejilla 4x2 de acciones necesita 816 px reales
-   (medidos). Con la barra lateral (235 px), el relleno del main (56 px) y
-   el del card (52 px) se necesitan ~1161 px de ventana; se pone el corte
-   en 1200 px para dejar holgura. Por debajo, el historial pasa a lista de
-   tarjetas. Todo lo de escritorio va aquí dentro para no pisar el bloque
-   de tarjetas. */
-@media (min-width:1201px){
-    #historial table{min-width:760px;}
+/* ------------------------------------------------------------
+   Tabla de escritorio (a partir de 1361 px de ventana).
+
+   Dos hechos medidos mandan aquí:
+
+   1) La columna de acciones hay que ANCHARLA a mano. Con `width:100%` el
+      navegador repartía todo el sobrante entre FACTURA/CLIENTE/FECHA/TOTAL/
+      ESTADO (CLIENTE llegaba a 450 px) y ACCIONES se quedaba clavada en
+      154 px. Por eso los botones salían amontonados en dos filas mientras
+      el resto de la tabla nadaba en espacio vacío.
+
+   2) Con los 8 botones en UNA fila la tabla necesita ~1006 px reales
+      (medidos, con nombres largos y el estado en una línea), o sea unos
+      1351 px de ventana. El corte se pone en 1360 px para dejar holgura.
+   ------------------------------------------------------------ */
+@media (min-width:1361px){
     #historial tbody td:first-child{
         box-shadow:inset 3px 0 0 0 transparent;
         transition:box-shadow .2s ease;
@@ -3971,37 +3979,45 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     #historial tbody tr:hover td:first-child{
         box-shadow:inset 3px 0 0 0 var(--p);
     }
-    /* El tope del nombre del cliente fija el ancho mínimo de la tabla, así
-       que se mantiene corto para poder encoger hasta 1200 px. */
-    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:160px;}
+    /* El tope del nombre fija el ancho mínimo de la tabla: se mantiene corto
+       para que la tabla quepa a 1361 px. En pantallas amplias se suelta. */
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:150px;}
     /* la columna de importe se lee mejor alineada a la derecha */
     #historial thead th:nth-child(4),
     #historial tbody td:nth-child(4){text-align:right;}
-    /* el estado nunca parte en dos líneas */
-    #historial tbody td:nth-child(5){white-space:nowrap;}
-    /* Las acciones se reparten en 4 columnas fijas: así todas las filas miden
-       lo mismo y la última línea queda alineada a la derecha. */
-    #historial thead th:last-child,
-    #historial tbody td:nth-child(6){width:154px;white-space:nowrap;}
+    /* El estado va SIEMPRE en una línea. Con `flex-wrap:wrap` se apilaba en
+       dos según el ancho, y el alto de la fila bailaba. Se usa
+       `#historial tbody .estado-celda` (más específico) porque la regla base
+       de 19.6 va después en la hoja y pisaba a la de aquí. */
+    #historial tbody td:nth-child(5){white-space:nowrap;overflow:hidden;}
+    #historial tbody .estado-celda{flex-wrap:nowrap;overflow:hidden;}
+    /* La columna de acciones se lleva el ancho que necesita (los 8 botones
+       en una sola fila) y no se comprime nunca. */
     #historial thead th:last-child{text-align:right;}
+    #historial thead th:last-child,
+    #historial tbody td:nth-child(6){width:288px;white-space:nowrap;}
     #historial .history-actions{
         display:flex;
         flex-wrap:wrap;
         justify-content:flex-end;
-        gap:5px;
-        /* ancho clavado: 4 x 28px + 3 huecos de 5px. Sin el min-width la
-           celda se comprimía y los chips se apilaban en 5 filas. */
-        min-width:127px;
-        max-width:127px;
+        gap:6px;
+        min-width:266px;   /* 8 x 28px + 7 huecos de 6px */
+        max-width:266px;
         margin-left:auto;
     }
     #historial .history-btn{flex:0 0 28px;}
 }
 
-/* En pantallas anchas el tope del nombre se suelta, para no cortar nombres
-   largos cuando la tabla ya tiene espacio de sobra. */
-@media (min-width:1300px){
-    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:240px;}
+/* El tope del nombre se suelta por tramos: cuanto más ancha la ventana, más
+   sitio hay para el nombre, y así no se corta teniendo hueco libre al lado. */
+@media (min-width:1420px){
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:200px;}
+}
+@media (min-width:1560px){
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:300px;}
+}
+@media (min-width:1700px){
+    #historial tbody td:nth-child(2) .h-cliente-nombre{max-width:400px;}
 }
 
 /* ---------- 19.5) Número, cliente, fecha y total ---------- */
@@ -4217,12 +4233,12 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 #historial .pag-btn:disabled{opacity:.35;cursor:default;}
 #historial .pag-ellipsis{color:#c6b0ba;font-weight:800;padding:0 2px;}
 
-/* ---------- 19.10) Hasta 1200 px: la tabla se convierte en tarjetas ----------
-   Por debajo de 1200 px de ventana la tabla de 6 columnas no cabe (la barra
-   lateral se lleva 235 px), así que el historial pasa a lista de tarjetas.
-   Este bloque es autosuficiente: incluye la conversión de tabla a tarjeta,
-   porque el bloque móvil original de la hoja solo actúa hasta 850 px. */
-@media (max-width:1200px){
+/* ---------- 19.10) Hasta 1360 px: la tabla se convierte en tarjetas ----------
+   Por debajo de 1361 px de ventana la tabla de 6 columnas no cabe con holgura
+   (la barra lateral se lleva 235 px), así que el historial pasa a lista de
+   tarjetas. Este bloque es autosuficiente: incluye la conversión de tabla a
+   tarjeta, porque el bloque móvil original de la hoja solo actúa hasta 850 px. */
+@media (max-width:1360px){
     #historial{padding:18px 16px 16px;}
     #historial .hist-titulo{margin-bottom:14px;padding-bottom:12px;}
     #historial .hist-titulo-texto{font-size:16px;}
