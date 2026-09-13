@@ -551,382 +551,657 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   ✨ REDISEÑO PREMIUM — Tejiendo Sueños Clau (index)
+   ✨ CAPA DE ACABADO — Tejiendo Sueños Clau (index)
+   ------------------------------------------------------------
+   UNA sola capa. Sustituye a las cuatro versiones que se habían
+   ido apilando encima de los CSS base.
+
+   Reglas de la casa:
+   · Solo ASPECTO. Ni HTML ni JS: los selectores, ids y clases
+     siguen siendo exactamente los mismos.
+   · El color sale de las variables base (--primario, --verde,
+     --card, --text, --borde, --muted…). Así el modo oscuro se
+     adapta solo y esta capa no tiene que pelearse con dark.css.
+   · El rosa se queda como ACENTO (título del hero y firma del
+     pie); el resto vuelve a la paleta cálida de la marca
+     (marrón + verde), que es la que usan los CSS base y los
+     botones, y así desaparecen los choques.
+   · Los !important están SOLO donde hay que ganarle a un
+     style="" escrito en el HTML o a una regla base.
    ============================================================ */
-html{scroll-behavior:smooth}
-body{font-family:"Quicksand","Century Gothic",CenturyGothic,AppleGothic,sans-serif;-webkit-font-smoothing:antialiased}
-::selection{background:#f7cfdd;color:#8a3a55}
-::-webkit-scrollbar{width:9px}
-::-webkit-scrollbar-track{background:#fff8fa}
-::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#f5aec7,#e85c8b);border-radius:999px}
-::-webkit-scrollbar-thumb:hover{background:#d94f7f}
 
-/* Hero: entrada animada + título degradado */
-.presentacion-seo{animation:tsSubir .65s cubic-bezier(.2,.8,.2,1) both}
+:root{
+    --ts-rosa:#b76e8a;
+    --ts-rosa-claro:#e7c3d1;
+    --ts-violeta:#9a84b8;
+    --ts-velo:rgba(217,169,184,.15);
+    --ts-radio:18px;
+    --ts-radio-sm:12px;
+    --ts-sombra:0 2px 10px rgba(120,80,95,.06);
+    --ts-sombra-alta:0 14px 32px rgba(120,80,95,.14);
+}
+
+/* ============================================================
+   1) BASE — tipografía, selección y barra de desplazamiento
+   ============================================================ */
+body{
+    font-family:"Quicksand","Century Gothic","Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden}
+
+::selection{background:var(--ts-rosa-claro);color:#3a2b22}
+
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg,#d9b8a8,#c29a86);
+    border-radius:999px;
+    border:3px solid transparent;
+    background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:#b56b45;background-clip:padding-box}
+.dark ::-webkit-scrollbar-thumb{background:#4a4a4a;background-clip:padding-box}
+
+/* ============================================================
+   2) TÍTULOS DE SECCIÓN
+   Los tres usan texto con degradado (-webkit-text-fill-color:
+   transparent). Si el navegador no lo soporta quedarían
+   INVISIBLES: el bloque @supports de más abajo les devuelve un
+   color sólido.
+   ============================================================ */
+#categorias h2,#catalogo h2,.seccion-facil h2{
+    background:linear-gradient(90deg,var(--ts-rosa),var(--ts-violeta),var(--ts-rosa));
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:transparent !important;
+    font-weight:700;
+    letter-spacing:1.6px;
+    animation:tsBrillo 8s linear infinite}
+
+#categorias h2,#catalogo h2{
+    position:relative;
+    padding-bottom:12px;
+    margin-bottom:6px}
+#categorias h2::after,#catalogo h2::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    width:74px;
+    height:3.5px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#d9b8a8,var(--ts-rosa))}
+
+/* Respaldo: si el navegador no sabe recortar el fondo al texto,
+   se le da color sólido en vez de dejarlo invisible. */
+@supports not ((-webkit-background-clip:text) or (background-clip:text)){
+    #categorias h2,
+    #catalogo h2,
+    .seccion-facil h2,
+    .presentacion-seo h1,
+    .creditos .marca{
+        background:none !important;
+        -webkit-text-fill-color:currentColor !important;
+        color:var(--ts-rosa) !important}
+}
+
+/* ============================================================
+   3) HERO (.presentacion-seo)
+   El HTML trae max-width/padding en un style="", así que aquí
+   sí hace falta !important para recolocarlo.
+   ============================================================ */
+.presentacion-seo{
+    max-width:1080px !important;
+    margin:0 auto !important;
+    padding:clamp(30px,5vw,58px) 20px clamp(6px,1.5vw,14px) !important;
+    text-align:center !important}
 .presentacion-seo h1{
-    background:linear-gradient(90deg,#F47DA3,#c96bd8,#F47DA3);
-    background-size:200% auto;
-    -webkit-background-clip:text;background-clip:text;
+    font-weight:700;
+    letter-spacing:-.5px;
+    line-height:1.14;
+    margin-bottom:14px;
+    background:linear-gradient(100deg,var(--primario),var(--ts-rosa) 45%,var(--ts-violeta));
+    -webkit-background-clip:text;
+    background-clip:text;
     -webkit-text-fill-color:transparent;
-    color:transparent !important;
-    animation:tsBrillo 5s linear infinite;
-    filter:drop-shadow(0 2px 10px rgba(244,125,163,.28))}
-@keyframes tsBrillo{to{background-position:200% center}}
-@keyframes tsSubir{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    color:transparent !important}
+.presentacion-seo p{
+    color:var(--muted);
+    font-size:clamp(1rem,1.5vw,1.12rem);
+    line-height:1.7;
+    max-width:62ch;
+    margin:0 auto}
+.acciones-inicio{gap:14px !important;margin-top:26px !important;align-items:center;justify-content:center}
 
-/* Botones del hero */
+/* CTA principal: marrón de marca */
 #btnVerCatalogo{
-    position:relative;overflow:hidden;
-    background:linear-gradient(135deg,#F47DA3,#e85c8b) !important;
-    box-shadow:0 6px 18px rgba(244,125,163,.45) !important;
-    transition:transform .22s ease,box-shadow .22s ease !important;
-    animation:tsPulsoBoton 2.6s ease-in-out infinite}
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,var(--primario),var(--primario-oscuro)) !important;
+    color:#fff !important;
+    border:0 !important;
+    border-radius:999px !important;
+    padding:14px 30px !important;
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:.3px;
+    cursor:pointer;
+    box-shadow:0 8px 22px rgba(181,107,69,.30) !important;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease !important}
+#btnVerCatalogo:hover{
+    transform:translateY(-3px) !important;
+    box-shadow:0 14px 30px rgba(181,107,69,.40) !important}
 #btnVerCatalogo::after{
-    content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
-    transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
-#btnVerCatalogo:hover{animation:none;transform:translateY(-3px) scale(1.03) !important;box-shadow:0 12px 28px rgba(244,125,163,.58) !important}
+    content:"";
+    position:absolute;
+    top:0;
+    left:-80%;
+    width:50%;
+    height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+    transform:skewX(-20deg);
+    transition:left .55s ease;
+    pointer-events:none}
 #btnVerCatalogo:hover::after{left:130%}
-@keyframes tsPulsoBoton{
-    0%,100%{box-shadow:0 6px 18px rgba(244,125,163,.45)}
-    50%{box-shadow:0 9px 30px rgba(244,125,163,.68)}}
-.presentacion-seo a[href*="wa.me"]{
-    position:relative;overflow:hidden;
-    border:2px solid transparent !important;
-    background:linear-gradient(#ffffff,#ffffff) padding-box,linear-gradient(120deg,#F47DA3,#c96bd8,#F47DA3) border-box;
-    color:#e85c8b !important;
-    box-shadow:0 4px 14px rgba(244,125,163,.18);
-    transition:transform .22s ease,box-shadow .22s ease,color .22s ease !important}
-.presentacion-seo a[href*="wa.me"]::after{
-    content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
-    background:linear-gradient(100deg,transparent,rgba(244,125,163,.16),transparent);
-    transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
-.presentacion-seo a[href*="wa.me"]:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(244,125,163,.35);color:#c94f7d !important}
-.presentacion-seo a[href*="wa.me"]:hover::after{left:130%}
 
-/* Cómo comprar: título degradado, pasos con brillo y tarjetas con acento */
-.seccion-facil h2{
-    background:linear-gradient(90deg,#e85c8b,#c96bd8,#F47DA3,#e85c8b);
-    background-size:200% auto;
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    color:transparent !important;
-    animation:tsBrillo 6s linear infinite}
+/* CTA de WhatsApp: contorno verde, para no competir con el marrón */
+.presentacion-seo a[href*="wa.me"]{
+    position:relative;
+    overflow:hidden;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#fff !important;
+    border:2px solid var(--primario-suave) !important;
+    border-radius:999px !important;
+    padding:12px 26px !important;
+    color:var(--primario) !important;
+    font-weight:700;
+    text-decoration:none;
+    box-shadow:var(--ts-sombra);
+    transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease,
+               background .25s ease,color .25s ease !important}
+.presentacion-seo a[href*="wa.me"]:hover{
+    background:var(--primario-suave) !important;
+    border-color:var(--primario) !important;
+    color:var(--primario-oscuro) !important;
+    transform:translateY(-3px);
+    box-shadow:var(--ts-sombra-alta)}
+.dark .presentacion-seo a[href*="wa.me"]{
+    background:transparent !important;
+    border-color:rgba(229,168,132,.5) !important;
+    color:#e0a884 !important}
+.dark .presentacion-seo a[href*="wa.me"]:hover{
+    background:rgba(229,168,132,.14) !important}
+
+/* Chip de visitas bajo el hero */
+.visitas-chip{
+    font-weight:700;
+    letter-spacing:.2px;
+    box-shadow:0 6px 16px rgba(181,107,69,.18) !important}
+
+/* ============================================================
+   4) CÓMO COMPRAR
+   ============================================================ */
+.seccion-facil{padding-top:clamp(26px,4vw,44px)}
+.seccion-facil h2{margin-bottom:clamp(18px,3vw,30px)}
 .paso-icono{
-    background:linear-gradient(135deg,#FDE7EF,#ffd6e4) !important;
-    box-shadow:0 6px 14px rgba(244,125,163,.22);
+    background:linear-gradient(135deg,var(--primario-suave),#ffeede) !important;
+    box-shadow:0 6px 14px rgba(181,107,69,.18) !important;
     transition:transform .25s ease,box-shadow .25s ease !important}
-.paso:hover .paso-icono{transform:scale(1.1) rotate(-6deg);box-shadow:0 10px 24px rgba(244,125,163,.38)}
-.paso h3{color:#e85c8b !important;letter-spacing:1.2px}
+.paso:hover .paso-icono{
+    transform:scale(1.1) rotate(-6deg);
+    box-shadow:0 12px 26px rgba(181,107,69,.30) !important}
+.paso h3{color:var(--primario) !important;letter-spacing:1.1px}
 .paso-flecha{animation:tsFlecha 1.6s ease-in-out infinite}
-@keyframes tsFlecha{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(7px);opacity:1}}
+@keyframes tsFlecha{
+    0%,100%{transform:translateX(0);opacity:.55}
+    50%{transform:translateX(7px);opacity:1}}
+
 .caja-facil{
     position:relative;
+    border-radius:var(--ts-radio);
+    background:var(--card);
+    box-shadow:var(--ts-sombra);
     transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease !important}
 .caja-facil::before{
-    content:"";position:absolute;top:0;left:16px;right:16px;height:3px;
+    content:"";
+    position:absolute;
+    top:0;
+    left:16px;
+    right:16px;
+    height:3px;
     border-radius:0 0 8px 8px;
-    background:linear-gradient(90deg,#f5aec7,#e85c8b,#c96bd8,#f5aec7);
+    background:linear-gradient(90deg,var(--primario-suave),var(--primario),var(--ts-rosa),var(--primario-suave));
     background-size:200% auto;
-    animation:tsBrillo 5s linear infinite;
-    opacity:.9;pointer-events:none}
-.caja-facil:hover{transform:translateY(-4px);border-color:#f0b9cb;box-shadow:0 14px 30px rgba(244,125,163,.22) !important}
+    animation:tsBrillo 6s linear infinite;
+    opacity:.9;
+    pointer-events:none}
+.caja-facil:hover{
+    transform:translateY(-4px);
+    border-color:var(--primario-suave);
+    box-shadow:var(--ts-sombra-alta) !important}
 .caja-facil h3 svg{transition:transform .25s ease}
 .caja-facil:hover h3 svg{transform:scale(1.18) rotate(-8deg)}
 
-/* Aparición escalonada al hacer scroll (activada por JS) */
-.seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{
-    opacity:0;transform:translateY(20px);
+/* Aparición escalonada al bajar (la activa JS con .ts-animar /
+   .ts-visible: NO tocar o las tarjetas se quedan invisibles) */
+.seccion-facil.ts-animar .paso,
+.seccion-facil.ts-animar .caja-facil{
+    opacity:0;
+    transform:translateY(20px);
     transition:opacity .55s ease,transform .55s ease}
 .seccion-facil.ts-animar .ts-visible{opacity:1;transform:translateY(0)}
 
-/* Categorías */
-.categoria{transition:transform .22s ease,box-shadow .22s ease !important}
-.categoria:hover{transform:translateY(-3px) !important}
-.categoria .cat-icono{transition:transform .22s ease}
-.categoria:hover .cat-icono{transform:scale(1.15) rotate(-6deg)}
+/* ============================================================
+   5) CATEGORÍAS — una sola familia
+   Antes había cuatro versiones apiladas: las píldoras acababan
+   SIN fondo ni borde y el icono con un borde punteado de 3px que
+   se lee como "imagen no cargada".
+   El layout (6 en fila / 3+3 / columna) lo pone el grid de
+   style.css: aquí solo el aspecto.
+   ============================================================ */
+#catIndicador{display:none !important}
 
-/* Footer y redes flotantes */
-.visitas-chip{box-shadow:0 4px 14px rgba(244,125,163,.25) !important}
+.categorias{
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    padding:0 !important;
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+    animation:tsCatEntrada .6s ease both}
+@keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
+
+#categorias .categoria{
+    position:relative;
+    z-index:2;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:7px 18px 7px 7px;
+    background:var(--card) !important;
+    border:1.5px solid var(--borde) !important;
+    border-radius:999px;
+    color:var(--text) !important;
+    box-shadow:var(--ts-sombra) !important;
+    transition:transform .28s cubic-bezier(.2,.8,.2,1),background .28s ease,
+               border-color .28s ease,box-shadow .28s ease,color .28s ease !important;
+    animation:tsCatPop .5s cubic-bezier(.2,.8,.2,1) backwards}
+#categorias .categoria:nth-child(2){animation-delay:.05s}
+#categorias .categoria:nth-child(3){animation-delay:.10s}
+#categorias .categoria:nth-child(4){animation-delay:.15s}
+#categorias .categoria:nth-child(5){animation-delay:.20s}
+#categorias .categoria:nth-child(6){animation-delay:.25s}
+#categorias .categoria:nth-child(7){animation-delay:.30s}
+@keyframes tsCatPop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+
+#categorias .categoria::after{display:none !important}
+
+/* El aro del icono: continuo y fino, en el tono de su categoría */
+#categorias .categoria .cat-icono{
+    width:38px;
+    height:38px;
+    padding:7px;
+    box-sizing:border-box;
+    display:block;
+    flex:0 0 auto;
+    border-radius:50%;
+    background:#fff;
+    border:2px solid var(--hilo,var(--ts-rosa-claro));
+    box-shadow:0 2px 6px rgba(120,80,95,.08);
+    stroke:currentColor;
+    transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease,
+               background .28s ease,color .28s ease}
+.dark #categorias .categoria .cat-icono{background:rgba(255,255,255,.06)}
+
+#categorias .categoria:hover{
+    background:var(--card) !important;
+    border-color:var(--hilo,var(--ts-rosa-claro)) !important;
+    transform:translateY(-3px);
+    box-shadow:var(--ts-sombra-alta) !important}
+#categorias .categoria:hover .cat-icono{
+    transform:scale(1.08) rotate(-6deg);
+    box-shadow:0 6px 16px rgba(120,80,95,.18)}
+#categorias .categoria:hover .cat-texto{color:var(--primario) !important}
+
+/* Tono del hilo y color del icono, por categoría */
+#categorias .categoria[data-categoria="Todos"]{--hilo:#e2b995}
+#categorias .categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
+#categorias .categoria[data-categoria="Disponibles"]{--hilo:#b6cdba}
+#categorias .categoria[data-categoria="Disponibles"] .cat-icono{color:#5d9a70}
+#categorias .categoria[data-categoria="Animales"]{--hilo:#e0b6c4}
+#categorias .categoria[data-categoria="Animales"] .cat-icono{color:#b76e8a}
+#categorias .categoria[data-categoria="Personajes"]{--hilo:#e2cf9e}
+#categorias .categoria[data-categoria="Personajes"] .cat-icono{color:#c2a15a}
+#categorias .categoria[data-categoria="Llaveros"]{--hilo:#cdbcdd}
+#categorias .categoria[data-categoria="Llaveros"] .cat-icono{color:#9a84b8}
+#categorias .categoria[data-categoria="Personalizados"]{--hilo:#b6cddd}
+#categorias .categoria[data-categoria="Personalizados"] .cat-icono{color:#7f9cb8}
+
+/* Activa. La app la marca con la clase .activo (js/app.js). */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:var(--ts-velo) !important;
+    border-color:var(--ts-rosa-claro) !important;
+    color:var(--primario) !important;
+    box-shadow:0 6px 16px rgba(181,107,69,.16) !important;
+    transform:translateY(-1px)}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{
+    color:var(--primario) !important;
+    font-weight:800}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    background:linear-gradient(135deg,var(--hilo,var(--ts-rosa-claro)),var(--primario));
+    border-color:transparent;
+    color:#fff !important;
+    box-shadow:0 6px 14px rgba(181,107,69,.26);
+    transform:none}
+@media (max-width:600px){
+    #categorias .categoria:is(.activo,.active,.seleccionada,.activa){width:100%}
+}
+
+/* ============================================================
+   6) TARJETAS DE PRODUCTO
+   ============================================================ */
+#productos{gap:clamp(16px,2.4vw,26px) !important}
+
+.card{
+    display:flex;
+    flex-direction:column;
+    border-radius:20px;
+    overflow:hidden;
+    background:var(--card);
+    border:1px solid var(--borde);
+    box-shadow:var(--ts-sombra);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,
+               border-color .3s ease}
+.card:hover{
+    transform:translateY(-6px);
+    border-color:var(--primario-suave);
+    box-shadow:var(--ts-sombra-alta)}
+
+/* La foto: se mantiene "sin recortes" (object-fit:contain) tal y
+   como se decidió, pero el marco pasa de rosa a un neutro cálido
+   para que no compita con el producto. */
+.producto-img{
+    aspect-ratio:1/1 !important;
+    width:100%;
+    object-fit:contain !important;
+    padding:14px !important;
+    background:linear-gradient(160deg,#fdfaf7,#f7f0e9) !important;
+    border-bottom:1px solid var(--borde);
+    transition:transform .35s ease}
+.card:hover .producto-img{transform:scale(1.035)}
+.dark .producto-img{background:linear-gradient(160deg,#333,#2b2b2b) !important}
+
+.badge{
+    font-family:inherit;
+    font-size:.72rem;
+    font-weight:800;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+    padding:7px 12px;
+    border-radius:999px;
+    box-shadow:0 4px 12px rgba(0,0,0,.18);
+    z-index:3}
+
+.card-body{
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+    padding:16px 18px 18px;
+    text-align:left}
+.nombre{
+    color:var(--text);
+    font-size:1.03rem;
+    font-weight:700;
+    letter-spacing:-.1px;
+    line-height:1.3;
+    margin-bottom:6px}
+.descripcion{
+    color:var(--muted);
+    font-size:.9rem;
+    line-height:1.55;
+    margin-bottom:12px}
+.precio{
+    color:var(--primario);
+    font-size:1.22rem;
+    font-weight:800;
+    letter-spacing:-.2px;
+    font-variant-numeric:tabular-nums;
+    margin-top:auto;
+    margin-bottom:12px}
+
+/* Acciones: UNA sola acción principal.
+   Antes los dos botones eran verdes (--verde y --whatsapp) y
+   competían entre sí; ahora "Ver más" es secundario y WhatsApp
+   manda. */
+.acciones{gap:8px !important;margin-top:0 !important}
+.acciones .btn{
+    flex:1 1 auto;
+    margin-top:0 !important;
+    padding:12px 16px !important;
+    border-radius:var(--ts-radio-sm) !important;
+    font-family:inherit;
+    font-size:.93rem !important;
+    font-weight:700;
+    letter-spacing:.2px;
+    text-align:center;
+    transition:transform .24s ease,box-shadow .24s ease,background .24s ease,
+               border-color .24s ease,color .24s ease !important}
+.acciones .btn:not(.secundario){
+    background:var(--card) !important;
+    color:var(--primario) !important;
+    border:2px solid var(--primario-suave) !important;
+    box-shadow:none !important}
+.acciones .btn:not(.secundario):hover{
+    background:var(--primario-suave) !important;
+    border-color:var(--primario) !important;
+    color:var(--primario-oscuro) !important;
+    transform:translateY(-2px) !important;
+    box-shadow:0 8px 18px rgba(181,107,69,.20) !important;
+    filter:none !important}
+.acciones .btn.secundario{
+    background:linear-gradient(135deg,#2ed36f,var(--whatsapp)) !important;
+    color:#fff !important;
+    border:0 !important;
+    box-shadow:0 6px 16px rgba(37,211,102,.28) !important}
+.acciones .btn.secundario:hover{
+    transform:translateY(-2px) !important;
+    box-shadow:0 12px 24px rgba(37,211,102,.38) !important;
+    filter:none !important}
+
+/* ============================================================
+   7) PIE DE PÁGINA
+   ============================================================ */
+.footer-artesanal{
+    background:var(--bg) !important;
+    border-top:1px solid var(--borde);
+    margin-top:clamp(28px,5vw,52px)}
+.visitas-caja{
+    background:transparent !important;
+    padding:18px 20px !important}
+.creditos{
+    border-top:1px solid rgba(255,255,255,.06);
+    font-size:.86rem;
+    letter-spacing:.2px}
 .creditos .marca{
-    background:linear-gradient(90deg,#F47DA3,#c96bd8,#F47DA3);
+    font-weight:800;
+    background:linear-gradient(90deg,var(--ts-rosa),var(--ts-violeta),var(--ts-rosa));
     background-size:200% auto;
-    -webkit-background-clip:text;background-clip:text;
+    -webkit-background-clip:text;
+    background-clip:text;
     -webkit-text-fill-color:transparent;
-    animation:tsBrillo 5s linear infinite}
-/* Redes flotantes premium */
+    animation:tsBrillo 6s linear infinite}
+
+/* ============================================================
+   8) BOTONES FLOTANTES DE REDES + VOLVER ARRIBA
+   ============================================================ */
 .redes-flotantes a{
     position:relative;
-    display:flex;align-items:center;justify-content:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     box-shadow:0 6px 16px rgba(64,55,59,.20);
     transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease !important;
-    animation:tsEntraRedes .5s ease both,tsFlotar 3.5s ease-in-out infinite}
+    animation:tsEntraRedes .5s ease both,tsFlotar 3.6s ease-in-out infinite}
 .redes-flotantes a:nth-child(1){animation-delay:.1s,0s}
 .redes-flotantes a:nth-child(2){animation-delay:.25s,.5s}
 .redes-flotantes a:nth-child(3){animation-delay:.4s,1s}
-.redes-flotantes a img{transition:transform .25s ease;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
-.redes-flotantes a:hover{animation:none;transform:translateY(-4px) scale(1.08) !important}
+.redes-flotantes a img{
+    transition:transform .25s ease;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+.redes-flotantes a:hover{
+    animation:none;
+    transform:translateY(-4px) scale(1.08) !important}
 .redes-flotantes a:hover img{transform:scale(1.15) rotate(-8deg)}
 @keyframes tsEntraRedes{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:blur(0)}}
 @keyframes tsFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-/* tooltip con el nombre de la red */
+
+/* Etiqueta con el nombre de la red (usa el aria-label del enlace) */
 .redes-flotantes a::before{
     content:attr(aria-label);
-    position:absolute;right:calc(100% + 14px);top:50%;
+    position:absolute;
+    right:calc(100% + 14px);
+    top:50%;
     transform:translateY(-50%) translateX(8px);
-    background:linear-gradient(135deg,#4a3a42,#2e2329);color:#fff;
+    background:linear-gradient(135deg,#4a3a42,#2e2329);
+    color:#fff;
     font-family:"Quicksand","Century Gothic",sans-serif;
-    font-size:12px;font-weight:700;letter-spacing:.3px;
-    padding:7px 13px;border-radius:999px;white-space:nowrap;
-    opacity:0;pointer-events:none;z-index:999;
-    box-shadow:0 8px 20px rgba(0,0,0,.3);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.3px;
+    padding:7px 13px;
+    border-radius:999px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    z-index:999;
+    box-shadow:0 8px 20px rgba(0,0,0,.30);
     transition:opacity .22s ease,transform .22s ease}
-.redes-flotantes a:hover::before{opacity:1;transform:translateY(-50%) translateX(0)}
-/* colores por red */
+.redes-flotantes a:hover::before,
+.redes-flotantes a:focus-visible::before{
+    opacity:1;
+    transform:translateY(-50%) translateX(0)}
+
+/* Color propio de cada red (se respeta la identidad de cada una) */
 .redes-flotantes .whatsapp-float{
     background:linear-gradient(135deg,#3fd584,#1f9a52);
-    animation:tsEntraRedes .5s ease both,tsFlotar 3.5s ease-in-out infinite,tsFloatPulso 2.8s ease-in-out infinite}
+    animation:tsEntraRedes .5s ease both,tsFlotar 3.6s ease-in-out infinite,
+               tsFloatPulso 2.8s ease-in-out infinite}
 .redes-flotantes .instagram-float{background:linear-gradient(135deg,#f9ce34,#ee2a7b 45%,#6228d7)}
 .redes-flotantes .tiktok-float{
     background:linear-gradient(135deg,#1c1c26,#000);
     box-shadow:0 6px 16px rgba(0,0,0,.35),3px 3px 0 rgba(37,244,238,.22),-3px -3px 0 rgba(254,44,85,.22)}
+.redes-flotantes .whatsapp-float:hover{box-shadow:0 10px 26px rgba(49,184,102,.60)}
+.redes-flotantes .instagram-float:hover{box-shadow:0 10px 26px rgba(238,42,123,.55)}
+.redes-flotantes .tiktok-float:hover{
+    box-shadow:0 10px 26px rgba(0,0,0,.5),3px 3px 0 rgba(37,244,238,.3),-3px -3px 0 rgba(254,44,85,.3)}
 @keyframes tsFloatPulso{
     0%,100%{box-shadow:0 6px 16px rgba(49,184,102,.35)}
-    50%{box-shadow:0 10px 26px rgba(49,184,102,.6)}}
-.redes-flotantes .whatsapp-float:hover{box-shadow:0 10px 26px rgba(49,184,102,.6)}
-.redes-flotantes .instagram-float:hover{box-shadow:0 10px 26px rgba(238,42,123,.55)}
-.redes-flotantes .tiktok-float:hover{box-shadow:0 10px 26px rgba(0,0,0,.5),3px 3px 0 rgba(37,244,238,.3),-3px -3px 0 rgba(254,44,85,.3)}
-/* Categorías premium */
-#categorias h2{
-    position:relative;padding-bottom:12px;
-    background:linear-gradient(90deg,#C77B4F,#E85C8B,#C77B4F);
-    background-size:200% auto;
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    color:transparent !important;
-    animation:tsBrillo 6s linear infinite;
-    letter-spacing:.6px}
-#categorias h2::after{
-    content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-    width:74px;height:3.5px;border-radius:99px;
-    background:linear-gradient(90deg,#F47DA3,#C77B4F)}
-.categoria{
-    position:relative;overflow:hidden;
-    transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,color .22s ease !important;
-    animation:tsCatIn .45s cubic-bezier(.2,.8,.2,1) backwards}
-.categoria:nth-child(1){animation-delay:.05s}
-.categoria:nth-child(2){animation-delay:.12s}
-.categoria:nth-child(3){animation-delay:.19s}
-.categoria:nth-child(4){animation-delay:.26s}
-.categoria:nth-child(5){animation-delay:.33s}
-.categoria:nth-child(6){animation-delay:.40s}
-@keyframes tsCatIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-/* iconos en chip blanco con su color de categoría */
-.categoria .cat-icono{
-    width:34px;height:34px;border-radius:9px;flex:0 0 auto;
-    background:#fff;
-    display:block;
-    box-sizing:border-box;
-    padding:7px;
-    box-shadow:0 3px 8px rgba(64,55,59,.14);
-    transition:transform .22s ease,box-shadow .22s ease,color .22s ease}
-.cat-icono svg{width:19px;height:19px;stroke-width:2;display:block}
-.categoria[data-categoria="Todos"] .cat-icono{color:#EF8F3C}
-.categoria[data-categoria="Disponibles"] .cat-icono{color:#3CB371}
-.categoria[data-categoria="Animales"] .cat-icono{color:#E85C8B}
-.categoria[data-categoria="Personajes"] .cat-icono{color:#E8B73D}
-.categoria[data-categoria="Llaveros"] .cat-icono{color:#8A63C9}
-.categoria[data-categoria="Personalizados"] .cat-icono{color:#4E8FD6}
-.categoria::after{
-    content:"";position:absolute;top:0;left:-85%;width:55%;height:100%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
-    transform:skewX(-20deg);transition:left .5s ease;pointer-events:none}
-.categoria:hover{transform:translateY(-3px) !important;color:#fff !important}
-.categoria:hover::after{left:135%}
-.categoria:hover .cat-texto{color:#fff !important}
-.categoria:hover .cat-icono{transform:scale(1.12) rotate(-6deg);box-shadow:0 5px 12px rgba(64,55,59,.22)}
-.categoria[data-categoria="Todos"]:hover .cat-icono{color:#D97A28}
-.categoria[data-categoria="Disponibles"]:hover .cat-icono{color:#2E9E63}
-.categoria[data-categoria="Animales"]:hover .cat-icono{color:#D94F7F}
-.categoria[data-categoria="Personajes"]:hover .cat-icono{color:#C99A24}
-.categoria[data-categoria="Llaveros"]:hover .cat-icono{color:#7350AC}
-.categoria[data-categoria="Personalizados"]:hover .cat-icono{color:#3D7BC0}
-/* estado activo: el botón elegido se enciende en su color */
-.categoria:is(.activo,.active,.seleccionada,.activa){color:#fff!important;transform:translateY(-2px)}
-.categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#fff!important}
-.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#F7B267,#EF8F3C)!important;border-color:#EF8F3C!important;box-shadow:0 8px 20px rgba(239,143,60,.40)!important}
-.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#58C77B,#3CB371)!important;border-color:#3CB371!important;box-shadow:0 8px 20px rgba(60,179,113,.40)!important}
-.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#F06A93,#E85C8B)!important;border-color:#E85C8B!important;box-shadow:0 8px 20px rgba(232,92,139,.40)!important}
-.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#EDC24F,#E8B73D)!important;border-color:#E8B73D!important;box-shadow:0 8px 20px rgba(232,183,61,.40)!important}
-.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#9A74D4,#8A63C9)!important;border-color:#8A63C9!important;box-shadow:0 8px 20px rgba(138,99,201,.40)!important}
-.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada,.activa){background:linear-gradient(135deg,#62A2E8,#4E8FD6)!important;border-color:#4E8FD6!important;box-shadow:0 8px 20px rgba(78,143,214,.40)!important}
-.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#D97A28!important}
-.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#2E9E63!important}
-.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#D94F7F!important}
-.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#C99A24!important}
-.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#7350AC!important}
-.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#3D7BC0!important}
-/* pasteles por categoría */
-.categoria[data-categoria="Todos"]{background:linear-gradient(135deg,#FFF1E6,#FFE4CD);border-color:#F5D9C0}
-.categoria[data-categoria="Todos"]:hover{background:linear-gradient(135deg,#F7B267,#EF8F3C);border-color:#EF8F3C;box-shadow:0 8px 20px rgba(239,143,60,.40)}
-.categoria[data-categoria="Disponibles"]{background:linear-gradient(135deg,#EAF8EC,#D8F1DC);border-color:#C9EACD}
-.categoria[data-categoria="Disponibles"]:hover{background:linear-gradient(135deg,#58C77B,#3CB371);border-color:#3CB371;box-shadow:0 8px 20px rgba(60,179,113,.40)}
-.categoria[data-categoria="Animales"]{background:linear-gradient(135deg,#FDE9F0,#FBD6E4);border-color:#F5C9D8}
-.categoria[data-categoria="Animales"]:hover{background:linear-gradient(135deg,#F06A93,#E85C8B);border-color:#E85C8B;box-shadow:0 8px 20px rgba(232,92,139,.40)}
-.categoria[data-categoria="Personajes"]{background:linear-gradient(135deg,#FFF8E0,#FFEFC2);border-color:#F3E3A8}
-.categoria[data-categoria="Personajes"]:hover{background:linear-gradient(135deg,#EDC24F,#E8B73D);border-color:#E8B73D;box-shadow:0 8px 20px rgba(232,183,61,.40)}
-.categoria[data-categoria="Llaveros"]{background:linear-gradient(135deg,#F1EBFB,#E7DBF8);border-color:#DAC9F2}
-.categoria[data-categoria="Llaveros"]:hover{background:linear-gradient(135deg,#9A74D4,#8A63C9);border-color:#8A63C9;box-shadow:0 8px 20px rgba(138,99,201,.40)}
-.categoria[data-categoria="Personalizados"]{background:linear-gradient(135deg,#E9F2FD,#DBEBFC);border-color:#C9DDF7}
-.categoria[data-categoria="Personalizados"]:hover{background:linear-gradient(135deg,#62A2E8,#4E8FD6);border-color:#4E8FD6;box-shadow:0 8px 20px rgba(78,143,214,.40)}
-/* ============================================================
-   🧶 MENÚ ANILLOS DE TEJIDO — aros de crochet premium
-   ============================================================ */
-/* El layout (fila en escritorio / columna en móvil) lo maneja el grid externo de style.css:
-   ≥1200px → 6 en una fila · 600-1200px → 3+3 · ≤600px → vertical. Aquí solo estilo. */
-.categorias{
-    background:transparent !important;
-    border:0 !important;box-shadow:none !important;
-    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
-    padding:0 !important;border-radius:0 !important;
-    animation:tsAnilloEntrada .6s ease both}
-@keyframes tsAnilloEntrada{from{opacity:0}to{opacity:1}}
-#catIndicador{display:none !important}
-#categorias .categoria{
-    position:relative;z-index:2;
-    display:inline-flex;align-items:center;gap:9px;
-    padding:7px 14px 7px 7px;
-    background:transparent !important;
-    border:0 !important;border-radius:999px;
-    box-shadow:none !important;
-    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
-    color:#4a3f43 !important;
-    transition:transform .3s ease,background .3s ease,color .3s ease !important;
-    animation:tsAnilloPop .5s ease backwards}
-#categorias .categoria:nth-child(2){animation-delay:.06s}
-#categorias .categoria:nth-child(3){animation-delay:.12s}
-#categorias .categoria:nth-child(4){animation-delay:.18s}
-#categorias .categoria:nth-child(5){animation-delay:.24s}
-#categorias .categoria:nth-child(6){animation-delay:.30s}
-#categorias .categoria:nth-child(7){animation-delay:.36s}
-@keyframes tsAnilloPop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-#categorias .categoria::before,#categorias .categoria::after{display:none !important}
-/* anillo de crochet: borde punteado como puntadas de hilo */
-#categorias .categoria .cat-icono{
-    width:38px;height:38px;border-radius:50%;
-    padding:7px;box-sizing:border-box;display:block;flex:0 0 auto;
-    background:#fffdf9;
-    border:3px dashed var(--hilo,#d9a9b8);
-    box-shadow:0 3px 10px rgba(120,80,95,.10);
-    stroke:currentColor;
-    transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease,background .3s ease,color .3s ease}
-#categorias .categoria:hover{
-    background:rgba(217,169,184,.10) !important;
-    transform:translateY(-2px)}
-#categorias .categoria:hover .cat-icono{
-    transform:scale(1.08);
-    border-color:var(--hilo);
-    box-shadow:0 6px 16px rgba(120,80,95,.16)}
-#categorias .categoria:hover,#categorias .categoria:hover .cat-texto{color:#a05f78 !important}
-/* color del hilo por categoría */
-#categorias .categoria[data-categoria="Todos"]{--hilo:#d8a884}
-#categorias .categoria[data-categoria="Disponibles"]{--hilo:#a9c3ad}
-#categorias .categoria[data-categoria="Animales"]{--hilo:#d9a9b8}
-#categorias .categoria[data-categoria="Personajes"]{--hilo:#d8c391}
-#categorias .categoria[data-categoria="Llaveros"]{--hilo:#bfa9d4}
-#categorias .categoria[data-categoria="Personalizados"]{--hilo:#a9c3d4}
-/* iconos en el tono de su hilo */
-#categorias .categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
-#categorias .categoria[data-categoria="Disponibles"] .cat-icono{color:#7fa98a}
-#categorias .categoria[data-categoria="Animales"] .cat-icono{color:#b76e8a}
-#categorias .categoria[data-categoria="Personajes"] .cat-icono{color:#c2a15a}
-#categorias .categoria[data-categoria="Llaveros"] .cat-icono{color:#9a84b8}
-#categorias .categoria[data-categoria="Personalizados"] .cat-icono{color:#7f9cb8}
-/* activo: el anillo se rellena como un aro tejido sólido */
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:rgba(217,169,184,.12) !important;
-    color:#a05f78 !important;
-    transform:translateY(-1px)}
-/* móvil: el activo ocupa el ancho como barra */
-@media (max-width:600px){
-    #categorias .categoria:is(.activo,.active,.seleccionada,.activa){width:100%}
-}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#a05f78 !important;font-weight:800}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    background:linear-gradient(135deg,var(--hilo,#d9a9b8),#b76e8a);
-    border:0;
-    box-shadow:0 5px 14px rgba(120,80,95,.22);
-    color:#fff !important;
-    transform:scale(1.05)}
-@media (prefers-reduced-motion:reduce){
-    #categorias .categoria,#categorias .categoria .cat-icono,.categorias{animation:none !important;transition:none !important}
-}
-/* iconos en tonos sobrios por categoría */
-.categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
-.categoria[data-categoria="Disponibles"] .cat-icono{color:#7fa98a}
-.categoria[data-categoria="Animales"] .cat-icono{color:#b76e8a}
-.categoria[data-categoria="Personajes"] .cat-icono{color:#c2a15a}
-.categoria[data-categoria="Llaveros"] .cat-icono{color:#9a84b8}
-.categoria[data-categoria="Personalizados"] .cat-icono{color:#7f9cb8}
-.categoria[data-categoria="Todos"]:hover .cat-icono,
-.categoria[data-categoria="Todos"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#b9805c !important}
-.categoria[data-categoria="Disponibles"]:hover .cat-icono,
-.categoria[data-categoria="Disponibles"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#7fa98a !important}
-.categoria[data-categoria="Animales"]:hover .cat-icono,
-.categoria[data-categoria="Animales"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#b76e8a !important}
-.categoria[data-categoria="Personajes"]:hover .cat-icono,
-.categoria[data-categoria="Personajes"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#c2a15a !important}
-.categoria[data-categoria="Llaveros"]:hover .cat-icono,
-.categoria[data-categoria="Llaveros"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#9a84b8 !important}
-.categoria[data-categoria="Personalizados"]:hover .cat-icono,
-.categoria[data-categoria="Personalizados"]:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#7f9cb8 !important}
-/* título del menú en tono sobrio */
-#categorias h2{
-    background:linear-gradient(90deg,#b76e8a,#9a84b8,#b76e8a);
-    background-size:200% auto;
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation:tsBrillo 8s linear infinite;
-    letter-spacing:1.5px}
-#categorias h2::after{background:linear-gradient(90deg,#d9b8a8,#b76e8a)}
-@media (prefers-reduced-motion:reduce){
-    .categoria,.categoria .cat-icono{animation:none !important}
-    .categoria,.categoria .cat-icono{transition:none !important}
-}
+    50%{box-shadow:0 10px 26px rgba(49,184,102,.60)}}
 
-/* Botón volver arriba */
+/* Botón volver arriba: círculo flotante abajo en el centro.
+   La geometría (fixed, 50px, opacity 0 + .visible) la lleva JS:
+   hay que conservarla tal cual o el botón se queda siempre visible. */
 #volverArriba{
-    position:fixed;left:50%;bottom:20px;z-index:900;
-    width:50px;height:50px;margin-left:-25px;border-radius:50%;
-    border:0;cursor:pointer;
-    background:linear-gradient(135deg,#F47DA3,#e85c8b);
+    position:fixed;
+    left:50%;
+    bottom:20px;
+    z-index:900;
+    width:50px;
+    height:50px;
+    margin-left:-25px;
+    border-radius:50%;
+    border:0;
+    padding:0;
+    cursor:pointer;
     color:#fff;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 8px 20px rgba(232,92,139,.45);
-    opacity:0;visibility:hidden;transform:translateY(16px);
-    transition:opacity .3s ease,transform .3s ease,visibility .3s,box-shadow .25s ease}
+    background:linear-gradient(135deg,var(--primario),var(--primario-oscuro));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 20px rgba(181,107,69,.40);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(16px);
+    transition:opacity .3s ease,transform .3s cubic-bezier(.2,.8,.2,1),
+               visibility .3s,box-shadow .25s ease}
 #volverArriba.visible{opacity:1;visibility:visible;transform:translateY(0)}
-#volverArriba:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(232,92,139,.6)}
+#volverArriba:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(181,107,69,.52)}
 #volverArriba:active{transform:scale(.94)}
-@media (max-width:700px){
+@media (max-width:600px){
     #volverArriba{width:44px;height:44px;margin-left:-22px;bottom:14px}
     #volverArriba svg{width:18px;height:18px}
 }
-/* 📷 Fotos completas en las tarjetas del catálogo (sin recortes) */
-.producto-img{
-    width:100% !important;
-    height:auto !important;
-    object-fit:contain !important;
-    aspect-ratio:4/3;
-    background:linear-gradient(135deg,#fff8fb,#fdeef4);
-    padding:8px;
-    box-sizing:border-box;
-    display:block}
-@media (prefers-reduced-motion:reduce){
-    .presentacion-seo,.presentacion-seo h1,#btnVerCatalogo,.paso-flecha,.caja-facil::before,.redes-flotantes a,.creditos .marca,.categoria,#categorias h2{animation:none !important}
-    #volverArriba{transition:none !important}
-    .seccion-facil.ts-animar .paso,.seccion-facil.ts-animar .caja-facil{opacity:1 !important;transform:none !important;transition:none !important}
+.dark #volverArriba{background:linear-gradient(135deg,#7a4a30,#5e3822)}
+
+/* ============================================================
+   9) MODO OSCURO — solo lo que esta capa fija a mano
+   ============================================================ */
+.dark{
+    --ts-velo:rgba(217,169,184,.18);
+    --ts-sombra:0 2px 10px rgba(0,0,0,.30);
+    --ts-sombra-alta:0 14px 32px rgba(0,0,0,.45)}
+.dark .card,
+.dark .caja-facil{background:var(--card);border-color:var(--borde)}
+.dark .nombre{color:var(--text)}
+.dark .descripcion{color:var(--muted)}
+.dark .precio{color:#e0a884}
+.dark .acciones .btn:not(.secundario){
+    background:transparent !important;
+    color:#e0a884 !important;
+    border-color:rgba(229,168,132,.45) !important}
+.dark .acciones .btn:not(.secundario):hover{
+    background:rgba(229,168,132,.14) !important;
+    border-color:#e0a884 !important}
+.dark .caja-facil:hover{border-color:rgba(229,168,132,.45)}
+.dark #categorias h2,
+.dark #catalogo h2,
+.dark .seccion-facil h2,
+.dark .creditos .marca{
+    background:linear-gradient(90deg,#e0a884,#c9a8d8,#e0a884);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent}
+@supports not ((-webkit-background-clip:text) or (background-clip:text)){
+    .dark #categorias h2,
+    .dark #catalogo h2,
+    .dark .seccion-facil h2,
+    .dark .creditos .marca{-webkit-text-fill-color:currentColor !important;color:#e0a884 !important}
 }
+
+/* ============================================================
+   10) MOVIMIENTO REDUCIDO
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+    .categorias,
+    #categorias .categoria,
+    #categorias .categoria .cat-icono,
+    .redes-flotantes a,
+    .paso-flecha,
+    #categorias h2,
+    #catalogo h2,
+    .seccion-facil h2,
+    .caja-facil::before,
+    .creditos .marca{
+        animation:none !important;
+        transition:none !important}
+    .card:hover,
+    .caja-facil:hover,
+    #categorias .categoria:hover,
+    .redes-flotantes a:hover{transform:none !important}
+    .card:hover .producto-img{transform:none}
+}
+
+/* Brillo que recorre los títulos y las líneas de acento */
+@keyframes tsBrillo{0%{background-position:0% center}100%{background-position:200% center}}
 </style>
 </head>
 <body>
