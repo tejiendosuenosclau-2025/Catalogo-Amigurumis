@@ -809,31 +809,47 @@ body{
 #catIndicador{display:none !important}
 
 /* ============================================================
-   BARRA DE CATEGORÍAS — control segmentado
-   Antes eran 6 píldoras de colores sueltas. Se sustituye por una
-   sola barra con los 6 apartados del mismo ancho, separadores finos
-   y el activo relleno: es el patrón de una barra de pestañas, se lee
-   más ordenado y profesional.
-   El texto sube a 1rem (antes .86rem, que se veía pequeño al lado
-   del resto de la página).
+   BARRA DE CATEGORÍAS — control con relieve (pressed / inset)
+   ------------------------------------------------------------
+   La barra es un CANAL hundido (sombra interior) y cada apartado
+   es una tecla con volumen propio: en reposo sobresale un poco,
+   al pasar el ratón se levanta y el ACTIVO queda PRENSADO hacia
+   dentro, con sombras interiores y un hundimiento de 1px.
+   Texto a 1rem (16px), el mismo tamaño que el resto de la página.
    ============================================================ */
+:root{
+    --ts-canal:#f4ece6;
+    --ts-canal-alto:#ffffff;
+    --ts-tecla:#fffdfb;
+    --ts-tecla-alto:#f5ede7;
+    --ts-borde-tecla:rgba(120,80,95,.13);
+    --ts-sombra-tecla:0 1px 2px rgba(120,80,95,.12);
+    --ts-sombra-hundido:inset 0 3px 7px rgba(120,80,95,.30),
+                        inset 0 1px 1px rgba(90,60,75,.22),
+                        inset 0 -1px 0 rgba(255,255,255,.55);
+}
+
 .categorias{
     display:flex !important;
     flex-wrap:nowrap;
     align-items:stretch;
     justify-content:center;
-    gap:0 !important;
-    padding:6px !important;
+    gap:4px !important;
+    padding:5px !important;
     margin-top:clamp(16px,2.6vw,28px) !important;
-    background:var(--card) !important;
+    /* el canal: fondo más oscuro + sombra interior = hueco */
+    background:var(--ts-canal) !important;
     border:1px solid var(--borde) !important;
-    border-radius:16px !important;
-    box-shadow:0 2px 12px rgba(120,80,95,.07) !important;
+    border-radius:15px !important;
+    box-shadow:inset 0 2px 6px rgba(120,80,95,.16),
+               inset 0 1px 1px rgba(90,60,75,.10),
+               0 1px 0 var(--ts-canal-alto) !important;
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
     animation:tsCatEntrada .6s ease both}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
+/* Tecla en reposo: sobresale del canal */
 #categorias .categoria{
     position:relative;
     z-index:2;
@@ -842,19 +858,21 @@ body{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:7px;
-    padding:12px 12px;
-    background:transparent !important;
-    border:0 !important;
-    border-radius:11px;
+    gap:6px;
+    padding:10px 10px;
+    background:linear-gradient(180deg,var(--ts-tecla),var(--ts-tecla-alto)) !important;
+    border:1px solid var(--ts-borde-tecla) !important;
+    border-radius:9px;
     color:var(--text) !important;
     font-family:inherit;
     font-size:1rem;
     font-weight:700;
     letter-spacing:0;
     cursor:pointer;
-    box-shadow:none !important;
-    transition:background .22s ease,color .22s ease,transform .22s ease !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),
+               var(--ts-sombra-tecla) !important;
+    transition:background .18s ease,color .18s ease,transform .12s ease,
+               box-shadow .18s ease !important;
     animation:tsCatPop .45s cubic-bezier(.2,.8,.2,1) backwards}
 #categorias .categoria:nth-child(2){animation-delay:.04s}
 #categorias .categoria:nth-child(3){animation-delay:.08s}
@@ -864,14 +882,52 @@ body{
 #categorias .categoria:nth-child(7){animation-delay:.24s}
 @keyframes tsCatPop{from{opacity:0}to{opacity:1}}
 
-/* Separador fino entre apartados (solo en la fila única) */
-#categorias .categoria + .categoria{box-shadow:inset 1.5px 0 0 0 var(--borde) !important}
+/* Sin separadores: cada tecla tiene ya su propio borde */
+#categorias .categoria + .categoria{box-shadow:inset 0 1px 0 rgba(255,255,255,.95),
+               var(--ts-sombra-tecla) !important}
 #categorias .categoria::after{display:none !important}
 
-/* Icono neutro: el color se reserva para el apartado activo */
+/* El ratón la levanta un poco más */
+#categorias .categoria:hover{
+    background:linear-gradient(180deg,#fff,#fdf8f4) !important;
+    transform:translateY(-1px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,1),
+               0 3px 7px rgba(120,80,95,.16) !important}
+#categorias .categoria:hover .cat-icono{color:var(--primario)}
+
+/* Mientras se pulsa: ya está hundida */
+#categorias .categoria:active{
+    transform:translateY(1px);
+    box-shadow:inset 0 2px 5px rgba(120,80,95,.26),
+               inset 0 1px 1px rgba(90,60,75,.18) !important}
+
+/* ACTIVA = PRENSADA: sombras interiores y 1px hundida */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(180deg,
+        var(--tono,var(--primario-suave)),
+        var(--tinta,var(--primario))) !important;
+    border-color:rgba(90,60,75,.28) !important;
+    color:#fff !important;
+    transform:translateY(1px);
+    box-shadow:var(--ts-sombra-hundido) !important}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-nombre{
+    color:#fff !important;
+    font-weight:700;
+    text-shadow:0 1px 1px rgba(90,60,75,.35)}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    color:#fff;
+    filter:drop-shadow(0 1px 1px rgba(90,60,75,.4))}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    background:rgba(0,0,0,.18);
+    color:#fff;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.30),
+               inset 0 -1px 0 rgba(255,255,255,.18)}
+
+/* Icono en trazo neutro: el color se reserva al estado activo */
 #categorias .categoria .cat-icono{
-    width:20px;
-    height:20px;
+    width:18px;
+    height:18px;
     padding:0;
     box-sizing:border-box;
     display:block;
@@ -882,7 +938,7 @@ body{
     color:var(--muted);
     stroke:currentColor;
     stroke-width:1.9;
-    transition:color .22s ease,transform .22s ease}
+    transition:color .18s ease,transform .18s ease}
 
 #categorias .categoria,
 #categorias .categoria .cat-texto,
@@ -893,7 +949,7 @@ body{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:8px;
+    gap:6px;
     min-width:0;
     font-size:1rem;
     font-weight:700}
@@ -902,52 +958,29 @@ body{
     overflow:hidden;
     text-overflow:ellipsis}
 
-/* Contador: discreto, en tono apagado (antes era un distintivo de color) */
+/* Contador: también con relieve, hundido en la tecla */
 #categorias .categoria .cat-num{
     flex:0 0 auto;
     min-width:0;
-    padding:1px 8px;
+    padding:1px 7px;
     border-radius:999px;
-    background:var(--bg);
+    background:var(--ts-canal);
     color:var(--muted);
     font-size:.8rem;
     font-weight:700;
     line-height:1.6;
     text-align:center;
     font-variant-numeric:tabular-nums;
-    box-shadow:inset 0 0 0 1px var(--borde);
-    transition:background .22s ease,color .22s ease,box-shadow .22s ease}
+    box-shadow:inset 0 1px 2px rgba(120,80,95,.18),
+               0 1px 0 rgba(255,255,255,.85);
+    transition:background .18s ease,color .18s ease,box-shadow .18s ease}
 
-#categorias .categoria:hover{
-    background:var(--primario-suave) !important;
-    box-shadow:inset 1.5px 0 0 0 var(--borde) !important;
-    transform:none}
-#categorias .categoria:hover .cat-icono{color:var(--primario)}
-#categorias .categoria:hover .cat-num{background:var(--card);color:var(--primario)}
-
-/* Activo: se rellena con el color de su categoría */
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(135deg,var(--tinta,var(--primario)),var(--primario-oscuro)) !important;
-    color:#fff !important;
-    box-shadow:0 6px 16px rgba(120,80,95,.22) !important;
-    transform:none}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-nombre{color:#fff !important;font-weight:700}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#fff}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
-    background:rgba(255,255,255,.22);
-    color:#fff;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.34)}
-
-/* Medido: un apartado necesita ~195px para no recortar "Personalizados".
-   De ahí salen los tres tramos: fila única desde 1440 (el contenedor topa en 1280px y un apartado
-   necesita ~205px: 6x205 = 1230), tres por fila de 720 a 1439, y dos
-   por fila por debajo. Los separadores solo se pintan
-   en la fila única, que es donde tienen sentido. */
+/* Medido: un apartado necesita ~205px para no recortar "Personalizados".
+   Fila única desde 1440 (el contenedor topa en 1280px), tres por fila
+   de 720 a 1439 y dos por fila por debajo. */
 @media (max-width:1439px){
-    #categorias .categorias{flex-wrap:wrap;gap:4px !important}
-    #categorias .categoria{flex:1 1 calc(33.333% - 4px);box-shadow:none !important}
-    #categorias .categoria + .categoria{box-shadow:none !important}
+    #categorias .categorias{flex-wrap:wrap}
+    #categorias .categoria{flex:1 1 calc(33.333% - 4px)}
     #categorias .categoria .cat-texto{font-size:.97rem}
 }
 @media (max-width:719px){
@@ -1260,6 +1293,36 @@ body{
     color:#fff !important}
 .dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{background:rgba(255,255,255,.92)}
 .dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.20);color:#fff}
+
+/* Relieve en modo oscuro: el canal se hunde igual pero sin blancos */
+.dark{
+    --ts-canal:#241f22;
+    --ts-canal-alto:rgba(255,255,255,.05);
+    --ts-tecla:#332c30;
+    --ts-tecla-alto:#2b2529;
+    --ts-borde-tecla:rgba(0,0,0,.45);
+    --ts-sombra-tecla:0 1px 2px rgba(0,0,0,.45);
+    --ts-sombra-hundido:inset 0 3px 8px rgba(0,0,0,.60),
+                        inset 0 1px 1px rgba(0,0,0,.50),
+                        inset 0 -1px 0 rgba(255,255,255,.07)}
+.dark .categorias{
+    background:var(--ts-canal) !important;
+    border-color:rgba(255,255,255,.06) !important;
+    box-shadow:inset 0 2px 7px rgba(0,0,0,.60),0 1px 0 rgba(255,255,255,.04) !important}
+.dark #categorias .categoria{
+    background:linear-gradient(180deg,var(--ts-tecla),var(--ts-tecla-alto)) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),var(--ts-sombra-tecla) !important}
+.dark #categorias .categoria:hover{
+    background:linear-gradient(180deg,#3b3338,#332c30) !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(180deg,var(--tono),rgba(0,0,0,.35)) !important;
+    border-color:rgba(0,0,0,.55) !important}
+.dark #categorias .categoria .cat-num{
+    background:rgba(0,0,0,.30);
+    color:#cfc4c9;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.55)}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    background:rgba(0,0,0,.32);color:#fff}
 
 /* ============================================================
    10) MOVIMIENTO REDUCIDO
