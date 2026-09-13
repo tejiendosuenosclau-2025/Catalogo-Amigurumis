@@ -913,10 +913,6 @@ body{
     stroke-width:2;
     transition:color .3s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
 
-/* Los contadores se ocultan para que las seis entren en una fila.
-   (Para devolverlos: quitar esta línea.) */
-#categorias .categoria .cat-num{display:none !important}
-
 #categorias .categoria,
 #categorias .categoria .cat-texto,
 #categorias .categoria .cat-nombre{white-space:nowrap}
@@ -927,7 +923,6 @@ body{
     gap:8px;
     font-size:1rem;
     font-weight:700}
-#categorias .categoria .cat-nombre{min-width:0}
 
 /* Al pasar el ratón se tiñe un poco (el resalte sigue donde está) */
 #categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
@@ -944,8 +939,13 @@ body{
     box-shadow:0 8px 20px rgba(154,132,184,.32) !important;
     color:#fff !important}
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-nombre{
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
     color:#fff !important}
+/* El contador hereda el color del botón para que también pase a blanco */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) *{color:#fff !important}
+
+/* Clic garantizado: el botón siempre por encima y recibiendo el puntero */
+#categorias .categoria{pointer-events:auto !important}
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
     color:#fff;
     filter:drop-shadow(0 1px 2px rgba(90,60,75,.35))}
@@ -1519,11 +1519,11 @@ body{
         document.querySelectorAll(".categoria").forEach(function(btn){
             var cat = btn.dataset.categoria;
             if(cat === "Todos"){
-                btn.innerHTML = CAT_ICONOS["Todos"] + ' <span class="cat-texto"><span class="cat-nombre">Inicio</span><span class="cat-num" id="totalProductos">' + total + '</span></span>';
+                btn.innerHTML = CAT_ICONOS["Todos"] + ' <span class="cat-texto">Inicio (<span id="totalProductos">' + total + '</span>)</span>';
                 return;
             }
             var n = (window.todosLosProductos || []).filter(function(p){ return p.categoria && p.categoria.indexOf(cat) !== -1; }).length;
-            btn.innerHTML = (CAT_ICONOS[cat] || "") + ' <span class="cat-texto"><span class="cat-nombre">' + cat + '</span><span class="cat-num">' + n + '</span></span>';
+            btn.innerHTML = (CAT_ICONOS[cat] || "") + " " + cat + " (" + n + ")";
         });
     }
     window.addEventListener("productosCargados", renderCategorias);
