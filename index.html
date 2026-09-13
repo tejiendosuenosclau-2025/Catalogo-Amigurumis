@@ -806,73 +806,86 @@ body{
    El layout (6 en fila / 3+3 / columna) lo pone el grid de
    style.css: aquí solo el aspecto.
    ============================================================ */
-#catIndicador{display:none !important}
-
 /* ============================================================
-   BARRA DE CATEGORÍAS — control con relieve (pressed / inset)
+   🧶 MENÚ DE CATEGORÍAS — resalte deslizante
    ------------------------------------------------------------
-   La barra es un CANAL hundido (sombra interior) y cada apartado
-   es una tecla con volumen propio: en reposo sobresale un poco,
-   al pasar el ratón se levanta y el ACTIVO queda PRENSADO hacia
-   dentro, con sombras interiores y un hundimiento de 1px.
-   Texto a 1rem (16px), el mismo tamaño que el resto de la página.
+   Una sola fila SIEMPRE (nada de dos filas de tres). Si las seis
+   no caben, la barra se desplaza en horizontal con el dedo o la
+   rueda, como una tira de pestañas.
+   El resalte es #catIndicador, que tu propio js ya coloca con
+   moverIndicador(): aquí solo se le da forma, color y transición,
+   así que se DESLIZA de una categoría a otra.
+   Texto a 1rem (16px), el mismo que el resto de la página.
    ============================================================ */
-:root{
-    --ts-canal:#f4ece6;
-    --ts-canal-alto:#ffffff;
-    --ts-tecla:#fffdfb;
-    --ts-tecla-alto:#f5ede7;
-    --ts-borde-tecla:rgba(120,80,95,.13);
-    --ts-sombra-tecla:0 1px 2px rgba(120,80,95,.12);
-    --ts-sombra-hundido:inset 0 3px 7px rgba(120,80,95,.30),
-                        inset 0 1px 1px rgba(90,60,75,.22),
-                        inset 0 -1px 0 rgba(255,255,255,.55);
-}
-
 .categorias{
+    position:relative;
     display:flex !important;
-    flex-wrap:nowrap;
+    flex-wrap:nowrap !important;
     align-items:stretch;
     justify-content:center;
-    gap:4px !important;
+    gap:2px !important;
     padding:5px !important;
     margin-top:clamp(16px,2.6vw,28px) !important;
-    /* el canal: fondo más oscuro + sombra interior = hueco */
-    background:var(--ts-canal) !important;
-    border:1px solid var(--borde) !important;
-    border-radius:15px !important;
-    box-shadow:inset 0 2px 6px rgba(120,80,95,.16),
-               inset 0 1px 1px rgba(90,60,75,.10),
-               0 1px 0 var(--ts-canal-alto) !important;
+    background:var(--card) !important;
+    /* sin borde real: el filo va con sombra interior para que el
+       indicador de tu js cuadre al píxel (usa el borde de la caja) */
+    border:0 !important;
+    border-radius:999px !important;
+    box-shadow:inset 0 0 0 1px var(--borde),
+               0 8px 26px rgba(90,60,75,.10) !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    scroll-snap-type:x proximity;
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
     animation:tsCatEntrada .6s ease both}
+.categorias::-webkit-scrollbar{display:none}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
-/* Tecla en reposo: sobresale del canal */
+/* El resalte que se desliza (lo mueve moverIndicador con left/width) */
+#catIndicador{
+    position:absolute;
+    top:5px;
+    bottom:5px;
+    left:0;
+    width:0;
+    z-index:1;
+    border-radius:999px;
+    background:linear-gradient(120deg,var(--ts-rosa),var(--ts-violeta));
+    box-shadow:0 8px 20px rgba(154,132,184,.42),
+               0 1px 0 rgba(255,255,255,.35) inset;
+    opacity:0;
+    pointer-events:none;
+    transition:left .42s cubic-bezier(.34,1.3,.4,1),
+               width .42s cubic-bezier(.34,1.3,.4,1),
+               opacity .3s ease}
+
 #categorias .categoria{
     position:relative;
     z-index:2;
-    flex:1 1 0;
-    min-width:0;
+    flex:0 0 auto;
+    /* Imprescindible: el style.css base pone width:100% a .categoria y,
+       sin esto, cada apartado medía el ancho entero de la barra. */
+    width:auto !important;
     display:inline-flex;
     align-items:center;
     justify-content:center;
     gap:6px;
-    padding:10px 10px;
-    background:linear-gradient(180deg,var(--ts-tecla),var(--ts-tecla-alto)) !important;
-    border:1px solid var(--ts-borde-tecla) !important;
-    border-radius:9px;
+    padding:11px 14px;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:999px;
     color:var(--text) !important;
     font-family:inherit;
     font-size:1rem;
     font-weight:700;
-    letter-spacing:0;
+    letter-spacing:.1px;
     cursor:pointer;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),
-               var(--ts-sombra-tecla) !important;
-    transition:background .18s ease,color .18s ease,transform .12s ease,
-               box-shadow .18s ease !important;
+    box-shadow:none !important;
+    scroll-snap-align:center;
+    transition:color .3s ease,background .2s ease !important;
     animation:tsCatPop .45s cubic-bezier(.2,.8,.2,1) backwards}
 #categorias .categoria:nth-child(2){animation-delay:.04s}
 #categorias .categoria:nth-child(3){animation-delay:.08s}
@@ -882,52 +895,12 @@ body{
 #categorias .categoria:nth-child(7){animation-delay:.24s}
 @keyframes tsCatPop{from{opacity:0}to{opacity:1}}
 
-/* Sin separadores: cada tecla tiene ya su propio borde */
-#categorias .categoria + .categoria{box-shadow:inset 0 1px 0 rgba(255,255,255,.95),
-               var(--ts-sombra-tecla) !important}
 #categorias .categoria::after{display:none !important}
 
-/* El ratón la levanta un poco más */
-#categorias .categoria:hover{
-    background:linear-gradient(180deg,#fff,#fdf8f4) !important;
-    transform:translateY(-1px);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,1),
-               0 3px 7px rgba(120,80,95,.16) !important}
-#categorias .categoria:hover .cat-icono{color:var(--primario)}
-
-/* Mientras se pulsa: ya está hundida */
-#categorias .categoria:active{
-    transform:translateY(1px);
-    box-shadow:inset 0 2px 5px rgba(120,80,95,.26),
-               inset 0 1px 1px rgba(90,60,75,.18) !important}
-
-/* ACTIVA = PRENSADA: sombras interiores y 1px hundida */
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(180deg,
-        var(--tono,var(--primario-suave)),
-        var(--tinta,var(--primario))) !important;
-    border-color:rgba(90,60,75,.28) !important;
-    color:#fff !important;
-    transform:translateY(1px);
-    box-shadow:var(--ts-sombra-hundido) !important}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-nombre{
-    color:#fff !important;
-    font-weight:700;
-    text-shadow:0 1px 1px rgba(90,60,75,.35)}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    color:#fff;
-    filter:drop-shadow(0 1px 1px rgba(90,60,75,.4))}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
-    background:rgba(0,0,0,.18);
-    color:#fff;
-    box-shadow:inset 0 1px 3px rgba(0,0,0,.30),
-               inset 0 -1px 0 rgba(255,255,255,.18)}
-
-/* Icono en trazo neutro: el color se reserva al estado activo */
+/* Icono en el tono de su categoría: da color sin gritar */
 #categorias .categoria .cat-icono{
-    width:18px;
-    height:18px;
+    width:19px;
+    height:19px;
     padding:0;
     box-sizing:border-box;
     display:block;
@@ -935,60 +908,51 @@ body{
     border:0;
     border-radius:0;
     background:none;
-    color:var(--muted);
+    color:var(--tinta,var(--primario));
     stroke:currentColor;
-    stroke-width:1.9;
-    transition:color .18s ease,transform .18s ease}
+    stroke-width:2;
+    transition:color .3s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+
+/* Los contadores se ocultan para que las seis entren en una fila.
+   (Para devolverlos: quitar esta línea.) */
+#categorias .categoria .cat-num{display:none !important}
 
 #categorias .categoria,
 #categorias .categoria .cat-texto,
 #categorias .categoria .cat-nombre{white-space:nowrap}
 
 #categorias .categoria .cat-texto{
-    flex:1 1 auto;
     display:inline-flex;
     align-items:center;
-    justify-content:center;
-    gap:6px;
-    min-width:0;
+    gap:8px;
     font-size:1rem;
     font-weight:700}
-#categorias .categoria .cat-nombre{
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis}
+#categorias .categoria .cat-nombre{min-width:0}
 
-/* Contador: también con relieve, hundido en la tecla */
-#categorias .categoria .cat-num{
-    flex:0 0 auto;
-    min-width:0;
-    padding:1px 7px;
-    border-radius:999px;
-    background:var(--ts-canal);
-    color:var(--muted);
-    font-size:.8rem;
-    font-weight:700;
-    line-height:1.6;
-    text-align:center;
-    font-variant-numeric:tabular-nums;
-    box-shadow:inset 0 1px 2px rgba(120,80,95,.18),
-               0 1px 0 rgba(255,255,255,.85);
-    transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+/* Al pasar el ratón se tiñe un poco (el resalte sigue donde está) */
+#categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
+    background:var(--soft) !important}
+#categorias .categoria:hover .cat-icono{transform:scale(1.12) rotate(-8deg)}
 
-/* Medido: un apartado necesita ~205px para no recortar "Personalizados".
-   Fila única desde 1440 (el contenedor topa en 1280px), tres por fila
-   de 720 a 1439 y dos por fila por debajo. */
-@media (max-width:1439px){
-    #categorias .categorias{flex-wrap:wrap}
-    #categorias .categoria{flex:1 1 calc(33.333% - 4px)}
-    #categorias .categoria .cat-texto{font-size:.97rem}
-}
-@media (max-width:719px){
-    #categorias .categoria{flex:1 1 calc(50% - 4px)}
-    #categorias .categoria .cat-texto{font-size:.95rem}
-}
-@media (max-width:400px){
-    #categorias .categoria{flex:1 1 100%}
+/* Activa: lleva su PROPIO relleno, idéntico al del resalte.
+   Así el color nunca depende de que el resalte se pinte: si el
+   indicador fallara, el texto seguiría siendo legible. Y durante el
+   cambio, el apartado que sale se queda transparente, de modo que el
+   resalte se ve DESLIZARSE por debajo hasta el nuevo. */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(120deg,var(--ts-rosa),var(--ts-violeta)) !important;
+    box-shadow:0 8px 20px rgba(154,132,184,.32) !important;
+    color:#fff !important}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-nombre{
+    color:#fff !important}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    color:#fff;
+    filter:drop-shadow(0 1px 2px rgba(90,60,75,.35))}
+
+/* Un pelín más juntas las seis cuando hay sitio de sobra */
+@media (min-width:1300px){
+    #categorias .categoria{padding:11px 22px}
 }
 
 /* --- Tonos por categoría (tinte / aro / tinta) --- */
@@ -1294,35 +1258,13 @@ body{
 .dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{background:rgba(255,255,255,.92)}
 .dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.20);color:#fff}
 
-/* Relieve en modo oscuro: el canal se hunde igual pero sin blancos */
-.dark{
-    --ts-canal:#241f22;
-    --ts-canal-alto:rgba(255,255,255,.05);
-    --ts-tecla:#332c30;
-    --ts-tecla-alto:#2b2529;
-    --ts-borde-tecla:rgba(0,0,0,.45);
-    --ts-sombra-tecla:0 1px 2px rgba(0,0,0,.45);
-    --ts-sombra-hundido:inset 0 3px 8px rgba(0,0,0,.60),
-                        inset 0 1px 1px rgba(0,0,0,.50),
-                        inset 0 -1px 0 rgba(255,255,255,.07)}
-.dark .categorias{
-    background:var(--ts-canal) !important;
-    border-color:rgba(255,255,255,.06) !important;
-    box-shadow:inset 0 2px 7px rgba(0,0,0,.60),0 1px 0 rgba(255,255,255,.04) !important}
-.dark #categorias .categoria{
-    background:linear-gradient(180deg,var(--ts-tecla),var(--ts-tecla-alto)) !important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),var(--ts-sombra-tecla) !important}
-.dark #categorias .categoria:hover{
-    background:linear-gradient(180deg,#3b3338,#332c30) !important}
-.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(180deg,var(--tono),rgba(0,0,0,.35)) !important;
-    border-color:rgba(0,0,0,.55) !important}
-.dark #categorias .categoria .cat-num{
-    background:rgba(0,0,0,.30);
-    color:#cfc4c9;
-    box-shadow:inset 0 1px 3px rgba(0,0,0,.55)}
-.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
-    background:rgba(0,0,0,.32);color:#fff}
+/* Menú de categorías en oscuro */
+.dark #catIndicador{
+    background:linear-gradient(120deg,#c07f9c,#a58fc4);
+    box-shadow:0 8px 22px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.20) inset}
+.dark .categorias{box-shadow:inset 0 0 0 1px var(--borde),0 8px 26px rgba(0,0,0,.45) !important}
+.dark #categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
+    background:rgba(255,255,255,.06) !important}
 
 /* ============================================================
    10) MOVIMIENTO REDUCIDO
