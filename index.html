@@ -807,75 +807,56 @@ body{
    style.css: aquí solo el aspecto.
    ============================================================ */
 /* ============================================================
-   🧶 MENÚ DE CATEGORÍAS — resalte deslizante
+   🧶 MENÚ DE CATEGORÍAS — pastillas con icono
    ------------------------------------------------------------
-   Una sola fila SIEMPRE (nada de dos filas de tres). Si las seis
-   no caben, la barra se desplaza en horizontal con el dedo o la
-   rueda, como una tira de pestañas.
-   El resalte es #catIndicador, que tu propio js ya coloca con
-   moverIndicador(): aquí solo se le da forma, color y transición,
-   así que se DESLIZA de una categoría a otra.
-   Texto a 1rem (16px), el mismo que el resto de la página.
+   Una sola fila de pastillas. Cada pastilla lleva:
+       [icono en círculo de color]  Nombre  [contador]
+   El círculo de color y su filo van DENTRO del propio SVG
+   (--tinte y --tono); el dibujo toma el color --tinta. Así el
+   icono se ve redondo y con color sin necesidad de más cajas.
+   En escritorio, UNA fila. En pantalla pequeña se reparten en
+   dos columnas y se ven las seis enteras, sin cortar ninguna.
    ============================================================ */
+
+/* Bandeja que agrupa las pastillas */
 .categorias{
     position:relative;
     display:flex !important;
     flex-wrap:nowrap !important;
-    align-items:stretch;
+    align-items:center;
     justify-content:center;
-    gap:2px !important;
-    padding:5px !important;
+    gap:7px !important;
+    padding:7px !important;
     margin-top:clamp(16px,2.6vw,28px) !important;
-    background:var(--card) !important;
-    /* sin borde real: el filo va con sombra interior para que el
-       indicador de tu js cuadre al píxel (usa el borde de la caja) */
-    border:0 !important;
+    background:var(--menu-bandeja,#faf5f0) !important;
+    border:1px solid var(--borde) !important;
     border-radius:999px !important;
-    box-shadow:inset 0 0 0 1px var(--borde),
-               0 8px 26px rgba(90,60,75,.10) !important;
+    box-shadow:0 8px 26px rgba(90,60,75,.08) !important;
     overflow-x:auto !important;
     overflow-y:hidden !important;
     scrollbar-width:none;
     -ms-overflow-style:none;
-    scroll-snap-type:x proximity;
-    -webkit-backdrop-filter:none !important;
-    backdrop-filter:none !important;
     animation:tsCatEntrada .6s ease both}
 .categorias::-webkit-scrollbar{display:none}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
-/* El resalte que se desliza (lo mueve moverIndicador con left/width) */
-#catIndicador{
-    position:absolute;
-    top:5px;
-    bottom:5px;
-    left:0;
-    width:0;
-    z-index:1;
-    border-radius:999px;
-    background:linear-gradient(120deg,var(--ts-rosa),var(--ts-violeta));
-    box-shadow:0 8px 20px rgba(154,132,184,.42),
-               0 1px 0 rgba(255,255,255,.35) inset;
-    opacity:0;
-    pointer-events:none;
-    transition:left .42s cubic-bezier(.34,1.3,.4,1),
-               width .42s cubic-bezier(.34,1.3,.4,1),
-               opacity .3s ease}
+/* El resalte deslizante ya no hace falta: la pastilla activa se
+   pinta ella sola. Se queda oculto para que no haya dos resaltes. */
+#catIndicador{display:none !important}
 
+/* La pastilla */
 #categorias .categoria{
     position:relative;
     z-index:2;
     flex:0 0 auto;
-    /* Imprescindible: el style.css base pone width:100% a .categoria y,
-       sin esto, cada apartado medía el ancho entero de la barra. */
     width:auto !important;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:5px;
-    padding:11px 9px;
-    background:transparent !important;
-    border:0 !important;
+    gap:7px;
+    padding:4px 11px 4px 4px;
+    background:var(--card) !important;
+    border:1px solid var(--borde) !important;
     border-radius:999px;
     color:var(--text) !important;
     font-family:inherit;
@@ -883,9 +864,9 @@ body{
     font-weight:700;
     letter-spacing:.1px;
     cursor:pointer;
-    box-shadow:none !important;
-    scroll-snap-align:center;
-    transition:color .3s ease,background .2s ease !important;
+    box-shadow:0 1px 2px rgba(67,53,45,.05) !important;
+    transition:background .22s ease,border-color .22s ease,color .22s ease,box-shadow .22s ease !important;
+    pointer-events:auto !important;
     animation:tsCatPop .45s cubic-bezier(.2,.8,.2,1) backwards}
 #categorias .categoria:nth-child(2){animation-delay:.04s}
 #categorias .categoria:nth-child(3){animation-delay:.08s}
@@ -894,108 +875,104 @@ body{
 #categorias .categoria:nth-child(6){animation-delay:.20s}
 #categorias .categoria:nth-child(7){animation-delay:.24s}
 @keyframes tsCatPop{from{opacity:0}to{opacity:1}}
-
 #categorias .categoria::after{display:none !important}
 
-/* Icono en el tono de su categoría: da color sin gritar */
+/* Icono: círculo de color con el dibujo dentro.
+   El círculo lo pinta también el CSS, así se ve redondo con su
+   color incluso si algún día el dibujo llega sin su círculo. */
 #categorias .categoria .cat-icono{
-    width:19px;
-    height:19px;
-    padding:0;
-    box-sizing:border-box;
-    display:block;
+    width:26px;
+    height:26px;
     flex:0 0 auto;
+    display:block;
+    padding:0;
     border:0;
-    border-radius:0;
-    background:none;
+    border-radius:50%;
+    background:var(--tinte,#fbf1e5);
+    box-shadow:inset 0 0 0 1px var(--tono,#ebd0ac);
     color:var(--tinta,var(--primario));
-    stroke:currentColor;
-    stroke-width:2;
-    transition:color .3s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+    transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+#categorias .categoria:hover .cat-icono{transform:scale(1.07) rotate(-5deg)}
 
 #categorias .categoria,
-#categorias .categoria .cat-texto,
-#categorias .categoria .cat-nombre{white-space:nowrap}
-
+#categorias .categoria .cat-texto{white-space:nowrap}
 #categorias .categoria .cat-texto{
     display:inline-flex;
     align-items:center;
-    gap:8px;
+    gap:6px;
     font-size:1rem;
     font-weight:700}
 
-/* Al pasar el ratón se tiñe un poco (el resalte sigue donde está) */
+/* Contador en su chapita */
+#categorias .categoria .cat-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:21px;
+    padding:1px 6px;
+    border-radius:999px;
+    background:var(--menu-chip,#f5ede4);
+    color:var(--tinta,var(--muted));
+    font-size:.8rem;
+    font-weight:700;
+    line-height:1.55}
+
+/* Hover y activa: la pastilla toma el color de su apartado */
 #categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
-    background:var(--soft) !important}
-#categorias .categoria:hover .cat-icono{transform:scale(1.12) rotate(-8deg)}
-
-/* Activa: lleva su PROPIO relleno, idéntico al del resalte.
-   Así el color nunca depende de que el resalte se pinte: si el
-   indicador fallara, el texto seguiría siendo legible. Y durante el
-   cambio, el apartado que sale se queda transparente, de modo que el
-   resalte se ve DESLIZARSE por debajo hasta el nuevo. */
+    background:var(--relleno,#f7ecdc) !important;
+    border-color:var(--tono,#ebd0ac) !important}
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(120deg,var(--ts-rosa),var(--ts-violeta)) !important;
-    box-shadow:0 8px 20px rgba(154,132,184,.32) !important;
-    color:#fff !important}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    color:#fff !important}
-/* El contador hereda el color del botón para que también pase a blanco */
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) *{color:#fff !important}
+    background:var(--relleno,#f7ecdc) !important;
+    border-color:var(--tono,#ebd0ac) !important;
+    color:var(--tinta,#a2703f) !important;
+    box-shadow:0 5px 14px rgba(67,53,45,.10) !important}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{--tinte:#fff}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.72)}
 
-/* Clic garantizado: el botón siempre por encima y recibiendo el puntero */
-#categorias .categoria{pointer-events:auto !important}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    color:#fff;
-    filter:drop-shadow(0 1px 2px rgba(90,60,75,.35))}
-
-/* Un pelín más juntas las seis cuando hay sitio de sobra */
-@media (min-width:1300px){
-    #categorias .categoria{padding:11px 20px}
+/* En pantallas medianas (1020-1199) las seis van más juntas para
+   que quepan enteras y de una sola fila, sin desplazar nada.
+   El nombre se queda al mismo tamaño. */
+@media (min-width:1020px) and (max-width:1199px){
+    #categorias .categorias{gap:4px !important;padding:5px !important}
+    #categorias .categoria{gap:4px;padding:3px 7px 3px 3px}
+    #categorias .categoria .cat-icono{width:22px;height:22px}
+    #categorias .categoria .cat-num{min-width:16px;padding:1px 4px;font-size:.74rem}
+}
+/* Por debajo de 1100 queda menos sitio todavía: el nombre baja
+   medio punto (15,2 px, se lee perfectamente). */
+@media (min-width:1020px) and (max-width:1099px){
+    #categorias .categoria .cat-texto{font-size:.95rem}
 }
 
-/* ------------------------------------------------------------
-   PANTALLAS POR DEBAJO DE 1440 (móvil, tablet y portátil)
-   Medido: con los contadores, las seis solo caben en una fila a
-   partir de 1440 (el contenedor topa en 1280px y no da más). Por
-   debajo NO se desplaza: se reparten en dos columnas y se ven TODAS: se reparten en dos columnas y se ven
-   TODAS de un vistazo, sin arrastrar y sin nada cortado.
-   El resalte deslizante se oculta porque con varias filas
-   quedaría colocado en el sitio equivocado; el apartado activo
-   ya lleva su propio relleno, así que se sigue viendo cuál es.
-   ------------------------------------------------------------ */
-@media (max-width:1439px){
+/* --- Tonos por apartado: relleno / tinte / aro / tinta --- */
+#categorias .categoria[data-categoria="Todos"]{--relleno:#f7ecdc;--tinte:#fbf1e5;--tono:#ebd0ac;--tinta:#a2703f}
+#categorias .categoria[data-categoria="Disponibles"]{--relleno:#e4f2e9;--tinte:#edf7f0;--tono:#bfdcc9;--tinta:#3f7f57}
+#categorias .categoria[data-categoria="Animales"]{--relleno:#fbe4ee;--tinte:#fdf0f4;--tono:#efc6d7;--tinta:#a85f82}
+#categorias .categoria[data-categoria="Personajes"]{--relleno:#faf0d7;--tinte:#fdf7e7;--tono:#ebdaa6;--tinta:#9c7c24}
+#categorias .categoria[data-categoria="Llaveros"]{--relleno:#eee8f9;--tinte:#f4f0fb;--tono:#d4c8ec;--tinta:#6f5ca0}
+#categorias .categoria[data-categoria="Personalizados"]{--relleno:#e3eff8;--tinte:#edf4fa;--tono:#c2daec;--tinta:#43719b}
+
+/* Pantalla pequeña: dos columnas, todas enteras y sin arrastrar */
+@media (max-width:1019px){
     #categorias .categorias{
         flex-wrap:wrap !important;
         overflow:visible !important;
         justify-content:center;
-        gap:4px !important}
-    #categorias .categorias::-webkit-scrollbar{display:none}
-    #catIndicador{display:none !important}
+        gap:7px !important;
+        border-radius:24px !important}
     #categorias .categoria{
-        flex:1 1 calc(50% - 4px);
+        flex:1 1 calc(50% - 7px);
         justify-content:flex-start;
-        padding:11px 12px}
-    #categorias .categoria .cat-texto{font-size:.95rem}
+        padding:4px 10px 4px 4px}
 }
 @media (max-width:400px){
     #categorias .categoria{flex:1 1 100%}
 }
-
-/* --- Tonos por categoría (tinte / aro / tinta) --- */
-#categorias .categoria[data-categoria="Todos"]{--tinte:#fbf1e5;--tono:#ebd0ac;--tinta:#a2703f}
-#categorias .categoria[data-categoria="Disponibles"]{--tinte:#edf7f0;--tono:#bfdcc9;--tinta:#3f7f57}
-#categorias .categoria[data-categoria="Animales"]{--tinte:#fdf0f4;--tono:#efc6d7;--tinta:#a85f82}
-#categorias .categoria[data-categoria="Personajes"]{--tinte:#fdf7e7;--tono:#ebdaa6;--tinta:#9c7c24}
-#categorias .categoria[data-categoria="Llaveros"]{--tinte:#f4f0fb;--tono:#d4c8ec;--tinta:#6f5ca0}
-#categorias .categoria[data-categoria="Personalizados"]{--tinte:#edf4fa;--tono:#c2daec;--tinta:#43719b}
-
-/* En móvil estrecho se apilan a lo ancho para que nada se corte */
+/* En móvil el texto va un pelín más pequeño, el icono igual de
+   vistoso, y el contador sigue a la vista. */
 @media (max-width:520px){
-    #categorias .categorias{gap:8px !important}
-    #categorias .categoria{padding:5px 10px 5px 5px}
-    #categorias .categoria .cat-texto{font-size:.84rem}
+    #categorias .categoria .cat-texto{font-size:.94rem}
+    #categorias .categoria .cat-icono{width:24px;height:24px}
 }
 
 /* ============================================================
@@ -1270,29 +1247,32 @@ body{
     .dark .creditos .marca{-webkit-text-fill-color:currentColor !important;color:#e0a884 !important}
 }
 
-/* Tonos de categoría en oscuro: fondos translúcidos y tintas claras
-   (en claro son pasteles; sobre fondo oscuro brillarían) */
-.dark #categorias .categoria[data-categoria="Todos"]{--tinte:rgba(235,208,172,.12);--tono:rgba(235,208,172,.30);--tinta:#e3be8e}
-.dark #categorias .categoria[data-categoria="Disponibles"]{--tinte:rgba(191,220,201,.12);--tono:rgba(191,220,201,.30);--tinta:#9ed0b3}
-.dark #categorias .categoria[data-categoria="Animales"]{--tinte:rgba(239,198,215,.12);--tono:rgba(239,198,215,.30);--tinta:#e8afc7}
-.dark #categorias .categoria[data-categoria="Personajes"]{--tinte:rgba(235,218,166,.12);--tono:rgba(235,218,166,.30);--tinta:#dcc77e}
-.dark #categorias .categoria[data-categoria="Llaveros"]{--tinte:rgba(212,200,236,.12);--tono:rgba(212,200,236,.30);--tinta:#bba9df}
-.dark #categorias .categoria[data-categoria="Personalizados"]{--tinte:rgba(194,218,236,.12);--tono:rgba(194,218,236,.30);--tinta:#9fc4de}
-.dark #categorias .categoria .cat-num{background:rgba(255,255,255,.10);color:var(--tinta);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(135deg,var(--tono),rgba(255,255,255,.10)) !important;
-    border-color:var(--tinta) !important;
-    color:#fff !important}
-.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{background:rgba(255,255,255,.92)}
-.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.20);color:#fff}
+/* Tonos de categoría en oscuro: fondos translúcidos y tintas
+   claras (en claro son pasteles; sobre fondo oscuro brillarían) */
+.dark #categorias .categoria[data-categoria="Todos"]{--relleno:rgba(235,208,172,.15);--tinte:rgba(235,208,172,.12);--tono:rgba(235,208,172,.34);--tinta:#e3be8e}
+.dark #categorias .categoria[data-categoria="Disponibles"]{--relleno:rgba(191,220,201,.15);--tinte:rgba(191,220,201,.12);--tono:rgba(191,220,201,.34);--tinta:#9ed0b3}
+.dark #categorias .categoria[data-categoria="Animales"]{--relleno:rgba(239,198,215,.15);--tinte:rgba(239,198,215,.12);--tono:rgba(239,198,215,.34);--tinta:#e8afc7}
+.dark #categorias .categoria[data-categoria="Personajes"]{--relleno:rgba(235,218,166,.15);--tinte:rgba(235,218,166,.12);--tono:rgba(235,218,166,.34);--tinta:#dcc77e}
+.dark #categorias .categoria[data-categoria="Llaveros"]{--relleno:rgba(212,200,236,.15);--tinte:rgba(212,200,236,.12);--tono:rgba(212,200,236,.34);--tinta:#bba9df}
+.dark #categorias .categoria[data-categoria="Personalizados"]{--relleno:rgba(194,218,236,.15);--tinte:rgba(194,218,236,.12);--tono:rgba(194,218,236,.34);--tinta:#9fc4de}
 
 /* Menú de categorías en oscuro */
-.dark #catIndicador{
-    background:linear-gradient(120deg,#c07f9c,#a58fc4);
-    box-shadow:0 8px 22px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.20) inset}
-.dark .categorias{box-shadow:inset 0 0 0 1px var(--borde),0 8px 26px rgba(0,0,0,.45) !important}
+.dark #categorias .categorias{
+    --menu-bandeja:#242424;
+    --menu-chip:rgba(255,255,255,.10);
+    box-shadow:inset 0 0 0 1px var(--borde),0 8px 26px rgba(0,0,0,.45) !important}
+.dark #categorias .categoria{background:#2f2f2f !important;border-color:var(--borde) !important}
 .dark #categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
-    background:rgba(255,255,255,.06) !important}
+    background:#3a3a3a !important;
+    border-color:var(--tono) !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:var(--relleno) !important;
+    border-color:var(--tono) !important;
+    color:#fff !important;
+    box-shadow:0 5px 16px rgba(0,0,0,.45) !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{color:#fff !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{--tinte:rgba(255,255,255,.14)}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.16);color:#fff}
 
 /* ============================================================
    10) MOVIMIENTO REDUCIDO
@@ -1390,29 +1370,29 @@ body{
 
             <div id="catIndicador" class="cat-indicador"></div>
 
-            <button type="button" class="categoria" data-categoria="Todos">
-                <svg class="cat-icono c-Inicio" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M10 20v-5.5h4V20"/><path d="M14.4 7.4V4.9h2v2.8"/><rect x="7" y="12.4" width="2.7" height="2.7" rx=".6"/></svg>
-                <span class="cat-texto">Inicio (<span id="totalProductos">0</span>)</span>
+                        <button type="button" class="categoria" data-categoria="Todos">
+                <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.9 12.1 12 7.3l6.1 4.8"/><path d="M7.6 11.6v6.3h8.8v-6.3"/></g><path d="M12 17.4c-1.6-1.1-2.4-2-2.4-2.8 0-.7.5-1.2 1.2-1.2.5 0 .9.3 1.2.7.3-.4.7-.7 1.2-.7.7 0 1.2.5 1.2 1.2 0 .8-.8 1.7-2.4 2.8z" fill="currentColor"/></svg>
+                <span class="cat-texto">Inicio <span class="cat-num" id="totalProductos">0</span></span>
             </button>
             <button type="button" class="categoria" data-categoria="Disponibles">
-                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="m8.8 12.3 2.1 2.1 4.3-4.6"/></svg>
-                Disponibles
+                <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.3" cy="12.6" r="6.1"/><path d="m8.6 12.7 2.1 2.1 4.2-4.5"/></g><path d="M17.6 5.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>
+                <span class="cat-texto">Disponibles <span class="cat-num">0</span></span>
             </button>
             <button type="button" class="categoria" data-categoria="Animales">
-                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="6"/><circle cx="8.2" cy="9.2" r="2.7"/><circle cx="15.8" cy="9.2" r="2.7"/><path d="M10.3 15c.9.9 2.5.9 3.4 0"/></svg>
-                Animales
+                <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.6" r="5.5"/><circle cx="6.9" cy="8.5" r="2"/><circle cx="17.1" cy="8.5" r="2"/><path d="M10.9 15.7c.7.6 1.5.6 2.2 0"/></g><circle cx="10.2" cy="13.3" r=".9" fill="currentColor"/><circle cx="13.8" cy="13.3" r=".9" fill="currentColor"/></svg>
+                <span class="cat-texto">Animales <span class="cat-num">0</span></span>
             </button>
             <button type="button" class="categoria" data-categoria="Personajes">
-                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.2 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.5 1-5.8-4.3-4.1 5.9-.9z"/></svg>
-                Personajes
+                <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.6 7 12.95 10.54 16.74 10.73 13.79 13.11 14.77 16.77 11.6 14.7 8.43 16.77 9.41 13.11 6.47 10.73 10.25 10.54Z"/></g><path d="M17.9 6.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>
+                <span class="cat-texto">Personajes <span class="cat-num">0</span></span>
             </button>
             <button type="button" class="categoria" data-categoria="Llaveros">
-                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="14" r="4.5"/><path d="m11.4 10.6 8.1-8.1"/><path d="m15.2 6.8 2.8 2.8"/><path d="m17.5 4.5 1.9 1.9"/></svg>
-                Llaveros
+                <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15.2" r="4"/><circle cx="12" cy="15.2" r="1.5"/><path d="M12 11.2V7.6"/></g><path d="M12 7.9c-1.5-1-2.3-1.9-2.3-2.7 0-.65.5-1.15 1.15-1.15.5 0 .9.3 1.15.7.25-.4.65-.7 1.15-.7.65 0 1.15.5 1.15 1.15 0 .8-.8 1.7-2.3 2.7z" fill="currentColor"/></svg>
+                <span class="cat-texto">Llaveros <span class="cat-num">0</span></span>
             </button>
             <button type="button" class="categoria" data-categoria="Personalizados">
-                <svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.8l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M18.8 14.6l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9z"/></svg>
-                Personalizados
+                <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.9" cy="12.6" r="5.4"/><path d="M8 9.1c2.5.8 4.2 2.7 4.6 5.4"/><path d="M12.6 17.4c2.3-.6 3.6-2.2 3.8-4.6"/><path d="M6.9 13.9c2.3 2 5.6 2.6 8.7 1.6"/></g></svg>
+                <span class="cat-texto">Personalizados <span class="cat-num">0</span></span>
             </button>
         </div>
 
@@ -1499,19 +1479,64 @@ body{
 <script type="module" src="js/modal.js"></script>
 <script src="js/menu.js"></script>
 <script>
-/* 🧶 Catálogo conectado a Supabase (tabla products) — sin tocar app.js */
+/* ============================================================
+   1) ICONOS Y CONTADORES DEL MENÚ
+   Va aparte y SIN depender de la base de datos: así las pastillas
+   se pintan siempre, aunque Supabase no conteste.
+   ============================================================ */
+(function(){
+    var CAT_ICONOS = {
+        'Todos': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.9 12.1 12 7.3l6.1 4.8"/><path d="M7.6 11.6v6.3h8.8v-6.3"/></g><path d="M12 17.4c-1.6-1.1-2.4-2-2.4-2.8 0-.7.5-1.2 1.2-1.2.5 0 .9.3 1.2.7.3-.4.7-.7 1.2-.7.7 0 1.2.5 1.2 1.2 0 .8-.8 1.7-2.4 2.8z" fill="currentColor"/></svg>',
+        'Disponibles': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.3" cy="12.6" r="6.1"/><path d="m8.6 12.7 2.1 2.1 4.2-4.5"/></g><path d="M17.6 5.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>',
+        'Animales': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.6" r="5.5"/><circle cx="6.9" cy="8.5" r="2"/><circle cx="17.1" cy="8.5" r="2"/><path d="M10.9 15.7c.7.6 1.5.6 2.2 0"/></g><circle cx="10.2" cy="13.3" r=".9" fill="currentColor"/><circle cx="13.8" cy="13.3" r=".9" fill="currentColor"/></svg>',
+        'Personajes': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.6 7 12.95 10.54 16.74 10.73 13.79 13.11 14.77 16.77 11.6 14.7 8.43 16.77 9.41 13.11 6.47 10.73 10.25 10.54Z"/></g><path d="M17.9 6.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>',
+        'Llaveros': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15.2" r="4"/><circle cx="12" cy="15.2" r="1.5"/><path d="M12 11.2V7.6"/></g><path d="M12 7.9c-1.5-1-2.3-1.9-2.3-2.7 0-.65.5-1.15 1.15-1.15.5 0 .9.3 1.15.7.25-.4.65-.7 1.15-.7.65 0 1.15.5 1.15 1.15 0 .8-.8 1.7-2.3 2.7z" fill="currentColor"/></svg>',
+        'Personalizados': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.9" cy="12.6" r="5.4"/><path d="M8 9.1c2.5.8 4.2 2.7 4.6 5.4"/><path d="M12.6 17.4c2.3-.6 3.6-2.2 3.8-4.6"/><path d="M6.9 13.9c2.3 2 5.6 2.6 8.7 1.6"/></g></svg>'
+    };
+
+    /* Pinta cada pastilla: icono + nombre + contador.
+       Solo reescribe si de verdad cambió, para no entrar en un
+       bucle de repintado. */
+    function renderCategorias(){
+        var total = (window.todosLosProductos || []).length;
+        document.querySelectorAll(".categoria").forEach(function(btn){
+            var cat = btn.dataset.categoria;
+            var html;
+            if(cat === "Todos"){
+                html = CAT_ICONOS["Todos"] + ' <span class="cat-texto">Inicio <span class="cat-num" id="totalProductos">' + total + '</span></span>';
+            }else{
+                var n = (window.todosLosProductos || []).filter(function(p){ return p.categoria && p.categoria.indexOf(cat) !== -1; }).length;
+                html = (CAT_ICONOS[cat] || "") + ' <span class="cat-texto">' + cat + ' <span class="cat-num">' + n + '</span></span>';
+            }
+            /* Se reescribe si el contenido cambió O si alguien lo
+               pisó (app.js vuelve a pintar por su cuenta), para que
+               los iconos nuevos se queden siempre. */
+            if(btn.dataset.pintado !== html || !btn.querySelector('circle[r="11.3"]')){
+                btn.dataset.pintado = html;
+                btn.innerHTML = html;
+            }
+        });
+    }
+    window.renderCategorias = renderCategorias;
+    window.addEventListener("productosCargados", renderCategorias);
+    document.addEventListener("DOMContentLoaded", renderCategorias);
+    setTimeout(renderCategorias, 400);
+    setTimeout(renderCategorias, 1600);
+
+    var contCats = document.querySelector(".categorias");
+    if(contCats && "MutationObserver" in window){
+        new MutationObserver(function(){ setTimeout(renderCategorias, 0); })
+            .observe(contCats, {childList:true, subtree:true});
+    }
+})();
+
+/* ============================================================
+   2) CATÁLOGO DESDE LA BASE DE DATOS (Supabase)
+   Si no está disponible, la página sigue con productos.json.
+   ============================================================ */
 (function(){
     if(!window.supabaseClient) return;
     var fetchOriginal = window.fetch;
-
-    var CAT_ICONOS = {
-        'Todos': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>',
-        'Disponibles': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="m8.8 12.3 2.1 2.1 4.3-4.6"/></svg>',
-        'Animales': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="6"/><circle cx="8.2" cy="9.2" r="2.7"/><circle cx="15.8" cy="9.2" r="2.7"/><path d="M10.3 15c.9.9 2.5.9 3.4 0"/></svg>',
-        'Personajes': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.2 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.5 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
-        'Llaveros': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="14" r="4.5"/><path d="m11.4 10.6 8.1-8.1"/><path d="m15.2 6.8 2.8 2.8"/><path d="m17.5 4.5 1.9 1.9"/></svg>',
-        'Personalizados': '<svg class="cat-icono" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.8l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M18.8 14.6l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9z"/></svg>'
-    };
 
     function mapear(p){
         var cats = String(p.categoria||"").split(",").map(function(s){ return s.trim(); }).filter(Boolean);
@@ -1541,21 +1566,6 @@ body{
         return fetchOriginal.apply(this, arguments);
     };
 
-    /* Render de iconos y contadores de las categorías (fuerza los iconos siempre) */
-    function renderCategorias(){
-        var total = (window.todosLosProductos || []).length;
-        document.querySelectorAll(".categoria").forEach(function(btn){
-            var cat = btn.dataset.categoria;
-            if(cat === "Todos"){
-                btn.innerHTML = CAT_ICONOS["Todos"] + ' <span class="cat-texto">Inicio (<span id="totalProductos">' + total + '</span>)</span>';
-                return;
-            }
-            var n = (window.todosLosProductos || []).filter(function(p){ return p.categoria && p.categoria.indexOf(cat) !== -1; }).length;
-            btn.innerHTML = (CAT_ICONOS[cat] || "") + " " + cat + " (" + n + ")";
-        });
-    }
-    window.addEventListener("productosCargados", renderCategorias);
-    document.addEventListener("DOMContentLoaded", renderCategorias);
     /* Indicador deslizante del menú segmentado */
     function moverIndicador(){
         var ind = document.getElementById("catIndicador");
@@ -1568,13 +1578,6 @@ body{
         ind.style.opacity = "1";
         ind.style.left = (rb.left - rc.left) + "px";
         ind.style.width = rb.width + "px";
-    }
-    /* Vigilante: restaura iconos y mueve el indicador cuando cambian las categorías */
-    var contCats = document.querySelector(".categorias");
-    if(contCats && "MutationObserver" in window){
-        new MutationObserver(function(){
-            setTimeout(function(){ renderCategorias(); moverIndicador(); }, 0);
-        }).observe(contCats, {childList:true, subtree:true, attributes:true, attributeFilter:["class"]});
     }
     window.addEventListener("resize", function(){ setTimeout(moverIndicador, 60); });
     document.addEventListener("DOMContentLoaded", function(){ setTimeout(moverIndicador, 60); });
