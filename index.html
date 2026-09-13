@@ -808,146 +808,155 @@ body{
    ============================================================ */
 #catIndicador{display:none !important}
 
+/* ============================================================
+   BARRA DE CATEGORÍAS — control segmentado
+   Antes eran 6 píldoras de colores sueltas. Se sustituye por una
+   sola barra con los 6 apartados del mismo ancho, separadores finos
+   y el activo relleno: es el patrón de una barra de pestañas, se lee
+   más ordenado y profesional.
+   El texto sube a 1rem (antes .86rem, que se veía pequeño al lado
+   del resto de la página).
+   ============================================================ */
 .categorias{
-    background:transparent !important;
-    border:0 !important;
-    border-radius:0 !important;
-    box-shadow:none !important;
-    padding:0 !important;
+    display:flex !important;
+    flex-wrap:nowrap;
+    align-items:stretch;
+    justify-content:center;
+    gap:0 !important;
+    padding:6px !important;
+    margin-top:clamp(16px,2.6vw,28px) !important;
+    background:var(--card) !important;
+    border:1px solid var(--borde) !important;
+    border-radius:16px !important;
+    box-shadow:0 2px 12px rgba(120,80,95,.07) !important;
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
-    /* Fila flexible, no rejilla: cada píldora mide lo que su texto y la
-       fila se centra. Con rejilla, en pantallas medianas cada píldora se
-       estiraba a un tercio del ancho y quedaba un hueco enorme en medio. */
-    display:flex !important;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:center;
-    gap:10px !important;
-    margin-top:clamp(14px,2.4vw,26px) !important;
     animation:tsCatEntrada .6s ease both}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
-/* ============================================================
-   Píldoras de categoría.
-   Antes eran blancas, con borde fino y el texto a veces partido
-   en dos líneas. Ahora cada una lleva el TONO de su categoría en
-   tres niveles (--tinte de fondo, --tono del aro, --tinta del
-   icono y del texto), el contador va en un distintivo y el texto
-   nunca se parte.
-   ============================================================ */
 #categorias .categoria{
     position:relative;
     z-index:2;
+    flex:1 1 0;
+    min-width:0;
     display:inline-flex;
     align-items:center;
-    justify-content:flex-start;
-    gap:5px;
-    /* Se ajusta a su contenido: nada de estirarse.
-       El width:auto es imprescindible: el CSS base pone width:100%
-       a .categoria y, sin esto, cada píldora ocupaba la fila entera. */
-    width:auto !important;
-    max-width:100%;
-    padding:5px 10px 5px 5px;
-    background:var(--tinte,#fbf1e5) !important;
-    border:1.5px solid var(--tono,#ebd0ac) !important;
-    border-radius:999px;
-    color:var(--tinta,#a2703f) !important;
+    justify-content:center;
+    gap:7px;
+    padding:12px 12px;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:11px;
+    color:var(--text) !important;
+    font-family:inherit;
+    font-size:1rem;
     font-weight:700;
-    letter-spacing:.1px;
-    box-shadow:0 2px 8px rgba(120,80,95,.07) !important;
-    transition:transform .28s cubic-bezier(.2,.8,.2,1),background .28s ease,
-               border-color .28s ease,box-shadow .28s ease,color .28s ease !important;
-    animation:tsCatPop .5s cubic-bezier(.2,.8,.2,1) backwards}
-#categorias .categoria:nth-child(2){animation-delay:.05s}
-#categorias .categoria:nth-child(3){animation-delay:.10s}
-#categorias .categoria:nth-child(4){animation-delay:.15s}
-#categorias .categoria:nth-child(5){animation-delay:.20s}
-#categorias .categoria:nth-child(6){animation-delay:.25s}
-#categorias .categoria:nth-child(7){animation-delay:.30s}
-@keyframes tsCatPop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+    letter-spacing:0;
+    cursor:pointer;
+    box-shadow:none !important;
+    transition:background .22s ease,color .22s ease,transform .22s ease !important;
+    animation:tsCatPop .45s cubic-bezier(.2,.8,.2,1) backwards}
+#categorias .categoria:nth-child(2){animation-delay:.04s}
+#categorias .categoria:nth-child(3){animation-delay:.08s}
+#categorias .categoria:nth-child(4){animation-delay:.12s}
+#categorias .categoria:nth-child(5){animation-delay:.16s}
+#categorias .categoria:nth-child(6){animation-delay:.20s}
+#categorias .categoria:nth-child(7){animation-delay:.24s}
+@keyframes tsCatPop{from{opacity:0}to{opacity:1}}
 
+/* Separador fino entre apartados (solo en la fila única) */
+#categorias .categoria + .categoria{box-shadow:inset 1.5px 0 0 0 var(--borde) !important}
 #categorias .categoria::after{display:none !important}
 
-/* Icono: aro relleno con el tono de la categoría (antes era solo
-   una línea fina, que con el texto se quedaba muy soso) */
+/* Icono neutro: el color se reserva para el apartado activo */
 #categorias .categoria .cat-icono{
-    width:28px;
-    height:28px;
-    padding:6px;
+    width:20px;
+    height:20px;
+    padding:0;
     box-sizing:border-box;
     display:block;
     flex:0 0 auto;
-    border-radius:50%;
-    background:var(--tono,#ebd0ac);
     border:0;
-    color:var(--tinta,#a2703f);
+    border-radius:0;
+    background:none;
+    color:var(--muted);
     stroke:currentColor;
-    box-shadow:0 3px 9px rgba(120,80,95,.16);
-    transition:transform .28s ease,box-shadow .28s ease,background .28s ease,
-               color .28s ease}
+    stroke-width:1.9;
+    transition:color .22s ease,transform .22s ease}
 
-/* Texto: en una sola línea, siempre */
 #categorias .categoria,
 #categorias .categoria .cat-texto,
-#categorias .categoria .cat-nombre{
-    white-space:nowrap}
+#categorias .categoria .cat-nombre{white-space:nowrap}
+
 #categorias .categoria .cat-texto{
     flex:1 1 auto;
     display:inline-flex;
     align-items:center;
-    gap:5px;
+    justify-content:center;
+    gap:8px;
     min-width:0;
-    font-size:.86rem;
+    font-size:1rem;
     font-weight:700}
-/* El nombre se recorta él solo; el contador nunca se corta */
 #categorias .categoria .cat-nombre{
     min-width:0;
     overflow:hidden;
     text-overflow:ellipsis}
 
-/* Contador: distintivo propio en vez de " (55)" pegado al nombre */
+/* Contador: discreto, en tono apagado (antes era un distintivo de color) */
 #categorias .categoria .cat-num{
     flex:0 0 auto;
-    min-width:18px;
-    padding:1px 5px;
+    min-width:0;
+    padding:1px 8px;
     border-radius:999px;
-    background:rgba(255,255,255,.72);
-    color:var(--tinta,#a2703f);
-    font-size:.72rem;
-    font-weight:800;
-    line-height:1.5;
+    background:var(--bg);
+    color:var(--muted);
+    font-size:.8rem;
+    font-weight:700;
+    line-height:1.6;
     text-align:center;
     font-variant-numeric:tabular-nums;
-    box-shadow:inset 0 0 0 1px rgba(120,80,95,.10)}
+    box-shadow:inset 0 0 0 1px var(--borde);
+    transition:background .22s ease,color .22s ease,box-shadow .22s ease}
 
 #categorias .categoria:hover{
-    border-color:var(--tinta,#a2703f) !important;
-    transform:translateY(-3px);
-    box-shadow:0 12px 26px rgba(120,80,95,.18) !important}
-#categorias .categoria:hover .cat-icono{
-    transform:scale(1.08) rotate(-6deg);
-    box-shadow:0 7px 18px rgba(120,80,95,.26)}
+    background:var(--primario-suave) !important;
+    box-shadow:inset 1.5px 0 0 0 var(--borde) !important;
+    transform:none}
+#categorias .categoria:hover .cat-icono{color:var(--primario)}
+#categorias .categoria:hover .cat-num{background:var(--card);color:var(--primario)}
 
-/* Activa: la píldora se rellena con su color y el icono se invierte.
-   La app la marca con .activo (js) o .activa (css base): cubro las dos. */
+/* Activo: se rellena con el color de su categoría */
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(135deg,var(--tono,#ebd0ac),var(--tinta,#a2703f)) !important;
-    border-color:transparent !important;
+    background:linear-gradient(135deg,var(--tinta,var(--primario)),var(--primario-oscuro)) !important;
     color:#fff !important;
-    box-shadow:0 10px 24px rgba(120,80,95,.28) !important;
-    transform:translateY(-2px)}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{
-    color:#fff !important;
-    font-weight:800}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    background:rgba(255,255,255,.94);
-    color:var(--tinta,#a2703f);
-    box-shadow:0 4px 12px rgba(0,0,0,.18)}
+    box-shadow:0 6px 16px rgba(120,80,95,.22) !important;
+    transform:none}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto,
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-nombre{color:#fff !important;font-weight:700}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{color:#fff}
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
-    background:rgba(255,255,255,.26);
+    background:rgba(255,255,255,.22);
     color:#fff;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.34)}
+
+/* Medido: un apartado necesita ~195px para no recortar "Personalizados".
+   De ahí salen los tres tramos: fila única desde 1440 (el contenedor topa en 1280px y un apartado
+   necesita ~205px: 6x205 = 1230), tres por fila de 720 a 1439, y dos
+   por fila por debajo. Los separadores solo se pintan
+   en la fila única, que es donde tienen sentido. */
+@media (max-width:1439px){
+    #categorias .categorias{flex-wrap:wrap;gap:4px !important}
+    #categorias .categoria{flex:1 1 calc(33.333% - 4px);box-shadow:none !important}
+    #categorias .categoria + .categoria{box-shadow:none !important}
+    #categorias .categoria .cat-texto{font-size:.97rem}
+}
+@media (max-width:719px){
+    #categorias .categoria{flex:1 1 calc(50% - 4px)}
+    #categorias .categoria .cat-texto{font-size:.95rem}
+}
+@media (max-width:400px){
+    #categorias .categoria{flex:1 1 100%}
+}
 
 /* --- Tonos por categoría (tinte / aro / tinta) --- */
 #categorias .categoria[data-categoria="Todos"]{--tinte:#fbf1e5;--tono:#ebd0ac;--tinta:#a2703f}
