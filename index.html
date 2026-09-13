@@ -816,18 +816,16 @@ body{
     padding:0 !important;
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
-    display:grid !important;
-    gap:clamp(8px,1.1vw,14px) !important;
-    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    /* Fila flexible, no rejilla: cada píldora mide lo que su texto y la
+       fila se centra. Con rejilla, en pantallas medianas cada píldora se
+       estiraba a un tercio del ancho y quedaba un hueco enorme en medio. */
+    display:flex !important;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:10px !important;
     margin-top:clamp(14px,2.4vw,26px) !important;
     animation:tsCatEntrada .6s ease both}
-@media (min-width:700px){
-    #categorias .categorias{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
-}
-/* 6 en fila solo cuando cada píldora tiene sitio de sobra */
-@media (min-width:1400px){
-    #categorias .categorias{grid-template-columns:repeat(6,minmax(0,1fr)) !important}
-}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
 /* ============================================================
@@ -845,11 +843,11 @@ body{
     align-items:center;
     justify-content:flex-start;
     gap:5px;
-    /* Todas ocupan su celda entera: así los huecos son iguales
-       (antes cada píldora medía lo que su texto y la fila salía
-       descompensada) y el contador puede irse a la derecha. */
-    width:100%;
-    min-width:0;
+    /* Se ajusta a su contenido: nada de estirarse.
+       El width:auto es imprescindible: el CSS base pone width:100%
+       a .categoria y, sin esto, cada píldora ocupaba la fila entera. */
+    width:auto !important;
+    max-width:100%;
     padding:5px 10px 5px 5px;
     background:var(--tinte,#fbf1e5) !important;
     border:1.5px solid var(--tono,#ebd0ac) !important;
@@ -911,7 +909,6 @@ body{
 /* Contador: distintivo propio en vez de " (55)" pegado al nombre */
 #categorias .categoria .cat-num{
     flex:0 0 auto;
-    margin-left:auto;
     min-width:18px;
     padding:1px 5px;
     border-radius:999px;
@@ -962,8 +959,9 @@ body{
 
 /* En móvil estrecho se apilan a lo ancho para que nada se corte */
 @media (max-width:520px){
-    #categorias .categorias{grid-template-columns:1fr !important}
-    #categorias .categoria{width:100%;justify-content:flex-start}
+    #categorias .categorias{gap:8px !important}
+    #categorias .categoria{padding:5px 10px 5px 5px}
+    #categorias .categoria .cat-texto{font-size:.84rem}
 }
 
 /* ============================================================
