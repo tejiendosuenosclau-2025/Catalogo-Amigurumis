@@ -816,21 +816,48 @@ body{
     padding:0 !important;
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
+    display:grid !important;
+    gap:clamp(8px,1.1vw,14px) !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    margin-top:clamp(14px,2.4vw,26px) !important;
     animation:tsCatEntrada .6s ease both}
+@media (min-width:700px){
+    #categorias .categorias{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+}
+/* 6 en fila solo cuando cada píldora tiene sitio de sobra */
+@media (min-width:1400px){
+    #categorias .categorias{grid-template-columns:repeat(6,minmax(0,1fr)) !important}
+}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
+/* ============================================================
+   Píldoras de categoría.
+   Antes eran blancas, con borde fino y el texto a veces partido
+   en dos líneas. Ahora cada una lleva el TONO de su categoría en
+   tres niveles (--tinte de fondo, --tono del aro, --tinta del
+   icono y del texto), el contador va en un distintivo y el texto
+   nunca se parte.
+   ============================================================ */
 #categorias .categoria{
     position:relative;
     z-index:2;
     display:inline-flex;
     align-items:center;
-    gap:10px;
-    padding:7px 18px 7px 7px;
-    background:var(--card) !important;
-    border:1.5px solid var(--borde) !important;
+    justify-content:flex-start;
+    gap:5px;
+    /* Todas ocupan su celda entera: así los huecos son iguales
+       (antes cada píldora medía lo que su texto y la fila salía
+       descompensada) y el contador puede irse a la derecha. */
+    width:100%;
+    min-width:0;
+    padding:5px 10px 5px 5px;
+    background:var(--tinte,#fbf1e5) !important;
+    border:1.5px solid var(--tono,#ebd0ac) !important;
     border-radius:999px;
-    color:var(--text) !important;
-    box-shadow:var(--ts-sombra) !important;
+    color:var(--tinta,#a2703f) !important;
+    font-weight:700;
+    letter-spacing:.1px;
+    box-shadow:0 2px 8px rgba(120,80,95,.07) !important;
     transition:transform .28s cubic-bezier(.2,.8,.2,1),background .28s ease,
                border-color .28s ease,box-shadow .28s ease,color .28s ease !important;
     animation:tsCatPop .5s cubic-bezier(.2,.8,.2,1) backwards}
@@ -844,65 +871,99 @@ body{
 
 #categorias .categoria::after{display:none !important}
 
-/* El aro del icono: continuo y fino, en el tono de su categoría */
+/* Icono: aro relleno con el tono de la categoría (antes era solo
+   una línea fina, que con el texto se quedaba muy soso) */
 #categorias .categoria .cat-icono{
-    width:38px;
-    height:38px;
-    padding:7px;
+    width:28px;
+    height:28px;
+    padding:6px;
     box-sizing:border-box;
     display:block;
     flex:0 0 auto;
     border-radius:50%;
-    background:#fff;
-    border:2px solid var(--hilo,var(--ts-rosa-claro));
-    box-shadow:0 2px 6px rgba(120,80,95,.08);
+    background:var(--tono,#ebd0ac);
+    border:0;
+    color:var(--tinta,#a2703f);
     stroke:currentColor;
-    transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease,
-               background .28s ease,color .28s ease}
-.dark #categorias .categoria .cat-icono{background:rgba(255,255,255,.06)}
+    box-shadow:0 3px 9px rgba(120,80,95,.16);
+    transition:transform .28s ease,box-shadow .28s ease,background .28s ease,
+               color .28s ease}
+
+/* Texto: en una sola línea, siempre */
+#categorias .categoria,
+#categorias .categoria .cat-texto,
+#categorias .categoria .cat-nombre{
+    white-space:nowrap}
+#categorias .categoria .cat-texto{
+    flex:1 1 auto;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    min-width:0;
+    font-size:.86rem;
+    font-weight:700}
+/* El nombre se recorta él solo; el contador nunca se corta */
+#categorias .categoria .cat-nombre{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis}
+
+/* Contador: distintivo propio en vez de " (55)" pegado al nombre */
+#categorias .categoria .cat-num{
+    flex:0 0 auto;
+    margin-left:auto;
+    min-width:18px;
+    padding:1px 5px;
+    border-radius:999px;
+    background:rgba(255,255,255,.72);
+    color:var(--tinta,#a2703f);
+    font-size:.72rem;
+    font-weight:800;
+    line-height:1.5;
+    text-align:center;
+    font-variant-numeric:tabular-nums;
+    box-shadow:inset 0 0 0 1px rgba(120,80,95,.10)}
 
 #categorias .categoria:hover{
-    background:var(--card) !important;
-    border-color:var(--hilo,var(--ts-rosa-claro)) !important;
+    border-color:var(--tinta,#a2703f) !important;
     transform:translateY(-3px);
-    box-shadow:var(--ts-sombra-alta) !important}
+    box-shadow:0 12px 26px rgba(120,80,95,.18) !important}
 #categorias .categoria:hover .cat-icono{
     transform:scale(1.08) rotate(-6deg);
-    box-shadow:0 6px 16px rgba(120,80,95,.18)}
-#categorias .categoria:hover .cat-texto{color:var(--primario) !important}
+    box-shadow:0 7px 18px rgba(120,80,95,.26)}
 
-/* Tono del hilo y color del icono, por categoría */
-#categorias .categoria[data-categoria="Todos"]{--hilo:#e2b995}
-#categorias .categoria[data-categoria="Todos"] .cat-icono{color:#b9805c}
-#categorias .categoria[data-categoria="Disponibles"]{--hilo:#b6cdba}
-#categorias .categoria[data-categoria="Disponibles"] .cat-icono{color:#5d9a70}
-#categorias .categoria[data-categoria="Animales"]{--hilo:#e0b6c4}
-#categorias .categoria[data-categoria="Animales"] .cat-icono{color:#b76e8a}
-#categorias .categoria[data-categoria="Personajes"]{--hilo:#e2cf9e}
-#categorias .categoria[data-categoria="Personajes"] .cat-icono{color:#c2a15a}
-#categorias .categoria[data-categoria="Llaveros"]{--hilo:#cdbcdd}
-#categorias .categoria[data-categoria="Llaveros"] .cat-icono{color:#9a84b8}
-#categorias .categoria[data-categoria="Personalizados"]{--hilo:#b6cddd}
-#categorias .categoria[data-categoria="Personalizados"] .cat-icono{color:#7f9cb8}
-
-/* Activa. La app la marca con la clase .activo (js/app.js). */
+/* Activa: la píldora se rellena con su color y el icono se invierte.
+   La app la marca con .activo (js) o .activa (css base): cubro las dos. */
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:var(--ts-velo) !important;
-    border-color:var(--ts-rosa-claro) !important;
-    color:var(--primario) !important;
-    box-shadow:0 6px 16px rgba(181,107,69,.16) !important;
-    transform:translateY(-1px)}
+    background:linear-gradient(135deg,var(--tono,#ebd0ac),var(--tinta,#a2703f)) !important;
+    border-color:transparent !important;
+    color:#fff !important;
+    box-shadow:0 10px 24px rgba(120,80,95,.28) !important;
+    transform:translateY(-2px)}
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-texto{
-    color:var(--primario) !important;
+    color:#fff !important;
     font-weight:800}
 #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    background:linear-gradient(135deg,var(--hilo,var(--ts-rosa-claro)),var(--primario));
-    border-color:transparent;
-    color:#fff !important;
-    box-shadow:0 6px 14px rgba(181,107,69,.26);
-    transform:none}
-@media (max-width:600px){
-    #categorias .categoria:is(.activo,.active,.seleccionada,.activa){width:100%}
+    background:rgba(255,255,255,.94);
+    color:var(--tinta,#a2703f);
+    box-shadow:0 4px 12px rgba(0,0,0,.18)}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    background:rgba(255,255,255,.26);
+    color:#fff;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+
+/* --- Tonos por categoría (tinte / aro / tinta) --- */
+#categorias .categoria[data-categoria="Todos"]{--tinte:#fbf1e5;--tono:#ebd0ac;--tinta:#a2703f}
+#categorias .categoria[data-categoria="Disponibles"]{--tinte:#edf7f0;--tono:#bfdcc9;--tinta:#3f7f57}
+#categorias .categoria[data-categoria="Animales"]{--tinte:#fdf0f4;--tono:#efc6d7;--tinta:#a85f82}
+#categorias .categoria[data-categoria="Personajes"]{--tinte:#fdf7e7;--tono:#ebdaa6;--tinta:#9c7c24}
+#categorias .categoria[data-categoria="Llaveros"]{--tinte:#f4f0fb;--tono:#d4c8ec;--tinta:#6f5ca0}
+#categorias .categoria[data-categoria="Personalizados"]{--tinte:#edf4fa;--tono:#c2daec;--tinta:#43719b}
+
+/* En móvil estrecho se apilan a lo ancho para que nada se corte */
+@media (max-width:520px){
+    #categorias .categorias{grid-template-columns:1fr !important}
+    #categorias .categoria{width:100%;justify-content:flex-start}
 }
 
 /* ============================================================
@@ -1177,6 +1238,22 @@ body{
     .dark .creditos .marca{-webkit-text-fill-color:currentColor !important;color:#e0a884 !important}
 }
 
+/* Tonos de categoría en oscuro: fondos translúcidos y tintas claras
+   (en claro son pasteles; sobre fondo oscuro brillarían) */
+.dark #categorias .categoria[data-categoria="Todos"]{--tinte:rgba(235,208,172,.12);--tono:rgba(235,208,172,.30);--tinta:#e3be8e}
+.dark #categorias .categoria[data-categoria="Disponibles"]{--tinte:rgba(191,220,201,.12);--tono:rgba(191,220,201,.30);--tinta:#9ed0b3}
+.dark #categorias .categoria[data-categoria="Animales"]{--tinte:rgba(239,198,215,.12);--tono:rgba(239,198,215,.30);--tinta:#e8afc7}
+.dark #categorias .categoria[data-categoria="Personajes"]{--tinte:rgba(235,218,166,.12);--tono:rgba(235,218,166,.30);--tinta:#dcc77e}
+.dark #categorias .categoria[data-categoria="Llaveros"]{--tinte:rgba(212,200,236,.12);--tono:rgba(212,200,236,.30);--tinta:#bba9df}
+.dark #categorias .categoria[data-categoria="Personalizados"]{--tinte:rgba(194,218,236,.12);--tono:rgba(194,218,236,.30);--tinta:#9fc4de}
+.dark #categorias .categoria .cat-num{background:rgba(255,255,255,.10);color:var(--tinta);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(135deg,var(--tono),rgba(255,255,255,.10)) !important;
+    border-color:var(--tinta) !important;
+    color:#fff !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{background:rgba(255,255,255,.92)}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.20);color:#fff}
+
 /* ============================================================
    10) MOVIMIENTO REDUCIDO
    ============================================================ */
@@ -1430,11 +1507,11 @@ body{
         document.querySelectorAll(".categoria").forEach(function(btn){
             var cat = btn.dataset.categoria;
             if(cat === "Todos"){
-                btn.innerHTML = CAT_ICONOS["Todos"] + ' <span class="cat-texto">Inicio (<span id="totalProductos">' + total + '</span>)</span>';
+                btn.innerHTML = CAT_ICONOS["Todos"] + ' <span class="cat-texto"><span class="cat-nombre">Inicio</span><span class="cat-num" id="totalProductos">' + total + '</span></span>';
                 return;
             }
             var n = (window.todosLosProductos || []).filter(function(p){ return p.categoria && p.categoria.indexOf(cat) !== -1; }).length;
-            btn.innerHTML = (CAT_ICONOS[cat] || "") + " " + cat + " (" + n + ")";
+            btn.innerHTML = (CAT_ICONOS[cat] || "") + ' <span class="cat-texto"><span class="cat-nombre">' + cat + '</span><span class="cat-num">' + n + '</span></span>';
         });
     }
     window.addEventListener("productosCargados", renderCategorias);
