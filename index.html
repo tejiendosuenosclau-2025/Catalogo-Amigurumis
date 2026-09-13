@@ -872,8 +872,8 @@ body{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:6px;
-    padding:11px 14px;
+    gap:5px;
+    padding:11px 9px;
     background:transparent !important;
     border:0 !important;
     border-radius:999px;
@@ -952,7 +952,35 @@ body{
 
 /* Un pelín más juntas las seis cuando hay sitio de sobra */
 @media (min-width:1300px){
-    #categorias .categoria{padding:11px 22px}
+    #categorias .categoria{padding:11px 20px}
+}
+
+/* ------------------------------------------------------------
+   PANTALLAS POR DEBAJO DE 1440 (móvil, tablet y portátil)
+   Medido: con los contadores, las seis solo caben en una fila a
+   partir de 1440 (el contenedor topa en 1280px y no da más). Por
+   debajo NO se desplaza: se reparten en dos columnas y se ven TODAS: se reparten en dos columnas y se ven
+   TODAS de un vistazo, sin arrastrar y sin nada cortado.
+   El resalte deslizante se oculta porque con varias filas
+   quedaría colocado en el sitio equivocado; el apartado activo
+   ya lleva su propio relleno, así que se sigue viendo cuál es.
+   ------------------------------------------------------------ */
+@media (max-width:1439px){
+    #categorias .categorias{
+        flex-wrap:wrap !important;
+        overflow:visible !important;
+        justify-content:center;
+        gap:4px !important}
+    #categorias .categorias::-webkit-scrollbar{display:none}
+    #catIndicador{display:none !important}
+    #categorias .categoria{
+        flex:1 1 calc(50% - 4px);
+        justify-content:flex-start;
+        padding:11px 12px}
+    #categorias .categoria .cat-texto{font-size:.95rem}
+}
+@media (max-width:400px){
+    #categorias .categoria{flex:1 1 100%}
 }
 
 /* --- Tonos por categoría (tinte / aro / tinta) --- */
