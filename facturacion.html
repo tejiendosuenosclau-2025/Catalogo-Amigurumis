@@ -2651,6 +2651,11 @@ select.sel-nativo{display:none !important}
 .cat-check input{accent-color:#e85c8b;width:16px;height:16px;cursor:pointer}
 .cat-check.disponible{grid-column:1/-1}
 .productos-foto-preview{margin-top:8px}
+/* Aviso de la conversión de la foto a webp */
+.foto-ayuda{margin:6px 0 0;font-size:var(--fs-xs,11px);line-height:1.45;color:var(--mut-ink,#6b5f66)}
+.prod-foto-aviso{margin:6px 0 0;font-size:var(--fs-xs,11px);line-height:1.45;color:var(--mut-ink,#6b5f66)}
+.prod-foto-aviso.ok{color:var(--g-ink,#0e7a44);font-weight:700}
+.prod-foto-aviso.error{color:var(--warn-ink,#a86400)}
 /* Indicador de progreso de la subida de foto */
 .producto-subida{
     position:fixed;inset:0;z-index:3000;
@@ -10486,6 +10491,15 @@ async function eliminarFacturaDB(id){
 
         if(errorFactura) throw errorFactura;
 
+        /* Si la consulta devolviera la fila vacía, antes se seguía adelante y
+           reventaba más abajo, al leer factura.numero: los borrados ya se
+           habían hecho, pero el historial no se refrescaba y parecía que no
+           se había eliminado nada. Con el nombre de reserva eso ya no pasa. */
+        const numeroFactura =
+            (factura && factura.numero)
+                ? factura.numero
+                : ("#" + id);
+
 
         // ==========================================
         // 3. ELIMINAR DETALLES
@@ -10497,6 +10511,31 @@ async function eliminarFacturaDB(id){
             .eq("factura_id", id);
 
         if(errorDetalle) throw errorDetalle;
+
+
+        // ==========================================
+        // 3b. ELIMINAR ABONOS
+        // ==========================================
+        //
+        // factura_pagos apunta a la factura con una clave foránea. Si no se
+        // borran antes, la base de datos rechaza borrar la factura y el error
+        // que sale es «revisa los permisos», que despista.
+        // Si esta tabla no existiera o no se pudiera borrar, se avisa por
+        // consola y se continúa: esto nunca debe impedir el borrado.
+
+        const { error: errorPagos } = await db
+            .from("factura_pagos")
+            .delete()
+            .eq("factura_id", id);
+
+        if(errorPagos){
+
+            console.warn(
+                "No se pudieron borrar los abonos de la factura (se continúa):",
+                errorPagos
+            );
+
+        }
 
 
         // ==========================================
@@ -10515,14 +10554,19 @@ async function eliminarFacturaDB(id){
         // 5. MENSAJE
         // ==========================================
 
-        mostrarToast('La factura ' + factura.numero + ' fue eliminada definitivamente.','success','Factura eliminada');
+        mostrarToast('La factura ' + numeroFactura + ' fue eliminada definitivamente.','success','Factura eliminada');
 
 
-        // ==========================================
-        // 6. ACTUALIZAR HISTORIAL
-        // ==========================================
+        // Si la factura borrada era la que se estaba editando, el formulario
+        // se queda apuntando a algo que ya no existe: se limpia.
 
-        await cargarHistorialDB();
+        if(String(editingInvoiceId) === String(id)){
+
+            reiniciarFactura();
+
+            bloquearForm(true);
+
+        }
 
 
     }catch(err){
@@ -10532,7 +10576,25 @@ async function eliminarFacturaDB(id){
             err
         );
 
-        mostrarToast('No fue posible eliminar la factura. Revisa los permisos de Supabase.','error','Error al eliminar',6500);
+        /* Se muestra el error real: si fue una clave foránea o un permiso,
+           antes era imposible saberlo desde el mensaje. */
+        mostrarToast(
+            'No fue posible eliminar la factura: ' +
+            ((err && err.message) ? err.message : 'error desconocido'),
+            'error',
+            'Error al eliminar',
+            8000
+        );
+
+
+    }finally{
+
+        // ==========================================
+        // 6. ACTUALIZAR HISTORIAL (pase lo que pase)
+        // ==========================================
+
+        try{ await cargarHistorialDB(); }catch(e){ console.warn("No se pudo refrescar el historial:",e); }
+
     }
 }
 
@@ -11946,6 +12008,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var editandoId = null;
     var fotoArchivo = null;
+    var fotoEnProceso = null;   /* promesa de la conversión a webp en curso */
 
     function abrirModal(){
         el("modalProductos").classList.add("show");
@@ -12071,6 +12134,8 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.disabled = true; btn.style.opacity = .6;
         var barraOk = false;
         try{
+            /* Si la conversión a webp sigue en marcha, se espera */
+            if(fotoEnProceso){ try{ await fotoEnProceso; }catch(eF){} fotoEnProceso = null; }
             if(fotoArchivo){
                 mostrarSubida(true); setBarra(4,"📤 Preparando foto…");
                 var ext = (fotoArchivo.name.split(".").pop() || "jpg").toLowerCase();
@@ -12144,6 +12209,74 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         if(t && txt) t.textContent = txt;
     }
+    /* ------------------------------------------------------------
+       CONVERSIÓN DE LA FOTO A WEBP (antes de subirla al catálogo)
+       Se reduce el lado mayor a 1200 px y se guarda en webp.
+       En pantalla se ve igual, pero pesa muchísimo menos.
+       ------------------------------------------------------------ */
+    var FOTO_LADO_MAX = 1200;   /* lado mayor en píxeles */
+    var FOTO_CALIDAD  = 0.85;   /* calidad del webp */
+
+    function pesoLegible(bytes){
+        var b = Number(bytes) || 0;
+        if(b < 1024)              return b + " B";
+        if(b < 1024 * 1024)       return Math.round(b / 1024) + " KB";
+        return (b / (1024 * 1024)).toFixed(1).replace(".", ",") + " MB";
+    }
+
+    /* Devuelve una promesa con el archivo ya convertido.
+       Si no se puede convertir, se rechaza y quien llama decide
+       (en la subida se usa la foto original como respaldo). */
+    function convertirAWebp(archivo, maxLado, calidad){
+        maxLado = maxLado || FOTO_LADO_MAX;
+        calidad = (calidad === undefined) ? FOTO_CALIDAD : calidad;
+        var tipo  = String(archivo.type || "");
+        var nombre = String(archivo.name || "foto");
+        var yaWebp = tipo.indexOf("webp") !== -1 || /\.webp$/i.test(nombre);
+
+        /* Un gif animado perdería el movimiento: se deja tal cual */
+        if(tipo.indexOf("gif") !== -1) return Promise.resolve(archivo);
+        /* Si ya es webp y va ligera, no hay nada que ganar */
+        if(yaWebp && archivo.size <= 350 * 1024) return Promise.resolve(archivo);
+
+        return new Promise(function(res, rej){
+            var url = URL.createObjectURL(archivo);
+            var img = new Image();
+            img.onload = function(){
+                try{
+                    var w = img.naturalWidth || img.width;
+                    var h = img.naturalHeight || img.height;
+                    if(!w || !h) throw new Error("no se pudo medir la imagen");
+                    var escala = Math.min(1, maxLado / Math.max(w, h));
+                    var nw = Math.max(1, Math.round(w * escala));
+                    var nh = Math.max(1, Math.round(h * escala));
+                    var cv = document.createElement("canvas");
+                    cv.width = nw; cv.height = nh;
+                    var ctx = cv.getContext("2d");
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = "high";
+                    ctx.drawImage(img, 0, 0, nw, nh);
+                    URL.revokeObjectURL(url);
+                    cv.toBlob(function(blob){
+                        /* Ojo: si el navegador no sabe codificar webp,
+                           toBlob devuelve un png sin avisar. Se comprueba. */
+                        if(!blob || String(blob.type).indexOf("webp") === -1){
+                            rej(new Error("este navegador no sabe crear webp"));
+                            return;
+                        }
+                        var salidaNombre = nombre.replace(/\.[^.]+$/, "") + ".webp";
+                        var salida;
+                        try{ salida = new File([blob], salidaNombre, {type:"image/webp"}); }
+                        catch(e){ salida = blob; salida.name = salidaNombre; }
+                        res(salida);
+                    }, "image/webp", calidad);
+                }catch(err){ URL.revokeObjectURL(url); rej(err); }
+            };
+            img.onerror = function(){ URL.revokeObjectURL(url); rej(new Error("no se pudo leer la imagen")); };
+            img.src = url;
+        });
+    }
+
     function subirFotoXHR(archivo, ruta, onProgreso){
         return new Promise(function(res, rej){
             var xhr = new XMLHttpRequest();
@@ -12187,14 +12320,38 @@ document.addEventListener("DOMContentLoaded", function () {
     if(buscar) buscar.addEventListener("input", cargarLista);
     var foto = el("productoFoto");
     if(foto) foto.addEventListener("change", function(e){
-        fotoArchivo = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-        el("productoFotoPreview").innerHTML = "";
+        var elegida = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+        var caja = el("productoFotoPreview");
+        fotoArchivo = null;
+        fotoEnProceso = null;
+        caja.innerHTML = "";
         if(el("productoSubida")){ el("productoSubida").classList.remove("activo"); el("productoSubida").classList.remove("fracaso"); }
-        if(fotoArchivo){
-            var img = document.createElement("img");
-            img.src = URL.createObjectURL(fotoArchivo);
-            el("productoFotoPreview").appendChild(img);
-        }
+        if(!elegida) return;
+
+        /* Se muestra ya lo elegido, sin esperar */
+        var img = document.createElement("img");
+        img.src = URL.createObjectURL(elegida);
+        caja.appendChild(img);
+        var aviso = document.createElement("p");
+        aviso.className = "prod-foto-aviso";
+        aviso.textContent = "Preparando la foto…";
+        caja.appendChild(aviso);
+
+        /* Y se convierte a webp en segundo plano */
+        fotoEnProceso = convertirAWebp(elegida).then(function(lista){
+            fotoArchivo = lista;
+            img.setAttribute("src", URL.createObjectURL(lista));
+            aviso.className = "prod-foto-aviso ok";
+            aviso.textContent = "Lista para subir: " + pesoLegible(elegida.size) +
+                                " → " + pesoLegible(lista.size) + " · webp";
+            return lista;
+        }).catch(function(err){
+            fotoArchivo = elegida;   /* respaldo: se sube la original */
+            aviso.className = "prod-foto-aviso error";
+            aviso.textContent = "No se pudo convertir (" + (err && err.message ? err.message : "error") +
+                                "): se subirá la original, " + pesoLegible(elegida.size) + ".";
+            return elegida;
+        });
     });
     var modalProd = el("modalProductos");
     if(modalProd) modalProd.addEventListener("click", function(e){ if(e.target === this) cerrarModal(); });
@@ -12419,6 +12576,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <label for="productoFoto">Foto</label>
             <input id="productoFoto" type="file" accept="image/*">
+            <p class="foto-ayuda">La foto se convierte sola a <b>webp</b> y se reduce a 1200 px: se ve igual y el catálogo carga mucho más rápido.</p>
 
             <div id="productoFotoPreview" class="productos-foto-preview"></div>
 
