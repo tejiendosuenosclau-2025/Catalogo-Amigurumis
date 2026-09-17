@@ -4815,17 +4815,19 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 /* Superficie clara del panel: el neomorfismo necesita un tono suave
    para que el relieve se lea (antes era blanco puro). */
 #loginScreen .login-card{
-    background:linear-gradient(160deg,#fffafc 0%,#fdf1f6 100%);
+    background:#fdf2f7;
 }
 
-/* ── Cajas de texto: relieve hundido y suave ── */
+/* ── Cajas de texto: relieve HUNDIDO (hacia adentro) ──
+   Misma tonalidad que la tarjeta: el hueco lo dibujan las sombras
+   internas (oscura arriba-izquierda + luz blanca abajo-derecha). */
 #loginScreen .login-card .campo input{
     width:100%;box-sizing:border-box;
     padding:14px 16px 14px 46px;
     border:0;border-radius:15px;
-    background:linear-gradient(145deg,#fdeef5 0%,#fff9fc 100%);
-    box-shadow:inset 3px 3px 8px rgba(197,141,167,.20),
-               inset -3px -3px 8px rgba(255,255,255,.95);
+    background:#fdf2f7;
+    box-shadow:inset 5px 5px 10px rgba(196,138,167,.55),
+               inset -5px -5px 10px #ffffff;
     font-family:inherit;font-size:15px;color:var(--ink);
     outline:none;
     transition:box-shadow .25s ease,background .25s ease;
@@ -4835,10 +4837,10 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 /* Al enfocar: mismo relieve + anillo rosa del proyecto (sin bordes duros) */
 #loginScreen .login-card .campo input:focus,
 #loginScreen .login-card .campo:focus-within input{
-    background:linear-gradient(145deg,#fde8f1 0%,#fffafd 100%);
-    box-shadow:inset 3px 3px 9px rgba(197,141,167,.24),
-               inset -3px -3px 9px rgba(255,255,255,.95),
-               0 0 0 3px rgba(244,125,163,.18);
+    background:#fbe9f2;
+    box-shadow:inset 5px 5px 11px rgba(196,138,167,.60),
+               inset -5px -5px 10px #ffffff,
+               0 0 0 3px rgba(244,125,163,.22);
 }
 /* El input de contraseña reserva sitio al ojo */
 #loginScreen .login-card .password-box input{padding-right:54px}
@@ -4847,8 +4849,8 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 #loginScreen .login-card input:-webkit-autofill,
 #loginScreen .login-card input:-webkit-autofill:hover,
 #loginScreen .login-card input:-webkit-autofill:focus{
-    -webkit-box-shadow:0 0 0 1000px #fdeff6 inset;
-    box-shadow:0 0 0 1000px #fdeff6 inset;
+    -webkit-box-shadow:0 0 0 1000px #fdf2f7 inset;
+    box-shadow:0 0 0 1000px #fdf2f7 inset;
     -webkit-text-fill-color:var(--ink);
     caret-color:var(--ink);
 }
@@ -4869,17 +4871,20 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
     margin:16px 0 8px;
 }
 
-/* ── Botón "Ingresar" / "Crear cuenta": relieve elevado tipo video ── */
+/* ── Botón "Ingresar" / "Crear cuenta": relieve ELEVADO (hacia afuera) ──
+   Sombras EXTERNAS (oscura abajo-derecha + luz blanca arriba-izquierda)
+   más un filo de luz interno arriba: el botón "sobresale" del panel. */
 #loginScreen .login-card .login-button{
     position:relative;overflow:hidden;
     width:100%;margin-top:26px;padding:15px 18px;
     border:0;border-radius:15px;
-    background:linear-gradient(145deg,#fff2f7 0%,#ffdbe9 100%);
+    background:linear-gradient(160deg,#fff5f9 0%,#ffdce9 100%);
     color:#a8346b;font-family:inherit;font-weight:800;font-size:15px;
     letter-spacing:.1em;text-transform:uppercase;
     cursor:pointer;
-    box-shadow:6px 6px 16px rgba(197,141,167,.28),
-               -6px -6px 16px rgba(255,255,255,.95);
+    box-shadow:7px 7px 16px rgba(196,138,167,.45),
+               -7px -7px 16px #ffffff,
+               inset 1px 1px 0 rgba(255,255,255,.95);
     transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
     animation:loginEntrar .5s ease .34s forwards, pulsoNeo 3.4s ease-in-out 1.1s infinite;
 }
@@ -4891,25 +4896,28 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 #loginScreen .login-card .login-button:hover{
     animation:none;opacity:1;
     transform:translateY(-2px);
-    background:linear-gradient(145deg,#ffecf4 0%,#ffcfe2 100%);
-    box-shadow:8px 8px 20px rgba(197,141,167,.32),
-               -7px -7px 18px rgba(255,255,255,.95),
-               0 0 0 3px rgba(244,125,163,.16);
+    background:linear-gradient(160deg,#fff0f7 0%,#ffd2e4 100%);
+    box-shadow:10px 10px 22px rgba(196,138,167,.48),
+               -8px -8px 18px #ffffff,
+               inset 1px 1px 0 rgba(255,255,255,.95),
+               0 0 0 3px rgba(244,125,163,.18);
     filter:none;
 }
 /* Pulsado: el relieve se hunde (feedback táctil) */
 #loginScreen .login-card .login-button:active{
     transform:translateY(0);
-    background:linear-gradient(145deg,#fde3ef 0%,#fbd2e2 100%);
-    box-shadow:inset 4px 4px 10px rgba(197,141,167,.30),
-               inset -4px -4px 10px rgba(255,255,255,.95);
+    background:linear-gradient(160deg,#fbe4ef 0%,#f9d3e2 100%);
+    box-shadow:inset 5px 5px 12px rgba(196,138,167,.55),
+               inset -5px -5px 12px #ffffff;
 }
 @keyframes pulsoNeo{
-    0%,100%{box-shadow:6px 6px 16px rgba(197,141,167,.28),
-                       -6px -6px 16px rgba(255,255,255,.95)}
-    50%{box-shadow:6px 6px 22px rgba(232,92,139,.34),
-                   -6px -6px 16px rgba(255,255,255,.95),
-                   0 0 0 4px rgba(244,125,163,.10)}
+    0%,100%{box-shadow:7px 7px 16px rgba(196,138,167,.45),
+                       -7px -7px 16px #ffffff,
+                       inset 1px 1px 0 rgba(255,255,255,.95)}
+    50%{box-shadow:10px 10px 24px rgba(232,92,139,.40),
+                   -7px -7px 16px #ffffff,
+                   inset 1px 1px 0 rgba(255,255,255,.95),
+                   0 0 0 4px rgba(244,125,163,.12)}
 }
 
 /* Ojo de la contraseña: mismo relieve suave */
@@ -4919,7 +4927,7 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
 }
 #loginScreen .login-card .password-box button:hover{
     background:rgba(244,125,163,.12);
-    box-shadow:inset 2px 2px 5px rgba(197,141,167,.18);
+    box-shadow:inset 2px 2px 6px rgba(196,138,167,.45);
 }
 #loginScreen .login-card .password-box button:focus-visible{
     outline:2px solid #a43d63;outline-offset:2px;
