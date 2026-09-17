@@ -4797,8 +4797,144 @@ label,.datos-superiores label,#form label,.login-card label{color:#8b7b82;letter
         animation:none !important;
         transition:none !important;
     }
-    #modalAbono .modal-abono-cerrar:hover,
-    #modalAbono #guardarAbono:hover{transform:none;}
+     #modalAbono .modal-abono-cerrar:hover,
+     #modalAbono #guardarAbono:hover{transform:none;}
+}
+
+/* ============================================================
+   🔐 LOGIN — CAJAS DE TEXTO Y BOTONES ESTILO NEUMÓRFICO
+   Referencia de forma/sombra: video "Modern Login & Signup Form"
+   (CodeByGaurav). Los colores son los del proyecto (--p / --pd / --v),
+   no el azul del video. Solo estética: NO toca la lógica de Supabase,
+   ni los id (#loginForm, #loginUser, #loginPass, #togglePassword,
+   #forgotPassword, #loginError) ni el panel de marca ni el registro.
+   Todo va con prefijo #loginScreen para no afectar el formulario
+   de facturación (que usa .campo / .campo-icono propios).
+   ============================================================ */
+
+/* Superficie clara del panel: el neomorfismo necesita un tono suave
+   para que el relieve se lea (antes era blanco puro). */
+#loginScreen .login-card{
+    background:linear-gradient(160deg,#fffafc 0%,#fdf1f6 100%);
+}
+
+/* ── Cajas de texto: relieve hundido y suave ── */
+#loginScreen .login-card .campo input{
+    width:100%;box-sizing:border-box;
+    padding:14px 16px 14px 46px;
+    border:0;border-radius:15px;
+    background:linear-gradient(145deg,#fdeef5 0%,#fff9fc 100%);
+    box-shadow:inset 3px 3px 8px rgba(197,141,167,.20),
+               inset -3px -3px 8px rgba(255,255,255,.95);
+    font-family:inherit;font-size:15px;color:var(--ink);
+    outline:none;
+    transition:box-shadow .25s ease,background .25s ease;
+}
+#loginScreen .login-card .campo input::placeholder{color:#6f6469;font-weight:500}
+
+/* Al enfocar: mismo relieve + anillo rosa del proyecto (sin bordes duros) */
+#loginScreen .login-card .campo input:focus,
+#loginScreen .login-card .campo:focus-within input{
+    background:linear-gradient(145deg,#fde8f1 0%,#fffafd 100%);
+    box-shadow:inset 3px 3px 9px rgba(197,141,167,.24),
+               inset -3px -3px 9px rgba(255,255,255,.95),
+               0 0 0 3px rgba(244,125,163,.18);
+}
+/* El input de contraseña reserva sitio al ojo */
+#loginScreen .login-card .password-box input{padding-right:54px}
+
+/* El navegador no debe pintar el campo de azul al autocompletar */
+#loginScreen .login-card input:-webkit-autofill,
+#loginScreen .login-card input:-webkit-autofill:hover,
+#loginScreen .login-card input:-webkit-autofill:focus{
+    -webkit-box-shadow:0 0 0 1000px #fdeff6 inset;
+    box-shadow:0 0 0 1000px #fdeff6 inset;
+    -webkit-text-fill-color:var(--ink);
+    caret-color:var(--ink);
+}
+
+/* Icono dentro del campo */
+#loginScreen .login-card .campo-icono{
+    left:15px;width:19px;height:19px;stroke:#a9628a;
+}
+#loginScreen .login-card .campo:focus-within .campo-icono{stroke:var(--pd)}
+
+/* La línea brillante inferior ya no encaja con el relieve suave */
+#loginScreen .login-card .campo::after{display:none}
+
+/* Etiqueta encima del campo: pequeña, en negrita y en rosa oscuro
+   (5,9:1 sobre el fondo de la tarjeta → cumple 4.5:1) */
+#loginScreen .login-card label{
+    color:#a43d63;font-size:12.5px;font-weight:800;letter-spacing:.2px;
+    margin:16px 0 8px;
+}
+
+/* ── Botón "Ingresar" / "Crear cuenta": relieve elevado tipo video ── */
+#loginScreen .login-card .login-button{
+    position:relative;overflow:hidden;
+    width:100%;margin-top:26px;padding:15px 18px;
+    border:0;border-radius:15px;
+    background:linear-gradient(145deg,#fff2f7 0%,#ffdbe9 100%);
+    color:#a8346b;font-family:inherit;font-weight:800;font-size:15px;
+    letter-spacing:.1em;text-transform:uppercase;
+    cursor:pointer;
+    box-shadow:6px 6px 16px rgba(197,141,167,.28),
+               -6px -6px 16px rgba(255,255,255,.95);
+    transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+    animation:loginEntrar .5s ease .34s forwards, pulsoNeo 3.4s ease-in-out 1.1s infinite;
+}
+#loginScreen .login-card .login-button .btn-icono{width:17px;height:17px;stroke:currentColor}
+/* Barrido de brillo rosa al pasar el cursor */
+#loginScreen .login-card .login-button::after{
+    background:linear-gradient(100deg,transparent,rgba(244,125,163,.22),transparent);
+}
+#loginScreen .login-card .login-button:hover{
+    animation:none;opacity:1;
+    transform:translateY(-2px);
+    background:linear-gradient(145deg,#ffecf4 0%,#ffcfe2 100%);
+    box-shadow:8px 8px 20px rgba(197,141,167,.32),
+               -7px -7px 18px rgba(255,255,255,.95),
+               0 0 0 3px rgba(244,125,163,.16);
+    filter:none;
+}
+/* Pulsado: el relieve se hunde (feedback táctil) */
+#loginScreen .login-card .login-button:active{
+    transform:translateY(0);
+    background:linear-gradient(145deg,#fde3ef 0%,#fbd2e2 100%);
+    box-shadow:inset 4px 4px 10px rgba(197,141,167,.30),
+               inset -4px -4px 10px rgba(255,255,255,.95);
+}
+@keyframes pulsoNeo{
+    0%,100%{box-shadow:6px 6px 16px rgba(197,141,167,.28),
+                       -6px -6px 16px rgba(255,255,255,.95)}
+    50%{box-shadow:6px 6px 22px rgba(232,92,139,.34),
+                   -6px -6px 16px rgba(255,255,255,.95),
+                   0 0 0 4px rgba(244,125,163,.10)}
+}
+
+/* Ojo de la contraseña: mismo relieve suave */
+#loginScreen .login-card .password-box button{
+    border-radius:11px;background:transparent;
+    transition:background .2s ease,box-shadow .2s ease;
+}
+#loginScreen .login-card .password-box button:hover{
+    background:rgba(244,125,163,.12);
+    box-shadow:inset 2px 2px 5px rgba(197,141,167,.18);
+}
+#loginScreen .login-card .password-box button:focus-visible{
+    outline:2px solid #a43d63;outline-offset:2px;
+}
+#loginScreen .login-card .ojo-icono{stroke:#b0335f}
+
+/* Enlace "¿Olvidaste tu contraseña?" en el mismo rosa oscuro legible */
+#loginScreen .login-card .forgot-password{color:#a43d63;font-weight:700}
+
+/* ── Ajuste para pantallas pequeñas: mantener altura táctil ≥44px ── */
+@media (max-width:520px){
+    #loginScreen .login-card .campo input{padding:13px 14px 13px 44px}
+    #loginScreen .login-card .password-box input{padding-right:52px}
+    #loginScreen .login-card label{margin:14px 0 7px}
+    #loginScreen .login-card .login-button{margin-top:22px;padding:14px;font-size:14px;letter-spacing:.08em}
 }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
