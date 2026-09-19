@@ -10,11 +10,13 @@
     <meta name="description"
           content="Amigurumis tejidos a mano en Popayán, Cauca. Muñecos de crochet, personajes, llaveros y regalos personalizados. ¡Encarga el tuyo por WhatsApp!">
 
-    <meta name="keywords"
-          content="amigurumis popayán, amigurumis, crochet, muñecos tejidos, tejidos a mano, llaveros, regalos personalizados, Popayán, Cauca, Colombia">
+    <!-- <meta name="keywords"> se retiró: Google lo ignora desde 2009 y
+         solo aporta ruido. La descripción y el JSON-LD hacen ese trabajo. -->
     <meta name="author" content="Tejiendo Sueños Clau">
     <meta name="geo.region" content="CO-CAU">
     <meta name="geo.placename" content="Popayán">
+    <meta name="geo.position" content="2.4414;-76.6065">
+    <meta name="color-scheme" content="light dark">
 
     <link rel="canonical" href="https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/">
 
@@ -27,8 +29,17 @@
     <meta property="og:url" content="https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/">
     <meta property="og:site_name" content="Tejiendo Sueños Clau">
     <meta property="og:image:alt" content="Logo de Tejiendo Sueños Clau">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Amigurumis en Popayán | Tejiendo Sueños Clau">
+    <meta name="twitter:description" content="Amigurumis tejidos a mano en Popayán, Cauca. Muñecos de crochet, llaveros y regalos personalizados.">
+    <meta name="twitter:image" content="https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/img/icon.png">
+
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#F47DA3">
+    <!-- Antes #F47DA3: era el ÚNICO punto rosa fuerte que quedaba y no
+         coincidía con el acento real de la página (--ts-rosa #b76e8a). -->
+    <meta name="theme-color" content="#b76e8a">
 
     <script type="application/ld+json">
 {
@@ -60,7 +71,11 @@
       "sameAs": [
         "https://www.instagram.com/tejiendo_suenos_clau_/",
         "https://www.tiktok.com/@tejiendo.suenos.clau"
-      ]
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "Colombia"
+      }
     },
     {
       "@type": "ItemList",
@@ -84,8 +99,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#llavero-dinosaurio-amigurumi",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -106,8 +120,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#migli-y-bigli",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -128,8 +141,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#perros",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -150,8 +162,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#chavo-del-8",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -172,8 +183,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#llavero-perro",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -194,8 +204,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#minecraft",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -216,8 +225,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#rapunzel",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -230,16 +238,15 @@
             "name": "Llavero Perro",
             "image": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/img/productos/llavero-perro.jpg",
             "description": "Amigurumi Llavero Perro tejido a mano en Popayán, Cauca, Colombia. Tamaño: 10 cm. Encarga el tuyo por WhatsApp o Instagram.",
-            "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#llavero-perro",
+            "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#llavero-perro-2",
             "offers": {
               "@type": "Offer",
               "price": 45000,
               "priceCurrency": "COP",
               "availability": "https://schema.org/InStock",
-              "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#llavero-perro",
+              "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#llavero-perro-2",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -260,8 +267,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#chicas-super-poderosas",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -282,8 +288,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#soldados",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -304,8 +309,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#abuelo",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -326,8 +330,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#conejo-gallina",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -348,8 +351,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#familia-arco-con-nubes",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -370,8 +372,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#novios",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -392,8 +393,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#peras",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -414,8 +414,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#winny-puu",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -436,8 +435,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#pitufinas",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -458,8 +456,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#mike-wazowsky",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -480,8 +477,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#estrellas",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -502,8 +498,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#hoja-de-marihuana",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -524,8 +519,7 @@
               "availability": "https://schema.org/InStock",
               "url": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#vacas",
               "seller": {
-                "@type": "Organization",
-                "name": "Tejiendo Sueños Clau"
+                "@id": "https://tejiendosuenosclau-2025.github.io/Catalogo-Amigurumis/#store"
               }
             }
           }
@@ -579,6 +573,16 @@
     --ts-radio-sm:12px;
     --ts-sombra:0 2px 10px rgba(120,80,95,.06);
     --ts-sombra-alta:0 14px 32px rgba(120,80,95,.14);
+    /* --- Contraste --------------------------------------------------
+       --ts-rosa (#b76e8a) da 3,7:1 sobre blanco: sirve para TÍTULOS
+       grandes y adornos, pero NO para texto pequeño (mínimo 4,5:1).
+       Para eso están estos dos tonos oscuros de la misma familia:
+         --ts-rosa-texto   #8e4a63  → 6,3:1
+         --ts-marron-texto #8B5A2B  → 5,8:1
+       ---------------------------------------------------------------- */
+    --ts-rosa-texto:#8e4a63;
+    --ts-marron-texto:#8B5A2B;
+    --ts-foco:rgba(183,110,138,.35);
 }
 
 /* ============================================================
@@ -663,7 +667,8 @@ body{
     font-weight:700;
     letter-spacing:-.5px;
     line-height:1.14;
-    margin-bottom:14px;
+    font-size:clamp(1.5rem,4vw,2.1rem); /* antes venía del style="" del HTML */
+    margin:0 0 10px;
     background:linear-gradient(100deg,var(--primario),var(--ts-rosa) 45%,var(--ts-violeta));
     -webkit-background-clip:text;
     background-clip:text;
@@ -675,7 +680,14 @@ body{
     line-height:1.7;
     max-width:62ch;
     margin:0 auto}
-.acciones-inicio{gap:14px !important;margin-top:26px !important;align-items:center;justify-content:center}
+/* display/flex-wrap venían del style="" del HTML */
+.acciones-inicio{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px !important;
+    margin-top:26px !important;
+    align-items:center;
+    justify-content:center}
 
 /* CTA principal: marrón de marca */
 #btnVerCatalogo{
@@ -687,7 +699,7 @@ body{
     border-radius:999px !important;
     padding:14px 30px !important;
     font-family:inherit;
-    font-size:1rem;
+    font-size:1.05rem;   /* el tamaño que traía el style="" del HTML */
     font-weight:700;
     letter-spacing:.3px;
     cursor:pointer;
@@ -721,6 +733,7 @@ body{
     border-radius:999px !important;
     padding:12px 26px !important;
     color:var(--primario) !important;
+    font-size:1.05rem;   /* el tamaño que traía el style="" del HTML */
     font-weight:700;
     text-decoration:none;
     box-shadow:var(--ts-sombra);
@@ -748,23 +761,91 @@ body{
 /* ============================================================
    4) CÓMO COMPRAR
    ============================================================ */
-.seccion-facil{padding-top:clamp(26px,4vw,44px)}
-.seccion-facil h2{margin-bottom:clamp(18px,3vw,30px)}
+/* El layout de esta sección vivía en un <style> escrito DENTRO del
+   <body>: al ir después del <head> le ganaba a esta capa y dejaba
+   colores fijos (#F47DA3, #8B5A2B, #555) imposibles de adaptar al
+   modo oscuro. Aquí está todo, con los mismos números, pero usando
+   las variables. */
+.seccion-facil{
+    max-width:1100px;
+    margin:0 auto;
+    padding:clamp(26px,4vw,44px) 16px 10px;
+    text-align:center}
+.seccion-facil h2{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:0 0 clamp(18px,3vw,30px);
+    font-size:clamp(1.3rem,3.5vw,1.8rem)}
+/* IMPORTANTE: el h2 lleva -webkit-text-fill-color:transparent. Si el
+   SVG de dentro no fija su propio color, hereda "transparent" y el
+   icono desaparece. Esta regla no se puede quitar. */
+.seccion-facil svg{color:var(--ts-rosa)}
+.seccion-facil h2 svg{width:34px;height:34px;flex:0 0 auto}
+
+.pasos{display:flex;justify-content:center;align-items:flex-start;gap:6px;flex-wrap:wrap}
+.paso{flex:1 1 150px;max-width:190px;text-align:center}
 .paso-icono{
+    width:56px;
+    height:56px;
+    margin:0 auto 8px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
     background:linear-gradient(135deg,var(--primario-suave),#ffeede) !important;
     box-shadow:0 6px 14px rgba(181,107,69,.18) !important;
     transition:transform .25s ease,box-shadow .25s ease !important}
+.paso-icono svg{width:28px;height:28px}
 .paso:hover .paso-icono{
     transform:scale(1.1) rotate(-6deg);
     box-shadow:0 12px 26px rgba(181,107,69,.30) !important}
-.paso h3{color:var(--primario) !important;letter-spacing:1.1px}
-.paso-flecha{animation:tsFlecha 1.6s ease-in-out infinite}
+.paso h3{
+    margin:0 0 4px;
+    font-size:.95rem;
+    letter-spacing:.5px;
+    color:var(--ts-marron-texto) !important}
+.paso p{margin:0;font-size:.82rem;line-height:1.45;color:#555}
+.paso-flecha{
+    display:flex;
+    align-items:center;
+    font-size:20px;
+    color:var(--ts-rosa);
+    padding-top:18px;
+    flex:0 0 auto;
+    animation:tsFlecha 1.6s ease-in-out infinite}
+@media (max-width:700px){.paso-flecha{display:none}}
+
+.cajas-facil{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.caja-facil h3{
+    margin:0 0 8px;
+    font-size:.95rem;
+    color:var(--ts-marron-texto);
+    display:flex;
+    align-items:center;
+    gap:6px}
+.caja-facil h3 svg{width:20px;height:20px;flex:0 0 auto}
+.caja-facil p{margin:4px 0;font-size:.82rem;line-height:1.5;color:#555}
+.caja-facil ul{margin:4px 0;padding-left:18px;font-size:.82rem;color:#555;line-height:1.6}
+.caja-destacado{margin-top:6px;font-weight:700;color:var(--ts-rosa-texto)}
+/* En oscuro, los #555 tienen que aclararse */
+.dark .paso p,
+.dark .caja-facil p,
+.dark .caja-facil ul{color:#cfc7c0}
+.dark .paso h3{color:var(--ts-marron-texto) !important}
 @keyframes tsFlecha{
     0%,100%{transform:translateX(0);opacity:.55}
     50%{transform:translateX(7px);opacity:1}}
 
 .caja-facil{
     position:relative;
+    flex:1 1 220px;
+    max-width:255px;
+    padding:16px 14px;
+    text-align:left;
+    border:1px solid var(--borde);
     border-radius:var(--ts-radio);
     background:var(--card);
     box-shadow:var(--ts-sombra);
@@ -840,9 +921,9 @@ body{
 .categorias::-webkit-scrollbar{display:none}
 @keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
 
-/* El resalte deslizante ya no hace falta: la pastilla activa se
-   pinta ella sola. Se queda oculto para que no haya dos resaltes. */
-#catIndicador{display:none !important}
+/* El resalte deslizante (#catIndicador) se eliminó del HTML y de los
+   scripts: la pastilla activa se pinta ella sola, así que solo era un
+   div invisible calculando posiciones para nada. */
 
 /* La pastilla */
 #categorias .categoria{
@@ -1046,6 +1127,42 @@ body{
     font-variant-numeric:tabular-nums;
     margin-top:auto;
     margin-bottom:12px}
+/* "c/u" o "COP": va dentro del precio, más pequeño y con un tono que
+   sí pasa 4,5:1 (el rosa grande del precio es para texto ≥19 px). */
+.precio .unidad{
+    font-size:.7em;
+    font-weight:700;
+    letter-spacing:.3px;
+    color:var(--ts-marron-texto);
+    margin-left:4px}
+.dark .precio .unidad{color:#e0a884}
+
+/* Etiquetas de categoría dentro de la tarjeta */
+.etiquetas{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.etiqueta{
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:999px;
+    background:#f6efe9;
+    border:1px solid #e6d8cd;
+    color:#6b4a3a;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.3px;
+    text-transform:uppercase;
+    line-height:1.5}
+.dark .etiqueta{
+    background:rgba(255,255,255,.08);
+    border-color:rgba(255,255,255,.16);
+    color:#ddcfc4}
+
+/* Al entrar por un enlace directo (#rapunzel) la tarjeta se resalta
+   y no queda escondida bajo el header fijo. */
+#productos .card{scroll-margin-top:96px}
+#productos .card:target{
+    border-color:var(--ts-rosa);
+    box-shadow:0 0 0 3px var(--ts-foco),var(--ts-sombra-alta)}
+#catalogo{scroll-margin-top:16px}
 
 /* Acciones: UNA sola acción principal.
    Antes los dos botones eran verdes (--verde y --whatsapp) y
@@ -1054,6 +1171,10 @@ body{
 .acciones{gap:8px !important;margin-top:0 !important}
 .acciones .btn{
     flex:1 1 auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
     margin-top:0 !important;
     padding:12px 16px !important;
     border-radius:var(--ts-radio-sm) !important;
@@ -1061,9 +1182,12 @@ body{
     font-size:.93rem !important;
     font-weight:700;
     letter-spacing:.2px;
+    line-height:1.2;
     text-align:center;
+    text-decoration:none;
     transition:transform .24s ease,box-shadow .24s ease,background .24s ease,
                border-color .24s ease,color .24s ease !important}
+.acciones .btn .btn-icono{width:18px;height:18px;flex:0 0 auto}
 .acciones .btn:not(.secundario){
     background:var(--card) !important;
     color:var(--primario) !important;
@@ -1217,7 +1341,11 @@ body{
 .dark{
     --ts-velo:rgba(217,169,184,.18);
     --ts-sombra:0 2px 10px rgba(0,0,0,.30);
-    --ts-sombra-alta:0 14px 32px rgba(0,0,0,.45)}
+    --ts-sombra-alta:0 14px 32px rgba(0,0,0,.45);
+    /* Los tonos de texto se aclaran para seguir pasando 4,5:1 */
+    --ts-rosa-texto:#e8afc7;
+    --ts-marron-texto:#e0a884;
+    --ts-foco:rgba(232,175,199,.45)}
 .dark .card,
 .dark .caja-facil{background:var(--card);border-color:var(--borde)}
 .dark .nombre{color:var(--text)}
@@ -1297,100 +1425,196 @@ body{
     .card:hover .producto-img{transform:none}
 }
 
+/* ============================================================
+   11) BUSCADOR DEL CATÁLOGO
+   El input #buscar no existía en el HTML: app.js ya traía todo el
+   código de búsqueda, pero no había dónde escribirlo y nunca se
+   activaba.
+   ============================================================ */
+.buscador{max-width:460px;margin:0 auto clamp(14px,2.4vw,22px)}
+.buscador-caja{position:relative}
+.buscador-icono{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    width:19px;
+    height:19px;
+    color:#8a7a70;
+    pointer-events:none}
+.dark .buscador-icono{color:#b3a49a}
+#buscar{
+    width:100%;
+    padding:12px 44px;
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:600;
+    color:var(--text);
+    background:var(--card);
+    border:1.5px solid var(--borde);
+    border-radius:999px;
+    box-shadow:var(--ts-sombra);
+    transition:border-color .2s ease,box-shadow .2s ease}
+#buscar::placeholder{color:#8a7a70;font-weight:500;opacity:1}
+.dark #buscar::placeholder{color:#b3a49a}
+#buscar:focus{
+    outline:none;
+    border-color:var(--ts-rosa);
+    box-shadow:0 0 0 3px var(--ts-foco)}
+.resultado-busqueda{
+    min-height:1.2em;
+    margin:8px 4px 0;
+    font-size:.86rem;
+    font-weight:600;
+    color:#5a5049}
+.dark .resultado-busqueda{color:#cfc7c0}
+
+/* ============================================================
+   12) UTILIDADES, ESTADOS Y FOCO
+   ============================================================ */
+/* Enlace "saltar al contenido": solo aparece al tabular */
+.salto-contenido{
+    position:absolute;
+    left:-9999px;
+    top:0;
+    z-index:1200;
+    padding:10px 18px;
+    background:#5e3822;
+    color:#fff;
+    font-weight:700;
+    text-decoration:none;
+    border-radius:0 0 12px 0}
+.salto-contenido:focus{left:0}
+
+/* Texto solo para lectores de pantalla */
+.sr-only{
+    position:absolute !important;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    clip-path:inset(50%);
+    white-space:nowrap;
+    border:0}
+
+/* Avisos de carga, "sin resultados" o "no se pudo cargar".
+   Sirve tanto si #productos es grid como si es flex. */
+.estado-vacio{
+    grid-column:1/-1;
+    flex:1 1 100%;
+    text-align:center;
+    padding:clamp(24px,5vw,40px) 18px;
+    background:var(--card);
+    border:1px dashed var(--borde);
+    border-radius:var(--ts-radio);
+    color:#5a5049;
+    font-weight:600;
+    line-height:1.6}
+.estado-vacio a{color:var(--ts-marron-texto);font-weight:800}
+.dark .estado-vacio{color:#cfc7c0}
+
+/* Foco visible y consistente en todo lo que se puede pulsar */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible{
+    outline:3px solid var(--ts-rosa);
+    outline-offset:2px}
+
+/* Pista discreta de que el modo admin está activo (?admin=1 o cinco
+   toques en el título). Antes el desbloqueo no daba ninguna señal. */
+body.modo-admin .visitas-chip{
+    box-shadow:0 0 0 2px var(--ts-rosa) inset !important}
+body.modo-admin .visitas-chip::after{
+    content:" · admin";
+    font-weight:800;
+    color:var(--ts-rosa-texto)}
+
 /* Brillo que recorre los títulos y las líneas de acento */
 @keyframes tsBrillo{0%{background-position:0% center}100%{background-position:200% center}}
 </style>
 </head>
 <body>
+<a class="salto-contenido" href="#contenido">Saltar al contenido</a>
 <header class="header-banner" id="inicio">
         <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" style="display:none">
         ☰
         </button>
 </header>
 
-<main>
+<main id="contenido">
     <!-- ===== PRESENTACIÓN (SEO local) ===== -->
-    <section class="presentacion-seo" style="max-width:1100px;margin:0 auto;padding:26px 16px 6px;text-align:center;">
-        <h1 style="margin:0 0 10px;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25;color:inherit;">Amigurumis en Popayán · Tejiendo Sueños Clau</h1>
-        <p style="margin:0 auto;max-width:760px;line-height:1.6;color:inherit;opacity:.85;">Amigurumis tejidos a mano en Popayán, Cauca. Muñecos de crochet, personajes, llaveros y regalos personalizados, hechos con amor para regalos y ocasiones especiales. Encarga el tuyo por WhatsApp o Instagram. 🧶</p>
-        <div class="acciones-inicio" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
-            <button type="button" id="btnVerCatalogo" style="background:#F47DA3;color:#fff;border:none;border-radius:999px;padding:14px 30px;font-size:1.05rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(244,125,163,.4);">Ver Catálogo</button>
-            <a href="https://wa.me/573011810933?text=Hola,%20quiero%20cotizar%20un%20amigurumi%20personalizado" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:#F47DA3;border:2px solid #F47DA3;border-radius:999px;padding:12px 28px;font-size:1.05rem;font-weight:700;text-decoration:none;">Cotizar mi Personalizado</a>
+    <!-- Los style="" de este bloque se movieron a la capa de acabado:
+         repetían lo mismo y le ganaban por orden. -->
+    <section class="presentacion-seo">
+        <!-- id="hero-titulo": el script de admin busca este id para
+             desbloquear con 5 toques. No existía y por eso no
+             funcionaba (solo servía ?admin=1). -->
+        <h1 id="hero-titulo">Amigurumis en Popayán · Tejiendo Sueños Clau</h1>
+        <p>Amigurumis tejidos a mano en Popayán, Cauca. Muñecos de crochet, personajes, llaveros y regalos personalizados, hechos con amor para regalos y ocasiones especiales. Encarga el tuyo por WhatsApp o Instagram. 🧶</p>
+        <div class="acciones-inicio">
+            <button type="button" id="btnVerCatalogo">Ver Catálogo</button>
+            <a href="https://wa.me/573011810933?text=Hola,%20quiero%20cotizar%20un%20amigurumi%20personalizado" target="_blank" rel="noopener">Cotizar mi Personalizado</a>
         </div>
     </section>
 
     <!-- ===== CÓMO COMPRAR (info para el cliente) ===== -->
-    <style>
-        .seccion-facil{max-width:1100px;margin:0 auto;padding:30px 16px 10px;text-align:center;}
-        .seccion-facil h2{margin:0 0 20px;font-size:clamp(1.3rem,3.5vw,1.8rem);color:#8B5A2B;}
-        .seccion-facil svg{color:#F47DA3;}
-        .seccion-facil h2 svg{width:34px;height:34px;flex:0 0 auto;}
-        .paso-icono svg{width:28px;height:28px;}
-        .caja-facil h3 svg{width:20px;height:20px;flex:0 0 auto;}
-        .pasos{display:flex;justify-content:center;align-items:flex-start;gap:6px;flex-wrap:wrap;}
-        .paso{flex:1 1 150px;max-width:190px;text-align:center;}
-        .paso-icono{width:56px;height:56px;margin:0 auto 8px;border-radius:50%;background:#FDE7EF;display:flex;align-items:center;justify-content:center;font-size:26px;}
-        .paso h3{margin:0 0 4px;font-size:.95rem;color:#F47DA3;letter-spacing:.5px;}
-        .paso p{margin:0;font-size:.82rem;line-height:1.45;color:#555;}
-        .paso-flecha{display:flex;align-items:center;font-size:20px;color:#F47DA3;padding-top:18px;flex:0 0 auto;}
-        .cajas-facil{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px;}
-        .caja-facil{flex:1 1 220px;max-width:255px;background:#fff;border:1px solid #f3d5e0;border-radius:16px;padding:16px 14px;text-align:left;box-shadow:0 3px 10px rgba(244,125,163,.12);}
-        .caja-facil h3{margin:0 0 8px;font-size:.95rem;color:#8B5A2B;display:flex;align-items:center;gap:6px;}
-        .caja-facil p{margin:4px 0;font-size:.82rem;line-height:1.5;color:#555;}
-        .caja-facil ul{margin:4px 0;padding-left:18px;font-size:.82rem;color:#555;line-height:1.6;}
-        @media (max-width:700px){ .paso-flecha{display:none;} }
-    </style>
     <section class="seccion-facil" aria-label="Cómo comprar">
-        <h2 style="display:flex;align-items:center;justify-content:center;gap:10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"/><path d="M9.7 8.6c-1.5 1-1.5 5.8 0 6.8M14.3 8.6c1.5 1 1.5 5.8 0 6.8"/></svg> Comprar es muy fácil</h2>
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"/><path d="M9.7 8.6c-1.5 1-1.5 5.8 0 6.8M14.3 8.6c1.5 1 1.5 5.8 0 6.8"/></svg> Comprar es muy fácil</h2>
         <div class="pasos">
             <div class="paso"><div class="paso-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8.5h12l-.9 11H6.9z"/><path d="M9 8.5V6.5a3 3 0 0 1 6 0v2"/></svg></div><h3>ELIGE</h3><p>Encuentra tu producto favorito en el catálogo.</p></div>
-            <div class="paso-flecha">→</div>
+            <div class="paso-flecha" aria-hidden="true">→</div>
             <div class="paso"><div class="paso-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8 8 0 0 1-8 8c-1.3 0-2.6-.3-3.7-.9L3 20l1.4-5.3A8 8 0 1 1 21 11.5z"/><path d="M9 10.5h6M9 13.5h4"/></svg></div><h3>ESCRÍBENOS</h3><p>Haz clic en WhatsApp y cuéntanos qué quieres.</p></div>
-            <div class="paso-flecha">→</div>
+            <div class="paso-flecha" aria-hidden="true">→</div>
             <div class="paso"><div class="paso-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="4" width="13" height="17" rx="2"/><path d="M9 4.5V3.5h6v3H9z"/><path d="m9.5 13 2 2 3.5-4"/></svg></div><h3>CONFIRMAMOS</h3><p>Te indicamos precio, disponibilidad y tiempo.</p></div>
-            <div class="paso-flecha">→</div>
+            <div class="paso-flecha" aria-hidden="true">→</div>
             <div class="paso"><div class="paso-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"/><path d="M9.7 8.6c-1.5 1-1.5 5.8 0 6.8M14.3 8.6c1.5 1 1.5 5.8 0 6.8"/></svg></div><h3>ELABORAMOS</h3><p>Comenzamos a crear tu pedido.</p></div>
-            <div class="paso-flecha">→</div>
+            <div class="paso-flecha" aria-hidden="true">→</div>
             <div class="paso"><div class="paso-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="11.5" height="9" rx="1"/><path d="M13.5 10h3.5l3.5 3.5V16h-7z"/><circle cx="6.8" cy="17.8" r="1.8"/><circle cx="16.2" cy="17.8" r="1.8"/></svg></div><h3>ENTREGAMOS</h3><p>Coordinamos la entrega o envío.</p></div>
         </div>
         <div class="cajas-facil">
             <div class="caja-facil"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg> ENTREGAS Y ENVÍOS</h3><p><strong>Popayán:</strong> entregas según disponibilidad y zona.</p><p><strong>Otras ciudades:</strong> enviamos a todo Colombia.</p><p>El tiempo depende de la transportadora.</p></div>
-            <div class="caja-facil"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M2.5 10.5h19"/><path d="M6 15h4"/></svg> MEDIOS DE PAGO</h3><ul><li>Nequi</li><li>Efectivo</li><li>Transferencia bancaria</li></ul><p style="margin-top:6px;font-weight:700;color:#F47DA3;">¡Fácil, rápido y seguro!</p></div>
+            <div class="caja-facil"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M2.5 10.5h19"/><path d="M6 15h4"/></svg> MEDIOS DE PAGO</h3><ul><li>Nequi</li><li>Efectivo</li><li>Transferencia bancaria</li></ul><p class="caja-destacado">¡Fácil, rápido y seguro!</p></div>
             <div class="caja-facil"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9.5v3.5l2.8 1.7"/><path d="M10 3.5h4"/><path d="M12 3.5v2"/></svg> TIEMPO DE ELABORACIÓN</h3><p>Depende del tamaño, diseño, nivel de personalización y cantidad de pedidos.</p><p>¿Necesitas tu pedido para una fecha especial? <strong>Escríbenos con anticipación.</strong></p></div>
             <div class="caja-facil"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.8-5.4-6.8-10.5a6.8 6.8 0 0 1 13.6 0C18.8 15.6 12 21 12 21z"/><circle cx="12" cy="10.3" r="2.6"/></svg> ¿DÓNDE ESTAMOS?</h3><p><strong>Popayán, Cauca</strong></p><p>Atendemos pedidos personalizados y detalles únicos hechos a mano con amor.</p></div>
         </div>
     </section>
 
     <!-- ===== CATEGORÍAS ===== -->
-    <section id="categorias" aria-labelledby="categorias-titulo" style="display:none;">
+    <!-- Antes esta sección arrancaba con style="display:none" y solo la
+         destapaba el botón "Ver Catálogo". Eso dejaba el catálogo
+         inalcanzable sin JavaScript y rompía los enlaces directos del
+         tipo #rapunzel que usa el JSON-LD. -->
+    <section id="categorias" aria-labelledby="categorias-titulo">
 
         <h2 id="categorias-titulo">Nuestros Amigurumis</h2>
 
-        <div class="categorias">
+        <!-- aria-pressed lo mantiene al día app.js: son filtros, no
+             enlaces, y el estado tiene que ser audible. -->
+        <div class="categorias" role="group" aria-label="Filtrar por categoría">
 
-            <div id="catIndicador" class="cat-indicador"></div>
-
-                        <button type="button" class="categoria" data-categoria="Todos">
+            <button type="button" class="categoria" data-categoria="Todos" aria-pressed="true">
                 <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.9 12.1 12 7.3l6.1 4.8"/><path d="M7.6 11.6v6.3h8.8v-6.3"/></g><path d="M12 17.4c-1.6-1.1-2.4-2-2.4-2.8 0-.7.5-1.2 1.2-1.2.5 0 .9.3 1.2.7.3-.4.7-.7 1.2-.7.7 0 1.2.5 1.2 1.2 0 .8-.8 1.7-2.4 2.8z" fill="currentColor"/></svg>
                 <span class="cat-texto">Inicio <span class="cat-num" id="totalProductos">0</span></span>
             </button>
-            <button type="button" class="categoria" data-categoria="Disponibles">
+            <button type="button" class="categoria" data-categoria="Disponibles" aria-pressed="false">
                 <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.3" cy="12.6" r="6.1"/><path d="m8.6 12.7 2.1 2.1 4.2-4.5"/></g><path d="M17.6 5.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>
                 <span class="cat-texto">Disponibles <span class="cat-num">0</span></span>
             </button>
-            <button type="button" class="categoria" data-categoria="Animales">
+            <button type="button" class="categoria" data-categoria="Animales" aria-pressed="false">
                 <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.6" r="5.5"/><circle cx="6.9" cy="8.5" r="2"/><circle cx="17.1" cy="8.5" r="2"/><path d="M10.9 15.7c.7.6 1.5.6 2.2 0"/></g><circle cx="10.2" cy="13.3" r=".9" fill="currentColor"/><circle cx="13.8" cy="13.3" r=".9" fill="currentColor"/></svg>
                 <span class="cat-texto">Animales <span class="cat-num">0</span></span>
             </button>
-            <button type="button" class="categoria" data-categoria="Personajes">
+            <button type="button" class="categoria" data-categoria="Personajes" aria-pressed="false">
                 <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.6 7 12.95 10.54 16.74 10.73 13.79 13.11 14.77 16.77 11.6 14.7 8.43 16.77 9.41 13.11 6.47 10.73 10.25 10.54Z"/></g><path d="M17.9 6.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>
                 <span class="cat-texto">Personajes <span class="cat-num">0</span></span>
             </button>
-            <button type="button" class="categoria" data-categoria="Llaveros">
+            <button type="button" class="categoria" data-categoria="Llaveros" aria-pressed="false">
                 <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15.2" r="4"/><circle cx="12" cy="15.2" r="1.5"/><path d="M12 11.2V7.6"/></g><path d="M12 7.9c-1.5-1-2.3-1.9-2.3-2.7 0-.65.5-1.15 1.15-1.15.5 0 .9.3 1.15.7.25-.4.65-.7 1.15-.7.65 0 1.15.5 1.15 1.15 0 .8-.8 1.7-2.3 2.7z" fill="currentColor"/></svg>
                 <span class="cat-texto">Llaveros <span class="cat-num">0</span></span>
             </button>
-            <button type="button" class="categoria" data-categoria="Personalizados">
+            <button type="button" class="categoria" data-categoria="Personalizados" aria-pressed="false">
                 <svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.9" cy="12.6" r="5.4"/><path d="M8 9.1c2.5.8 4.2 2.7 4.6 5.4"/><path d="M12.6 17.4c2.3-.6 3.6-2.2 3.8-4.6"/><path d="M6.9 13.9c2.3 2 5.6 2.6 8.7 1.6"/></g></svg>
                 <span class="cat-texto">Personalizados <span class="cat-num">0</span></span>
             </button>
@@ -1399,10 +1623,31 @@ body{
     </section>
 
     <!-- ===== CATÁLOGO ===== -->
-    <section id="catalogo" aria-labelledby="catalogo-titulo" style="display:none;">
+    <section id="catalogo" aria-labelledby="catalogo-titulo">
         <h2 id="catalogo-titulo">Nuestro catálogo</h2>
+
+        <!-- El buscador ya estaba escrito en app.js, pero no existía
+             ningún input #buscar: ese código nunca llegaba a correr. -->
+        <div class="buscador" role="search">
+            <div class="buscador-caja">
+                <svg class="buscador-icono" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+                <label class="sr-only" for="buscar">Buscar amigurumi por nombre o categoría</label>
+                <input id="buscar" type="search" placeholder="Buscar amigurumi…" autocomplete="off">
+            </div>
+            <p id="resultadoBusqueda" class="resultado-busqueda" role="status" aria-live="polite"></p>
+        </div>
+
         <div id="productos">
-        <!-- Aquí se cargan los productos desde productos.json -->
+            <!-- Aquí se cargan los productos desde productos.json -->
+            <p class="estado-vacio" id="productosCargando">Cargando catálogo…</p>
+            <noscript>
+                <p class="estado-vacio">
+                    Para ver el catálogo con fotos y precios hace falta activar JavaScript.
+                    Mientras tanto, escríbenos por
+                    <a href="https://wa.me/573011810933?text=Hola,%20quiero%20ver%20el%20cat%C3%A1logo%20de%20amigurumis" target="_blank" rel="noopener">WhatsApp</a>
+                    y te lo enviamos completo.
+                </p>
+            </noscript>
         </div>
     </section>
 </main>
@@ -1415,7 +1660,7 @@ body{
     <p class="creditos">© 2026 <span class="marca">Tejiendo Sueños Clau</span> · Amigurumis hechos con amor 🧶</p>
 </footer>
 
-<div class="redes-flotantes">
+<div class="redes-flotantes" role="navigation" aria-label="Redes sociales y contacto">
 <a href="https://wa.me/573011810933?text=Hola,%20quiero%20información%20sobre%20los%20amigurumis." class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
     <img src="img/whatsapp.png" alt="WhatsApp">
 </a>
@@ -1481,54 +1726,16 @@ body{
 <script>
 /* ============================================================
    1) ICONOS Y CONTADORES DEL MENÚ
-   Va aparte y SIN depender de la base de datos: así las pastillas
-   se pintan siempre, aunque Supabase no conteste.
+   ------------------------------------------------------------
+   Aquí vivía un SEGUNDO juego de iconos (CAT_ICONOS) que reescribía
+   el innerHTML de las seis pastillas cada pocos cientos de milisegundos,
+   peleándose con los SVG que ya trae el HTML y con app.js: de ahí el
+   parpadeo de los iconos.
+
+   Ahora hay UN solo juego de iconos: los que están escritos en el HTML
+   de cada pastilla. app.js solo actualiza el número del contador
+   (el .cat-num), sin tocar el resto.
    ============================================================ */
-(function(){
-    var CAT_ICONOS = {
-        'Todos': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.9 12.1 12 7.3l6.1 4.8"/><path d="M7.6 11.6v6.3h8.8v-6.3"/></g><path d="M12 17.4c-1.6-1.1-2.4-2-2.4-2.8 0-.7.5-1.2 1.2-1.2.5 0 .9.3 1.2.7.3-.4.7-.7 1.2-.7.7 0 1.2.5 1.2 1.2 0 .8-.8 1.7-2.4 2.8z" fill="currentColor"/></svg>',
-        'Disponibles': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.3" cy="12.6" r="6.1"/><path d="m8.6 12.7 2.1 2.1 4.2-4.5"/></g><path d="M17.6 5.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>',
-        'Animales': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.6" r="5.5"/><circle cx="6.9" cy="8.5" r="2"/><circle cx="17.1" cy="8.5" r="2"/><path d="M10.9 15.7c.7.6 1.5.6 2.2 0"/></g><circle cx="10.2" cy="13.3" r=".9" fill="currentColor"/><circle cx="13.8" cy="13.3" r=".9" fill="currentColor"/></svg>',
-        'Personajes': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.6 7 12.95 10.54 16.74 10.73 13.79 13.11 14.77 16.77 11.6 14.7 8.43 16.77 9.41 13.11 6.47 10.73 10.25 10.54Z"/></g><path d="M17.9 6.7l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="currentColor"/></svg>',
-        'Llaveros': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15.2" r="4"/><circle cx="12" cy="15.2" r="1.5"/><path d="M12 11.2V7.6"/></g><path d="M12 7.9c-1.5-1-2.3-1.9-2.3-2.7 0-.65.5-1.15 1.15-1.15.5 0 .9.3 1.15.7.25-.4.65-.7 1.15-.7.65 0 1.15.5 1.15 1.15 0 .8-.8 1.7-2.3 2.7z" fill="currentColor"/></svg>',
-        'Personalizados': '<svg class="cat-icono" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.3" style="fill:var(--tinte,#fbf1e5)" stroke="var(--tono,#ebd0ac)" stroke-width="1"/><path d="M3.66 8.11a9.2 9.2 0 0 1 4.45-4.45" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.9" cy="12.6" r="5.4"/><path d="M8 9.1c2.5.8 4.2 2.7 4.6 5.4"/><path d="M12.6 17.4c2.3-.6 3.6-2.2 3.8-4.6"/><path d="M6.9 13.9c2.3 2 5.6 2.6 8.7 1.6"/></g></svg>'
-    };
-
-    /* Pinta cada pastilla: icono + nombre + contador.
-       Solo reescribe si de verdad cambió, para no entrar en un
-       bucle de repintado. */
-    function renderCategorias(){
-        var total = (window.todosLosProductos || []).length;
-        document.querySelectorAll(".categoria").forEach(function(btn){
-            var cat = btn.dataset.categoria;
-            var html;
-            if(cat === "Todos"){
-                html = CAT_ICONOS["Todos"] + ' <span class="cat-texto">Inicio <span class="cat-num" id="totalProductos">' + total + '</span></span>';
-            }else{
-                var n = (window.todosLosProductos || []).filter(function(p){ return p.categoria && p.categoria.indexOf(cat) !== -1; }).length;
-                html = (CAT_ICONOS[cat] || "") + ' <span class="cat-texto">' + cat + ' <span class="cat-num">' + n + '</span></span>';
-            }
-            /* Se reescribe si el contenido cambió O si alguien lo
-               pisó (app.js vuelve a pintar por su cuenta), para que
-               los iconos nuevos se queden siempre. */
-            if(btn.dataset.pintado !== html || !btn.querySelector('circle[r="11.3"]')){
-                btn.dataset.pintado = html;
-                btn.innerHTML = html;
-            }
-        });
-    }
-    window.renderCategorias = renderCategorias;
-    window.addEventListener("productosCargados", renderCategorias);
-    document.addEventListener("DOMContentLoaded", renderCategorias);
-    setTimeout(renderCategorias, 400);
-    setTimeout(renderCategorias, 1600);
-
-    var contCats = document.querySelector(".categorias");
-    if(contCats && "MutationObserver" in window){
-        new MutationObserver(function(){ setTimeout(renderCategorias, 0); })
-            .observe(contCats, {childList:true, subtree:true});
-    }
-})();
 
 /* ============================================================
    2) CATÁLOGO DESDE LA BASE DE DATOS (Supabase)
@@ -1546,6 +1753,10 @@ body{
         return {
             id: p.id,
             nombre: p.nombre,
+            /* La columna descripcion existe en la tabla products y hasta
+               ahora se quedaba sin pasar: si algún día la rellenas, la
+               tarjeta la mostrará sola. */
+            descripcion: p.descripcion || "",
             categoria: cats,
             precio: Number(p.precio) || 0,
             tamano: p.tamano || "",
@@ -1566,22 +1777,10 @@ body{
         return fetchOriginal.apply(this, arguments);
     };
 
-    /* Indicador deslizante del menú segmentado */
-    function moverIndicador(){
-        var ind = document.getElementById("catIndicador");
-        if(!ind) return;
-        var caja = document.querySelector(".categorias");
-        var act = document.querySelector(".categoria.activa, .categoria.activo, .categoria.active, .categoria.seleccionada");
-        if(!caja || !act){ ind.style.opacity = "0"; return; }
-        var rc = caja.getBoundingClientRect();
-        var rb = act.getBoundingClientRect();
-        ind.style.opacity = "1";
-        ind.style.left = (rb.left - rc.left) + "px";
-        ind.style.width = rb.width + "px";
-    }
-    window.addEventListener("resize", function(){ setTimeout(moverIndicador, 60); });
-    document.addEventListener("DOMContentLoaded", function(){ setTimeout(moverIndicador, 60); });
-    setTimeout(moverIndicador, 300);
+    /* El indicador deslizante (#catIndicador) se eliminó: la pastilla
+       activa ya se pinta sola con su propio color y el CSS lo tenía
+       oculto con display:none. Era código calculando coordenadas de un
+       elemento invisible. */
 })();
 </script>
 <script src="js/app.js"></script>
@@ -1589,23 +1788,18 @@ body{
 <script src="js/contacto.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script>
-/* Mostrar el catálogo al hacer clic en "Ver Catálogo" */
+/* "Ver Catálogo" ahora solo BAJA al catálogo.
+   Antes lo destapaba con display:none y ocultaba "Comprar es muy
+   fácil": el catálogo no existía hasta pulsar el botón, así que sin
+   JavaScript (o entrando por un enlace #rapunzel) era inalcanzable. */
 (function(){
   var btn = document.getElementById("btnVerCatalogo");
   if(!btn) return;
   btn.addEventListener("click", function(){
-    var facil = document.querySelector(".seccion-facil");
-    if(facil) facil.style.display = "none";
-    var cats = document.getElementById("categorias");
-    var cat  = document.getElementById("catalogo");
-    if(cats) cats.style.display = "";
-    if(cat)  cat.style.display = "";
-    var destino = cats || cat;
-    if(destino){
-      setTimeout(function(){
-        destino.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 60);
-    }
+    var destino = document.getElementById("catalogo") || document.getElementById("categorias");
+    if(!destino) return;
+    var reducir = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    destino.scrollIntoView({ behavior: reducir ? "auto" : "smooth", block: "start" });
   });
 })();
 </script>
@@ -1634,19 +1828,11 @@ body{
 })();
 </script>
 <script>
-/* Estado activo de las categorías (solo visual — el filtrado lo hace app.js) */
-(function(){
-    var cats = document.querySelectorAll('.categoria');
-    if(!cats.length) return;
-    function marcar(b){
-        cats.forEach(function(c){ c.classList.remove('activo'); });
-        if(b) b.classList.add('activo');
-    }
-    cats.forEach(function(b){
-        b.addEventListener('click', function(){ marcar(b); });
-    });
-    marcar(cats[0]); /* Inicio activo por defecto */
-})();
+/* Este bloque se eliminó.
+   Marcaba la pastilla activa con la clase "activo", mientras app.js
+   usaba "activa": cada uno borraba solo la suya y el CSS acababa
+   aceptando las dos. Ahora el estado activo (clase "activa" +
+   aria-pressed) lo lleva SOLO app.js, en un único sitio. */
 </script>
 <script>
 /* Botón volver arriba */

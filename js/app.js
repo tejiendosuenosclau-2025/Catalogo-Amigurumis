@@ -1,200 +1,347 @@
+/* ============================================================
+   CATÁLOGO — Tejiendo Sueños Clau
+   ------------------------------------------------------------
+   Este archivo SOLO se ocupa del catálogo:
+     · pedir los productos (Supabase o data/productos.json)
+     · pintar las tarjetas
+     · filtrar por categoría y por texto
+
+   Los iconos de las pastillas viven en el HTML: aquí solo se
+   actualiza el número de cada contador (.cat-num), sin reescribir
+   las pastillas enteras. Eso era lo que hacía parpadear los iconos.
+   ============================================================ */
+
 const contenedor = document.getElementById("productos");
+const buscador = document.getElementById("buscar");
+const avisoBusqueda = document.getElementById("resultadoBusqueda");
+
+const TELEFONO_WHATSAPP = "573011810933";
+const ENLACE_WHATSAPP = "https://wa.me/" + TELEFONO_WHATSAPP;
+const SALUDO_WHATSAPP = "Hola, estoy interesado en el amigurumi ";
+
+const ICONO_WHATSAPP =
+    '<svg class="btn-icono" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">' +
+    '<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.03c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.1 8.1 0 0 1-1.25-4.29c0-4.48 3.65-8.12 8.13-8.12s8.12 3.64 8.12 8.12-3.64 8.16-8.12 8.16zm4.47-6.1c-.24-.12-1.45-.71-1.67-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.03-.38-1.96-1.21-.72-.65-1.21-1.44-1.35-1.68-.14-.24-.02-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.33-.75-1.81-.2-.48-.4-.41-.55-.42h-.47c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.69 2.7 4.1 3.68 2.41.98 2.41.65 2.85.61.44-.04 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>';
 
 let todosLosProductos = [];
+let categoriaActiva = "Todos";
+let textoBusqueda = "";
 
-// Cargar productos
-fetch("data/productos.json")
-    .then(res => res.json())
-    .then(datos => {
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
 
-    todosLosProductos = datos;
-    window.todosLosProductos = datos;
-
-    // Avisar que los productos ya cargaron
-    window.dispatchEvent(new Event("productosCargados"));
-
-	actualizarContadores();
-	mostrarProductos("Todos");
-
-    
-
-});
-
-// Mostrar productos
-function mostrarProductos(categoria = "Todos") {
-
-    contenedor.innerHTML = "";
-
-    let productosMostrar = todosLosProductos;
-
-    if (categoria !== "Todos") {
-
-        productosMostrar = todosLosProductos.filter(producto =>
-            producto.categoria.includes(categoria)
-        );
-
-    }
-
-    productosMostrar.forEach(producto => {
-
-        contenedor.innerHTML += `<div class="card">
-
-                <img src="${producto.imagen}" class="producto-img" alt="${producto.nombre}" loading="lazy" decoding="async">
-
-                <div class="card-body">
-
-                    <h3>${producto.nombre}</h3>
-
-                    <p><strong>Categoría:</strong> ${producto.categoria.join(", ")}</p>
-
-                    <p><strong>Tamaño:</strong> ${producto.tamano}</p>
-
-                    <h2>$${producto.precio.toLocaleString()} ${producto.unidad ? producto.unidad : ""}</h2>
-
-		    <a href="https://wa.me/573011810933?text=Hola,%20estoy%20interesado%20en%20el%20amigurumi%20${encodeURIComponent(producto.nombre)}" target="_blank"
-                    class="btn-whatsapp">
-                      	<img src="img/boton.png" alt="Comprar por WhatsApp">
-    		    </a>
-
-                 </div>
-
-            </div>
-        `;
-
-    });
-
+/* Los datos vienen de la base de datos y de un JSON: se escapan antes
+   de meterlos en el HTML. */
+function esc(texto) {
+    return String(texto == null ? "" : texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }
 
-const iconos = {
-    "Todos": '<svg class="cat-icono c-Todos" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M10 20v-5.5h4V20"/><path d="M14.4 7.4V4.9h2v2.8"/><rect x="7.5" y="10" width="9" height="4" rx="1"/></svg>',
-    "Disponibles": '<svg class="cat-icono c-Disponibles" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.6"/><path d="m8.9 12 2.1 2.1 4-4.2"/></svg>',
-    "Animales": '<svg class="cat-icono c-Animales" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.8" cy="9.8" r="1.7"/><circle cx="16.2" cy="9.8" r="1.7"/><circle cx="10.2" cy="7.2" r="1.7"/><circle cx="13.8" cy="7.2" r="1.7"/><path d="M12 14.6c-2.8 0-4.9 1.9-4.9 3.7 0 1.1.8 1.9 1.9 1.9h6c1.1 0 1.9-.8 1.9-1.9 0-1.8-2.1-3.7-4.9-3.7z"/></svg>',
-    "Personajes": '<svg class="cat-icono c-Personajes" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.4 5.1 5.6.6-4.1 3.8 1.1 5.5L12 15.9l-5 2.6 1.1-5.5L4 9.2l5.6-.6z"/><path d="M19.6 4.4l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/><path d="M5.2 2.6l.5 1.2 1.2.5-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.5z"/></svg>',
-    "Llaveros": '<svg class="cat-icono c-Llaveros" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="16" r="4"/><path d="M10.5 13 21 3.5"/><path d="M16.8 6.3 19 8.5M13.8 8.8l2.2 2.2M18.3 11l1.2 1.2"/></svg>',
-    "Personalizados": '<svg class="cat-icono c-Personalizados" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a8 8 0 0 0-8 8c0 4.4 3.6 8 8 8 1.4 0 2.2-1 2.2-2.2 0-1-.6-1.7-.6-2.7 0-1.3 1.2-2.1 2.7-2.1h1.4c2.3 0 3.8-1.6 3.8-3.6C21.5 6.4 17.3 4 12 4z"/><circle cx="8.5" cy="9.5" r="1.1"/><circle cx="12" cy="7.6" r="1.1"/><circle cx="15.4" cy="9.2" r="1.1"/></svg>'
-};
+/* "Popayán" tiene que encontrarse escribiendo "popayan" */
+function sinAcentos(texto) {
+    return String(texto == null ? "" : texto)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
 
+/* Un producto puede traer la categoría de dos formas:
+     · Supabase → array  ["Animales"]
+     · productos.json → texto "Animales,Personajes"
+   Antes se llamaba a .join() sin comprobar: con un texto reventaba. */
+function listaCategorias(producto) {
+    const categorias = producto && producto.categoria;
+    if (Array.isArray(categorias)) {
+        return categorias.map(function (c) { return String(c).trim(); }).filter(Boolean);
+    }
+    return String(categorias == null ? "" : categorias)
+        .split(",")
+        .map(function (c) { return c.trim(); })
+        .filter(Boolean);
+}
+
+/* El precio puede llegar como número o como texto ("30000"). */
+function textoPrecio(producto) {
+    const numero = Number(producto && producto.precio);
+    if (!isFinite(numero) || numero <= 0) return "Precio a convenir";
+    return "$" + numero.toLocaleString("es-CO");
+}
+
+/* Un id por producto para poder enlazar directo (#rapunzel).
+   Si dos productos se llaman igual (en el catálogo hay dos
+   "Llavero Perro"), el segundo pasa a ser #llavero-perro-2. */
+function anclaPara(nombre, yaUsadas) {
+    let base = sinAcentos(nombre)
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    if (!base) base = "amigurumi";
+    let ancla = base;
+    let n = 2;
+    while (yaUsadas[ancla]) {
+        ancla = base + "-" + n;
+        n++;
+    }
+    yaUsadas[ancla] = true;
+    return ancla;
+}
+
+function reducirMovimiento() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+}
+
+/* ============================================================
+   TARJETAS
+   ============================================================ */
+
+function tarjetaHTML(producto, ancla) {
+    const nombre = esc(producto.nombre);
+    const tamano = esc(producto.tamano || "");
+    const unidad = esc(producto.unidad || "");
+    const imagen = producto.imagen ? esc(producto.imagen) : "";
+    const descripcion = esc(producto.descripcion || "");
+    const categorias = listaCategorias(producto);
+
+    /* Una sola línea descriptiva, sin inventar datos: si la base de
+       datos trae descripción se usa, y si no se compone con lo que hay. */
+    const linea = descripcion || ("Tejido a mano en Popayán" + (tamano ? " · Tamaño: " + tamano : ""));
+
+    const etiquetas = categorias.map(function (c) {
+        return '<span class="etiqueta">' + esc(c) + "</span>";
+    }).join("");
+
+    const enlaceWhatsApp = ENLACE_WHATSAPP + "?text=" +
+        encodeURIComponent(SALUDO_WHATSAPP + producto.nombre);
+
+    /* La foto: si el producto no tiene imagen, se deja el hueco con el
+       mismo alto (aspect-ratio del CSS) en vez de un icono roto. */
+    const foto = imagen
+        ? '<img src="' + imagen + '" alt="' + nombre +
+          ' — amigurumi tejido a mano en Popayán" class="producto-img" loading="lazy" decoding="async">'
+        : '<div class="producto-img" role="img" aria-label="' + nombre + '"></div>';
+
+    return '' +
+        '<div class="card" id="' + ancla + '">' +
+            foto +
+            '<div class="card-body">' +
+                '<h3 class="nombre">' + nombre + '</h3>' +
+                '<p class="descripcion">' + linea + '</p>' +
+                (etiquetas ? '<div class="etiquetas">' + etiquetas + '</div>' : '') +
+                '<p class="precio">' + textoPrecio(producto) +
+                    (unidad ? ' <span class="unidad">' + unidad + '</span>' : '') +
+                '</p>' +
+                '<div class="acciones">' +
+                    '<a class="btn secundario" href="' + enlaceWhatsApp +
+                       '" target="_blank" rel="noopener">' +
+                        ICONO_WHATSAPP + 'Pedir por WhatsApp' +
+                    '</a>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+}
+
+function mensajeVacio() {
+    const enlace = '<a href="' + ENLACE_WHATSAPP +
+        '?text=' + encodeURIComponent("Hola, quiero información sobre los amigurumis") +
+        '" target="_blank" rel="noopener">WhatsApp</a>';
+
+    if (textoBusqueda.trim()) {
+        return 'No encontramos nada con «' + esc(textoBusqueda.trim()) +
+            '». Prueba con otra palabra o escríbenos por ' + enlace +
+            ': podemos hacerlo a tu medida.';
+    }
+    if (categoriaActiva !== "Todos") {
+        return 'Todavía no hay productos en «' + esc(categoriaActiva) +
+            '». Escríbenos por ' + enlace + ' y lo hacemos a tu medida.';
+    }
+    return 'El catálogo está vacío por ahora. Escríbenos por ' + enlace +
+        ' y te contamos qué podemos tejer para ti.';
+}
+
+/* ============================================================
+   FILTROS Y PINTADO
+   ============================================================ */
+
+function listaParaMostrar() {
+    const texto = sinAcentos(textoBusqueda.trim());
+
+    return todosLosProductos.filter(function (producto) {
+        /* Mientras se escribe se busca en TODO el catálogo; al vaciar
+           el buscador vuelve a mandar la categoría elegida. */
+        if (texto) {
+            const nombre = sinAcentos(producto.nombre);
+            const categorias = sinAcentos(listaCategorias(producto).join(" "));
+            return nombre.indexOf(texto) !== -1 || categorias.indexOf(texto) !== -1;
+        }
+        if (categoriaActiva === "Todos") return true;
+        return listaCategorias(producto).indexOf(categoriaActiva) !== -1;
+    });
+}
+
+function pintarEstadoActivo() {
+    document.querySelectorAll(".categoria").forEach(function (btn) {
+        /* Se limpian también los nombres antiguos por si algún otro
+           script los añade: el estado activo es SOLO uno. */
+        btn.classList.remove("activa", "activo", "active", "seleccionada");
+        const esActiva = !textoBusqueda.trim() && btn.dataset.categoria === categoriaActiva;
+        if (esActiva) btn.classList.add("activa");
+        btn.setAttribute("aria-pressed", esActiva ? "true" : "false");
+    });
+}
+
+function actualizarAviso(cantidad) {
+    if (!avisoBusqueda) return;
+    if (textoBusqueda.trim()) {
+        avisoBusqueda.textContent = cantidad === 1
+            ? "1 producto encontrado"
+            : cantidad + " productos encontrados";
+    } else if (categoriaActiva !== "Todos") {
+        avisoBusqueda.textContent = cantidad === 1
+            ? "1 producto en " + categoriaActiva
+            : cantidad + " productos en " + categoriaActiva;
+    } else {
+        avisoBusqueda.textContent = "";
+    }
+}
+
+/* Pinta la lista que toque según la categoría y el texto buscado. */
+function render() {
+    if (!contenedor) return;
+
+    const lista = listaParaMostrar();
+
+    if (!lista.length) {
+        contenedor.innerHTML = '<p class="estado-vacio">' + mensajeVacio() + "</p>";
+        actualizarAviso(0);
+        return;
+    }
+
+    const yaUsadas = {};
+    contenedor.innerHTML = lista.map(function (producto) {
+        return tarjetaHTML(producto, anclaPara(producto.nombre, yaUsadas));
+    }).join("");
+
+    actualizarAviso(lista.length);
+}
+
+/* Se mantiene el nombre de antes para no romper nada que lo llame. */
+function mostrarProductos(categoria) {
+    categoriaActiva = (typeof categoria === "string" && categoria) ? categoria : "Todos";
+    if (buscador && buscador.value) buscador.value = "";
+    textoBusqueda = "";
+    pintarEstadoActivo();
+    render();
+}
+
+/* Solo toca el número de cada pastilla: los iconos y el texto del HTML
+   se quedan intactos. */
 function actualizarContadores() {
-
-    // Contador total para Inicio
     const total = todosLosProductos.length;
 
-    const contadorTotal = document.getElementById("totalProductos");
+    document.querySelectorAll(".categoria").forEach(function (btn) {
+        const categoria = btn.dataset.categoria;
+        const cantidad = categoria === "Todos"
+            ? total
+            : todosLosProductos.filter(function (producto) {
+                return listaCategorias(producto).indexOf(categoria) !== -1;
+              }).length;
 
-    if (contadorTotal) {
-        contadorTotal.textContent = total;
-    }
-
-
-    // Contadores de categorías (Inicio también lleva su icono)
-    document.querySelectorAll(".categoria").forEach(categoria => {
-
-        const nombre = categoria.dataset.categoria;
-
-        if (nombre === "Todos") {
-
-            const total = todosLosProductos.length;
-            const contadorTotal = document.getElementById("totalProductos");
-            if (contadorTotal) contadorTotal.textContent = total;
-
-            categoria.innerHTML = `${iconos["Todos"] || ""} <span class="cat-texto">Inicio (<span id="totalProductos">${total}</span>)</span>`;
-
-        } else {
-
-            const cantidad = todosLosProductos.filter(producto =>
-            producto.categoria.includes(nombre)).length;
-
-            categoria.innerHTML = `${iconos[nombre] || ""} ${nombre} (${cantidad})`;
-
-        }
-
+        const numero = btn.querySelector(".cat-num");
+        if (numero) numero.textContent = cantidad;
     });
-
 }
 
-document.querySelectorAll(".categoria").forEach(categoria => {
+/* ============================================================
+   ENLACES DIRECTOS (#rapunzel)
+   El JSON-LD apunta a anclas de producto. Antes no existían y el
+   enlace dejaba al visitante en una sección oculta.
+   ============================================================ */
 
-    categoria.addEventListener("click", () => {
+function irAlAncla() {
+    const hash = decodeURIComponent(String(location.hash || "")).replace(/^#/, "");
+    if (!hash) return;
+    const destino = document.getElementById(hash);
+    if (!destino) return;
+    setTimeout(function () {
+        destino.scrollIntoView({
+            behavior: reducirMovimiento() ? "auto" : "smooth",
+            block: "center"
+        });
+    }, 120);
+}
 
-        document.querySelectorAll(".categoria").forEach(c =>
-            c.classList.remove("activa")
-        );
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
 
-        categoria.classList.add("activa");
+document.querySelectorAll(".categoria").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        categoriaActiva = btn.dataset.categoria || "Todos";
+        if (buscador && buscador.value) buscador.value = "";
+        textoBusqueda = "";
+        pintarEstadoActivo();
+        render();
 
-        // Scroll automático al catálogo al hacer clic en una categoría
-        const destinoCatalogo = document.getElementById("catalogo");
-        if (destinoCatalogo) {
-            destinoCatalogo.scrollIntoView({ behavior: "smooth", block: "start" });
+        const destino = document.getElementById("catalogo");
+        if (destino) {
+            destino.scrollIntoView({
+                behavior: reducirMovimiento() ? "auto" : "smooth",
+                block: "start"
+            });
         }
-
-        contenedor.classList.add("oculto");
-
-        setTimeout(() => {
-
-            mostrarProductos(categoria.dataset.categoria);
-
-            contenedor.classList.remove("oculto");
-            contenedor.classList.add("visible");
-
-        },300);
-
     });
-
 });
-//========================
-// BUSCADOR
-//========================
 
-const buscador = document.getElementById("buscar");
+let temporizadorBusqueda = null;
 
 if (buscador) {
-
     buscador.addEventListener("input", function () {
-
-        const texto = this.value.toLowerCase();
-
-        const productosFiltrados = todosLosProductos.filter(producto => {
-
-        return (producto.nombre.toLowerCase().includes(texto) ||
-        producto.categoria.some(cat =>
-            cat.toLowerCase().includes(texto)
-        )
-    );
-
-});
-
-        contenedor.innerHTML = "";
-
-        productosFiltrados.forEach(producto => {
-
-            contenedor.innerHTML += `
-            <div class="card">
-
-                <img src="${producto.imagen}" class="producto-img" loading="lazy" decoding="async">
-
-                <div class="card-body">
-
-                    <h3>${producto.nombre}</h3>
-
-                    <p><strong>Categoría:</strong> ${producto.categoria.join(", ")}</p>
-
-                    <p><strong>Tamaño:</strong> ${producto.tamano}</p>
-
-                    <h2>$${producto.precio.toLocaleString()} ${producto.unidad ? producto.unidad : ""}</h2>
-		    
-                    <a href="https://wa.me/573011810933?text=Hola,%20estoy%20interesado%20en%20el%20amigurumi%20${encodeURIComponent(producto.nombre)}" target="_blank"
-                    class="btn-whatsapp">
-                      	<img src="img/boton.png" alt="Comprar por WhatsApp">
-    		    </a>
-
-                </div>
-
-            </div>
-            `;
-
-        });
-
+        const valor = buscador.value;
+        clearTimeout(temporizadorBusqueda);
+        /* Pequeña espera para no repintar en cada letra */
+        temporizadorBusqueda = setTimeout(function () {
+            textoBusqueda = valor;
+            pintarEstadoActivo();
+            render();
+        }, 160);
     });
-
 }
+
+window.addEventListener("hashchange", irAlAncla);
+
+fetch("data/productos.json")
+    .then(function (respuesta) {
+        if (!respuesta.ok) throw new Error("No se pudo leer el catálogo (" + respuesta.status + ")");
+        return respuesta.json();
+    })
+    .then(function (datos) {
+        if (!Array.isArray(datos)) throw new Error("El catálogo no tiene el formato esperado");
+
+        todosLosProductos = datos;
+        window.todosLosProductos = datos;
+
+        /* Aviso para quien quiera enterarse de que ya hay productos */
+        window.dispatchEvent(new Event("productosCargados"));
+
+        actualizarContadores();
+        pintarEstadoActivo();
+        render();
+        irAlAncla();
+    })
+    .catch(function (error) {
+        /* Sin datos se avisa con claridad en vez de dejar un hueco. */
+        if (contenedor) {
+            contenedor.innerHTML = '<p class="estado-vacio">' +
+                'No pudimos cargar el catálogo ahora mismo (' + esc(error && error.message) + '). ' +
+                'Recarga la página o escríbenos por ' +
+                '<a href="' + ENLACE_WHATSAPP +
+                '?text=' + encodeURIComponent("Hola, quiero ver el catálogo de amigurumis") +
+                '" target="_blank" rel="noopener">WhatsApp</a>.</p>';
+        }
+        if (avisoBusqueda) avisoBusqueda.textContent = "";
+        console.error("[catálogo]", error);
+    });
