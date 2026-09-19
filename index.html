@@ -888,191 +888,6 @@ body{
 .seccion-facil.ts-animar .ts-visible{opacity:1;transform:translateY(0)}
 
 /* ============================================================
-   5) CATEGORÍAS — una sola familia
-   Antes había cuatro versiones apiladas: las píldoras acababan
-   SIN fondo ni borde y el icono con un borde punteado de 3px que
-   se lee como "imagen no cargada".
-   El layout (6 en fila / 3+3 / columna) lo pone el grid de
-   style.css: aquí solo el aspecto.
-   ============================================================ */
-/* ============================================================
-   🧶 MENÚ DE CATEGORÍAS — pastillas con icono
-   ------------------------------------------------------------
-   Una sola fila de pastillas. Cada pastilla lleva:
-       [icono en círculo de color]  Nombre  [contador]
-   El círculo de color y su filo van DENTRO del propio SVG
-   (--tinte y --tono); el dibujo toma el color --tinta. Así el
-   icono se ve redondo y con color sin necesidad de más cajas.
-   En escritorio, UNA fila. En pantalla pequeña se reparten en
-   dos columnas y se ven las seis enteras, sin cortar ninguna.
-   ============================================================ */
-
-/* Bandeja que agrupa las pastillas */
-.categorias{
-    position:relative;
-    display:flex !important;
-    flex-wrap:nowrap !important;
-    align-items:center;
-    justify-content:center;
-    gap:7px !important;
-    padding:7px !important;
-    margin-top:clamp(16px,2.6vw,28px) !important;
-    background:var(--menu-bandeja,#faf5f0) !important;
-    border:1px solid var(--borde) !important;
-    border-radius:999px !important;
-    box-shadow:0 8px 26px rgba(90,60,75,.08) !important;
-    overflow-x:auto !important;
-    overflow-y:hidden !important;
-    scrollbar-width:none;
-    -ms-overflow-style:none;
-    animation:tsCatEntrada .6s ease both}
-.categorias::-webkit-scrollbar{display:none}
-/* Arranca en 0,55 y no en 0: si el reloj de animaciones se atascara, la
-   bandeja de filtros se vería un poco tenue, nunca desaparecida. Ningún
-   elemento imprescindible arranca en opacidad 0 sin red de seguridad. */
-@keyframes tsCatEntrada{
-    from{opacity:.55;transform:translateY(6px)}
-    to{opacity:1;transform:none}}
-
-/* El resalte deslizante (#catIndicador) se eliminó del HTML y de los
-   scripts: la pastilla activa se pinta ella sola, así que solo era un
-   div invisible calculando posiciones para nada. */
-
-/* La pastilla */
-#categorias .categoria{
-    position:relative;
-    z-index:2;
-    flex:0 0 auto;
-    width:auto !important;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-    padding:4px 11px 4px 4px;
-    background:var(--card) !important;
-    border:1px solid var(--borde) !important;
-    border-radius:999px;
-    color:var(--text) !important;
-    font-family:inherit;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.1px;
-    cursor:pointer;
-    box-shadow:0 1px 2px rgba(67,53,45,.05) !important;
-    transition:background .22s ease,border-color .22s ease,color .22s ease,box-shadow .22s ease !important;
-    pointer-events:auto !important;
-    animation:tsCatPop .45s cubic-bezier(.2,.8,.2,1) backwards}
-#categorias .categoria:nth-child(2){animation-delay:.04s}
-#categorias .categoria:nth-child(3){animation-delay:.08s}
-#categorias .categoria:nth-child(4){animation-delay:.12s}
-#categorias .categoria:nth-child(5){animation-delay:.16s}
-#categorias .categoria:nth-child(6){animation-delay:.20s}
-#categorias .categoria:nth-child(7){animation-delay:.24s}
-/* Igual que la bandeja: 0,55 en vez de 0, por el mismo motivo. */
-@keyframes tsCatPop{
-    from{opacity:.55;transform:translateY(5px) scale(.97)}
-    to{opacity:1;transform:none}}
-#categorias .categoria::after{display:none !important}
-
-/* Icono: círculo de color con el dibujo dentro.
-   El círculo lo pinta también el CSS, así se ve redondo con su
-   color incluso si algún día el dibujo llega sin su círculo. */
-#categorias .categoria .cat-icono{
-    width:26px;
-    height:26px;
-    flex:0 0 auto;
-    display:block;
-    padding:0;
-    border:0;
-    border-radius:50%;
-    background:var(--tinte,#fbf1e5);
-    box-shadow:inset 0 0 0 1px var(--tono,#ebd0ac);
-    color:var(--tinta,var(--primario));
-    transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-#categorias .categoria:hover .cat-icono{transform:scale(1.07) rotate(-5deg)}
-
-#categorias .categoria,
-#categorias .categoria .cat-texto{white-space:nowrap}
-#categorias .categoria .cat-texto{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-size:1rem;
-    font-weight:700}
-
-/* Contador en su chapita */
-#categorias .categoria .cat-num{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:21px;
-    padding:1px 6px;
-    border-radius:999px;
-    background:var(--menu-chip,#f5ede4);
-    color:var(--tinta,var(--muted));
-    font-size:.8rem;
-    font-weight:700;
-    line-height:1.55}
-
-/* Hover y activa: la pastilla toma el color de su apartado */
-#categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
-    background:var(--relleno,#f7ecdc) !important;
-    border-color:var(--tono,#ebd0ac) !important}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:var(--relleno,#f7ecdc) !important;
-    border-color:var(--tono,#ebd0ac) !important;
-    color:var(--tinta,#a2703f) !important;
-    box-shadow:0 5px 14px rgba(67,53,45,.10) !important}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{--tinte:#fff}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{background:rgba(255,255,255,.72)}
-
-/* En pantallas medianas (1020-1199) las seis van más juntas para
-   que quepan enteras y de una sola fila, sin desplazar nada.
-   El nombre se queda al mismo tamaño. */
-@media (min-width:1020px) and (max-width:1199px){
-    #categorias .categorias{gap:4px !important;padding:5px !important}
-    #categorias .categoria{gap:4px;padding:3px 7px 3px 3px}
-    #categorias .categoria .cat-icono{width:22px;height:22px}
-    #categorias .categoria .cat-num{min-width:16px;padding:1px 4px;font-size:.74rem}
-}
-/* Por debajo de 1100 queda menos sitio todavía: el nombre baja
-   medio punto (15,2 px, se lee perfectamente). */
-@media (min-width:1020px) and (max-width:1099px){
-    #categorias .categoria .cat-texto{font-size:.95rem}
-}
-
-/* --- Tonos por apartado: relleno / tinte / aro / tinta --- */
-#categorias .categoria[data-categoria="Todos"]{--relleno:#f7ecdc;--tinte:#fbf1e5;--tono:#ebd0ac;--tinta:#a2703f}
-#categorias .categoria[data-categoria="Disponibles"]{--relleno:#e4f2e9;--tinte:#edf7f0;--tono:#bfdcc9;--tinta:#3f7f57}
-#categorias .categoria[data-categoria="Animales"]{--relleno:#fbe4ee;--tinte:#fdf0f4;--tono:#efc6d7;--tinta:#a85f82}
-#categorias .categoria[data-categoria="Personajes"]{--relleno:#faf0d7;--tinte:#fdf7e7;--tono:#ebdaa6;--tinta:#9c7c24}
-#categorias .categoria[data-categoria="Llaveros"]{--relleno:#eee8f9;--tinte:#f4f0fb;--tono:#d4c8ec;--tinta:#6f5ca0}
-#categorias .categoria[data-categoria="Personalizados"]{--relleno:#e3eff8;--tinte:#edf4fa;--tono:#c2daec;--tinta:#43719b}
-
-/* Pantalla pequeña: dos columnas, todas enteras y sin arrastrar */
-@media (max-width:1019px){
-    #categorias .categorias{
-        flex-wrap:wrap !important;
-        overflow:visible !important;
-        justify-content:center;
-        gap:7px !important;
-        border-radius:24px !important}
-    #categorias .categoria{
-        flex:1 1 calc(50% - 7px);
-        justify-content:flex-start;
-        padding:4px 10px 4px 4px}
-}
-@media (max-width:400px){
-    #categorias .categoria{flex:1 1 100%}
-}
-/* En móvil el texto va un pelín más pequeño, el icono igual de
-   vistoso, y el contador sigue a la vista. */
-@media (max-width:520px){
-    #categorias .categoria .cat-texto{font-size:.94rem}
-    #categorias .categoria .cat-icono{width:24px;height:24px}
-}
-
-/* ============================================================
    6) TARJETAS DE PRODUCTO
    ============================================================ */
 #productos{gap:clamp(16px,2.4vw,26px) !important}
@@ -1652,73 +1467,6 @@ body.modo-admin .visitas-chip::after{
 #categorias h2::after,#catalogo h2::after{
     box-shadow:0 0 18px var(--ts-halo),0 0 4px rgba(244,125,163,.55)}
 
-/* ---------- 13.3 Pastillas de categoría ---------- */
-/* Cada apartado tiene su propio color de resplandor (--brillo). */
-#categorias .categoria[data-categoria="Todos"]{--brillo:rgba(162,112,63,.45)}
-#categorias .categoria[data-categoria="Disponibles"]{--brillo:rgba(63,127,87,.42)}
-#categorias .categoria[data-categoria="Animales"]{--brillo:rgba(168,95,130,.45)}
-#categorias .categoria[data-categoria="Personajes"]{--brillo:rgba(156,124,36,.42)}
-#categorias .categoria[data-categoria="Llaveros"]{--brillo:rgba(111,92,160,.45)}
-#categorias .categoria[data-categoria="Personalizados"]{--brillo:rgba(67,113,155,.42)}
-
-/* Texto de la pastilla ACTIVA: un punto más oscuro que --tinta.
-   El nombre de la pastilla va a 16 px en negrita, así que NO cuenta
-   como "texto grande" y necesita 4,5:1. Con los tonos originales se
-   quedaba entre 3,5:1 y 4,1:1 (venía así del diseño anterior); estos
-   son los mínimos que lo pasan sin cambiar de color.
-   El icono y el aro conservan el tono original (--tinta / --tono):
-   son dibujo, no texto. En modo oscuro no cambia nada: la regla
-   .dark de más arriba tiene más peso y sigue poniendo blanco. */
-#categorias .categoria[data-categoria="Todos"]{--tinta-fuerte:#8c6136}
-#categorias .categoria[data-categoria="Disponibles"]{--tinta-fuerte:#3b7751}
-#categorias .categoria[data-categoria="Animales"]{--tinta-fuerte:#945472}
-#categorias .categoria[data-categoria="Personajes"]{--tinta-fuerte:#84691e}
-#categorias .categoria[data-categoria="Llaveros"]{--tinta-fuerte:#6f5ca0}
-#categorias .categoria[data-categoria="Personalizados"]{--tinta-fuerte:#416e96}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa),
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
-    color:var(--tinta-fuerte,var(--tinta)) !important}
-
-/* Bandeja: un poco de resplandor rosa por debajo */
-.categorias{
-    box-shadow:0 8px 26px rgba(90,60,75,.08),
-               0 22px 44px -30px var(--ts-halo) !important}
-
-#categorias .categoria{
-    overflow:hidden;
-    transition:transform .28s cubic-bezier(.2,.8,.2,1),
-               background .22s ease,border-color .22s ease,
-               box-shadow .28s ease !important}
-#categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
-    transform:translateY(-3px);
-    box-shadow:0 12px 22px -10px var(--brillo),
-               0 2px 4px rgba(67,53,45,.06) !important}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
-    background:linear-gradient(135deg,var(--relleno),var(--card)) !important;
-    border-color:var(--tono) !important;
-    box-shadow:inset 0 0 0 1.5px var(--tono),
-               0 12px 24px -12px var(--brillo) !important;
-    animation:tsPopActiva .42s cubic-bezier(.2,.8,.2,1)}
-@keyframes tsPopActiva{
-    0%{transform:scale(.94)}
-    55%{transform:scale(1.045)}
-    100%{transform:scale(1)}}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
-    box-shadow:inset 0 0 0 1px var(--tono),0 5px 14px -4px var(--brillo)}
-#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
-    box-shadow:0 2px 8px -3px var(--brillo)}
-
-/* El contador pega un salto cuando cambia (lo marca el script) */
-#categorias .categoria .cat-num{
-    transition:transform .25s ease,background .25s ease}
-#categorias .categoria:hover .cat-num{transform:scale(1.09)}
-#categorias .categoria .cat-num.ts-latido{
-    animation:tsLatido .5s cubic-bezier(.2,.8,.2,1)}
-@keyframes tsLatido{
-    0%{transform:scale(1)}
-    40%{transform:scale(1.4)}
-    100%{transform:scale(1)}}
-
 /* ---------- 13.4 Tarjetas de producto ---------- */
 /* Entrada escalonada: 9 escalones que se repiten, así una lista de
    21 tarjetas no tarda casi un segundo en terminar de aparecer.
@@ -1998,6 +1746,344 @@ html.js #catalogo.revelado.ts-anima-entrada{
     #catalogo::before{width:min(360px,88vw);top:-40px}
     #catalogo::after{width:min(340px,84vw);bottom:-40px}
 }
+
+/* ============================================================
+   14) MENÚ DE CATEGORÍAS — "VITRINA"
+   ------------------------------------------------------------
+   Rediseño completo. Lo de antes eran seis pastillas metidas en una
+   bandeja beige: cajas pequeñas, apretadas, con el icono a 26 px y
+   el nombre pegado al lado. Se veía mezquino.
+
+   Ahora cada apartado es una ficha de vitrina:
+
+        ╭──────────╮
+        │  (disco) │   ← 58-74 px, su color, su halo
+        ╰──────────╯
+          Animales     ← el nombre debajo, centrado
+            ( 4 )      ← el contador en su chip
+
+   El activo se enciende con SU color, se levanta y le gira un aro de
+   luz alrededor. Nada de bandeja: los discos flotan sobre un panel de
+   cristal con filo rosa.
+
+   ORDEN DE CAPAS — importante: esta sección va LA ÚLTIMA del <style>
+   a propósito. Es la única que manda sobre el menú; deja sin efecto
+   lo que traía style.css y lo que andaba repartido por otras
+   secciones. Si algún día se toca el menú, se toca AQUÍ.
+
+   COLOR: el --texto de cada apartado está medido para pasar 4,5:1
+   tanto sobre blanco (el panel) como sobre su propio disco pastel.
+   El dibujo de dentro del disco sí va en blanco cuando está activo:
+   es dibujo, no texto, y le basta 3:1.
+   ============================================================ */
+
+/* ---------- 14.1 Paleta de cada apartado ----------
+   --disco  relleno del círculo en reposo
+   --aro    filo del círculo
+   --dibujo color del dibujo de dentro
+   --fuerte relleno del círculo ACTIVO (saturado)
+   --brillo color del halo y de las sombras
+   --texto  color del nombre y del contador (siempre >= 4,5:1) */
+#categorias .categoria[data-categoria="Todos"]{
+    --disco:#fbf1e5;--aro:#ebd0ac;--dibujo:#a2703f;
+    --fuerte:#b56b45;--brillo:rgba(181,107,69,.45);--texto:#8c6136}
+#categorias .categoria[data-categoria="Disponibles"]{
+    --disco:#eafaf0;--aro:#bfdcc9;--dibujo:#3f7f57;
+    --fuerte:#37a353;--brillo:rgba(55,163,83,.42);--texto:#2f6b46}
+#categorias .categoria[data-categoria="Animales"]{
+    --disco:#fdf0f5;--aro:#f3c9dc;--dibujo:#a85f82;
+    --fuerte:#e85c8b;--brillo:rgba(232,92,139,.45);--texto:#945472}
+#categorias .categoria[data-categoria="Personajes"]{
+    --disco:#fdf7e7;--aro:#eed9a0;--dibujo:#9c7c24;
+    /* el ámbar claro no llegaba a 3:1 con el dibujo blanco encima:
+       se hunde un punto y queda en 3,69:1 */
+    --fuerte:#c17217;--brillo:rgba(193,114,23,.44);--texto:#84691e}
+#categorias .categoria[data-categoria="Llaveros"]{
+    --disco:#f5f0fd;--aro:#d4c8ec;--dibujo:#6f5ca0;
+    --fuerte:#8662a9;--brillo:rgba(134,98,169,.45);--texto:#6f5ca0}
+#categorias .categoria[data-categoria="Personalizados"]{
+    --disco:#eef5fd;--aro:#c2daec;--dibujo:#43719b;
+    --fuerte:#4a86d8;--brillo:rgba(74,134,216,.42);--texto:#416e96}
+
+/* ---------- 14.2 El panel de cristal ---------- */
+#categorias .categorias{
+    position:relative;
+    display:flex !important;
+    flex-wrap:wrap !important;
+    align-items:flex-start;
+    justify-content:center;
+    gap:clamp(4px,1.6vw,22px) !important;
+    /* el panel se ciñe a los seis discos en vez de estirarse de lado a
+       lado y dejar medio metro de aire a los lados */
+    width:fit-content;
+    max-width:min(960px,100%);
+    margin:clamp(18px,3vw,30px) auto 0 !important;
+    padding:clamp(16px,2.6vw,26px) clamp(14px,2.4vw,30px) !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(255,247,251,.92)) !important;
+    border:1px solid rgba(244,125,163,.20) !important;
+    border-radius:clamp(22px,3vw,34px) !important;
+    box-shadow:0 30px 60px -44px rgba(134,98,169,.60),
+               0 1px 0 rgba(255,255,255,.9) inset,
+               0 22px 40px -38px rgba(244,125,163,.55) !important;
+    overflow:visible !important;
+    animation:tsCatEntrada .6s ease both}
+
+/* Arranca en 0,55 y no en 0: si el reloj de animaciones se atascara, el
+   menú se vería algo tenue, nunca desaparecido. */
+@keyframes tsCatEntrada{
+    from{opacity:.55;transform:translateY(6px)}
+    to{opacity:1;transform:none}}
+
+/* ---------- 14.3 La ficha ---------- */
+#categorias .categoria{
+    position:relative;
+    z-index:2;
+    flex:0 0 auto;
+    width:auto !important;
+    min-width:clamp(66px,7vw,96px);
+    display:flex !important;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:9px;
+    padding:6px 4px;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:20px;
+    color:var(--text) !important;
+    font-family:inherit;
+    font-size:clamp(.74rem,1.12vw,.92rem);
+    font-weight:700;
+    letter-spacing:.2px;
+    cursor:pointer;
+    box-shadow:none !important;
+    transition:transform .32s cubic-bezier(.2,.8,.2,1),color .24s ease !important;
+    pointer-events:auto !important;
+    animation:tsCatPop .5s cubic-bezier(.2,.8,.2,1) backwards}
+#categorias .categoria:nth-child(2){animation-delay:.05s}
+#categorias .categoria:nth-child(3){animation-delay:.10s}
+#categorias .categoria:nth-child(4){animation-delay:.15s}
+#categorias .categoria:nth-child(5){animation-delay:.20s}
+#categorias .categoria:nth-child(6){animation-delay:.25s}
+#categorias .categoria:nth-child(7){animation-delay:.30s}
+/* Igual que el panel: 0,55 en vez de 0, por el mismo motivo. */
+@keyframes tsCatPop{
+    from{opacity:.55;transform:translateY(6px) scale(.96)}
+    to{opacity:1;transform:none}}
+
+/* ---------- 14.4 El disco ---------- */
+#categorias .categoria .cat-icono{
+    position:relative;
+    z-index:1;
+    width:clamp(60px,8vw,82px);
+    height:clamp(60px,8vw,82px);
+    flex:0 0 auto;
+    display:block;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:transparent;
+    /* el SVG pinta su propio círculo con estas dos variables */
+    --tinte:var(--disco,#fbf1e5);
+    --tono:var(--aro,#ebd0ac);
+    color:var(--dibujo,var(--primario));
+    box-shadow:none;
+    /* drop-shadow sigue la forma dibujada, así que da una sombra
+       redonda de verdad; un box-shadow saldría cuadrado. */
+    filter:drop-shadow(0 12px 16px rgba(120,80,110,.16));
+    transition:transform .38s cubic-bezier(.2,.8,.2,1),filter .38s ease}
+#categorias .categoria:hover .cat-icono,
+#categorias .categoria:focus-visible .cat-icono{
+    transform:translateY(-5px) scale(1.06) rotate(-4deg);
+    filter:drop-shadow(0 16px 22px var(--brillo))}
+
+/* Aro de luz que gira alrededor del disco activo. Va 12 px más grande
+   que el disco y centrado con él, así asoma 6 px por todo el borde. */
+#categorias .categoria::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:50%;
+    width:calc(clamp(60px,8vw,82px) + 12px);
+    height:calc(clamp(60px,8vw,82px) + 12px);
+    margin-left:calc((clamp(60px,8vw,82px) + 12px) / -2);
+    border-radius:50%;
+    background:conic-gradient(from 0deg,
+        transparent 0deg 200deg,
+        var(--fuerte) 268deg,
+        transparent 336deg 360deg);
+    opacity:0;
+    z-index:0;
+    pointer-events:none;
+    transition:opacity .35s ease}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa)::after{
+    opacity:.95;
+    animation:tsGiroAro 3.6s linear infinite}
+@keyframes tsGiroAro{to{transform:rotate(360deg)}}
+
+/* ---------- 14.5 El nombre y el contador ---------- */
+#categorias .categoria .cat-texto{
+    display:flex !important;
+    flex-direction:column;
+    align-items:center;
+    gap:5px;
+    font-size:1em;
+    font-weight:700;
+    line-height:1.15;
+    letter-spacing:.2px;
+    white-space:nowrap;
+    text-align:center}
+
+#categorias .categoria .cat-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:24px;
+    padding:2px 8px;
+    border-radius:999px;
+    background:var(--disco,#fbf1e5);
+    border:1px solid var(--aro);
+    color:var(--texto,var(--muted));
+    font-size:.7rem;
+    font-weight:800;
+    line-height:1.5;
+    transition:transform .25s ease,background .25s ease,color .25s ease}
+#categorias .categoria:hover .cat-num{transform:scale(1.1)}
+#categorias .categoria .cat-num.ts-latido{
+    animation:tsLatido .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes tsLatido{
+    0%{transform:scale(1)}
+    40%{transform:scale(1.4)}
+    100%{transform:scale(1)}}
+
+/* ---------- 14.6 Encendido ---------- */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    color:var(--texto) !important;
+    animation:tsPopActiva .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes tsPopActiva{
+    0%{transform:scale(.93)}
+    58%{transform:scale(1.06)}
+    100%{transform:scale(1)}}
+
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    --tinte:var(--fuerte);
+    --tono:var(--fuerte);
+    color:#fff;
+    transform:translateY(-3px) scale(1.07);
+    animation:tsHaloDisco 2.8s ease-in-out infinite}
+@keyframes tsHaloDisco{
+    0%,100%{filter:drop-shadow(0 8px 16px var(--brillo))}
+    50%{filter:drop-shadow(0 0 24px var(--brillo))}}
+
+/* El contador activo se queda blanco con el número oscuro: si el chip
+   se pintara del color saturado, el número bajaría de 4,5:1. */
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    background:#fff;
+    border-color:var(--fuerte);
+    color:var(--texto);
+    box-shadow:0 4px 12px -4px var(--brillo)}
+
+/* ---------- 14.7 Móvil ---------- */
+@media (max-width:600px){
+    #categorias .categorias{
+        gap:0 !important;
+        padding:10px 4px !important;
+        border-radius:22px !important}
+    #categorias .categoria{
+        flex:1 1 30%;
+        min-width:0;
+        gap:7px}
+    #categorias .categoria .cat-icono{width:54px;height:54px}
+}
+@media (max-width:380px){
+    #categorias .categoria .cat-icono{width:48px;height:48px}
+    #categorias .categoria .cat-num{font-size:.66rem;padding:2px 6px}
+}
+
+/* ---------- 14.8 Modo oscuro ---------- */
+.dark #categorias .categorias{
+    background:linear-gradient(180deg,rgba(42,37,47,.97),rgba(33,29,37,.94)) !important;
+    border-color:rgba(244,125,163,.26) !important;
+    box-shadow:0 30px 60px -42px rgba(0,0,0,.85),
+               0 0 0 1px rgba(255,255,255,.04) inset !important}
+.dark #categorias .categoria{
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    color:#efe7ea !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    color:var(--texto) !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    background:rgba(255,255,255,.12);
+    border-color:var(--fuerte);
+    color:#fff}
+/* La sección 9 también toca el disco activo en oscuro y tiene más peso
+   que la regla de arriba: se reafirma aquí el color del apartado. */
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    --tinte:var(--fuerte);
+    --tono:var(--fuerte);
+    color:#fff}
+.dark #categorias .categoria[data-categoria="Todos"]{
+    --disco:rgba(235,208,172,.16);--aro:rgba(235,208,172,.36);
+    --dibujo:#e3be8e;--texto:#e3be8e}
+.dark #categorias .categoria[data-categoria="Disponibles"]{
+    --disco:rgba(191,220,201,.16);--aro:rgba(191,220,201,.36);
+    --dibujo:#9ed0b3;--texto:#9ed0b3}
+.dark #categorias .categoria[data-categoria="Animales"]{
+    --disco:rgba(239,198,215,.16);--aro:rgba(239,198,215,.36);
+    --dibujo:#e8afc7;--texto:#e8afc7}
+.dark #categorias .categoria[data-categoria="Personajes"]{
+    --disco:rgba(235,218,166,.16);--aro:rgba(235,218,166,.36);
+    --dibujo:#dcc77e;--texto:#dcc77e}
+.dark #categorias .categoria[data-categoria="Llaveros"]{
+    --disco:rgba(212,200,236,.16);--aro:rgba(212,200,236,.36);
+    --dibujo:#bba9df;--texto:#bba9df}
+.dark #categorias .categoria[data-categoria="Personalizados"]{
+    --disco:rgba(194,218,236,.16);--aro:rgba(194,218,236,.36);
+    --dibujo:#9fc4de;--texto:#9fc4de}
+
+/* ---------- 14.9 Sin movimiento ---------- */
+@media (prefers-reduced-motion:reduce){
+    #categorias .categorias,
+    #categorias .categoria,
+    #categorias .categoria::after,
+    #categorias .categoria .cat-icono,
+    #categorias .categoria .cat-num{
+        animation:none !important;
+        transition:none !important}
+    #categorias .categoria:hover .cat-icono,
+    #categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+        transform:none !important}
+    #categorias .categoria:is(.activo,.active,.seleccionada,.activa)::after{opacity:.5}
+}
+
+/* ============================================================
+   15) EMPUJÓN PREMIUM — títulos y tarjetas
+   ------------------------------------------------------------
+   Para que el catálogo no se quede plano al lado del menú nuevo:
+   títulos algo más grandes y aireados, y tarjetas con superficie de
+   cristal cálida y filo rosa en vez del blanco genérico.
+   ============================================================ */
+#categorias h2,#catalogo h2{
+    font-size:clamp(1.7rem,3.9vw,2.5rem);
+    letter-spacing:1.4px}
+#categorias h2::after,#catalogo h2::after{width:96px;height:4px}
+
+#productos .card{
+    background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(255,249,252,.95)) !important;
+    border:2px solid rgba(244,125,163,.20) !important;
+    box-shadow:0 20px 44px -34px rgba(134,98,169,.65),
+               0 2px 8px rgba(90,60,75,.05) !important}
+.dark #productos .card{
+    background:linear-gradient(180deg,rgba(48,43,53,.96),rgba(38,34,44,.96)) !important;
+    border-color:rgba(244,125,163,.22) !important}
 </style>
 </head>
 <body>
@@ -2375,7 +2461,11 @@ html.js #catalogo.revelado.ts-anima-entrada{
     document.addEventListener("pointerdown", function(e){
         if(reducir()) return;
         var destino = e.target && e.target.closest
-            ? e.target.closest("#btnVerCatalogo,.acciones .btn,.categoria,#volverArriba")
+            /* Las fichas de categoría NO llevan onda: para que la onda
+               quedara dentro haría falta overflow:hidden en el botón, y
+               eso recortaría el halo del disco. Se quedan con su
+               encendido y su aro girando, que lucen más. */
+            ? e.target.closest("#btnVerCatalogo,.acciones .btn,#volverArriba")
             : null;
         if(!destino) return;
 
