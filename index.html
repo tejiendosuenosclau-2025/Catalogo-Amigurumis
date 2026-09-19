@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Marca "hay JavaScript" antes de pintar nada. El catálogo se
+         enseña al pulsar "Ver Catálogo", pero ese ocultado solo debe
+         aplicarse si hay JavaScript: si no lo hay, el catálogo se ve
+         desde el principio en vez de quedar inalcanzable. -->
+    <script>document.documentElement.className += " js";</script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -703,11 +709,11 @@ body{
     font-weight:700;
     letter-spacing:.3px;
     cursor:pointer;
-    box-shadow:0 8px 22px rgba(181,107,69,.30) !important;
+    box-shadow:0 8px 22px rgba(181,107,69,.30);
     transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease !important}
 #btnVerCatalogo:hover{
     transform:translateY(-3px) !important;
-    box-shadow:0 14px 30px rgba(181,107,69,.40) !important}
+    box-shadow:0 14px 30px rgba(181,107,69,.40)}
 #btnVerCatalogo::after{
     content:"";
     position:absolute;
@@ -732,8 +738,10 @@ body{
     border:2px solid var(--primario-suave) !important;
     border-radius:999px !important;
     padding:12px 26px !important;
-    color:var(--primario) !important;
-    font-size:1.05rem;   /* el tamaño que traía el style="" del HTML */
+    /* --primario (#b56b45) sobre blanco da 4,07:1 y este botón se lee a
+       16 px, así que necesita 4,5:1. --primario-oscuro da 5,54:1 y es el
+       mismo marrón, un punto más hondo. */
+    color:var(--primario-oscuro) !important;
     font-weight:700;
     text-decoration:none;
     box-shadow:var(--ts-sombra);
@@ -919,7 +927,12 @@ body{
     -ms-overflow-style:none;
     animation:tsCatEntrada .6s ease both}
 .categorias::-webkit-scrollbar{display:none}
-@keyframes tsCatEntrada{from{opacity:0}to{opacity:1}}
+/* Arranca en 0,55 y no en 0: si el reloj de animaciones se atascara, la
+   bandeja de filtros se vería un poco tenue, nunca desaparecida. Ningún
+   elemento imprescindible arranca en opacidad 0 sin red de seguridad. */
+@keyframes tsCatEntrada{
+    from{opacity:.55;transform:translateY(6px)}
+    to{opacity:1;transform:none}}
 
 /* El resalte deslizante (#catIndicador) se eliminó del HTML y de los
    scripts: la pastilla activa se pinta ella sola, así que solo era un
@@ -955,7 +968,10 @@ body{
 #categorias .categoria:nth-child(5){animation-delay:.16s}
 #categorias .categoria:nth-child(6){animation-delay:.20s}
 #categorias .categoria:nth-child(7){animation-delay:.24s}
-@keyframes tsCatPop{from{opacity:0}to{opacity:1}}
+/* Igual que la bandeja: 0,55 en vez de 0, por el mismo motivo. */
+@keyframes tsCatPop{
+    from{opacity:.55;transform:translateY(5px) scale(.97)}
+    to{opacity:1;transform:none}}
 #categorias .categoria::after{display:none !important}
 
 /* Icono: círculo de color con el dibujo dentro.
@@ -1254,7 +1270,10 @@ body{
     animation:none;
     transform:translateY(-4px) scale(1.08) !important}
 .redes-flotantes a:hover img{transform:scale(1.15) rotate(-8deg)}
-@keyframes tsEntraRedes{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:blur(0)}}
+/* También 0,45 en vez de 0: son los botones de contacto, no un adorno. */
+@keyframes tsEntraRedes{
+    from{opacity:.45;filter:blur(6px)}
+    to{opacity:1;filter:blur(0)}}
 @keyframes tsFlotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
 /* Etiqueta con el nombre de la red (usa el aria-label del enlace) */
@@ -1522,6 +1541,23 @@ input:focus-visible{
     outline:3px solid var(--ts-rosa);
     outline-offset:2px}
 
+/* ============================================================
+   12.bis) EL CATÁLOGO SE ENSEÑA AL PULSAR "VER CATÁLOGO"
+   ------------------------------------------------------------
+   Es una decisión de diseño, no un descuido: primero se lee
+   "Comprar es muy fácil" y el catálogo aparece al pulsar el botón.
+
+   Se hace con la clase .js del <html> (la pone un script en el
+   <head>) en vez de un style="display:none" escrito en la etiqueta,
+   y así se gana sin cambiar el comportamiento:
+     · sin JavaScript la sección NO se oculta
+     · no hay parpadeo: la clase se pone antes de pintar nada
+     · al revelarla no se fuerza ningún display, vuelve al del CSS
+       base (igual que hacía el antiguo style.display = "")
+   ============================================================ */
+html.js #categorias:not(.revelado),
+html.js #catalogo:not(.revelado){display:none !important}
+
 /* Pista discreta de que el modo admin está activo (?admin=1 o cinco
    toques en el título). Antes el desbloqueo no daba ninguna señal. */
 body.modo-admin .visitas-chip{
@@ -1533,6 +1569,435 @@ body.modo-admin .visitas-chip::after{
 
 /* Brillo que recorre los títulos y las líneas de acento */
 @keyframes tsBrillo{0%{background-position:0% center}100%{background-position:200% center}}
+
+/* ============================================================
+   13) MODO ESPECTACULAR — catálogo, filtros y botones
+   ------------------------------------------------------------
+   Esta sección es SOLO ASPECTO. No cambia ids, clases ni el
+   comportamiento: el catálogo sigue oculto hasta pulsar "Ver
+   Catálogo", los filtros, la búsqueda y WhatsApp funcionan igual.
+
+   Lo único que se añade al documento son elementos vacíos que no
+   se leen ni se pueden pulsar:
+     · <span class="card-efectos"> dentro de cada tarjeta (lo pone
+       app.js, va con aria-hidden)
+     · las <span class="ts-onda"> de la onda al pulsar un botón
+       (las crea y las borra un script; duran 0,6 s)
+
+   REGLA DE COLOR — importante:
+   el rosa vivo de la marca (--ts-neon-*) NO se usa NUNCA para
+   texto pequeño: sobre blanco da 2,5:1 y no llega al 4,5:1 que
+   hace falta para leerlo. El texto sigue con --ts-rosa-texto
+   (6,3:1) y --ts-marron-texto (5,8:1). El rosa vivo va donde no
+   hay nada que leer: bordes, halos, fondos y barridos.
+
+   REGLA DE MOVIMIENTO:
+   todo lo de aquí se apaga en prefers-reduced-motion (bloque 13.10)
+   y la inclinación 3D solo se activa con ratón (hover + pointer:fine).
+   ============================================================ */
+
+:root{
+    --ts-neon-rosa:#f47da3;
+    --ts-neon-fucsia:#e85c8b;
+    --ts-neon-violeta:#8662a9;
+    --ts-halo:rgba(244,125,163,.42);
+    --ts-halo-suave:rgba(244,125,163,.18);
+    --ts-halo-violeta:rgba(134,98,169,.34);
+    --ts-espejo:rgba(255,255,255,.52);
+    /* --ts-foco solo existía en .dark: en modo claro el anillo de
+       la tarjeta enlazada (#rapunzel) quedaba sin pintar. */
+    --ts-foco:rgba(183,110,138,.35);
+    --ts-verde-1:#3fd584;
+    --ts-verde-2:#25d366;
+    --ts-verde-3:#128c4b;
+}
+
+/* ---------- 13.1 Dos nebulosas que se mueven muy despacio ---------- */
+#categorias,#catalogo{isolation:isolate}
+#catalogo{position:relative}
+#catalogo::before,
+#catalogo::after{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    border-radius:50%;
+    pointer-events:none;
+    will-change:transform}
+#catalogo::before{
+    width:min(520px,80vw);
+    aspect-ratio:1/1;
+    top:-70px;
+    left:-40px;
+    background:radial-gradient(circle,var(--ts-halo-suave) 0%,rgba(244,125,163,0) 68%);
+    animation:tsDerivaA 26s ease-in-out infinite alternate}
+#catalogo::after{
+    width:min(480px,76vw);
+    aspect-ratio:1/1;
+    right:-60px;
+    bottom:-60px;
+    background:radial-gradient(circle,var(--ts-halo-violeta) 0%,rgba(134,98,169,0) 68%);
+    animation:tsDerivaB 32s ease-in-out infinite alternate}
+@keyframes tsDerivaA{
+    from{transform:translate3d(0,0,0) scale(1)}
+    to{transform:translate3d(70px,50px,0) scale(1.14)}}
+@keyframes tsDerivaB{
+    from{transform:translate3d(0,0,0) scale(1.08)}
+    to{transform:translate3d(-80px,-40px,0) scale(1)}}
+
+/* ---------- 13.2 Títulos con halo ---------- */
+/* El text-shadow se dibuja DETRÁS del degradado recortado al texto,
+   así que se ve como un resplandor alrededor de las letras. */
+#categorias h2,#catalogo h2{
+    text-shadow:0 0 26px var(--ts-halo-suave),0 0 7px rgba(244,125,163,.14)}
+#categorias h2::after,#catalogo h2::after{
+    box-shadow:0 0 18px var(--ts-halo),0 0 4px rgba(244,125,163,.55)}
+
+/* ---------- 13.3 Pastillas de categoría ---------- */
+/* Cada apartado tiene su propio color de resplandor (--brillo). */
+#categorias .categoria[data-categoria="Todos"]{--brillo:rgba(162,112,63,.45)}
+#categorias .categoria[data-categoria="Disponibles"]{--brillo:rgba(63,127,87,.42)}
+#categorias .categoria[data-categoria="Animales"]{--brillo:rgba(168,95,130,.45)}
+#categorias .categoria[data-categoria="Personajes"]{--brillo:rgba(156,124,36,.42)}
+#categorias .categoria[data-categoria="Llaveros"]{--brillo:rgba(111,92,160,.45)}
+#categorias .categoria[data-categoria="Personalizados"]{--brillo:rgba(67,113,155,.42)}
+
+/* Texto de la pastilla ACTIVA: un punto más oscuro que --tinta.
+   El nombre de la pastilla va a 16 px en negrita, así que NO cuenta
+   como "texto grande" y necesita 4,5:1. Con los tonos originales se
+   quedaba entre 3,5:1 y 4,1:1 (venía así del diseño anterior); estos
+   son los mínimos que lo pasan sin cambiar de color.
+   El icono y el aro conservan el tono original (--tinta / --tono):
+   son dibujo, no texto. En modo oscuro no cambia nada: la regla
+   .dark de más arriba tiene más peso y sigue poniendo blanco. */
+#categorias .categoria[data-categoria="Todos"]{--tinta-fuerte:#8c6136}
+#categorias .categoria[data-categoria="Disponibles"]{--tinta-fuerte:#3b7751}
+#categorias .categoria[data-categoria="Animales"]{--tinta-fuerte:#945472}
+#categorias .categoria[data-categoria="Personajes"]{--tinta-fuerte:#84691e}
+#categorias .categoria[data-categoria="Llaveros"]{--tinta-fuerte:#6f5ca0}
+#categorias .categoria[data-categoria="Personalizados"]{--tinta-fuerte:#416e96}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa),
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    color:var(--tinta-fuerte,var(--tinta)) !important}
+
+/* Bandeja: un poco de resplandor rosa por debajo */
+.categorias{
+    box-shadow:0 8px 26px rgba(90,60,75,.08),
+               0 22px 44px -30px var(--ts-halo) !important}
+
+#categorias .categoria{
+    overflow:hidden;
+    transition:transform .28s cubic-bezier(.2,.8,.2,1),
+               background .22s ease,border-color .22s ease,
+               box-shadow .28s ease !important}
+#categorias .categoria:hover:not(:is(.activo,.active,.seleccionada,.activa)){
+    transform:translateY(-3px);
+    box-shadow:0 12px 22px -10px var(--brillo),
+               0 2px 4px rgba(67,53,45,.06) !important}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(135deg,var(--relleno),var(--card)) !important;
+    border-color:var(--tono) !important;
+    box-shadow:inset 0 0 0 1.5px var(--tono),
+               0 12px 24px -12px var(--brillo) !important;
+    animation:tsPopActiva .42s cubic-bezier(.2,.8,.2,1)}
+@keyframes tsPopActiva{
+    0%{transform:scale(.94)}
+    55%{transform:scale(1.045)}
+    100%{transform:scale(1)}}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-icono{
+    box-shadow:inset 0 0 0 1px var(--tono),0 5px 14px -4px var(--brillo)}
+#categorias .categoria:is(.activo,.active,.seleccionada,.activa) .cat-num{
+    box-shadow:0 2px 8px -3px var(--brillo)}
+
+/* El contador pega un salto cuando cambia (lo marca el script) */
+#categorias .categoria .cat-num{
+    transition:transform .25s ease,background .25s ease}
+#categorias .categoria:hover .cat-num{transform:scale(1.09)}
+#categorias .categoria .cat-num.ts-latido{
+    animation:tsLatido .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes tsLatido{
+    0%{transform:scale(1)}
+    40%{transform:scale(1.4)}
+    100%{transform:scale(1)}}
+
+/* ---------- 13.4 Tarjetas de producto ---------- */
+/* Entrada escalonada: 9 escalones que se repiten, así una lista de
+   21 tarjetas no tarda casi un segundo en terminar de aparecer.
+   Se reutiliza el :nth-child, sin tocar app.js.
+   fill-mode "backwards": mientras corre la animación manda ella, y
+   al acabar el transform vuelve al CSS normal, que es lo que deja
+   funcionar la inclinación del ratón. */
+#productos .card{
+    position:relative;
+    isolation:isolate;   /* el adorno de la tarjeta no se sale a las vecinas */
+    border-radius:22px;
+    /* animations.css le pone a las tarjetas la animación fadeUp. Se apaga
+       aquí por dos motivos: (1) al retirar .ts-entrada volvería a
+       dispararse y las tarjetas parpadearían, y (2) la entrada escalonada
+       de aquí abajo ya hace ese trabajo, y con red de seguridad. */
+    animation:none}
+
+/* La entrada escalonada NO se queda puesta: la enciende el script con
+   .ts-entrada y él mismo la apaga a los 1,4 s.
+   Es a propósito. Con la animación siempre encendida y relleno
+   "backwards", una tarjeta cuyo arranque se quede pendiente se ve a
+   opacity:0, o sea, en blanco. Quitando la clase vuelven a su estado
+   normal, así que el peor caso posible es "no se anima", nunca
+   "no se ve el catálogo". */
+#productos.ts-entrada .card{
+    animation:tsEntraTarjeta .52s cubic-bezier(.2,.8,.2,1) backwards}
+#productos.ts-entrada .card:nth-child(9n+2){animation-delay:45ms}
+#productos.ts-entrada .card:nth-child(9n+3){animation-delay:90ms}
+#productos.ts-entrada .card:nth-child(9n+4){animation-delay:135ms}
+#productos.ts-entrada .card:nth-child(9n+5){animation-delay:180ms}
+#productos.ts-entrada .card:nth-child(9n+6){animation-delay:225ms}
+#productos.ts-entrada .card:nth-child(9n+7){animation-delay:270ms}
+#productos.ts-entrada .card:nth-child(9n+8){animation-delay:315ms}
+#productos.ts-entrada .card:nth-child(9n+9){animation-delay:360ms}
+@keyframes tsEntraTarjeta{
+    from{opacity:0;transform:translateY(18px) scale(.96)}
+    to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* La foto respira un poco más al pasar por encima */
+#productos .card .producto-img{
+    transition:transform .55s cubic-bezier(.2,.8,.2,1),filter .45s ease}
+#productos .card:hover .producto-img,
+#productos .card:focus-within .producto-img{
+    transform:scale(1.07);
+    filter:saturate(1.06) brightness(1.03)}
+
+/* Foco de luz y barrido: van en el <span class="card-efectos">, que
+   es un elemento propio y vacío. Se hace así a propósito para no
+   pisar ningún ::before / ::after de los CSS base de las tarjetas. */
+.card-efectos{
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:3}
+/* Foco de luz que sigue al ratón. Va MUY suave a propósito: esta capa
+   pasa por encima de la foto, y en un catálogo la foto tiene que verse
+   con sus colores de verdad. Con más intensidad, los muñecos blancos
+   salían teñidos de rosa. */
+.card-efectos::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(300px circle at var(--mx,50%) var(--my,40%),
+                rgba(244,125,163,.13),rgba(134,98,169,.05) 45%,transparent 72%);
+    opacity:0;
+    transition:opacity .38s ease}
+#productos .card:hover .card-efectos::before,
+#productos .card:focus-within .card-efectos::before{opacity:1}
+.card-efectos::after{
+    content:"";
+    position:absolute;
+    top:-70%;
+    left:-60%;
+    width:34%;
+    height:240%;
+    background:linear-gradient(100deg,transparent,var(--ts-espejo),transparent);
+    transform:rotate(16deg);
+    opacity:0}
+#productos .card:hover .card-efectos::after,
+#productos .card:focus-within .card-efectos::after{
+    animation:tsBarrido .95s ease-out .05s 1}
+@keyframes tsBarrido{
+    0%{opacity:0;transform:translateX(0) rotate(16deg)}
+    18%{opacity:.8}
+    100%{opacity:0;transform:translateX(440%) rotate(16deg)}}
+
+/* Inclinación 3D + resplandor. Solo con ratón de verdad: en táctil
+   el :hover se queda "pegado" y la tarjeta se vería torcida. */
+@media (hover:hover) and (pointer:fine){
+    #productos .card:hover,
+    #productos .card:focus-within{
+        transform:perspective(900px)
+                  rotateX(var(--giro-x,0deg))
+                  rotateY(var(--giro-y,0deg))
+                  translate3d(0,-8px,0) scale(1.012);
+        border-color:rgba(244,125,163,.5);
+        box-shadow:0 24px 44px -20px rgba(134,98,169,.55),
+                   0 16px 32px -14px rgba(244,125,163,.6)}
+}
+#productos .card:target{
+    border-color:var(--ts-neon-rosa);
+    box-shadow:0 0 0 3px var(--ts-foco),0 18px 36px -18px var(--ts-halo)}
+
+/* ---------- 13.5 Botones ---------- */
+/* Botón de WhatsApp de cada tarjeta: degradado que se desliza,
+   resplandor, barrido de luz e icono que se mueve. */
+.acciones .btn.secundario{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,var(--ts-verde-1),var(--ts-verde-2) 45%,var(--ts-verde-3)) !important;
+    background-size:200% auto !important;
+    box-shadow:0 8px 20px -8px rgba(37,211,102,.65) !important;
+    transition:transform .26s cubic-bezier(.2,.8,.2,1),
+               box-shadow .26s ease,background-position .55s ease !important}
+.acciones .btn.secundario:hover{
+    transform:translateY(-3px) scale(1.02) !important;
+    background-position:100% center !important;
+    box-shadow:0 14px 28px -10px rgba(37,211,102,.85) !important}
+.acciones .btn.secundario::after{
+    content:"";
+    position:absolute;
+    top:-50%;
+    left:-70%;
+    width:45%;
+    height:200%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:rotate(18deg);
+    opacity:0;
+    pointer-events:none}
+.acciones .btn.secundario:hover::after{animation:tsBarridoBtn 1.05s ease-out}
+@keyframes tsBarridoBtn{
+    0%{opacity:0;transform:translateX(0) rotate(18deg)}
+    20%{opacity:.9}
+    100%{opacity:0;transform:translateX(400%) rotate(18deg)}}
+.acciones .btn.secundario .btn-icono{
+    transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.acciones .btn.secundario:hover .btn-icono,
+.acciones .btn.secundario:focus-visible .btn-icono{
+    transform:scale(1.18) rotate(-10deg)}
+
+/* "Ver Catálogo": degradado en movimiento + anillo que late.
+   El halo late con box-shadow, así que en la regla de arriba se
+   quitó el !important de box-shadow (si no, ganaría a la animación). */
+#btnVerCatalogo{
+    background:linear-gradient(135deg,#c07a52,#a25a34 40%,#8a4f2f 60%,#c07a52) !important;
+    background-size:220% auto !important;
+    animation:tsBrillo 9s linear infinite,tsHalo 3.4s ease-in-out infinite !important;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1) !important}
+#btnVerCatalogo:hover{transform:translateY(-3px) scale(1.03) !important}
+#btnVerCatalogo:active{transform:translateY(-1px) scale(.99) !important}
+@keyframes tsHalo{
+    0%,100%{box-shadow:0 8px 22px rgba(181,107,69,.32),
+                       0 0 0 0 rgba(244,125,163,.45)}
+    55%{box-shadow:0 12px 26px rgba(181,107,69,.40),
+                   0 0 0 14px rgba(244,125,163,0)}}
+
+/* "Cotizar mi Personalizado": contorno que se enciende en rosa */
+.presentacion-seo a[href*="wa.me"]:hover{
+    box-shadow:0 14px 30px rgba(120,80,95,.16),
+               0 0 0 4px var(--ts-halo-suave)}
+.dark .presentacion-seo a[href*="wa.me"]:hover{
+    box-shadow:0 14px 30px rgba(0,0,0,.45),
+               0 0 0 4px rgba(229,168,132,.18)}
+
+/* Onda al pulsar: la crea el script y se borra sola.
+   Usa currentColor, así funciona igual en botones claros y oscuros. */
+.ts-onda{
+    position:absolute;
+    border-radius:50%;
+    background:currentColor;
+    opacity:.3;
+    transform:translate(-50%,-50%) scale(0);
+    pointer-events:none;
+    animation:tsOnda .6s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes tsOnda{
+    to{transform:translate(-50%,-50%) scale(2.4);opacity:0}}
+
+/* Botón "volver arriba": un latido suave */
+#volverArriba{overflow:hidden}
+#volverArriba.visible{animation:tsSube 3.6s ease-in-out infinite}
+@keyframes tsSube{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-6px)}}
+
+/* ---------- 13.6 Buscador ---------- */
+#buscar:focus{
+    border-color:var(--ts-neon-rosa);
+    box-shadow:0 0 0 3px var(--ts-foco),
+               0 12px 28px -14px rgba(244,125,163,.8)}
+.buscador-caja:focus-within .buscador-icono{
+    color:var(--ts-neon-fucsia);
+    transform:translateY(-50%) scale(1.14)}
+
+/* ---------- 13.7 Aviso de "Cargando catálogo" ---------- */
+#productosCargando::after{
+    content:"";
+    display:block;
+    width:34px;
+    height:34px;
+    margin:16px auto 0;
+    border-radius:50%;
+    border:3px solid var(--ts-halo-suave);
+    border-top-color:var(--ts-neon-rosa);
+    animation:tsGirar .9s linear infinite}
+@keyframes tsGirar{to{transform:rotate(360deg)}}
+
+/* ---------- 13.8 Al revelar el catálogo ---------- */
+/* La clase .ts-anima-entrada la pone y la quita el script (900 ms).
+   Es a propósito: esta animación arranca en opacity 0, así que si se
+   quedara puesta y el reloj de animaciones se atascara, las dos
+   secciones —o sea, TODO el catálogo— se verían en blanco. Quitando
+   la clase vuelven a su estado normal y el catálogo siempre se ve. */
+html.js #categorias.revelado.ts-anima-entrada,
+html.js #catalogo.revelado.ts-anima-entrada{
+    animation:tsRevela .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes tsRevela{
+    from{opacity:0;transform:translateY(22px)}
+    to{opacity:1;transform:translateY(0)}}
+
+/* ---------- 13.9 Modo oscuro ---------- */
+.dark{
+    --ts-halo:rgba(244,125,163,.5);
+    --ts-halo-suave:rgba(244,125,163,.16);
+    --ts-halo-violeta:rgba(134,98,169,.4);
+    --ts-espejo:rgba(255,255,255,.34);
+    --ts-foco:rgba(232,175,199,.45)}
+.dark .categorias{
+    box-shadow:inset 0 0 0 1px var(--borde),
+               0 8px 26px rgba(0,0,0,.45),
+               0 22px 44px -30px var(--ts-halo) !important}
+.dark #categorias .categoria:is(.activo,.active,.seleccionada,.activa){
+    background:linear-gradient(135deg,var(--relleno),#2f2f2f) !important}
+.dark #productos .card:hover,
+.dark #productos .card:focus-within{
+    border-color:rgba(244,125,163,.5);
+    box-shadow:0 24px 46px -20px rgba(0,0,0,.85),
+               0 16px 34px -16px rgba(244,125,163,.65)}
+.dark #categorias h2,
+.dark #catalogo h2{text-shadow:0 0 26px rgba(244,125,163,.16)}
+
+/* ---------- 13.10 Sin movimiento ---------- */
+@media (prefers-reduced-motion:reduce){
+    #catalogo::before,
+    #catalogo::after,
+    #productos.ts-entrada .card,
+    .card-efectos::before,
+    .card-efectos::after,
+    .acciones .btn.secundario,
+    .acciones .btn.secundario::after,
+    .acciones .btn.secundario .btn-icono,
+    #btnVerCatalogo,
+    #volverArriba.visible,
+    #productosCargando::after,
+    #categorias .categoria,
+    #categorias .categoria .cat-num,
+    .ts-onda,
+    html.js #categorias.revelado,
+    html.js #catalogo.revelado{
+        animation:none !important;
+        transition:none !important}
+    #productos .card:hover,
+    #productos .card:focus-within,
+    #productos .card:hover .producto-img,
+    #productos .card:focus-within .producto-img,
+    #categorias .categoria:hover,
+    #btnVerCatalogo:hover{
+        transform:none !important}
+    #productos .card:hover .card-efectos::before,
+    #productos .card:focus-within .card-efectos::before{opacity:0}
+    #productosCargando::after{display:none}
+}
+
+/* ---------- 13.11 Pantallas pequeñas ---------- */
+@media (max-width:700px){
+    #catalogo::before{width:min(360px,88vw);top:-40px}
+    #catalogo::after{width:min(340px,84vw);bottom:-40px}
+}
 </style>
 </head>
 <body>
@@ -1582,10 +2047,8 @@ body.modo-admin .visitas-chip::after{
     </section>
 
     <!-- ===== CATEGORÍAS ===== -->
-    <!-- Antes esta sección arrancaba con style="display:none" y solo la
-         destapaba el botón "Ver Catálogo". Eso dejaba el catálogo
-         inalcanzable sin JavaScript y rompía los enlaces directos del
-         tipo #rapunzel que usa el JSON-LD. -->
+    <!-- Igual que el catálogo: oculta hasta que se pulsa "Ver Catálogo"
+         (regla html.js ...:not(.revelado) en el CSS del <head>). -->
     <section id="categorias" aria-labelledby="categorias-titulo">
 
         <h2 id="categorias-titulo">Nuestros Amigurumis</h2>
@@ -1788,19 +2251,57 @@ body.modo-admin .visitas-chip::after{
 <script src="js/contacto.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script>
-/* "Ver Catálogo" ahora solo BAJA al catálogo.
-   Antes lo destapaba con display:none y ocultaba "Comprar es muy
-   fácil": el catálogo no existía hasta pulsar el botón, así que sin
-   JavaScript (o entrando por un enlace #rapunzel) era inalcanzable. */
+/* "Ver Catálogo" hace exactamente lo de siempre: esconde "Comprar es
+   muy fácil" y enseña el catálogo (regla .revelado del CSS).
+
+   Lo único que cambia es CÓMO se esconde, y no cómo se comporta:
+     · sin JavaScript las dos secciones se ven desde el principio, así
+       nadie se queda sin catálogo por no tener JS activado
+     · un enlace directo a un producto (#rapunzel, los que usa el
+       JSON-LD) revela el catálogo solo, sin obligar a pulsar nada */
 (function(){
   var btn = document.getElementById("btnVerCatalogo");
-  if(!btn) return;
-  btn.addEventListener("click", function(){
-    var destino = document.getElementById("catalogo") || document.getElementById("categorias");
-    if(!destino) return;
-    var reducir = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    destino.scrollIntoView({ behavior: reducir ? "auto" : "smooth", block: "start" });
+
+  function reducirMovimiento(){
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  function revelar(desplazar){
+    /* "Comprar es muy fácil" solo se retira cuando la persona PULSA el
+       botón, que es lo que hacía antes. Si se llega por un enlace
+       directo a un producto (#rapunzel, los que usa el JSON-LD), el
+       catálogo se abre pero no se le quita de en medio una sección que
+       nadie pidió cerrar. */
+    if(desplazar){
+      var facil = document.querySelector(".seccion-facil");
+      if(facil) facil.style.display = "none";
+    }
+
+    ["categorias", "catalogo"].forEach(function(id){
+      var seccion = document.getElementById(id);
+      if(seccion) seccion.classList.add("revelado");
+    });
+
+    if(!desplazar) return;
+    var destino = document.getElementById("categorias") || document.getElementById("catalogo");
+    if(destino){
+      destino.scrollIntoView({ behavior: reducirMovimiento() ? "auto" : "smooth", block: "start" });
+    }
+  }
+
+  if(btn) btn.addEventListener("click", function(){ revelar(true); });
+
+  function revelarSiElAnclaExiste(){
+    var hash = decodeURIComponent(String(location.hash || "")).replace(/^#/, "");
+    if(hash && document.getElementById(hash)) revelar(false);
+  }
+
+  /* app.js avisa con "productosCargados" cuando ya pintó las tarjetas:
+     hasta ese momento el ancla #rapunzel todavía no existe en el DOM. */
+  window.addEventListener("productosCargados", function(){
+    setTimeout(revelarSiElAnclaExiste, 0);
   });
+  window.addEventListener("hashchange", revelarSiElAnclaExiste);
 })();
 </script>
 <script>
@@ -1848,6 +2349,198 @@ body.modo-admin .visitas-chip::after{
         window.scrollTo({top:0, behavior:'smooth'});
     });
     alScroll();
+})();
+</script>
+<script>
+/* ============================================================
+   EFECTOS DEL CATÁLOGO (solo adorno)
+   ------------------------------------------------------------
+   Este bloque NO toca datos, filtros ni WhatsApp: solo añade
+   adornos que se pueden quitar sin que nada deje de funcionar.
+
+     1. Onda al pulsar pastillas y botones
+     2. Inclinación 3D de la tarjeta siguiendo el ratón
+     3. Latido del contador de cada pastilla
+
+   Todo se apaga con prefers-reduced-motion y la inclinación solo
+   se activa con ratón de verdad (hover + pointer:fine).
+   ============================================================ */
+(function(){
+    var reducir = function(){
+        return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    };
+    var conRaton = !!(window.matchMedia && window.matchMedia("(hover:hover) and (pointer:fine)").matches);
+
+    /* ---------- 1) Onda al pulsar ---------- */
+    document.addEventListener("pointerdown", function(e){
+        if(reducir()) return;
+        var destino = e.target && e.target.closest
+            ? e.target.closest("#btnVerCatalogo,.acciones .btn,.categoria,#volverArriba")
+            : null;
+        if(!destino) return;
+
+        var caja = destino.getBoundingClientRect();
+        if(!caja.width || !caja.height) return;
+
+        var lado = Math.max(caja.width, caja.height);
+        var onda = document.createElement("span");
+        onda.className = "ts-onda";
+        onda.setAttribute("aria-hidden", "true");
+        onda.style.width = lado + "px";
+        onda.style.height = lado + "px";
+        onda.style.left = (e.clientX - caja.left) + "px";
+        onda.style.top = (e.clientY - caja.top) + "px";
+        onda.addEventListener("animationend", function(){ onda.remove(); });
+        /* Red de seguridad: si la animación no llegara a correr,
+           "animationend" no se dispararía y la onda se quedaría ahí. */
+        window.setTimeout(function(){ onda.remove(); }, 900);
+        destino.appendChild(onda);
+    }, {passive:true});
+
+    /* ---------- 2) Inclinación 3D siguiendo el ratón ---------- */
+    var productos = document.getElementById("productos");
+    if(productos && conRaton && !reducir()){
+        var pendiente = null;   /* hay un frame pedido */
+        var tarjeta = null;     /* la tarjeta bajo el ratón */
+        var ratonX = 0, ratonY = 0;
+
+        function limpiar(el){
+            if(!el) return;
+            el.style.removeProperty("--mx");
+            el.style.removeProperty("--my");
+            el.style.removeProperty("--giro-x");
+            el.style.removeProperty("--giro-y");
+        }
+
+        function pintar(){
+            pendiente = null;
+            if(!tarjeta) return;
+            var caja = tarjeta.getBoundingClientRect();
+            if(!caja.width || !caja.height) return;
+            var x = (ratonX - caja.left) / caja.width;   /* 0 = borde izq. */
+            var y = (ratonY - caja.top) / caja.height;   /* 0 = borde arriba */
+            tarjeta.style.setProperty("--mx", (x * 100).toFixed(2) + "%");
+            tarjeta.style.setProperty("--my", (y * 100).toFixed(2) + "%");
+            /* Máximo ±4°, muy suave: más grados se nota mareante */
+            tarjeta.style.setProperty("--giro-y", ((x - 0.5) * 8).toFixed(2) + "deg");
+            tarjeta.style.setProperty("--giro-x", ((0.5 - y) * 8).toFixed(2) + "deg");
+        }
+
+        /* Un solo escuchador para las 21 tarjetas: si se pone uno por
+           tarjeta, cada filtrado deja escuchadores muertos. */
+        productos.addEventListener("pointermove", function(e){
+            var nueva = e.target && e.target.closest ? e.target.closest(".card") : null;
+            if(nueva !== tarjeta){
+                limpiar(tarjeta);
+                tarjeta = nueva;
+            }
+            if(!tarjeta) return;
+            ratonX = e.clientX;
+            ratonY = e.clientY;
+            if(pendiente) return;
+            pendiente = window.requestAnimationFrame(pintar);
+        }, {passive:true});
+
+        productos.addEventListener("pointerleave", function(){
+            limpiar(tarjeta);
+            tarjeta = null;
+        }, {passive:true});
+    }
+
+    /* ---------- 3) Entrada escalonada de las tarjetas ---------- */
+    /* La clase .ts-entrada enciende la animación y se retira sola a los
+       1,4 s. Es a propósito: si se quedara puesta y una tarjeta no
+       llegara a arrancar la animación, se vería en blanco (opacity 0).
+       Quitándola, el peor caso posible es "no se anima", nunca
+       "no se ve el catálogo". */
+    var catalogo = document.getElementById("catalogo");
+    var temporizadorTarjetas = null;
+
+    /* La entrada de las secciones lleva la misma red de seguridad: la
+       clase se pone y se retira sola, así el peor caso es "no se
+       anima" y nunca "el catálogo se queda en blanco". */
+    function animarSecciones(){
+        if(reducir()) return;
+        ["categorias", "catalogo"].forEach(function(id){
+            var seccion = document.getElementById(id);
+            if(!seccion || !seccion.classList.contains("revelado")) return;
+            window.clearTimeout(seccion._tsEntrada);
+            seccion.classList.remove("ts-anima-entrada");
+            void seccion.offsetWidth;
+            seccion.classList.add("ts-anima-entrada");
+            seccion._tsEntrada = window.setTimeout(function(){
+                seccion.classList.remove("ts-anima-entrada");
+            }, 900);
+        });
+    }
+
+    function animarTarjetas(){
+        if(reducir() || !productos || !catalogo) return;
+        /* Dentro de una sección oculta las animaciones no corren: no se
+           encienden hasta que el catálogo se ve de verdad. */
+        if(!catalogo.classList.contains("revelado")) return;
+        if(!productos.querySelector(".card")) return;
+        window.clearTimeout(temporizadorTarjetas);
+        productos.classList.remove("ts-entrada");
+        void productos.offsetWidth;          /* reinicia la animación */
+        productos.classList.add("ts-entrada");
+        temporizadorTarjetas = window.setTimeout(function(){
+            productos.classList.remove("ts-entrada");
+        }, 1400);
+    }
+
+    function animarTodo(){
+        animarSecciones();
+        animarTarjetas();
+    }
+
+    if(window.MutationObserver){
+        /* app.js repinta las tarjetas al filtrar o al buscar */
+        if(productos) new MutationObserver(animarTarjetas)
+            .observe(productos, {childList:true});
+
+        /* "Ver Catálogo" pone .revelado en la sección. Se deja de
+           escuchar en cuanto pasa una vez: si no, animarSecciones()
+           cambiaría la clase de #catalogo y el propio observador se
+           volvería a llamar a sí mismo sin parar. */
+        if(catalogo){
+            var vigiaRevelado = new MutationObserver(function(){
+                if(!catalogo.classList.contains("revelado")) return;
+                vigiaRevelado.disconnect();
+                animarTodo();
+            });
+            vigiaRevelado.observe(catalogo, {attributes:true, attributeFilter:["class"]});
+        }
+    }
+    /* El catálogo también puede abrirse solo, por un enlace directo */
+    window.addEventListener("productosCargados", function(){
+        window.setTimeout(animarTodo, 0);
+    });
+
+    /* ---------- 4) Latido de los contadores ---------- */
+    function latir(numero){
+        if(!numero || reducir()) return;
+        numero.classList.remove("ts-latido");
+        void numero.offsetWidth;          /* reinicia la animación */
+        numero.classList.add("ts-latido");
+    }
+
+    document.addEventListener("click", function(e){
+        var pastilla = e.target && e.target.closest
+            ? e.target.closest("#categorias .categoria")
+            : null;
+        if(pastilla) latir(pastilla.querySelector(".cat-num"));
+    });
+
+    window.addEventListener("productosCargados", function(){
+        if(reducir()) return;
+        Array.prototype.forEach.call(
+            document.querySelectorAll("#categorias .cat-num"),
+            function(numero, i){
+                window.setTimeout(function(){ latir(numero); }, i * 60);
+            }
+        );
+    });
 })();
 </script>
 </body>

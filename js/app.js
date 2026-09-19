@@ -126,6 +126,11 @@ function tarjetaHTML(producto, ancla) {
 
     return '' +
         '<div class="card" id="' + ancla + '">' +
+            /* Elemento vacío solo para los adornos (foco de luz y
+               barrido de brillo del CSS .card-efectos). Se pone aquí
+               y no con un ::before de la tarjeta para no pisar los
+               ::before / ::after que ya usan los CSS base. */
+            '<span class="card-efectos" aria-hidden="true"></span>' +
             foto +
             '<div class="card-body">' +
                 '<h3 class="nombre">' + nombre + '</h3>' +
