@@ -1260,48 +1260,8 @@ body{
 }
 
 /* ============================================================
-   11) BUSCADOR DEL CATÁLOGO
-   El input #buscar no existía en el HTML: app.js ya traía todo el
-   código de búsqueda, pero no había dónde escribirlo y nunca se
-   activaba.
+   11) (libre) — aquí vivía el buscador, ya retirado
    ============================================================ */
-.buscador{max-width:460px;margin:0 auto clamp(14px,2.4vw,22px)}
-.buscador-caja{position:relative}
-.buscador-icono{
-    position:absolute;
-    left:15px;
-    top:50%;
-    transform:translateY(-50%);
-    width:19px;
-    height:19px;
-    color:#8a7a70;
-    pointer-events:none}
-.dark .buscador-icono{color:#b3a49a}
-#buscar{
-    width:100%;
-    padding:12px 44px;
-    font-family:inherit;
-    font-size:1rem;
-    font-weight:600;
-    color:var(--text);
-    background:var(--card);
-    border:1.5px solid var(--borde);
-    border-radius:999px;
-    box-shadow:var(--ts-sombra);
-    transition:border-color .2s ease,box-shadow .2s ease}
-#buscar::placeholder{color:#8a7a70;font-weight:500;opacity:1}
-.dark #buscar::placeholder{color:#b3a49a}
-#buscar:focus{
-    outline:none;
-    border-color:var(--ts-rosa);
-    box-shadow:0 0 0 3px var(--ts-foco)}
-.resultado-busqueda{
-    min-height:1.2em;
-    margin:8px 4px 0;
-    font-size:.86rem;
-    font-weight:600;
-    color:#5a5049}
-.dark .resultado-busqueda{color:#cfc7c0}
 
 /* ============================================================
    12) UTILIDADES, ESTADOS Y FOCO
@@ -1652,15 +1612,6 @@ body.modo-admin .visitas-chip::after{
 @keyframes tsSube{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-6px)}}
-
-/* ---------- 13.6 Buscador ---------- */
-#buscar:focus{
-    border-color:var(--ts-neon-rosa);
-    box-shadow:0 0 0 3px var(--ts-foco),
-               0 12px 28px -14px rgba(244,125,163,.8)}
-.buscador-caja:focus-within .buscador-icono{
-    color:var(--ts-neon-fucsia);
-    transform:translateY(-50%) scale(1.14)}
 
 /* ---------- 13.7 Aviso de "Cargando catálogo" ---------- */
 #productosCargando::after{
@@ -2175,16 +2126,8 @@ html.js #catalogo.revelado.ts-anima-entrada{
     <section id="catalogo" aria-labelledby="catalogo-titulo">
         <h2 id="catalogo-titulo">Nuestro catálogo</h2>
 
-        <!-- El buscador ya estaba escrito en app.js, pero no existía
-             ningún input #buscar: ese código nunca llegaba a correr. -->
-        <div class="buscador" role="search">
-            <div class="buscador-caja">
-                <svg class="buscador-icono" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
-                <label class="sr-only" for="buscar">Buscar amigurumi por nombre o categoría</label>
-                <input id="buscar" type="search" placeholder="Buscar amigurumi…" autocomplete="off">
-            </div>
-            <p id="resultadoBusqueda" class="resultado-busqueda" role="status" aria-live="polite"></p>
-        </div>
+        <!-- El buscador se quitó a petición: para filtrar están las seis
+             fichas de arriba. app.js ya no tiene nada de búsqueda. -->
 
         <div id="productos">
             <!-- Aquí se cargan los productos desde productos.json -->

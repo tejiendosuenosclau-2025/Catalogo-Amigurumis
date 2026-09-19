@@ -12,8 +12,6 @@
    ============================================================ */
 
 const contenedor = document.getElementById("productos");
-const buscador = document.getElementById("buscar");
-const avisoBusqueda = document.getElementById("resultadoBusqueda");
 
 const TELEFONO_WHATSAPP = "573011810933";
 const ENLACE_WHATSAPP = "https://wa.me/" + TELEFONO_WHATSAPP;
@@ -25,7 +23,6 @@ const ICONO_WHATSAPP =
 
 let todosLosProductos = [];
 let categoriaActiva = "Todos";
-let textoBusqueda = "";
 
 /* ============================================================
    UTILIDADES
@@ -154,11 +151,6 @@ function mensajeVacio() {
         '?text=' + encodeURIComponent("Hola, quiero información sobre los amigurumis") +
         '" target="_blank" rel="noopener">WhatsApp</a>';
 
-    if (textoBusqueda.trim()) {
-        return 'No encontramos nada con «' + esc(textoBusqueda.trim()) +
-            '». Prueba con otra palabra o escríbenos por ' + enlace +
-            ': podemos hacerlo a tu medida.';
-    }
     if (categoriaActiva !== "Todos") {
         return 'Todavía no hay productos en «' + esc(categoriaActiva) +
             '». Escríbenos por ' + enlace + ' y lo hacemos a tu medida.';
@@ -171,18 +163,11 @@ function mensajeVacio() {
    FILTROS Y PINTADO
    ============================================================ */
 
+/* El buscador se retiró: ahora solo filtra la categoría elegida. */
 function listaParaMostrar() {
-    const texto = sinAcentos(textoBusqueda.trim());
+    if (categoriaActiva === "Todos") return todosLosProductos.slice();
 
     return todosLosProductos.filter(function (producto) {
-        /* Mientras se escribe se busca en TODO el catálogo; al vaciar
-           el buscador vuelve a mandar la categoría elegida. */
-        if (texto) {
-            const nombre = sinAcentos(producto.nombre);
-            const categorias = sinAcentos(listaCategorias(producto).join(" "));
-            return nombre.indexOf(texto) !== -1 || categorias.indexOf(texto) !== -1;
-        }
-        if (categoriaActiva === "Todos") return true;
         return listaCategorias(producto).indexOf(categoriaActiva) !== -1;
     });
 }
@@ -192,28 +177,13 @@ function pintarEstadoActivo() {
         /* Se limpian también los nombres antiguos por si algún otro
            script los añade: el estado activo es SOLO uno. */
         btn.classList.remove("activa", "activo", "active", "seleccionada");
-        const esActiva = !textoBusqueda.trim() && btn.dataset.categoria === categoriaActiva;
+        const esActiva = btn.dataset.categoria === categoriaActiva;
         if (esActiva) btn.classList.add("activa");
         btn.setAttribute("aria-pressed", esActiva ? "true" : "false");
     });
 }
 
-function actualizarAviso(cantidad) {
-    if (!avisoBusqueda) return;
-    if (textoBusqueda.trim()) {
-        avisoBusqueda.textContent = cantidad === 1
-            ? "1 producto encontrado"
-            : cantidad + " productos encontrados";
-    } else if (categoriaActiva !== "Todos") {
-        avisoBusqueda.textContent = cantidad === 1
-            ? "1 producto en " + categoriaActiva
-            : cantidad + " productos en " + categoriaActiva;
-    } else {
-        avisoBusqueda.textContent = "";
-    }
-}
-
-/* Pinta la lista que toque según la categoría y el texto buscado. */
+/* Pinta la lista que toque según la categoría elegida. */
 function render() {
     if (!contenedor) return;
 
@@ -221,7 +191,6 @@ function render() {
 
     if (!lista.length) {
         contenedor.innerHTML = '<p class="estado-vacio">' + mensajeVacio() + "</p>";
-        actualizarAviso(0);
         return;
     }
 
@@ -229,15 +198,11 @@ function render() {
     contenedor.innerHTML = lista.map(function (producto) {
         return tarjetaHTML(producto, anclaPara(producto.nombre, yaUsadas));
     }).join("");
-
-    actualizarAviso(lista.length);
 }
 
 /* Se mantiene el nombre de antes para no romper nada que lo llame. */
 function mostrarProductos(categoria) {
     categoriaActiva = (typeof categoria === "string" && categoria) ? categoria : "Todos";
-    if (buscador && buscador.value) buscador.value = "";
-    textoBusqueda = "";
     pintarEstadoActivo();
     render();
 }
@@ -286,8 +251,6 @@ function irAlAncla() {
 document.querySelectorAll(".categoria").forEach(function (btn) {
     btn.addEventListener("click", function () {
         categoriaActiva = btn.dataset.categoria || "Todos";
-        if (buscador && buscador.value) buscador.value = "";
-        textoBusqueda = "";
         pintarEstadoActivo();
         render();
 
@@ -300,21 +263,6 @@ document.querySelectorAll(".categoria").forEach(function (btn) {
         }
     });
 });
-
-let temporizadorBusqueda = null;
-
-if (buscador) {
-    buscador.addEventListener("input", function () {
-        const valor = buscador.value;
-        clearTimeout(temporizadorBusqueda);
-        /* Pequeña espera para no repintar en cada letra */
-        temporizadorBusqueda = setTimeout(function () {
-            textoBusqueda = valor;
-            pintarEstadoActivo();
-            render();
-        }, 160);
-    });
-}
 
 window.addEventListener("hashchange", irAlAncla);
 
@@ -347,6 +295,5 @@ fetch("data/productos.json")
                 '?text=' + encodeURIComponent("Hola, quiero ver el catálogo de amigurumis") +
                 '" target="_blank" rel="noopener">WhatsApp</a>.</p>';
         }
-        if (avisoBusqueda) avisoBusqueda.textContent = "";
         console.error("[catálogo]", error);
     });
